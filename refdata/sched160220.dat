@@ -1,0 +1,100 @@
+#1
+#Section All Star and Extra Playoffs, Feb 20 and 21, 2016
+#Locked
+#Game,Date,Day,Field,Time,Division,Home Team,Visiting Team,Area,CR,AR1,AR2
+201,20-Feb,Saturday,White 1,8:00 AM,U14G,U1,B1,Area 1S,P.AGRAWAL,J.PARGMAN,S.DYKSTRA
+202,20-Feb,Saturday,White 2,8:00 AM,U14G,P2,S1,Area 1C,Bruce Hancock,Peter Smock,Craig Dunkin
+203,20-Feb,Saturday,White 3,8:00 AM,U14G,C1,P1,Area 1D,Sandee Wilson,Ramon Pulido,Mike Torrey
+204,20-Feb,Saturday,White 4,8:00 AM,U14G,D1,U2,Area 1P,ASCENZI,KLEIMAN,
+205,20-Feb,Saturday,Blue 2,8:00 AM,U12G,S1,D2,Area 1B,Renteria,Machado,Machado
+206,20-Feb,Saturday,Blue 3,8:00 AM,U12G,U1,B1,Area 1S,T.SMITH,R.JACKOWIAK,Z.HARRIS
+207,20-Feb,Saturday,Blue 4,8:00 AM,U12G,D1,P1,Area 1U,Mars Ramage,Nick Ruffle,Alfred Zambrano
+208,20-Feb,Saturday,Blue 5,8:00 AM,U12G,C1,B2,Area 1D,Michael Grosvenor,Mark Parrot,Manny Hernandez
+209,20-Feb,Saturday,Green 3,8:00 AM,U10G,B1,U2,Area 1C,Brian Bonham,Larry Abelson,Don Gibbs
+210,20-Feb,Saturday,Yellow 1,8:00 AM,U10G,C1,S1,Area 1B,Nieto,Rodrigues,Rodriguez
+211,20-Feb,Saturday,Yellow 2,8:00 AM,U10G,P1,D1,Area 1U,Tony Iacobacci,Aeby Perez,Hugo Gonzalez
+212,20-Feb,Saturday,Yellow 3,8:00 AM,U10G,U1,B2,Area 1P,MARTINEZ,RAMIREZ,GATES
+213,20-Feb,Saturday,White 1,9:00 AM,U14B,C1,B1,Area 1S,P. Agrawal,J. Pargman,S. Dykstra
+214,20-Feb,Saturday,White 2,9:00 AM,U14B,U1,D2,Area 1C,Craig Dunkin,Bruce Hancock,Peter Smock
+215,20-Feb,Saturday,White 3,9:00 AM,U14B,C2,P1,Area 1D,Ramon Pulido,Mike Torrey,Sandee Wilson
+216,20-Feb,Saturday,White 4,9:00 AM,U14B,S1,D1,Area 1P,RAMIREZ,GATES,MARTINEZ
+217,20-Feb,Saturday,Blue 2,9:00 AM,U12B,S1,P2,Area 1B,Machado,Machado,Renteria
+218,20-Feb,Saturday,Blue 3,9:00 AM,U12B,B1,C1,Area 1S,T. Smith,R.Jackowiak,Z. Harris,Z. Harris
+219,20-Feb,Saturday,Blue 4,9:00 AM,U12B,D1,C2,Area 1U,Nick Ruffle,Mars Ramage,Aeby Perez
+220,20-Feb,Saturday,Blue 5,9:00 AM,U12B,U1,P1,Area 1D,Mark Parrot,Manny Hernandez ,Michael Grosvenor
+221,20-Feb,Saturday,Green 3,9:00 AM,U10B,B2,P1,Area 1C,Don Gibbs,Brian Bonham,Larry Abelson
+222,20-Feb,Saturday,Yellow 1,9:00 AM,U10B,U1,C1,Area 1B,Jimenez,Jimenez,Abadilla
+223,20-Feb,Saturday,Yellow 2,9:00 AM,U10B,D1,C2,Area 1U,Alfred Zambrano,Tony Iacobacci,John Zhou
+224,20-Feb,Saturday,Yellow 3,9:00 AM,U10B,B1,S1,Area 1P,KLEIMAN,,ASCENZI
+225,20-Feb,Saturday,White 1,11:00 AM,U14G,B1,P2,Area 1C,Peter Smock,Al Prado,Bruce Hancock
+226,20-Feb,Saturday,White 2,11:00 AM,U14G,S1,U1,Area 1B,Udo,Flores,Baker
+227,20-Feb,Saturday,White 3,11:00 AM,U14G,P1,D1,Area 1U,Bob Hernandez,Nick Ruffle,Mars Ramage
+228,20-Feb,Saturday,White 4,11:00 AM,U14G,U2,C1,Area 1P,GATES,MARTINEZ,RAMIREZ
+229,20-Feb,Saturday,Blue 2,11:00 AM,U12G,D2,U1,Area 1C,Dave Jones,Don Gibbs,Brian Bonham
+230,20-Feb,Saturday,Blue 3,11:00 AM,U12G,B1,S1,Area 1P,MARTIN,REYNOLDS,FINEBERG
+231,20-Feb,Saturday,Blue 4,11:00 AM,U12G,P1,C1,Area 1D,Mike Torrey,Sandee Wilson,Ramon Pulido
+232,20-Feb,Saturday,Blue 5,11:00 AM,U12G,B2,D1,Area 1S,Larry Abelson (C),Krista Wesner,Curtis Wesner
+233,20-Feb,Saturday,Green 3,11:00 AM,U10G,U2,C1,Area 1B,Gaumer,Cornejo,Garcia
+234,20-Feb,Saturday,Yellow 1,11:00 AM,U10G,S1,B1,Area 1D,Manny Hernandez ,Mark Parrot,Michael Grosvenor
+235,20-Feb,Saturday,Yellow 2,11:00 AM,U10G,D1,U1,Area 1S,Todd Gallemore,Colin Lyon,
+236,20-Feb,Saturday,Yellow 3,11:00 AM,U10G,B2,P1,Area 1U,Jin Chun,Tony Koo,Aeby Perez
+237,20-Feb,Saturday,White 1,12:00 PM,U14B,B1,U1,Area 1C,Joe Small,Dave Alvarez,Adrian Backer
+238,20-Feb,Saturday,White 2,12:00 PM,U14B,D2,C1,Area 1B,Baker,Udo,Flores
+239,20-Feb,Saturday,White 3,12:00 PM,U14B,P1,S1,Area 1U,Nick Ruffle,Mars Ramage,Bob Hernandez
+240,20-Feb,Saturday,White 4,12:00 PM,U14B,D1,C2,Area 1P,,ASCENZI,KLEIMAN
+241,20-Feb,Saturday,Blue 2,12:00 PM,U12B,P2,B1,Area 1C,Al Prado,Tom Regan,Dave Jones
+242,20-Feb,Saturday,Blue 3,12:00 PM,U12B,C1,S1,Area 1P,REYNOLDS,FINEBERG,MARTIN
+243,20-Feb,Saturday,Blue 4,12:00 PM,U12B,C2,U1,Area 1D,Steve Resnick,Brian Holt,Greg Power
+244,20-Feb,Saturday,Blue 5,12:00 PM,U12B,P1,D1,Area 1S,John Mass (C),Roman Ogawa (C),Todd Gallemore (G)
+245,20-Feb,Saturday,Green 3,12:00 PM,U10B,P1,U1,Area 1B,Cornejo,Garcia,Gaumer
+246,20-Feb,Saturday,Yellow 1,12:00 PM,U10B,C1,B2,Area 1D,Mark Parrot,Manny Hernandez ,Michael Grosvenor
+247,20-Feb,Saturday,Yellow 2,12:00 PM,U10B,C2,B1,Area 1S,Colin Lyon,Krista Wesner,Curtis Wesner
+248,20-Feb,Saturday,Yellow 3,12:00 PM,U10B,S1,D1,Area 1U,Rudy Ramirez,Kevin Aie,Eddie Chavez
+249,20-Feb,Saturday,White 1,2:00 PM,U14G,U1,P2,Area 1D,Brian Holt,Steve Resnick,Greg Power
+250,20-Feb,Saturday,White 2,2:00 PM,U14G,B1,S1,Area 1U,Tony Koo,Jin Chun,Ray Villar
+251,20-Feb,Saturday,White 3,2:00 PM,U14G,C1,D1,Area 1B,Ellis,Koh,Olson
+252,20-Feb,Saturday,White 4,2:00 PM,U14G,P1,U2,Area 1S,T.SMITH,R.JACKOWIAK,Z.HARRIS
+253,20-Feb,Saturday,Blue 2,2:00 PM,U12G,S1,U1,Area 1P,TOWNSEND,,SIMMONS
+254,20-Feb,Saturday,Blue 3,2:00 PM,U12G,D2,B1,Area 1U,Jose Alcaraz,Tom West,Eric Mikkelson
+255,20-Feb,Saturday,Blue 4,2:00 PM,U12G,D1,C1,Area 1B,Carlton,Cerda,Urias
+256,20-Feb,Saturday,Blue 5,2:00 PM,U12G,P1,B2,Area 1C,Adrian Backer,Joe Small,Dave Alvarez
+257,20-Feb,Saturday,Green 3,2:00 PM,U10G,B1,C1,Area 1S,S.DYKSTRA,J.PARGMAN,P.AGRAWAL
+258,20-Feb,Saturday,Yellow 1,2:00 PM,U10G,U2,S1,Area 1D,Jack Desemone,Vera Horoschak,Sam Kabbani
+259,20-Feb,Saturday,Yellow 2,2:00 PM,U10G,P1,U1,Area 1C,Ricky Gonzalez,Al Prado,Tom Regan
+260,20-Feb,Saturday,Yellow 3,2:00 PM,U10G,D1,B2,Area 1P,FINEBERG,MARTIN,REYNOLDS
+261,20-Feb,Saturday,White 1,3:00 PM,U14B,C1,U1,Area 1D,Greg Power,Brian Holt,Steve Resnick
+262,20-Feb,Saturday,White 2,3:00 PM,U14B,B1,D2,Area 1U,Jin Chun,Tony Koo,Ray Villar
+263,20-Feb,Saturday,White 3,3:00 PM,U14B,C2,S1,Area 1B,Koh,Olson,Ellis
+264,20-Feb,Saturday,White 4,3:00 PM,U14B,P1,D1,Area 1S,P.Agrawal,J.Pargman,S.Dykstra
+265,20-Feb,Saturday,Blue 2,3:00 PM,U12B,S1,B1,Area 1P,KOZINSKI,COOPER,FEDER
+266,20-Feb,Saturday,Blue 3,3:00 PM,U12B,P2,C1,Area 1U,Rudy Ramirez,Kevin Aie,Eddie Chavez
+267,20-Feb,Saturday,Blue 4,3:00 PM,U12B,D1,U1,Area 1C,Dave Alvarez,Adrian Backer,Joe Small
+268,20-Feb,Saturday,Blue 5,3:00 PM,U12B,C2,P1,Area 1B,Region 67 TBA,Region 67 TBA,Region 67 TBA
+269,20-Feb,Saturday,Green 3,3:00 PM,U10B,B2,U1,Area 1S,T.SMITH,R.JACKOWIAC,Z.HARRIS
+270,20-Feb,Saturday,Yellow 1,3:00 PM,U10B,P1,C1,Area 1D,Vera Horoschak,Jack Desemone,Sam Kabbani
+271,20-Feb,Saturday,Yellow 2,3:00 PM,U10B,D1,B1,Area 1C,Tom Regan,Ricky Gonzalez,Dave Jones
+272,20-Feb,Saturday,Yellow 3,3:00 PM,U10B,C2,S1,Area 1P,MARTIN,REYNOLDS,FINEBERG
+301,20/Feb,Saturday,Murphy 1,9:00 AM,U14G,E-1,W-2,Area 1R,Ramon Guzman,Junior Mora,Jennifer Diaz
+302,20/Feb,Saturday,Murphy 2,9:00 AM,U14G,W-1,E-2,Area 1P,,SIMMONS,TOWNSEND
+303,20/Feb,Saturday,Blue 6,9:00 AM,U12G,E-1,W-2,Area 1U,Jose Alcaraz,Tom West,Eric Mikkelson
+304,20/Feb,Saturday,Blue 1,9:00 AM,U12G,W-1,E-2,Area 1F,Joe T,Michael W,Herb C
+305,20/Feb,Saturday,Green 1,9:00 AM,U10G,E-1,W-2,Area 1P,COOPER,FEDER,KOZINSKI
+306,20/Feb,Saturday,Green 2,9:00 AM,U10G,W-1,E-2,Area 1R,Ed Williams,David Schlesinger,Lee Lombard
+307,20/Feb,Saturday,Murphy 1,11:00 AM,U14B,E-1,W-2,Area 1R,Ramon Guzman,Junior Mora,Jennifer Diaz
+308,20/Feb,Saturday,Murphy 2,11:00 AM,U14B,W-1,E-2,Area 1P,FEDER,KOZINSKI,COOPER
+309,20/Feb,Saturday,Blue 6,11:00 AM,U12B,E-1,W-2,Area 1N,Gilbert Maldonado,Manuel Merlos,Bill Hinds
+310,20/Feb,Saturday,Blue 1,11:00 AM,U12B,W-1,E-2,Area 1F,Joe T,Michael W,-
+311,20/Feb,Saturday,Green 1,11:00 AM,U10B,E-1,W-2,Area 1P,SIMMONS,TOWNSEND,
+312,20/Feb,Saturday,Green 2,11:00 AM,U10B,W-1,E-2,Area 1R,Lalo Chaidez,Cruz Chaidez,Cole Chaidez
+325,21-Feb,Sunday,White 3,9:00 AM,U13G,E-1,W-2,Area 1D,Scott Jarus,Bill Raventos,Craig Breitman
+326,21-Feb,Sunday,White 4,9:00 AM,U13G,W-1,E-2,Area 1R,Ed Williams,Lee Lombard,Ozzy Castro
+327,21-Feb,Sunday,Blue 4,9:00 AM,U11G,E-1,W-2,Area 1F,Joe T,-,Geoff F
+328,21-Feb,Sunday,Blue 5,9:00 AM,U11G,W-1,E-2,Area 1G,Paul Mikusky,Mitch Graham,Lealon Watts
+329,21/Feb,Sunday,Green 3,9:00 AM,U9G,E-1,W-2,Area 1B,Skalsky,Purdy,Churchill
+330,21/Feb,Sunday,Yellow 3,9:00 AM,U9G,W-1,E-2,Area 1P,,KLEIMAN,MARTIN
+331,21-Feb,Sunday,White 3,11:00 AM,U13B,E-1,W-2,Area 1D,Bill Raventos,Scott Jarus,Craig Breitman
+332,21-Feb,Sunday,White 4,11:00 AM,U13B,W-1,E-2,Area 1R,Stefan Larson,Jason Gailliot,Jody Richardson
+333,21-Feb,Sunday,Blue 4,11:00 AM,U11B,E-1,W-2,Area 1B,Churchill,Skalsky,Purdy
+334,21-Feb,Sunday,Blue 5,11:00 AM,U11B,W-1,E-2,Area 1G,Lealon Watts,Paul Mikusky,Mitch Graham
+335,21/Feb,Sunday,Green 3,11:00 AM,U9B,E-1,W-2,Area 1P,KLEIMAN,,MARTIN
+336,21/Feb,Sunday,Yellow 3,11:00 AM,U9B,W-1,E-2,Area 1F,Joe T,-,Geoff F
