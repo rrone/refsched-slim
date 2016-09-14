@@ -123,7 +123,7 @@ class SchedGreetController extends AbstractController
                }
             }
             fclose( $scheddata );
-            $html .= "<h2 align=\"center\">$page_title</h2>";
+            $html = "<h2 align=\"center\">$page_title</h2>";
             if ( $rep == 'Section 1' ) {
                $html .= "<h3 align=\"center\">Welcome $rep Scheduler</h3>\n";
                $html .= "<h3 align=\"center\"><font color=\"#CC0000\">STATUS</font> - At this time:<br>\n";

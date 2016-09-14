@@ -121,3 +121,12 @@ table {
 .topspace {
 	padding-top: 5px;
 }
+.right {
+	float: right;
+}
+.left {
+	float: left;
+}
+.clear-fix {
+	clear: both;
+}

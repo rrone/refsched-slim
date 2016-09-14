@@ -9,7 +9,7 @@ class SchedEndController extends AbstractController
 {
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->logger->info("Schedule greet page action dispatched");
+        $this->logger->info("Schedule end page action dispatched");
         
         $_SESSON['authed'] = FALSE;
         session_destroy();

@@ -33,21 +33,21 @@ $app->map(['GET', 'POST'], '/full', App\Action\Full\SchedFullController::class)
 $app->map(['GET', 'POST'], '/greet', App\Action\Greet\SchedGreetController::class)
     ->setName('greet');
 
-$app->map(['GET', 'POST'], '/lock', App\Action\Greet\SchedLockController::class)
+$app->map(['GET', 'POST'], '/lock', App\Action\Lock\SchedLockController::class)
     ->setName('lock');
 
 $app->get('/logon', function ($req, $resp, $args) {
     $resp->withRedirect('/');
 });
 
-$app->map(['GET', 'POST'], '/unlock', App\Action\Greet\SchedLockController::class)
+$app->map(['GET', 'POST'], '/unlock', App\Action\Lock\SchedUnlockController::class)
     ->setName('unlock');
 
-$app->map(['GET', 'POST'], '/refs', App\Action\Greet\SchedRefsController::class)
+$app->map(['GET', 'POST'], '/refs', App\Action\Refs\SchedRefsController::class)
     ->setName('refs');
 
-$app->map(['GET', 'POST'], '/master', App\Action\Greet\SchedMasterController::class)
+$app->map(['GET', 'POST'], '/master', App\Action\Master\SchedMasterController::class)
     ->setName('master');
 
-$app->map(['GET', 'POST'], '/sched', App\Action\Greet\SchedSchedController::class)
+$app->map(['GET', 'POST'], '/sched', App\Action\Sched\SchedSchedController::class)
     ->setName('sched');

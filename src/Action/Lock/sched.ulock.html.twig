@@ -1,0 +1,10 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+		{{ sched.ulock | raw }}
+        
+      <h3 align="center"><a href="/greet">Return to main screen</a>&nbsp;-&nbsp;
+      <a href="/master">Return to schedule</a>&nbsp;-&nbsp;
+      <a href="/end">Logoff</a></h3>
+        
+{% endblock %}
