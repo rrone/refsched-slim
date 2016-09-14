@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>AYSO Section 1: {% block title %}Referee Scheduler{% endblock %}</title>
+
+	<link rel="icon" href="/images/favicon.ico" sizes="16x16">
+	<link href='{{ base_url() }}/css/app.css' rel='stylesheet' type='text/css'/>
+	
+	{% block head %}{% endblock %}
+
+</head>
+
+<body>
+	{% block layout %}{% endblock %}
+
+	<hr>
+<!-- footer -->	 
+	<p align="center"><span class="foottext"><a href="/">Home</a> - <a href="#">Contact Us</a><br>
+	</a>Corrections or additions to this web page can be sent to: <a href="mailto:web.ayso@gmail.com">web.ayso@gmail.com</a><br>
+	&copy;2016  Section 1, American Youth Soccer Organization <br />
+	AYSO name and AYSO initials, Logos and graphics copyright by the <a href="http://www.ayso.org" class="flinks">American Youth Soccer Organization</a> and used with permission.</span></p>
+	
+</body>
+
+<script type="text/javascript">
+	 var _gaq = _gaq || [];
+	 _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+	 _gaq.push(['_trackPageview']);
+
+	 (function() {
+		  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	 })();
+
+	 {% block script %}{% endblock %}        
+</script>
+</html>

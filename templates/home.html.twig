@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+
+{% block layout %}
+<table width="98%"  class="maincontent">
+  <tr>
+    <td align="center" class="contentarea">
+     
+			<div align="center">
+				<h1>Section 1 Referee Scheduling</h1>
+<!--Edit Below For Display Of Event-->
+				<h2>U16/U19 Playoffs, Chino<br>
+					November 19-20, 2016</h2>
+
+				<h2>U9-U14 Extra Playoffs, Torrance<br>
+					January 28-29, 2017</h2>
+
+				<h2>U10-U14 League Playoffs, Riverside<br>
+					February 25-26, 2016</h2>
+
+				<h2>U10-U14 All-Star Playoffs, Riverside<br>
+					March 11-12, 2016</h2>
+
+				<h2>Western States Championships, Carson City, NV<br>
+					March 25-26, 2016</h2>
+			</div>
+			<hr>
+    </td>
+	</tr>
+	<tr><td>
+	
+			{% block content%}{% endblock %}
+			
+  </td></tr>
+</table>
+
+{% endblock %}
