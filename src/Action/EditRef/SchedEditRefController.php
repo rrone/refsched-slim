@@ -53,7 +53,7 @@ class SchedEditRefController extends AbstractController
                 if ( substr( $line, 0, 1 ) != '#' ) {
                     $record = explode( ',', trim($line) );
                     if ( $record[0] == $target_game && ($record[8] == $this->rep || $this->rep == 'Section 1') ) {
-                    $html .=  "      <form name=\"editref\" method=\"post\" action=\"/addref\">\n";
+                    $html .=  "      <form name=\"editref\" method=\"post\" action=\"$this->refsPath\">\n";
                     $html .=  "      <table width=\"100%\">\n";
                     $html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
                     $html .=  "            <th>Game<br>No.</th>";
@@ -65,7 +65,7 @@ class SchedEditRefController extends AbstractController
                     $html .=  "            <th>Center</th>";
                     $html .=  "            <th>AR1</th>";
                     $html .=  "            <th>AR2</th>";
-                    $html .=  "            <th>4thO</th>";
+                    $html .=  "            <th>4th</th>";
                     $html .=  "            </tr>\n";
                     $html .=  "            <tr align=\"center\" bgcolor=\"#00FF88\">";
                     $html .=  "            <td>$record[0]</td>";
@@ -77,10 +77,11 @@ class SchedEditRefController extends AbstractController
                     $html .=  "            <td><input type=\"text\" name=\"center\" size=\"15\" value=\"$record[9]\"></td>";
                     $html .=  "            <td><input type=\"text\" name=\"ar1\" size=\"15\" value=\"$record[10]\"></td>";
                     $html .=  "            <td><input type=\"text\" name=\"ar2\" size=\"15\" value=\"$record[11]\"></td>";
-                    $html .=  "            <td><input type=\"text\" name=\"4thO\" size=\"15\" value=\"$record[12]\"></td>";
+                    $html .=  "            <td><input type=\"text\" name=\"4th\" size=\"15\" value=\"$record[12]\"></td>";
                     $html .=  "            </tr>\n";
                     $html .=  "            </table>\n";
-                    $html .=  "            <input type=\"submit\" name=\"update$record[0]\" value=\"Update Referees\">\n";
+                    $html .=  "            <input class=\"right\" type=\"submit\" name=\"update$record[0]\" value=\"Update Referees\">\n";
+                    $html .=  "      <div class='clear-fix'></div>";
                     $html .=  "            </form>\n";
                     $game_found = 1;
                 }
@@ -95,7 +96,7 @@ class SchedEditRefController extends AbstractController
         }
         elseif ( $this->authed ) {
            $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"/refs\">Referee Edit Page</a></h2></center>";
+           $html .= "You should go to the <a href=\"$this->refsPath\">Referee Edit Page</a></h2></center>";
         }
         elseif ( !$this->authed ) {
            $html .= $this->errorCheck();
@@ -110,7 +111,7 @@ class SchedEditRefController extends AbstractController
 <<<EOD
       <h3 align="center"><a href="/greet">Return to main page</a>&nbsp;-&nbsp;
       <a href="/master">Return to schedule</a>&nbsp;-&nbsp;
-      <a href="/end">Logoff</a></h3>
+      <a href="$this->endPath()">Logoff</a></h3>
 EOD;
         
         return $html;

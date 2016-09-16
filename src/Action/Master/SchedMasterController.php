@@ -38,7 +38,7 @@ class SchedMasterController extends AbstractController
              $sched_title = fgets( $infile, 1024 );
              $this->page_title = substr( $sched_title, 1);
   
-             $html .=  "  <form name=\"master_sched\" method=\"post\" action=\"/control\">\n";
+             $html .=  "  <form name=\"master_sched\" method=\"post\" action=\"$this->controlPath\">\n";
              $html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
              $html .=  "      <div class='clear-fix'></div>";
   
@@ -114,7 +114,7 @@ class SchedMasterController extends AbstractController
              fclose( $infile );
         }
         elseif ( $this->authed ) {
-           $html .=  "<center><h2>You probably want the <a href=\"/sched\">scheduling</a> page.</h2></center>";
+           $html .=  "<center><h2>You probably want the <a href=\"$this->schedPath\">scheduling</a> page.</h2></center>";
         }
         elseif ( !$this->authed ) {
            $html .=  $this->errorCheck();
@@ -125,16 +125,16 @@ class SchedMasterController extends AbstractController
     }
     private function menu()
     {
-        $html =  "<h3 align=\"center\"><a href=\"/greet\">Return to main page</a>&nbsp;-&nbsp;\n";
+        $html =  "<h3 align=\"center\"><a href=\"$this->greetPath\">Return to main page</a>&nbsp;-&nbsp;\n";
 
         if ( $this->rep == 'Section 1' ) {
-           $html .=  "<a href=\"/master\">Return to schedule</a>&nbsp;-&nbsp;\n";
+           $html .=  "<a href=\"$this->masterPath\">Return to schedule</a>&nbsp;-&nbsp;\n";
         }
         else {
-           $html .=  "<a href=\"/sched\">Return to schedule</a>&nbsp;-&nbsp;\n";
+           $html .=  "<a href=\"$this->schedPath\">Return to schedule</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .=  "<a href=\"/end\">Logoff</a></h3>\n";
+        $html .=  "<a href=\"$this->endPath\">Logoff</a></h3>\n";
       
         return $html;
 

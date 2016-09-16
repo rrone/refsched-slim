@@ -103,11 +103,11 @@ class SchedSchedController extends AbstractController
                 $allatlimit = 0;
             }
             elseif ( $locked && array_key_exists( 'all', $limit_list ) && $no_assigned == $limit_list[ 'all' ] ) { 
-                $html .= "<center><h3><font color=\"#CC0000\">The schedule has been locked and you are at your game limit.<br>\nYou will not be able to unassign yourself from games to sign up for others.<br>\nThe submit button on this page has been disabled and available games are not shown.<br>\nYou probably want to <a href=\"/greet\">Return to the Main Page</a> or <a href=\"/end\">Log Off</a></font></h3></center>\n";
+                $html .= "<center><h3><font color=\"#CC0000\">The schedule has been locked and you are at your game limit.<br>\nYou will not be able to unassign yourself from games to sign up for others.<br>\nThe submit button on this page has been disabled and available games are not shown.<br>\nYou probably want to <a href=\"$this->greetPath\">Return to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></font></h3></center>\n";
                 $showavailable = 0;
             }
             elseif ( $locked && array_key_exists( 'all', $limit_list ) && $no_assigned > $limit_list[ 'all' ] ) { 
-                $html .= "<center><h3><font color=\"#CC0000\">The schedule has been locked and you are above your game limit.<br>\nThe extra games were probably assigned by the Section staff.<br>\nYou will not be able to unassign yourself from games to sign up for others.<br>\nThe Submit button has been disabled and available games are not shown.<br>\nYou probably want to <a href=\"/greet\">Return to the Main Page</a> or <a href=\"/end\">Log Off</a></font></h3></center>\n";
+                $html .= "<center><h3><font color=\"#CC0000\">The schedule has been locked and you are above your game limit.<br>\nThe extra games were probably assigned by the Section staff.<br>\nYou will not be able to unassign yourself from games to sign up for others.<br>\nThe Submit button has been disabled and available games are not shown.<br>\nYou probably want to <a href=\"$this->greetPath\">Return to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></font></h3></center>\n";
                 $showavailable = 0; 
             }
             elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $no_assigned < $limit_list['all'] ) { 
@@ -115,7 +115,7 @@ class SchedSchedController extends AbstractController
                 $html .= "<center><h3>You are currently assigned to <font color=\"#CC00CC\">$no_assigned</font> of your <font color=\"#CC00CC\">$tmplimit</font> games.</h3></center>\n"; 
             }
             elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $no_assigned == $limit_list['all'] ) { $html .= "<center><h3><font color=\"#CC0000\">You are at your game limit.<br>You will have to unassign yourself from games to sign up for others.</font></h3></center>\n"; }
-            elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $no_assigned > $limit_list['all'] ) { $html .= "<center><h3><font color=\"#CC0000\">You are above your game limit.<br>\nThe extra games were probably assigned by the Section staff.<br>\nIf you continue from here you will not be able to keep all the games you are signed up for and may lose some of the games you already have.<br>\nIf you want to keep these games and remain over the game limit it is recommended that you do not hit submit but do something else instead.<br>\n<a href=\"/greet\">Return to the Main Page</a></font></h3></center>\n"; }
+            elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $no_assigned > $limit_list['all'] ) { $html .= "<center><h3><font color=\"#CC0000\">You are above your game limit.<br>\nThe extra games were probably assigned by the Section staff.<br>\nIf you continue from here you will not be able to keep all the games you are signed up for and may lose some of the games you already have.<br>\nIf you want to keep these games and remain over the game limit it is recommended that you do not hit submit but do something else instead.<br>\n<a href=\"$this->greetPath\">Return to the Main Page</a></font></h3></center>\n"; }
             elseif ( $locked && count( $limit_list ) ) {
                 $html .= "<center><h3><font color=\"#CC0000\">The system is locked.<br>You can add games to divisions that are below the limit but not unassign your Area from games.</font><br><br>\n";
                     foreach ( $limit_list as $k => $v ) {
@@ -146,7 +146,7 @@ class SchedSchedController extends AbstractController
                 $html .= "</h3></center>\n";
             }
       
-            $html .= "<form name=\"form1\" method=\"post\" action=\"/assign\">\n";
+            $html .= "<form name=\"form1\" method=\"post\" action=\"$assignPath\">\n";
 
             $html .= "  <div align=\"left\">";
             
@@ -249,12 +249,12 @@ class SchedSchedController extends AbstractController
          }
         elseif ( !$this->authed ) {
             $html .=  "<center><h1>You are not Logged On</h1></center>";
-            $html .= "<p align=\"center\"><a href=\"/\">Logon Page</a></p>";
+            $html .= "<p align=\"center\"><a href=\"$this->logonPath\">Logon Page</a></p>";
             session_destroy();
         }
         elseif ( $this->authed && $this->rep == 'Section 1' ) {
             $html .=  "<center><h1>You should be on this<br>";
-            $html .= "<a href=\"/master\">Schedule Page</a></h1>";
+            $html .= "<a href=\"$this->masterPath\">Schedule Page</a></h1>";
         }
         else {
             $html .=  $this->errorCheck();
@@ -268,8 +268,8 @@ class SchedSchedController extends AbstractController
         $html =
 <<<EOD
     <h3 align="center"><a href="/greet">Return to main page</a>&nbsp;-&nbsp;
-    <a href="/sched">Return to schedule</a>&nbsp;-&nbsp;
-    <a href="/end">Logoff</a></h3>
+    <a href="$this->schedPath">Return to schedule</a>&nbsp;-&nbsp;
+    <a href="$this->endPath()">Logoff</a></h3>
 EOD;
         
         return $html;

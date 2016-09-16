@@ -14,7 +14,8 @@ class SchedAddRefController extends AbstractController
         $content = array(
             'view' => array (
                 'content' => $this->renderAddRef(),
-                'title' => $this->page_title
+                'title' => $this->page_title,
+                'menu' => $this->menu()
             )
         );        
         
@@ -63,7 +64,7 @@ class SchedAddRefController extends AbstractController
                            $record[9] = $_POST[ 'center' ];
                            $record[10] = $_POST[ 'ar1' ];
                            $record[11] = $_POST[ 'ar2' ];
-                           $record[12] = $_POST[ '4thO' ];
+                           $record[12] = $_POST[ '4th' ];
                      }
                      elseif ( array_key_exists( $list_key, $_POST ) && $record[8] != $this->rep ) {
                         $html .= "<center><h2>Sorry, you are not currently assigned to game number $record[0]</h2></center>\n";
@@ -84,7 +85,7 @@ class SchedAddRefController extends AbstractController
                if ( substr( $line, 0, 1 ) != '#' ) {
                   $record = explode( ',', trim($line) );
                   if ( !$any_games && ( $this->rep == 'Section 1' || $this->rep == $record[8] )) {
-                     $html .= "<center><h2>Here are the current assignments</h2></center>\n";
+                     $html .= "<center><h2>Current assignments</h2></center>\n";
                      $html .= "      <table width=\"100%\">\n";
                      $html .= "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";   
                      $html .= "            <th>Game No.</th>";
@@ -96,7 +97,7 @@ class SchedAddRefController extends AbstractController
                      $html .= "            <th>Center</th>";
                      $html .= "            <th>AR1</th>";
                      $html .= "            <th>AR2</th>";
-                     $html .= "            <th>4thO</th>";
+                     $html .= "            <th>4th</th>";
                      $html .= "            </tr>\n";
                      $any_games = 1;
                   }
@@ -128,11 +129,11 @@ class SchedAddRefController extends AbstractController
         }
         elseif ( $this->authed && $this->rep == 'Section 1') {
            $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"/master\">Schedule Page</a></h2></center>";
+           $html .= "You should go to the <a href=\"$this->masterPath\">Schedule Page</a></h2></center>";
         }
         elseif ( $this->authed ) {
            $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"/sched\">Schedule Page</a></h2></center>";
+           $html .= "You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2></center>";
         }
         elseif ( !$this->authed ) {
            $html .= $this->errorCheck();
@@ -143,16 +144,18 @@ class SchedAddRefController extends AbstractController
     }
     private function menu()
     {
-        $html =  "<h3 align=\"center\"><a href=\"/greet\">Return to main page</a>&nbsp;-&nbsp;\n";
+        $html =  "<h3 align=\"center\"><a href=\"$this->greetPath\">Return to main page</a>&nbsp;-&nbsp;\n";
 
         if ( $this->rep == 'Section 1' ) {
-           $html .=  "<a href=\"/master\">Return to schedule</a>&nbsp;-&nbsp;\n";
+           $html .=  "<a href=\"$this->masterPath\">Return to schedule</a>&nbsp;-&nbsp;\n";
         }
         else {
-           $html .=  "<a href=\"/sched\">Return to schedule</a>&nbsp;-&nbsp;\n";
+           $html .=  "<a href=\"$this->schedPath\">Return to schedule</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .=  "<a href=\"/end\">Logoff</a></h3>\n";              
+        $html .= "<a href=\"$this->refsPath\">Add/Modify Referee assignments</a>&nbsp;-&nbsp;\n";
+        
+        $html .=  "<a href=\"$this->endPath\">Logoff</a></h3>\n";              
 
         return $html;
     }

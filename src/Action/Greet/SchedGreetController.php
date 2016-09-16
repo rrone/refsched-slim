@@ -105,6 +105,8 @@ class SchedGreetController extends AbstractController
             }
             else { $limit_list[ 'none' ] = 1; } 
 
+            $groups = ['U10', 'U12', 'U14', 'U16', 'U19' ];
+            $delim = ' - ';
             $no_assigned = 0;
             $no_unassigned = 0;
             $no_area = 0;
@@ -137,10 +139,10 @@ class SchedGreetController extends AbstractController
                $html .= "<h3 align=\"center\">Welcome $this->rep Scheduler</h3>\n";
                $html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">STATUS</font> - At this time:<br>\n";
                if ( $locked ) {
-                  $html .= "The schedule is:&nbsp;<font color=\"$this->colorAlert\">Locked</font>&nbsp;-&nbsp;(<a href=\"/unlock\">Unlock</a> the schedule now)<br>\n";
+                  $html .= "The schedule is:&nbsp;<font color=\"$this->colorAlert\">Locked</font>&nbsp;-&nbsp;(<a href=\"$this->unlockPath\">Unlock</a> the schedule now)<br>\n";
                }
                else {
-                  $html .= "The schedule is:&nbsp;<font color=\"$this->colorSuccess\">Unlocked</font>&nbsp;-&nbsp;(<a href=\"/lock\">Lock</a> the schedule now)<br>\n";
+                  $html .= "The schedule is:&nbsp;<font color=\"$this->colorSuccess\">Unlocked</font>&nbsp;-&nbsp;(<a href=\"$this->lockPath\">Lock</a> the schedule now)<br>\n";
                }
                $html .= "<font color=\"#008800\">$no_assigned</font> games are assigned and <font color=\"$this->colorAlert\">$no_unassigned</font> are unassigned.<br>\n";
                if ( array_key_exists( 'all', $limit_list ) ) {
@@ -162,64 +164,68 @@ class SchedGreetController extends AbstractController
                   
             }
             else {
-               $html .= "<h3 align=\"center\">Welcome $this->rep Representative</h3>";
-               $html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">Status</font><br>";
-               if ( $no_area == 0 ) { $html .= "$this->rep is not currently assigned to any games.<br>"; }
-               elseif ( $no_area == 1 ) { $html .= "$this->rep is currently assigned to <font color=\"$this->colorSuccess\">$no_area</font> game.<br>"; }
-               else { $html .= "$this->rep is currently assigned to <font color=\"$this->colorSuccess\">$no_area</font> games.<br>"; }
-               if ( array_key_exists( 'all', $limit_list ) ) {
-                  $tmplimit = $limit_list[ 'all' ];
-                  $html .= "There is a limit of <font color=\"$this->colorWarning\">$tmplimit</font> Area assigned games at this time.</h3>\n";
-               }
-               elseif ( array_key_exists( 'none', $limit_list ) ) {
-                  $html .= "There is <font color=\"$this->colorWarning\">no</font> limit on Area assigned games at this time.</h3>\n";
-               }
-               elseif ( count( $limit_list ) ) {
-                  foreach ( $limit_list as $k => $v ) {
-                     $tmpassigned = $assigned_list[ $k ];
-                     if ( $used_list[ $k ] ) { 
-                        $html .= "You have assigned <font color=\"$this->colorWarning\">$tmpassigned</font> of your <font color=\"$this->colorWarning\">$v</font> game limit for $k.<br>\n";
-                        if ( $tmpassigned >= $v ) { $oneatlimit = 1; }
-                     }
-                  }
-                  $html .= "</h3>\n";
-               }
-               else {
-                  $html .= "There is no game limit at this time.</h3>\n";
-               }
-               if ( $locked && !array_key_exists( 'none', $limit_list ) ) {
-                  $html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">The schedule is presently locked.</font><br>\n";
-                  if ( !$oneatlimit ) {
-                     $html .= "You may sign $this->rep teams up for games but not remove them.</h3>\n";
-                  }
-                  else {
-                     $html .= "Since $this->rep is at or above the limit you will not be able to sign teams up for games.</h3>\n";
-                  }
+                $html .= "<h3 align=\"center\">Welcome $this->rep Representative</h3>";
+                $html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">Status</font><br>";
+                if ( $no_area == 0 ) { $html .= "$this->rep is not currently assigned to any games.<br>"; }
+                elseif ( $no_area == 1 ) { $html .= "$this->rep is currently assigned to <font color=\"$this->colorSuccess\">$no_area</font> game.<br>"; }
+                else { $html .= "$this->rep is currently assigned to <font color=\"$this->colorSuccess\">$no_area</font> games.<br>"; }
+                if ( array_key_exists( 'all', $limit_list ) ) {
+                   $tmplimit = $limit_list[ 'all' ];
+                   $html .= "There is a limit of <font color=\"$this->colorWarning\">$tmplimit</font> Area assigned games at this time.</h3>\n";
+                }
+                elseif ( array_key_exists( 'none', $limit_list ) ) {
+                   $html .= "There is <font color=\"$this->colorWarning\">no</font> limit on Area assigned games at this time.</h3>\n";
+                }
+                elseif ( count( $limit_list ) ) {
+                    foreach ( $limit_list as $k => $v ) {
+                        $tmpassigned = $assigned_list[ $k ];
+                        if ( $used_list[ $k ] ) { 
+                           $html .= "You have assigned <font color=\"$this->colorWarning\">$tmpassigned</font> of your <font color=\"$this->colorWarning\">$v</font> game limit for $k.<br>\n";
+                           if ( $tmpassigned >= $v ) { $oneatlimit = 1; }
+                        }
+                    }
+                    $html .= "</h3>\n";
+                }
+                else {
+                   $html .= "There is no game limit at this time.</h3>\n";
+                }
+                if ( $locked && !array_key_exists( 'none', $limit_list ) ) {
+                    $html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">The schedule is presently locked.</font><br>\n";
+                    if ( !$oneatlimit ) {
+                      $html .= "You may sign $this->rep teams up for games but not remove them.</h3>\n";
+                    }
+                    else {
+                      $html .= "Since $this->rep is at or above the limit you will not be able to sign teams up for games.</h3>\n";
+                    }
                 }
               
             }
             $html .= "<center><hr width=\"25%\"><h3><font color=\"$this->colorAlert\">ACTIONS</font></h3>\n";
             if ( $this->rep == 'Section 1' ) {
-               $html .= "<h3 align=\"center\"><a href=\"/master\">Schedule All Referee Teams</a></h3>";
+                $html .= "<h3 align=\"center\"><a href=\"$this->masterPath\">Schedule All Referee Teams</a></h3>";
             }
             else {
-               $html .= "<h3 align=\"center\"><a href=\"/sched\">Schedule $this->rep Referee Teams</a></h3>";
-               $html .= "<h3 align=\"center\">Schedule 1 division: <a href=\"/sched?group=U10\">U10</a> - <a href=\"/sched?group=U12\">U12</a> - <a href=\"/sched?group=U14\">U14</a> - <a href=\"/sched?group=U16\">U16</a> - <a href=\"/sched?group=U19\">U19</a></h3>";
+                $html .= "<h3 align=\"center\"><a href=\"$this->schedPath\">Schedule $this->rep Referee Teams</a></h3>";
+                $html .= "<h3 align=\"center\">Schedule 1 division: ";
+                foreach ($groups as $group) {
+                    $html .= "<a href=\"$this->schedPath?group=$group\">$group</a>" . $delim;
+                }
+                $html = substr($html, 0, strlen($html)-3) ."</h3>";
             }
-            $html .= "<h3 align=\"center\"><a href=\"/full\">View the full game schedule</a></h3>";
-            $html .= "<h3 align=\"center\"><a href=\"/refs\">Add/Modify Referee Names to Assigned Games</a></h3>";
+            $html .= "<h3 align=\"center\"><a href=\"$this->fullPath\">View the full game schedule</a></h3>";
+            $html .= "<h3 align=\"center\"><a href=\"$this->refsPath\">Add/Modify Referee Names to Assigned Games</a></h3>";
    //         $html .= "<h3 align=\"center\"><a href=\"/summary.htm\">Summary of the playoffs</a></h3>";
-            $html .= "<h3 align=\"center\"><a href=\"/end\">LOG OFF</a></h3>";
+            $html .= "<h3 align=\"center\"><a href=\"$this->endPath\">LOG OFF</a></h3>";
             $html .= "</center>";
         }
         elseif ( $logon_good < 0 ) {
            $html .=  "<center><h1>Logon Failure</h1></center>";
-           $html .= "<h3 align=\"center\"><a href=\"/\">Return to Logon Page to Try Again.</a></h3>";
+           $html .= "<h3 align=\"center\"><a href=\"$this->logonPath\">Return to Logon Page to Try Again.</a></h3>";
            //session_destroy();
         }
         else {
            $html .=  "<center><h1>You are not Logged On</h1></center>";
-           $html .= "<h3 align=\"center\"><a href=\"/\">Logon Page</a></h3>";
+           $html .= "<h3 align=\"center\"><a href=\"$this->logonPath\">Logon Page</a></h3>";
            //session_destroy();
         }
     

@@ -95,7 +95,7 @@ class SchedFullController extends AbstractController
             
         }
         elseif ( !$this->authed ) {
-           $this->menu .=  "<center><h2>You need to <a href=\"/\">logon</a> first.</h2></center>";
+           $this->menu .=  "<center><h2>You need to <a href=\"$this->logonPath\">logon</a> first.</h2></center>";
         }
         else {
            $this->menu .=  "<center><h1>Something is not right</h1></center>";
@@ -109,13 +109,13 @@ class SchedFullController extends AbstractController
         $html =  "<h3 align=\"center\"><a href=\"greet\">Return to main page</a>&nbsp;-&nbsp\n";
 
         if ( $this->rep == 'Section 1' ) {
-           $html .=  "<a href=\"/master\">Return to schedule</a>&nbsp;-&nbsp\n";
+           $html .=  "<a href=\"$this->masterPath\">Return to schedule</a>&nbsp;-&nbsp\n";
         }
         else {
-           $html .=  "<a href=\"/sched\">Return to schedule</a>&nbsp;-&nbsp\n";
+           $html .=  "<a href=\"$this->schedPath\">Return to schedule</a>&nbsp;-&nbsp\n";
         }
         
-        $html .=  "<a href=\"/end\">Logoff</a></h3>\n";
+        $html .=  "<a href=\"$this->endPath\">Logoff</a></h3>\n";
         
         return $html;
     }

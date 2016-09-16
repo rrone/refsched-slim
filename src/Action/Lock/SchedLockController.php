@@ -77,14 +77,14 @@ class SchedLockController extends AbstractController
         }
         elseif ( $this->authed && $rep == 'Section 1') {
            $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"/master\">Schedule Page</a></h2></center>";
+           $html .= "You should go to the <a href=\"$this->masterPath\">Schedule Page</a></h2></center>";
         }
         elseif ( $this->authed ) {
            $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"/sched\">Schedule Page</a></h2></center>";
+           $html .= "You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2></center>";
         }
         elseif ( !$this->authed ) {
-           $html .= "<center><h2>You need to <a href=\"/\">logon</a> first.</h2></center>";
+           $html .= "<center><h2>You need to <a href=\"$this->logonPath\">logon</a> first.</h2></center>";
         }
         else {
            $html .= "<center><h1>Something is not right</h1></center>";

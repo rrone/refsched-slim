@@ -92,7 +92,6 @@ class SchedControlController extends AbstractController
                 if ( substr( $line, 0, 1 ) != '#' ) {
                     $record = explode( ',', trim($line) );
                     if ( !$any_games ) {
-                        $html .= "<center><h2>Here is the current schedule</h2></center>\n";
                         $html .= "      <table width=\"100%\">\n";
                         $html .= "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";                 
                         $html .= "            <th>Game No.</th>";
@@ -141,7 +140,7 @@ class SchedControlController extends AbstractController
 <<<EOT
       <h3 align="center"><a href="/greet">Return to main page</a>&nbsp;-&nbsp;
       <a href="/master">Return to schedule</a>&nbsp;-&nbsp;
-      <a href="/end">Logoff</a></h3>
+      <a href="$this->endPath()">Logoff</a></h3>
 EOT;
         
         return $html;

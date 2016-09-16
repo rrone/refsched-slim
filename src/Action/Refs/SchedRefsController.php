@@ -46,7 +46,7 @@ class SchedRefsController extends AbstractController
                    if ( $record[8] == $this->rep || $this->rep == 'Section 1') {
                       if ( !$any_games ) {
                          if ( $this->rep != 'Section 1') { $html .=  "<center><h2>You are currently scheduled for the following games</h2></center>\n"; }
-                         $html .=  "      <form name=\"addref\" method=\"post\" action=\"/editref\">\n";
+                         $html .=  "      <form name=\"addref\" method=\"post\" action=\"$this->editrefPath\">\n";
                          $html .=  "      <table width=\"100%\">\n";
                          $html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
                          $html .=  "            <th>Game<br>No.</th>";
@@ -58,7 +58,7 @@ class SchedRefsController extends AbstractController
                          $html .=  "            <th>CR</th>";
                          $html .=  "            <th>AR1</th>";
                          $html .=  "            <th>AR2</th>";
-                         $html .=  "            <th>4thO</th>";
+                         $html .=  "            <th>4th</th>";
                          $html .=  "            <th>&nbsp;</th>";
                          $html .=  "            </tr>\n";
                          $any_games = 1;
@@ -96,7 +96,7 @@ class SchedRefsController extends AbstractController
              fclose( $fp );
              if (!$any_games ) {
                 $html .=  "<center><h2>You do not currently have any games scheduled.</h2>\n";
-                $html .=  "  You should go to the <a href=\"/sched\">Schedule Page</a></h2></center>";
+                $html .=  "  You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2></center>";
              }
         }
         elseif ( !$this->authed ) {
@@ -108,16 +108,16 @@ class SchedRefsController extends AbstractController
     }
     private function menu()
     {
-        $html =  "<h3 align=\"center\"><a href=\"/greet\">Return to main page</a>&nbsp;-&nbsp;\n";
+        $html =  "<h3 align=\"center\"><a href=\"$this->greetPath\">Return to main page</a>&nbsp;-&nbsp;\n";
 
         if ( $this->rep == 'Section 1' ) {
-           $html .=  "<a href=\"/master\">Return to schedule</a>&nbsp;-&nbsp;\n";
+           $html .=  "<a href=\"$this->masterPath\">Return to schedule</a>&nbsp;-&nbsp;\n";
         }
         else {
-           $html .=  "<a href=\"/sched\">Return to schedule</a>&nbsp;-&nbsp;\n";
+           $html .=  "<a href=\"$this->schedPath\">Return to schedule</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .=  "<a href=\"/end\">Logoff</a></h3>\n";
+        $html .=  "<a href=\"$this->endPath\">Logoff</a></h3>\n";
       
         return $html;
     }
