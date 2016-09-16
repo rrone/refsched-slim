@@ -51,9 +51,10 @@ abstract class AbstractController
         $this->view = $container->get('view');
         $this->logger = $container->get('logger');
         
-        $this->root = $_SERVER['DOCUMENT_ROOT'] . '/..';
-        $this->refdata = $this->root . '/var/refdata/';
-        $this->authdat = $this->root . '/var/dat/';
+        $this->root = __DIR__ . '/../../var';
+
+        $this->refdata = $this->root . '/refdata/';
+        $this->authdat = $this->root . '/dat/';
 
         $this->addrefPath = $this->container->get('router')->pathFor('addref');
         $this->assignPath = $this->container->get('router')->pathFor('assign');

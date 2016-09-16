@@ -53,7 +53,7 @@ class SchedEditRefController extends AbstractController
                 if ( substr( $line, 0, 1 ) != '#' ) {
                     $record = explode( ',', trim($line) );
                     if ( $record[0] == $target_game && ($record[8] == $this->rep || $this->rep == 'Section 1') ) {
-                    $html .=  "      <form name=\"editref\" method=\"post\" action=\"$this->refsPath\">\n";
+                    $html .=  "      <form name=\"editref\" method=\"post\" action=\"$this->addrefPath\">\n";
                     $html .=  "      <table width=\"100%\">\n";
                     $html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
                     $html .=  "            <th>Game<br>No.</th>";

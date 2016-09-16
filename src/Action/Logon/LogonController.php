@@ -21,10 +21,9 @@ class LogonController extends AbstractController
     }
     private function renderLogon()
     {
-		$greetPath = $this->greetPath();
         $html =
 <<<EOD
-      <form name="form1" method="post" action="$greetPath">
+      <form name="form1" method="post" action="$this->greetPath">
         <div align="center">
 		  <table>
           <tr><td width="50%"><div align="right">ARA or representative from: </div></td>
