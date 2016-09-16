@@ -212,7 +212,7 @@ class SchedGreetController extends AbstractController
                 }
                 $html = substr($html, 0, strlen($html)-3) ."</h3>";
             }
-            $html .= "<h3 align=\"center\"><a href=\"$this->fullPath\">View the full game schedule</a></h3>";
+            $html .= "<h3 align=\"center\"><a href=\"$this->fullPath\">Go to the full game schedule</a></h3>";
             $html .= "<h3 align=\"center\"><a href=\"$this->refsPath\">Add/Modify Referee Names to Assigned Games</a></h3>";
    //         $html .= "<h3 align=\"center\"><a href=\"/summary.htm\">Summary of the playoffs</a></h3>";
             $html .= "<h3 align=\"center\"><a href=\"$this->endPath\">LOG OFF</a></h3>";
@@ -220,7 +220,7 @@ class SchedGreetController extends AbstractController
         }
         elseif ( $this->logon_good < 0 ) {
            $html .=  "<center><h1>Logon Failure</h1></center>";
-           $html .= "<h3 align=\"center\"><a href=\"$this->logonPath\">Return to Logon Page to Try Again.</a></h3>";
+           $html .= "<h3 align=\"center\"><a href=\"$this->logonPath\">Go to Logon Page to Try Again.</a></h3>";
            //session_destroy();
         }
         else {

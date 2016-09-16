@@ -138,8 +138,8 @@ class SchedControlController extends AbstractController
     {
         $html =
 <<<EOT
-      <h3 align="center"><a href="$this->greetPath">Return to main page</a>&nbsp;-&nbsp;
-      <a href="$this->masterPath">Return to schedule</a>&nbsp;-&nbsp;
+      <h3 align="center"><a href="$this->greetPath">Go to main page</a>&nbsp;-&nbsp;
+      <a href="$this->masterPath">Go to schedule</a>&nbsp;-&nbsp;
       <a href="$this->endPath">Logoff</a></h3>
 EOT;
         

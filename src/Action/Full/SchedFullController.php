@@ -106,13 +106,13 @@ class SchedFullController extends AbstractController
     }
     private function menu()
     {
-        $html =  "<h3 align=\"center\"><a href=\"greet\">Return to main page</a>&nbsp;-&nbsp\n";
+        $html =  "<h3 align=\"center\"><a href=\"greet\">Go to main page</a>&nbsp;-&nbsp\n";
 
         if ( $this->rep == 'Section 1' ) {
-           $html .=  "<a href=\"$this->masterPath\">Return to schedule</a>&nbsp;-&nbsp\n";
+           $html .=  "<a href=\"$this->masterPath\">Go to schedule</a>&nbsp;-&nbsp\n";
         }
         else {
-           $html .=  "<a href=\"$this->schedPath\">Return to schedule</a>&nbsp;-&nbsp\n";
+           $html .=  "<a href=\"$this->schedPath\">Go to schedule</a>&nbsp;-&nbsp\n";
         }
         
         $html .=  "<a href=\"$this->endPath\">Logoff</a></h3>\n";
