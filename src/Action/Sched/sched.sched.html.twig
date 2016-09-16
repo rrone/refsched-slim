@@ -1,10 +1,13 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-		{{ sched.sched | raw }}
+    
+    <h2 align="center">{{ view.title | raw }}</h2>
+    
+    {{ view.menu | raw }}
 
-        <h3 align="center"><a href="/greet">Return to main screen</a>&nbsp;-&nbsp;
-        <a href="/sched">Return to schedule</a>&nbsp;-&nbsp;
-        <a href="/end">Logoff</a></h3>
+    {{ view.sched | raw }}
+
+    {{ view.menu | raw }}
         
 {% endblock %}

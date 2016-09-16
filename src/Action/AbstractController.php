@@ -17,6 +17,17 @@ abstract class AbstractController
     protected $root;
     protected $refdata;
     protected $authdat;
+    protected $rep;
+    protected $page_title;
+    protected $authed;
+    
+    protected $colorTitle = '#80ccff';
+    protected $colorOpen = '#00FFFF';
+    protected $colorGroup = '#00FF88';
+    protected $colorNotGroup = '#ffcccc';
+    protected $colorAlert = '#CC0000';
+    protected $colorWarning = '#CC00CC';
+    protected $colorSuccess = '#008800';
 
     public function __construct(Container $container)
     {
@@ -30,10 +41,22 @@ abstract class AbstractController
         $this->authdat = $this->root . '/var/dat/';
 
     }
-
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->view->render($response, 'base.html.twig');
         return $response;
+    }
+    protected function errorCheck()
+    {
+        $html = null;
+        
+        if ( !$this->authed ) {
+            $html .= "<center><h2>You need to <a href=\"/\">logon</a> first.</h2></center>";
+        }
+        else {
+            $html .= "<center><h1>Something is not right</h1></center>";
+        }
+        
+        return $html;
     }
 }

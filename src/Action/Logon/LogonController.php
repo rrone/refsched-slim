@@ -12,7 +12,7 @@ class LogonController extends AbstractController
         $this->logger->info("Logon page action dispatched");
         
         $content = array(
-            'logon' => $this->renderLogon()
+            'content' => $this->renderLogon()
         );
         
         $this->view->render($response, 'logon.html.twig', $content);      

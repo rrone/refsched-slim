@@ -21,7 +21,6 @@ return [
                 __DIR__ . '/../src/Action/Master',
                 __DIR__ . '/../src/Action/Refs',
                 __DIR__ . '/../src/Action/Sched',
-                __DIR__ . '/../src/Action/TwigTest',
             ],
             'twig' => [
                 'cache' => __DIR__ . '/../var/cache/twig',

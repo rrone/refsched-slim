@@ -12,53 +12,48 @@ class SchedFullController extends AbstractController
         $this->logger->info("Schedule full page action dispatched");
         
         $content = array(
-            'sched' => array (
-                'full' => $this->renderFull(),
-                'event' => array (
-                    'name' => 'Western States Championships, Carson City, NV',
-                    'date' => 'March 25-26, 2016'
-                )
+            'view' => array (
+                'content' => $this->renderFull(),
+                'menu' => $this->menu(),
+                'title' => $this ->page_title
             )
         );        
-        
-        $this->view->render($response, 'sched.full.html.twig', $content);
-;
+
+        $this->view->render($response, 'sched.html.twig', $content);
     }
 
     private function renderFull()
     {
         $html = null;
         
-        $authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;
         
-  //         $html .=  "$authed";    //debug
-        $rep = $_SESSION['unit'];
-        $schedule_file = $_SESSION['eventfile'];
+  //         $html .=  "$this->authed";    //debug
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $schedule_file = isset($_SESSION['eventfile']) ? $_SESSION['eventfile'] : null;
 
-        if ( $authed ) {
+        if ( $this->authed ) {
              $infile = fopen( $schedule_file, "r");
              $sched_no = fgets( $infile, 1024 );
              $sched_title = fgets( $infile, 1024 );
-             $page_title = substr( $sched_title, 1);
-  
-             $html = "<center><h1>$page_title</h1></center>";
+             $this->page_title = substr( $sched_title, 1);
   
              $html .=  "      <table width=\"100%\">\n";
-             $html .=  "        <tr align=\"center\">";
-             $html .=  "            <td>Game No.</td>";
-             $html .=  "            <td>Day</td>";
-             $html .=  "            <td>Time</td>";
-             $html .=  "            <td>Location</td>";
-             $html .=  "            <td>Div</td>";
-             $html .=  "            <td>Home</td>";
-             $html .=  "            <td>Away</td>";
-             $html .=  "            <td>Referee<br>Team</td>";
-             $html .=  "            </tr>\n";
+             $html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+             $html .=  "            <th>Game No.</th>";
+             $html .=  "            <th>Day</th>";
+             $html .=  "            <th>Time</th>";
+             $html .=  "            <th>Location</th>";
+             $html .=  "            <th>Div</th>";
+             $html .=  "            <th>Home</th>";
+             $html .=  "            <th>Away</th>";
+             $html .=  "            <th>Referee<br>Team</th>";
+             $html .=  "         </tr>\n";
              while ( $line = fgets( $infile, 1024 ) ) {
                 if ( substr( $line, 0, 1 ) != '#' ) {
                    $record = explode( ',', $line );
-                   if ( $record[8] == $rep ) {
-                      $html .=  "            <tr align=\"center\" bgcolor=\"#FF8888\">";
+                   if ( $record[8] == $this->rep ) {
+                      $html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
                       $html .=  "            <td>$record[0]</td>";
                       $html .=  "            <td>$record[2]<br>$record[1]</td>";
                       $html .=  "            <td>$record[4]</td>";
@@ -70,7 +65,7 @@ class SchedFullController extends AbstractController
                       $html .=  "            </tr>\n";
                    }
                    elseif ( $record[8] == "" ) {
-                      $html .=  "            <tr align=\"center\" bgcolor=\"#00FFFF\">";
+                      $html .=  "            <tr align=\"center\" bgcolor=\"$this->colorNotGroup\">";
                       $html .=  "            <td>$record[0]</td>";
                       $html .=  "            <td>$record[2]<br>$record[1]</td>";
                       $html .=  "            <td>$record[4]</td>";
@@ -82,7 +77,7 @@ class SchedFullController extends AbstractController
                       $html .=  "            </tr>\n";
                    }
                    else {
-                      $html .=  "            <tr align=\"center\" bgcolor=\"#00FF88\">";
+                      $html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
                       $html .=  "            <td>$record[0]</td>";
                       $html .=  "            <td>$record[2]<br>$record[1]</td>";
                       $html .=  "            <td>$record[4]</td>";
@@ -97,24 +92,32 @@ class SchedFullController extends AbstractController
              }
              $html .=  "      </table>\n";
              fclose( $infile );
-            $html .=  "      <h3 align=\"center\"><a href=\"greet\">Return to main screen</a>&nbsp;-&nbsp\n";
-             if ( $rep == 'Section 1' ) {
-                $html .=  "      <a href=\"/master\">Return to schedule</a>&nbsp;-&nbsp\n";
-             }
-             else {
-                $html .=  "      <a href=\"/sched\">Return to schedule</a>&nbsp;-&nbsp\n";
-             }
-            $html .=  "      <a href=\"/end.php\">Logoff</a></h3>\n";
+            
         }
-        elseif ( !$authed ) {
-           $html .=  "<center><h2>You need to <a href=\"/\">logon</a> first.</h2></center>";
+        elseif ( !$this->authed ) {
+           $this->menu .=  "<center><h2>You need to <a href=\"/\">logon</a> first.</h2></center>";
         }
         else {
-           $html .=  "<center><h1>Something is not right</h1></center>";
+           $this->menu .=  "<center><h1>Something is not right</h1></center>";
         }    
 
         return $html;
           
+    }
+    private function menu()
+    {
+        $html =  "<h3 align=\"center\"><a href=\"greet\">Return to main page</a>&nbsp;-&nbsp\n";
+
+        if ( $this->rep == 'Section 1' ) {
+           $html .=  "<a href=\"/master\">Return to schedule</a>&nbsp;-&nbsp\n";
+        }
+        else {
+           $html .=  "<a href=\"/sched\">Return to schedule</a>&nbsp;-&nbsp\n";
+        }
+        
+        $html .=  "<a href=\"/end\">Logoff</a></h3>\n";
+        
+        return $html;
     }
 }
 

@@ -25,14 +25,16 @@ class SchedLockController extends AbstractController
     {
         $html = null;
         
-        $from_url = parse_url( $_SERVER['HTTP_REFERER']);
+        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_SERVER['HTTP_HOST'];
+        $from_url = parse_url( $referer );
+
         $from = $from_url['path'];
   //      $html .= "<p>$from</p>\n";
-        $authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;
         
         $rep = $_SESSION['unit'];
-        $schedule_file = $_SESSION['eventfile'];
-        if ( $authed && $rep == 'Section 1') {
+        $schedule_file = isset($_SESSION['eventfile']) ? $_SESSION['eventfile'] : null;
+        if ( $this->authed && $rep == 'Section 1') {
             $lock_yes = 0;
    //         print_r($_POST);
             copy( $schedule_file, $this->refdata . "temp_lock.dat");
@@ -72,17 +74,16 @@ class SchedLockController extends AbstractController
             else {
                $html .= "<h3 align=\"center\">The schedule has been locked!</h3>\n";
             }
-            $html .= "<h3 align=\"center\"><a href=\"/greet\">Return to the main page</a></h3>\n";
         }
-        elseif ( $authed && $rep == 'Section 1') {
+        elseif ( $this->authed && $rep == 'Section 1') {
            $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
            $html .= "You should go to the <a href=\"/master\">Schedule Page</a></h2></center>";
         }
-        elseif ( $authed ) {
+        elseif ( $this->authed ) {
            $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
            $html .= "You should go to the <a href=\"/sched\">Schedule Page</a></h2></center>";
         }
-        elseif ( !$authed ) {
+        elseif ( !$this->authed ) {
            $html .= "<center><h2>You need to <a href=\"/\">logon</a> first.</h2></center>";
         }
         else {

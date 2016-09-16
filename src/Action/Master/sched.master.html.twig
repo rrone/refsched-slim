@@ -1,6 +1,13 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-		{{ sched.master | raw }}
+    
+    <h2 align="center">{{ view.title | raw }}</h2>
+    
+    {{ view.menu | raw }}
+
+    {{ view.master | raw }}
+
+    {{ view.menu | raw }}
         
 {% endblock %}

@@ -130,3 +130,6 @@ table {
 .clear-fix {
 	clear: both;
 }
+input {
+	margin: 10px 20px;
+}

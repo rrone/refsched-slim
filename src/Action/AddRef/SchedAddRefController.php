@@ -12,12 +12,13 @@ class SchedAddRefController extends AbstractController
         $this->logger->info("Schedule addref page action dispatched");
         
         $content = array(
-            'sched' => array (
-                'addref' => $this->renderAddRef()
+            'view' => array (
+                'content' => $this->renderAddRef(),
+                'title' => $this->page_title
             )
         );        
         
-        $this->view->render($response, 'sched.greet.html.twig', $content);
+        $this->view->render($response, 'sched.html.twig', $content);
 
     }
 
@@ -25,31 +26,31 @@ class SchedAddRefController extends AbstractController
     {
         $html = null;
         
-        $from_url = parse_url( $_SERVER['HTTP_REFERER']);
+        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_SERVER['HTTP_HOST'];
+        $from_url = parse_url( $referer );
+
         $from = $from_url['path'];
    //      $html .= "<p>$from</p>\n";
    
-        $authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;
         
-        $rep = $_SESSION['unit'];
-        $schedule_file = $_SESSION['eventfile'];
+        $this->rep = $_SESSION['unit'];
+        $schedule_file = isset($_SESSION['eventfile']) ? $_SESSION['eventfile'] : null;
         $value = count( $_POST );
         
-        if ( $authed && $_SERVER['REQUEST_METHOD'] == 'POST' && count( $_POST ) == 5 ) {
+        if ( $this->authed && $_SERVER['REQUEST_METHOD'] == 'POST' && count( $_POST ) == 5 ) {
    //        print_r($_POST);
    //        $html .= "<p>$value</p>\n";
-            copy( $schedule_file, "refdata/temprefs.dat");
+            copy( $schedule_file, $this->refdata . "temprefs.dat");
             $outfile = fopen( $schedule_file, "w");
             if (flock( $outfile, LOCK_EX )) {
    //            $html .= "<p>Got lock</p>\n<ul>\n";
-               $tmpfile = fopen( "refdata/temprefs.dat", "r");
+               $tmpfile = fopen( $this->refdata . "temprefs.dat", "r");
                $sched_no = fgets( $tmpfile, 1024 );
                fputs( $outfile, $sched_no );
                $sched_title = fgets( $tmpfile, 1024 );
                fputs( $outfile, $sched_title );
-               $page_title = substr( $sched_title, 1);
-   
-               $html .= "<center><h1>$page_title</h1></center>";
+               $this->page_title = substr( $sched_title, 1);
    
                while ( $line = fgets( $tmpfile, 1024 ) ) {
                   if ( substr( $line, 0, 1 ) == '#' ) {
@@ -58,13 +59,13 @@ class SchedAddRefController extends AbstractController
                   else {
                      $record = explode( ',', trim($line) );
                      $list_key = "update" . trim( $record[0] );
-                     if ( array_key_exists( $list_key, $_POST ) && ($record[8] == $rep || $rep == 'Section 1') ) {
+                     if ( array_key_exists( $list_key, $_POST ) && ($record[8] == $this->rep || $this->rep == 'Section 1') ) {
                            $record[9] = $_POST[ 'center' ];
                            $record[10] = $_POST[ 'ar1' ];
                            $record[11] = $_POST[ 'ar2' ];
                            $record[12] = $_POST[ '4thO' ];
                      }
-                     elseif ( array_key_exists( $list_key, $_POST ) && $record[8] != $rep ) {
+                     elseif ( array_key_exists( $list_key, $_POST ) && $record[8] != $this->rep ) {
                         $html .= "<center><h2>Sorry, you are not currently assigned to game number $record[0]</h2></center>\n";
                      }
                      $line = implode( ',', $record )."\n";
@@ -82,30 +83,30 @@ class SchedAddRefController extends AbstractController
             while ( $line = fgets( $fp, 1024 ) ) {
                if ( substr( $line, 0, 1 ) != '#' ) {
                   $record = explode( ',', trim($line) );
-                  if ( !$any_games && ( $rep == 'Section 1' || $rep == $record[8] )) {
+                  if ( !$any_games && ( $this->rep == 'Section 1' || $this->rep == $record[8] )) {
                      $html .= "<center><h2>Here are the current assignments</h2></center>\n";
                      $html .= "      <table width=\"100%\">\n";
-                     $html .= "        <tr align=\"center\">";
-                     $html .= "            <td>Game No.</td>";
-                     $html .= "            <td>Day</td>";
-                     $html .= "            <td>Time</td>";
-                     $html .= "            <td>Location</td>";
-                     $html .= "            <td>Div</td>";
-                     $html .= "            <td>Ref<br>Team</td>";
-                     $html .= "            <td>Center</td>";
-                     $html .= "            <td>AR1</td>";
-                     $html .= "            <td>AR2</td>";
-                     $html .= "            <td>4thO</td>";
+                     $html .= "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";   
+                     $html .= "            <th>Game No.</th>";
+                     $html .= "            <th>Day</th>";
+                     $html .= "            <th>Time</th>";
+                     $html .= "            <th>Location</th>";
+                     $html .= "            <th>Div</th>";
+                     $html .= "            <th>Ref<br>Team</th>";
+                     $html .= "            <th>Center</th>";
+                     $html .= "            <th>AR1</th>";
+                     $html .= "            <th>AR2</th>";
+                     $html .= "            <th>4thO</th>";
                      $html .= "            </tr>\n";
                      $any_games = 1;
                   }
-                  if ( $record[8] == $rep || ( $record[8] && $rep == 'Section 1') ) {
+                  if ( $record[8] == $this->rep || ( $record[8] && $this->rep == 'Section 1') ) {
                      $html .= "            <tr align=\"center\" bgcolor=\"#00FF88\">";
                   } 
-                  elseif ( $rep == 'Section 1' ) {
+                  elseif ( $this->rep == 'Section 1' ) {
                      $html .= "            <tr align=\"center\" bgcolor=\"#00FFFF\">";
                   } 
-                  if ( $record[8] == $rep || $rep == 'Section 1' ) {
+                  if ( $record[8] == $this->rep || $this->rep == 'Section 1' ) {
                      $html .= "            <td>$record[0]</td>";
                      $html .= "            <td>$record[2]<br>$record[1]</td>";
                      $html .= "            <td>$record[4]</td>";
@@ -125,34 +126,35 @@ class SchedAddRefController extends AbstractController
             }
             fclose( $fp );
         }
-        elseif ( $authed && $rep == 'Section 1') {
+        elseif ( $this->authed && $this->rep == 'Section 1') {
            $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
            $html .= "You should go to the <a href=\"/master\">Schedule Page</a></h2></center>";
         }
-        elseif ( $authed ) {
+        elseif ( $this->authed ) {
            $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
            $html .= "You should go to the <a href=\"/sched\">Schedule Page</a></h2></center>";
         }
-        elseif ( !$authed ) {
-           $html .= "<center><h2>You need to <a href=\"/\">logon</a> first.</h2></center>";
-        }
-        else {
-           $html .= "<center><h1>Something is not right</h1></center>";
-        }
+        elseif ( !$this->authed ) {
+           $html .= $this->errorCheck();
+        }  
 
-        $html .=  "<h3 align=\"center\"><a href=\"/greet\">Return to main screen</a>&nbsp;-&nbsp;\n";
+        return $html;
+          
+    }
+    private function menu()
+    {
+        $html =  "<h3 align=\"center\"><a href=\"/greet\">Return to main page</a>&nbsp;-&nbsp;\n";
 
-        if ( $rep == 'Section 1' ) {
+        if ( $this->rep == 'Section 1' ) {
            $html .=  "<a href=\"/master\">Return to schedule</a>&nbsp;-&nbsp;\n";
         }
         else {
            $html .=  "<a href=\"/sched\">Return to schedule</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .=  "<a href=\"/end\">Logoff</a></h3>\n";        
+        $html .=  "<a href=\"/end\">Logoff</a></h3>\n";              
 
         return $html;
-          
     }
 }
 

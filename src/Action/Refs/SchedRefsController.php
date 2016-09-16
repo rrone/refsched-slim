@@ -12,62 +12,62 @@ class SchedRefsController extends AbstractController
         $this->logger->info("Schedule refs page action dispatched");
         
         $content = array(
-            'sched' => array (
-                'refs' => $this->renderRefs()
+            'view' => array (
+                'content' => $this->renderRefs(),
+                'menu' => $this->menu(),
+                'title' => $this->page_title
             )
         );        
         
-        $this->view->render($response, 'sched.refs.html.twig', $content);
-;
+        $this->view->render($response, 'sched.html.twig', $content);
+
     }
 
     private function renderRefs()
     {
         $html = null;
         
-        $authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;
         
-        $rep = $_SESSION['unit'];
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
         $locked = isset($_SESSION['locked']) ? $_SESSION['locked'] : null;
-        $schedule_file = $_SESSION['eventfile'];
+        $schedule_file = isset($_SESSION['eventfile']) ? $_SESSION['eventfile'] : null;
   
-        if ( $authed ) {
+        if ( $this->authed ) {
              $any_games = 0;
              $fp = fopen( $schedule_file, "r" );
              $sched_no = fgets( $fp, 1024 );
              $sched_title = fgets( $fp, 1024 );
-             $page_title = substr( $sched_title, 1);
-
-             $html = "<center><h1>$page_title</h1></center>";
+             $this->page_title = substr( $sched_title, 1);
 
              while ( $line = fgets( $fp, 1024 ) ) {
                 if ( substr( $line, 0, 1 ) != '#' ) {
                    $record = explode( ',', trim($line) );
-                   if ( $record[8] == $rep || $rep == 'Section 1') {
+                   if ( $record[8] == $this->rep || $this->rep == 'Section 1') {
                       if ( !$any_games ) {
-                         if ( $rep != 'Section 1') { $html .=  "<center><h2>You are currently scheduled for the following games</h2></center>\n"; }
+                         if ( $this->rep != 'Section 1') { $html .=  "<center><h2>You are currently scheduled for the following games</h2></center>\n"; }
                          $html .=  "      <form name=\"addref\" method=\"post\" action=\"/editref\">\n";
                          $html .=  "      <table width=\"100%\">\n";
-                         $html .=  "        <tr align=\"center\">";
-                         $html .=  "            <td>Game<br>No.</td>";
-                         $html .=  "            <td>Day</td>";
-                         $html .=  "            <td>Time</td>";
-                         $html .=  "            <td>Location</td>";
-                         $html .=  "            <td>Div</td>";
-                         $html .=  "            <td>Area</td>";
-                         $html .=  "            <td>CR</td>";
-                         $html .=  "            <td>AR1</td>";
-                         $html .=  "            <td>AR2</td>";
-                         $html .=  "            <td>4thO</td>";
-                         $html .=  "            <td>&nbsp;</td>";
+                         $html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+                         $html .=  "            <th>Game<br>No.</th>";
+                         $html .=  "            <th>Day</th>";
+                         $html .=  "            <th>Time</th>";
+                         $html .=  "            <th>Location</th>";
+                         $html .=  "            <th>Div</th>";
+                         $html .=  "            <th>Area</th>";
+                         $html .=  "            <th>CR</th>";
+                         $html .=  "            <th>AR1</th>";
+                         $html .=  "            <th>AR2</th>";
+                         $html .=  "            <th>4thO</th>";
+                         $html .=  "            <th>&nbsp;</th>";
                          $html .=  "            </tr>\n";
                          $any_games = 1;
                       }
-                      if ( !$record[8] && $rep == 'Section 1' ) {
-                         $html .=  "            <tr align=\"center\" bgcolor=\"#00FFFF\">";
+                      if ( !$record[8] && $this->rep == 'Section 1' ) {
+                         $html .=  "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
                       }
                       else {
-                         $html .=  "            <tr align=\"center\" bgcolor=\"#00FF88\">";
+                         $html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
                       }
                       $html .=  "            <td>$record[0]</td>";
                       $html .=  "            <td>$record[2]<br>$record[1]</td>";
@@ -99,16 +99,18 @@ class SchedRefsController extends AbstractController
                 $html .=  "  You should go to the <a href=\"/sched\">Schedule Page</a></h2></center>";
              }
         }
-        elseif ( !$authed ) {
-           $html .=  "<center><h2>You need to <a href=\"/\">logon</a> first.</h2></center>";
-        }
-        else {
-           $html .=  "<center><h1>Something is not right</h1></center>";
+        elseif ( !$this->authed ) {
+           $html .=  $this->errorCheck();
         }
   
-        $html .=  "<h3 align=\"center\"><a href=\"/greet\">Return to main screen</a>&nbsp;-&nbsp;\n";
+        return $html;
+          
+    }
+    private function menu()
+    {
+        $html =  "<h3 align=\"center\"><a href=\"/greet\">Return to main page</a>&nbsp;-&nbsp;\n";
 
-        if ( $rep == 'Section 1' ) {
+        if ( $this->rep == 'Section 1' ) {
            $html .=  "<a href=\"/master\">Return to schedule</a>&nbsp;-&nbsp;\n";
         }
         else {
@@ -118,7 +120,6 @@ class SchedRefsController extends AbstractController
         $html .=  "<a href=\"/end\">Logoff</a></h3>\n";
       
         return $html;
-          
     }
 }
 
