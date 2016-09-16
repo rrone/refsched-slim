@@ -24,7 +24,6 @@ class LogonController extends AbstractController
         $html =
 <<<EOD
       <form name="form1" method="post" action="/greet">
-        <h3 align="center">Scheduling System Logon</h3>
         <div align="center">
 		  <table>
           <tr><td width="50%"><div align="right">ARA or representative from: </div></td>

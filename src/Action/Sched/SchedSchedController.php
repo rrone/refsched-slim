@@ -150,13 +150,13 @@ class SchedSchedController extends AbstractController
 
             $html .= "  <div align=\"left\">";
             
-            $html .= "    <h3>Available games - Color change indicates different start times.</h3>\n";
             if ( !$locked || !$allatlimit ) {
                 $html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
                 $html .=  "      <div class='clear-fix'></div>";
             }
+            $html .= "    <h3>Available games - Color change indicates different start times.</h3>\n";
             if ( $allatlimit ) {
-                $html .= "		<tr align=\"center\" bgcolor=\"$this->colorTitle\">";   
+                $html .= "		<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";   
                 $html .= "		<td>No other games available.</td>";
                 $html .= "		</tr>\n";
             } else {

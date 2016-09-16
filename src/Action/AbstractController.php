@@ -25,6 +25,7 @@ abstract class AbstractController
     protected $colorOpen = '#00FFFF';
     protected $colorGroup = '#00FF88';
     protected $colorNotGroup = '#ffcccc';
+    protected $colorHighlight = '#FFBC00';
     protected $colorAlert = '#CC0000';
     protected $colorWarning = '#CC00CC';
     protected $colorSuccess = '#008800';

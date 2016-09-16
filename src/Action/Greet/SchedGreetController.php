@@ -87,9 +87,14 @@ class SchedGreetController extends AbstractController
         else { 
            $this->logon_good = 0;
         }
+        
+        $used_list[ 'none' ] = null;
+        $assigned_list = null;
+        $limit_list = null;
+
         if ( $this->logon_good > 0 ) {
             if ( file_exists( $this->authdat . "limit" ) ) {
-                $fp = fopen( $this->refdata . "limit", "r" );
+                $fp = fopen( $this->authdat . "limit", "r" );
                 while ( $line = fgets( $fp, 1024 ) ) {
                    $record = explode( ',', $line );
                    $limit_list[ $record[ 0 ] ] = $record[1];
@@ -99,6 +104,7 @@ class SchedGreetController extends AbstractController
                fclose( $fp );
             }
             else { $limit_list[ 'none' ] = 1; } 
+
             $no_assigned = 0;
             $no_unassigned = 0;
             $no_area = 0;
@@ -107,7 +113,8 @@ class SchedGreetController extends AbstractController
             $scheddata = fopen( $schedule_file, "r");
             $no = fgets( $scheddata, 1024 );
             $title = fgets( $scheddata, 1024 );
-            $page_title = substr( $title, 1);
+            $this->page_title = substr( $title, 1);
+
             while ( $line = fgets( $scheddata, 1024 ) ) {
                if ( strtoupper( trim( $line ) ) == '#LOCKED' ) {
                   $locked = 1;
@@ -117,14 +124,15 @@ class SchedGreetController extends AbstractController
                   if ( $this->rep == "Section 1" && $record[8] ) { $no_assigned++; }
                   elseif ( $this->rep == "Section 1" ) { $no_unassigned++; }
                   elseif ( $this->rep == $record[8] ) { 
-                     $no_area++; 
-                     $assigned_list[ substr( $record[5], 0, 3 ) ]++;
+                     $no_area++;
+                     $assigned_list[ substr( $record[5], 1, 3 ) ]++;
                   }
-                  $used_list[ substr( $record[5], 0, 3 ) ] = 1;
+                  $used_list[ substr( $record[5], 1, 3 ) ] = 1;
                }
             }
             fclose( $scheddata );
-            $html = "<h2 align=\"center\">$page_title</h2>";
+            
+            $html = null;
             if ( $this->rep == 'Section 1' ) {
                $html .= "<h3 align=\"center\">Welcome $this->rep Scheduler</h3>\n";
                $html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">STATUS</font> - At this time:<br>\n";

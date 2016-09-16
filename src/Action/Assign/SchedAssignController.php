@@ -15,7 +15,7 @@ class SchedAssignController extends AbstractController
             'view' => array (
                 'content' => $this->renderAssign(),
                 'title' => $this->page_title,
-                ''
+                'menu' => $this->menu()
             )
         );        
         
@@ -38,8 +38,12 @@ class SchedAssignController extends AbstractController
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
         $locked = isset($_SESSION['locked']) ? $_SESSION['locked'] : null;
         $schedule_file = isset($_SESSION['eventfile']) ? $_SESSION['eventfile'] : null;
-        if ( file_exists( "refdata/limit" ) ) {
-            $fp = fopen( "refdata/limit", "r" );
+  
+        $games_now = [];
+        $games_requested = [];
+        
+        if ( file_exists( $this->authdat . "limit" ) ) {
+            $fp = fopen( $this->authdat . "limit", "r" );
             while ( $line = fgets( $fp, 1024 ) ) {
                 $record = explode( ',', $line );
                 $limit_list[ $record[0] ] = $record[1];   //The limit on each div
@@ -54,6 +58,7 @@ class SchedAssignController extends AbstractController
             if ( !count( $limit_list ) ) { $limit_list[ 'none' ] = 1; }
         }
         else { $limit_list[ 'none' ] = 1; }
+  
   
         if ( $this->authed && $_SERVER['REQUEST_METHOD'] == 'POST' && $this->rep != 'Section 1' ) {
   //         print_r($_POST);
@@ -74,13 +79,13 @@ class SchedAssignController extends AbstractController
                         if ( substr( $line, 0, 1 ) != '#' ) {
                             $record = explode( ',', $line );
                             if ( in_array( $record[0], $array_of_keys ) ) { 
-                                $games_requested[ substr( $record[5], 0, 3 ) ]++;
+                                $games_requested[ substr( $record[5], 1, 3 ) ]++;
                                 if ( $record[8] == $this->rep ) {
-                                    $games_both[ substr( $record[5], 0, 3 ) ]++;
+                                    $games_both[ substr( $record[5], 1, 3 ) ]++;
                                 }
                             }
                             if ( $record[8] == $this->rep ) {
-                                $games_now[ substr( $record[5], 0, 3 ) ]++;
+                                $games_now[ substr( $record[5], 1, 3 ) ]++;
                                 if ( array_key_exists( 'all', $limit_list ) ) { $games_now[ 'all' ]++; }
                             }
                         }
@@ -96,16 +101,16 @@ class SchedAssignController extends AbstractController
        //            $html .= "\n";
        
        //   Begin the file rewrite loop
-                copy( $schedule_file, "refdata/temp.dat");
+                copy( $schedule_file, $this->refdata . "temp.dat");
                 $outfile = fopen( $schedule_file, "w");
                 if (flock( $outfile, LOCK_EX )) {
       //              $html .= "<p>Got lock</p>\n<ul>\n";
-                    $tmpfile = fopen( "refdata/temp.dat", "r");
+                    $tmpfile = fopen( $this->refdata . "temp.dat", "r");
                     $sched_no = fgets( $tmpfile, 1024 );
                     fputs( $outfile, $sched_no );
                     $sched_title = fgets( $tmpfile, 1024 );
                     fputs( $outfile, $sched_title );
-                    $page_title = substr( $sched_title, 1);
+                    $this->page_title = substr( $sched_title, 1);
       
                     while ( $line = fgets( $tmpfile, 1024 ) ) {
                         if ( substr( $line, 0, 1 ) == '#' ) {
@@ -115,7 +120,7 @@ class SchedAssignController extends AbstractController
                         else {
                                      //  Process anything else
                             $record = explode( ',', trim($line) );
-                            $tempdiv = substr( $record[5], 0, 3 );
+                            $tempdiv = substr( $record[5], 1, 3 );
                             if ( array_key_exists( 'all', $limit_list ) ) { $tempdiv = 'all'; }
                             if ( array_key_exists( 'none', $limit_list ) && in_array( $record[0], $array_of_keys ) && $record[8] == "" ) {
                                       //  No limits in place - Game number match - game not taken
@@ -223,11 +228,11 @@ class SchedAssignController extends AbstractController
                 fclose( $fp );
             }
             else {
-                copy( $schedule_file, "refdata/temp.dat");
+                copy( $schedule_file, $this->refdata . "temp.dat");
                 $outfile = fopen( $schedule_file, "w");
                 if (flock( $outfile, LOCK_EX )) {
     //              $html .= "<p>Got lock</p>\n<ul>\n";
-                $tmpfile = fopen( "refdata/temp.dat", "r");
+                $tmpfile = fopen( $this->refdata . "temp.dat", "r");
                 $sched_no = fgets( $tmpfile, 1024 );
                 fputs( $outfile, $sched_no );
                 $sched_title = fgets( $tmpfile, 1024 );
