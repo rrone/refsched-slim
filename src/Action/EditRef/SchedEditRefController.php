@@ -109,9 +109,9 @@ class SchedEditRefController extends AbstractController
     {
         $html =
 <<<EOD
-      <h3 align="center"><a href="/greet">Return to main page</a>&nbsp;-&nbsp;
-      <a href="/master">Return to schedule</a>&nbsp;-&nbsp;
-      <a href="$this->endPath()">Logoff</a></h3>
+      <h3 align="center"><a href="$this->greetPath">Return to main page</a>&nbsp;-&nbsp;
+      <a href="$this->masterPath">Return to schedule</a>&nbsp;-&nbsp;
+      <a href="$this->endPath">Logoff</a></h3>
 EOD;
         
         return $html;

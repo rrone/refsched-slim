@@ -146,7 +146,7 @@ class SchedSchedController extends AbstractController
                 $html .= "</h3></center>\n";
             }
       
-            $html .= "<form name=\"form1\" method=\"post\" action=\"$assignPath\">\n";
+            $html .= "<form name=\"form1\" method=\"post\" action=\"$this->assignPath\">\n";
 
             $html .= "  <div align=\"left\">";
             
@@ -267,9 +267,9 @@ class SchedSchedController extends AbstractController
     {
         $html =
 <<<EOD
-    <h3 align="center"><a href="/greet">Return to main page</a>&nbsp;-&nbsp;
+    <h3 align="center"><a href="$this->greetPath">Return to main page</a>&nbsp;-&nbsp;
     <a href="$this->schedPath">Return to schedule</a>&nbsp;-&nbsp;
-    <a href="$this->endPath()">Logoff</a></h3>
+    <a href="$this->endPath">Logoff</a></h3>
 EOD;
         
         return $html;

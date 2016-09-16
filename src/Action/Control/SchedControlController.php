@@ -13,7 +13,7 @@ class SchedControlController extends AbstractController
     {
         $this->logger->info("Schedule control page action dispatched");
         
-        $this->url_ref = '/master';
+        $this->url_ref = $this->masterPath;
         
         $content = array(
             'view' => array (
@@ -138,9 +138,9 @@ class SchedControlController extends AbstractController
     {
         $html =
 <<<EOT
-      <h3 align="center"><a href="/greet">Return to main page</a>&nbsp;-&nbsp;
-      <a href="/master">Return to schedule</a>&nbsp;-&nbsp;
-      <a href="$this->endPath()">Logoff</a></h3>
+      <h3 align="center"><a href="$this->greetPath">Return to main page</a>&nbsp;-&nbsp;
+      <a href="$this->masterPath">Return to schedule</a>&nbsp;-&nbsp;
+      <a href="$this->endPath">Logoff</a></h3>
 EOT;
         
         return $html;
