@@ -218,7 +218,7 @@ class SchedGreetController extends AbstractController
             $html .= "<h3 align=\"center\"><a href=\"$this->endPath\">LOG OFF</a></h3>";
             $html .= "</center>";
         }
-        elseif ( $logon_good < 0 ) {
+        elseif ( $this->logon_good < 0 ) {
            $html .=  "<center><h1>Logon Failure</h1></center>";
            $html .= "<h3 align=\"center\"><a href=\"$this->logonPath\">Return to Logon Page to Try Again.</a></h3>";
            //session_destroy();
