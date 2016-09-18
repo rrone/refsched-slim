@@ -64,6 +64,7 @@ class SchedSchedController extends AbstractController
             $this->page_title = substr( $sched_title, 1);
             $kount = 0;
             $kant = 0;
+            $testtime = null;
             while ( $line = fgetcsv( $scheddata, 1024 ) ) {
                 if ( strtoupper( trim( $line[ 0 ] ) ) == '#LOCKED' ) { 
                    $locked = 1;
@@ -93,6 +94,8 @@ class SchedSchedController extends AbstractController
             }
             fclose ( $scheddata );
 
+            $html = "<h2 align=\"center\">$this->rep Schedule</h2>";
+            
             //$free_board = $limit - $no_assigned;
             if ( $locked && array_key_exists( 'none', $limit_list ) ) { 
                 $html .= "<center><h3><font color=\"#CC0000\">The schedule has been locked.<br>You may sign up for games but not unassign yourself.</font></h3></center>\n"; 
@@ -149,13 +152,13 @@ class SchedSchedController extends AbstractController
             $html .= "<form name=\"form1\" method=\"post\" action=\"$this->assignPath\">\n";
 
             $html .= "  <div align=\"left\">";
-            
-            if ( !$locked || !$allatlimit ) {
+       
+            if ( (!$locked || !$allatlimit) && !empty($assigned_list) || $showavailable ) {
                 $html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
                 $html .=  "      <div class='clear-fix'></div>";
             }
             $html .= "    <h3>Available games - Color change indicates different start times.</h3>\n";
-            if ( $allatlimit ) {
+            if ( !$showavailable ) {
                 $html .= "		<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";   
                 $html .= "		<td>No other games available.</td>";
                 $html .= "		</tr>\n";
@@ -203,46 +206,55 @@ class SchedSchedController extends AbstractController
             $html .= "            </table>";
       
             $html .= "	  <h3>Assigned games</h3>\n";
-            $html .= "	  <table>\n";
-            $html .= "	    <tr align=\"center\" bgcolor=\"$this->colorTitle\">\n";
-            $html .= "		<th>Game No.</th>\n";
-            $html .= "		<th>Assigned</th>\n";
-            $html .= "		<th>Day</th>\n";
-            $html .= "		<th>Time</th>\n";
-            $html .= "		<th>Location</th>\n";
-            $html .= "		<th>Div</th>\n";
-            $html .= "		<th>Home</th>\n";
-            $html .= "		<th>Away</th>\n";
-            $html .= "		<th>Referee<br>Team</th>\n";
-            $html .= "          </tr>\n";
-      
-            for ( $kant=0; $kant < $kount; $kant++ ) {
-               if ( $this->rep == $ref_team[$kant]) {
-                    $html .= "		<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
-                    $html .= "		<td>$game_no[$kant]</td>";
-                    if ( $locked ) {
-                       $html .= "		<td>Locked</td>";
+            if ( empty($kount) ) {
+                $html .= "	  <table>\n";
+                $html .= "		<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";   
+                $html .= "		<td>$this->rep has no games assigned.</td>";
+                $html .= "		</tr>\n";
+            } else {            
+                $html .= "	  <table>\n";
+                $html .= "	    <tr align=\"center\" bgcolor=\"$this->colorTitle\">\n";
+                $html .= "		<th>Game No.</th>\n";
+                $html .= "		<th>Assigned</th>\n";
+                $html .= "		<th>Day</th>\n";
+                $html .= "		<th>Time</th>\n";
+                $html .= "		<th>Location</th>\n";
+                $html .= "		<th>Div</th>\n";
+                $html .= "		<th>Home</th>\n";
+                $html .= "		<th>Away</th>\n";
+                $html .= "		<th>Referee<br>Team</th>\n";
+                $html .= "          </tr>\n";
+          
+                for ( $kant=0; $kant < $kount; $kant++ ) {
+                   if ( $this->rep == $ref_team[$kant]) {
+                        $html .= "		<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+                        $html .= "		<td>$game_no[$kant]</td>";
+                        if ( $locked ) {
+                           $html .= "		<td>Locked</td>";
+                        }
+                        else {
+                           $html .= "		<td><input name=\"game$game_no[$kant]\" type=\"checkbox\" value=\"assign$game_no[$kant]\" checked></td>";
+                        }
+                        $html .= "		<td>$day[$kant]<br>$date[$kant]</td>";
+                        $html .= "		<td>$time[$kant]</td>";
+                        $html .= "		<td>$field[$kant]</td>";
+                        $html .= "		<td>$div[$kant]</td>";
+                        $html .= "		<td>$home[$kant]</td>";
+                        $html .= "		<td>$visitor[$kant]</td>";
+                        $html .= "		<td>$ref_team[$kant]</td>";
+                        $html .= "		</tr>\n";
                     }
-                    else {
-                       $html .= "		<td><input name=\"game$game_no[$kant]\" type=\"checkbox\" value=\"assign$game_no[$kant]\" checked></td>";
-                    }
-                    $html .= "		<td>$day[$kant]<br>$date[$kant]</td>";
-                    $html .= "		<td>$time[$kant]</td>";
-                    $html .= "		<td>$field[$kant]</td>";
-                    $html .= "		<td>$div[$kant]</td>";
-                    $html .= "		<td>$home[$kant]</td>";
-                    $html .= "		<td>$visitor[$kant]</td>";
-                    $html .= "		<td>$ref_team[$kant]</td>";
-                    $html .= "		</tr>\n";
                 }
-            }
+                }
             $html .= "            </table>";
             if ( $locked && $allatlimit ) {
                 $html .= "<h3>Submit Disabled</h3>\n";
             }
             else {
-                $html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-                $html .=  "      <div class='clear-fix'></div>";
+                if ( (!$locked || !$allatlimit) && !empty($assigned_list) || $showavailable ) {
+                    $html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+                    $html .=  "      <div class='clear-fix'></div>";
+                }
             }
             $html .= "            </form>\n";      
             $_SESSION['locked'] = $locked;

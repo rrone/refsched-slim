@@ -13,7 +13,8 @@ class SchedUnlockController extends AbstractController
         
         $content = array(
             'sched' => array (
-                'ulock' => $this->renderUnlock()
+                'ulock' => $this->renderLock(),
+                'menu' => $this->menu()
             )
         );        
         
@@ -93,6 +94,16 @@ class SchedUnlockController extends AbstractController
         return $html;
           
     }
+    private function menu()
+    {
+        $html =
+<<<EOT
+      <h3 align="center"><a href="$this->greetPath">Go to main screen</a>&nbsp;-&nbsp;
+      <a href="$this->masterPath">Go to schedule</a>&nbsp;-&nbsp;
+      <a href="$this->endPath">Logoff</a></h3>
+EOT;
+        return $html;
+    }    
 }
 
 

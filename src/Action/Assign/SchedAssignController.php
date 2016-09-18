@@ -7,6 +7,8 @@ use App\Action\AbstractController;
 
 class SchedAssignController extends AbstractController
 {
+    private $topmenu;
+    
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->logger->info("Schedule greet page action dispatched");
@@ -15,11 +17,12 @@ class SchedAssignController extends AbstractController
             'view' => array (
                 'content' => $this->renderAssign(),
                 'title' => $this->page_title,
+                'topmenu' => $this->topmenu,
                 'menu' => $this->menu()
             )
         );        
         
-        $this->view->render($response, 'sched.html.twig', $content);
+        $this->view->render($response, 'sched.assign.html.twig', $content);
 ;
     }
 
@@ -226,44 +229,46 @@ class SchedAssignController extends AbstractController
                   $html .= "      </table>\n";
                 }
                 fclose( $fp );
+                $this->topmenu = $this->menu();
             }
             else {
                 copy( $schedule_file, $this->refdata . "temp.dat");
                 $outfile = fopen( $schedule_file, "w");
                 if (flock( $outfile, LOCK_EX )) {
     //              $html .= "<p>Got lock</p>\n<ul>\n";
-                $tmpfile = fopen( $this->refdata . "temp.dat", "r");
-                $sched_no = fgets( $tmpfile, 1024 );
-                fputs( $outfile, $sched_no );
-                $sched_title = fgets( $tmpfile, 1024 );
-                fputs( $outfile, $sched_title );
-                $this->page_title = substr( $sched_title, 1);
-    
-                while ( $line = fgets( $tmpfile, 1024 ) ) {
-                    if ( substr( $line, 0, 1 ) == '#' ) {
-                       fputs( $outfile, $line );
-                    }
-                    else {
-                        $record = explode( ',', trim($line) );
-                        if ( $record[8] == $this->rep ) {
-                            $record[8] = "";
-                            $record[9] = "";
-                            $record[10] = "";
-                            $record[11] = "";
-                            $html .= "<p>You have <strong>removed</strong> your referee team from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
-                            $line = implode( ',', $record )."\n";
+                    $tmpfile = fopen( $this->refdata . "temp.dat", "r");
+                    $sched_no = fgets( $tmpfile, 1024 );
+                    fputs( $outfile, $sched_no );
+                    $sched_title = fgets( $tmpfile, 1024 );
+                    fputs( $outfile, $sched_title );
+                    $this->page_title = substr( $sched_title, 1);
+        
+                    while ( $line = fgets( $tmpfile, 1024 ) ) {
+                        if ( substr( $line, 0, 1 ) == '#' ) {
+                           fputs( $outfile, $line );
                         }
-      //                    $html .= "<li>$line</li>\n";
-                        fputs( $outfile, $line );
+                        else {
+                            $record = explode( ',', trim($line) );
+                            if ( $record[8] == $this->rep ) {
+                                $record[8] = "";
+                                $record[9] = "";
+                                $record[10] = "";
+                                $record[11] = "";
+                                $html .= "<p>You have <strong>removed</strong> your referee team from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
+                                $line = implode( ',', $record )."\n";
+                            }
+          //                    $html .= "<li>$line</li>\n";
+                            fputs( $outfile, $line );
+                        }
                     }
-                }
     //              $html .= "</ul>";
-                fclose ( $tmpfile );
-                flock( $outfile, LOCK_UN );
-             }
-             fclose ( $outfile );
-             $html .= "<center><h2>You do not currently have any games scheduled.</h2></center>\n";
-           }
+                    fclose ( $tmpfile );
+                    flock( $outfile, LOCK_UN );
+                }
+                fclose ( $outfile );
+                $html .= "<center><h2>You do not currently have any games scheduled.</h2></center>\n";
+                $this->topmenu = null;
+            }
         }
         else {
             $html .= $this->errorCheck();
@@ -277,7 +282,8 @@ class SchedAssignController extends AbstractController
         $html = 
 <<<EOD
       <h3 align="center"><a href="$this->greetPath">Go to main page</a>&nbsp;-&nbsp;
-      <a href="$this->schedPath">Go to schedule</a>&nbsp;-&nbsp;
+      <a href="$this->fullPath">Go to the full schedule</a>&nbsp;-&nbsp;
+      <a href="$this->schedPath">Go to $this->rep schedule</a>&nbsp;-&nbsp;
       <a href="$this->endPath">Logoff</a></h3>
 EOD;
         return $html;   

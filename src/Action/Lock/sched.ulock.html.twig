@@ -1,10 +1,9 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-		{{ sched.ulock | raw }}
-        
-      <h3 align="center"><a href="$this->greetPath">Go to main screen</a>&nbsp;-&nbsp;
-      <a href="$this->masterPath">Go to schedule</a>&nbsp;-&nbsp;
-      <a href="$this->endPath">Logoff</a></h3>
+
+    {{ sched.ulock | raw }}
+    
+    {{ sched.menu | raw }}
         
 {% endblock %}

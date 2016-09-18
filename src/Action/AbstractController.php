@@ -55,6 +55,8 @@ abstract class AbstractController
 
         $this->refdata = $this->root . '/refdata/';
         $this->authdat = $this->root . '/dat/';
+        
+        $this->page_title = "Section 1 Referee Scheduler";
 
         $this->addrefPath = $this->container->get('router')->pathFor('addref');
         $this->assignPath = $this->container->get('router')->pathFor('assign');

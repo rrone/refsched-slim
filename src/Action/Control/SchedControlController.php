@@ -8,6 +8,7 @@ use App\Action\AbstractController;
 class SchedControlController extends AbstractController
 {
     private $url_ref;
+    private $topmenu;
     
     public function __invoke(Request $request, Response $response, $args)
     {
@@ -18,12 +19,13 @@ class SchedControlController extends AbstractController
         $content = array(
             'view' => array (
                 'content' => $this->renderControl(),
+                'topmenu' => $this->topmenu,
                 'menu' => $this->menu(),
                 'title' => $this->page_title
             )
         );        
-        
-        $this->view->render($response, 'sched.html.twig', $content);
+     
+        $this->view->render($response, 'sched.control.html.twig', $content);
 
     }
 
@@ -123,12 +125,19 @@ class SchedControlController extends AbstractController
                 }
             }
             if ( $any_games ) {
-              $html .= "      </table>\n";
+                $html .= "      </table>\n";
+                $this->topmenu = $this->menu();
+            }
+            else {
+                $this->topmenu = null;
             }
             fclose( $fp );
+           
         }
         else {
             $html .= $this->errorCheck();
+            $this->page_title = "Section 1 Referee Scheduler";
+            $this->topmenu = null;
         }
 
         return $html;
