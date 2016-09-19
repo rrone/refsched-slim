@@ -3,24 +3,27 @@
 namespace App\Action;
 
 use Slim\App;
-use Slim\Views\Twig;
-use Psr\Log\LoggerInterface;
 use Slim\Container;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 abstract class AbstractController
 {
+    //database connection
+    protected $conn;
+	
+    //shared variables
     protected $view;
     protected $logger;
     protected $container;
     protected $root;
     protected $refdata;
-    protected $authdat;
     protected $rep;
     protected $page_title;
     protected $authed;
+    protected $authdat;
     
+    //default layout colors
     protected $colorTitle = '#80ccff';
     protected $colorOpen = '#00FFFF';
     protected $colorGroup = '#00FF88';
@@ -30,6 +33,7 @@ abstract class AbstractController
     protected $colorWarning = '#CC00CC';
     protected $colorSuccess = '#008800';
     
+    //named routes
     protected $addrefPath;
     protected $assignPath;
     protected $controlPath;
@@ -50,7 +54,6 @@ abstract class AbstractController
 
         $this->view = $container->get('view');
         $this->logger = $container->get('logger');
-        
         $this->root = __DIR__ . '/../../var';
 
         $this->refdata = $this->root . '/refdata/';
@@ -66,7 +69,7 @@ abstract class AbstractController
         $this->fullPath = $this->container->get('router')->pathFor('full');
         $this->greetPath = $this->container->get('router')->pathFor('greet');
         $this->lockPath = $this->container->get('router')->pathFor('lock');
-        $this->logonPath = $this->container->get('router')->pathFor('logon');
+        $this->logonPath = $this->container->get('router')->pathFor('logondb');
         $this->masterPath = $this->container->get('router')->pathFor('master');
         $this->refsPath = $this->container->get('router')->pathFor('refs');
         $this->schedPath = $this->container->get('router')->pathFor('sched');

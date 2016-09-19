@@ -1,5 +1,33 @@
-{% extends "home.html.twig" %}
+{% extends "layout.html.twig" %}
 
 {% block content %}
+<table width="98%"  class="maincontent">
+  <tr>
+    <td align="center" class="contentarea">
+     
+			<div align="center">
+				<h1>Section 1 Event Schedule</h1>
+
+                {% for event in events %}
+				<h3>{{ event.name }}, {{ event.location }}<br>
+					{{ event.dates }}</h3>
+                {% endfor %}
+			</div>
+			<hr>
+    </td>
+	</tr>
+	<tr>
+		<td>
+			<center><h2>Section 1 Referee Scheduling System Logon</h2></center>
+		</td>
+	</tr>
+	<tr>
+		<td>
+
 		{{ content | raw }}
+		
+		</td>
+	</tr>
+		
+</table>
 {% endblock %}

@@ -50,3 +50,9 @@ $app->map(['GET', 'POST'], '/sched', App\Action\Sched\SchedSchedController::clas
 $app->map(['GET', 'POST'], '/unlock', App\Action\Lock\SchedUnlockController::class)
     ->setName('unlock');
     
+// -----------------------------------------------------------------------------
+// Database routes
+// -----------------------------------------------------------------------------
+
+$app->map(['GET', 'POST'], '/logondb', App\Action\Logon\LogonDBController::class)
+    ->setName('logondb');

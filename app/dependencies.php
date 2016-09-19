@@ -24,21 +24,31 @@ $container['flash'] = function ($c) {
     return new Slim\Flash\Messages;
 };
 
-$container['errorHandler'] = function (\Exception $e, Request $request, $code) use ($app) {
-    if ($app['debug']) {
-        return;
-    }
-
-    // 404.html, or 40x.html, or 4xx.html, or error.html
-    $templates = array(
-        'errors/'.$code.'.html.twig',
-        'errors/'.substr($code, 0, 2).'x.html.twig',
-        'errors/'.substr($code, 0, 1).'xx.html.twig',
-        'errors/default.html.twig',
-    );
-
-    return new Response($container['view']->resolveTemplate($templates)->render(array('code' => $code)), $code);
-};
+unset($container['errorHandler']);
+//$container['errorHandler'] = function ($c) {
+//    if ($c['settings']['debug']) {
+//        return;
+//    }
+//
+//    return function ($request, $response, $exception) use ($c) {
+//
+//    var_dump($exception);                             
+//
+//        return $c['response']->withStatus(500)
+//                             ->withHeader('Content-Type', 'text/html')
+//                             ->write($exception->xdebug_message);
+//        //// 404.html, or 40x.html, or 4xx.html, or error.html
+//        //
+//        //$templates = array(
+//        //    'errors/'.$exception.'.html.twig',
+//        //    'errors/'.substr($exception, 0, 2).'x.html.twig',
+//        //    'errors/'.substr($exception, 0, 1).'xx.html.twig',
+//        //    'errors/default.html.twig',
+//        //);
+//        //
+//        //return new Response($container['view']->resolveTemplate($templates)->render(array('code' => $exception)), $exception);
+//    };
+//};
 
 // -----------------------------------------------------------------------------
 // Service factories
@@ -62,10 +72,34 @@ $container['logger'] = function ($c) {
     return $logger;
 };
 
+$container['db'] = function ($c) {
+    $capsule = new Illuminate\Database\Capsule\Manager;
+
+    $capsule->addConnection($c['settings']['db']);
+
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+
+    return $capsule;
+};
+
 // -----------------------------------------------------------------------------
-// Action dependencies
+// Action dependency Injection
 // -----------------------------------------------------------------------------
 
-$container[App\Action\HomeAction::class] = function ($c) {
-    return new App\Action\HomeAction($c->get('view'), $c->get('logger'));
+$container[App\Action\AbstractController::class] = function ($c) {
+    return new \App\Action\AbstractController($c);
+};
+
+$container[App\Action\SchedulerRepository::class] = function ($c) {
+    $db = $c->get('db');
+
+    return new \App\Action\SchedulerRepository($db);
+};
+
+$container[App\Action\Logon\LogonDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\Logon\LogonDBController($c, $repo);
 };

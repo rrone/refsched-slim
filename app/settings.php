@@ -3,7 +3,6 @@ return [
     'settings' => [
         // Slim Settings
         'determineRouteBeforeAppMiddleware' => false,
-        'displayErrorDetails' => true,
 
         // View settings
         'view' => [
@@ -20,7 +19,7 @@ return [
                 __DIR__ . '/../src/Action/Logon',
                 __DIR__ . '/../src/Action/Master',
                 __DIR__ . '/../src/Action/Refs',
-                __DIR__ . '/../src/Action/Sched',
+                __DIR__ . '/../src/Action/Sched'
             ],
             'twig' => [
                 'cache' => __DIR__ . '/../var/cache/twig',
@@ -34,8 +33,18 @@ return [
         // monolog settings
         'logger' => [
             'name' => 'app',
-            'path' => __DIR__ . '/../var/log/app.log',
+            'path' => __DIR__ . '/../var/logs/app.log',
         ],
-
+        
+        'db' => [
+            'driver' => 'mysql',
+            'host' => 'localhost',
+            'database' => 'wp_ayso1ref',
+            'username' => 'ayso1ref',
+            'password' => 'kjtAQV1bnSw6y0UXfc8j',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_general_ci',
+            'prefix'    => 'rs_',        
+        ],
     ],
 ];
