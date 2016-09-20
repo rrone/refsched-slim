@@ -103,3 +103,52 @@ $container[App\Action\Logon\LogonDBController::class] = function ($c) {
 
     return new \App\Action\Logon\LogonDBController($c, $repo);
 };
+
+$container[App\Action\Greet\SchedGreetDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\Greet\SchedGreetDBController($c, $repo);
+};
+
+$container[App\Action\Sched\SchedSchedDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\Sched\SchedSchedDBController($c, $repo);
+};
+
+$container[App\Action\Full\SchedFullDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\Full\SchedFullDBController($c, $repo);
+};
+
+$container[App\Action\Master\SchedMasterDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\Master\SchedMasterDBController($c, $repo);
+};
+
+$container[App\Action\Control\SchedControlDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\Control\SchedControlDBController($c, $repo);
+};
+
+$container[App\Action\Lock\SchedLockDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\Lock\SchedLockDBController($c, $repo);
+};
+
+$container[App\Action\Lock\SchedUnlockDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\Lock\SchedUnlockDBController($c, $repo);
+};

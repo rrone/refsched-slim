@@ -17,9 +17,14 @@ abstract class AbstractController
     protected $logger;
     protected $container;
     protected $root;
+
+	//view variables
+    protected $page_title;
+	protected $dates;
+	protected $location;
+	
     protected $refdata;
     protected $rep;
-    protected $page_title;
     protected $authed;
     protected $authdat;
     
@@ -69,7 +74,7 @@ abstract class AbstractController
         $this->fullPath = $this->container->get('router')->pathFor('full');
         $this->greetPath = $this->container->get('router')->pathFor('greet');
         $this->lockPath = $this->container->get('router')->pathFor('lock');
-        $this->logonPath = $this->container->get('router')->pathFor('logondb');
+        $this->logonPath = $this->container->get('router')->pathFor('logon');
         $this->masterPath = $this->container->get('router')->pathFor('master');
         $this->refsPath = $this->container->get('router')->pathFor('refs');
         $this->schedPath = $this->container->get('router')->pathFor('sched');

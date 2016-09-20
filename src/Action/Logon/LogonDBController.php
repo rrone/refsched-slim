@@ -2,9 +2,6 @@
 namespace App\Action\Logon;
 
 use Slim\Container;
-use Slim\Views\Twig;
-use Psr\Log\LoggerInterface;
-use Illuminate\Database\Capsule\Manager;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\AbstractController;
@@ -14,15 +11,18 @@ class LogonDBController extends AbstractController
 {
 	private $users;
 	private $events;
-	private $select;
+	private $enabled;
+	private $sr;
 	
 	public function __construct(Container $container, SchedulerRepository $repository) {
 		
 		parent::__construct($container);
 		
+		$this->sr = $repository;
+		
 		$this->users = $repository->getUsers();
 		$this->events = $repository->getEvents();
-		$this->select = $repository->getSelect();
+		$this->enabled = $repository->getEnabled();
 		
     }
     public function __invoke(Request $request, Response $response, $args)
@@ -35,13 +35,13 @@ class LogonDBController extends AbstractController
         );
       
         $this->view->render($response, 'logon.html.twig', $content);      
-  
+
         return $response;
     }
     private function renderLogon()
     {
 		$users = $this->users;
-		$select = $this->select;
+		$enabled = $this->enabled;
 		
         $html =
 <<<EOD
@@ -65,13 +65,12 @@ EOD;
             <td width="50%">
                 <select name="event">
 EOD;
-		foreach($select as $option) {
-			$html .= "<option>$option->dates $option->name</option>";
+		foreach($enabled as $option) {
+			$html .= "<option>$option->eventKey</option>";
 		}
 		
 		$html .=
 <<<EOD
-
                 </select>
             </td>
           </tr>

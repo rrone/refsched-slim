@@ -2,7 +2,12 @@
 
 {% block content %}
     
-    <h2 align="center">{{ view.title | raw }}</h2>
+    <h2 align="center">
+        {{ view.title | raw }}<br>
+        {{ view.location | raw }}<br>
+        {{ view.dates | raw }}
+    </h2>
+    <h3 align="center">{{ view.description | raw }}</h3>
     
     {{ view.menu | raw }}
 
