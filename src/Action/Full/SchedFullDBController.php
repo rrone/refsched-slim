@@ -23,6 +23,11 @@ class SchedFullDBController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+         if (!$this->authed) {
+            return $response->withRedirect($this->greetPath);
+         }
+
         $this->logger->info("Schedule full page action dispatched");
         
         $content = array(
@@ -43,63 +48,54 @@ class SchedFullDBController extends AbstractController
     {
         $html = null;
         
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;
-        
-  //         $html .=  "$this->authed";    //debug
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 
 		$event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 		if (!empty($event)) {
 			$projectKey = $event->projectKey;
 		
-			if ( $this->authed ) {
-	
-				$this->page_title = $event->name;
-				$this->dates = $event->dates;
-				$this->location = $event->location;
-	
-				$games = $this->sr->getGames($projectKey);
-				
-				$html .=  "      <table width=\"100%\">\n";
-				$html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
-				$html .=  "            <th>Game No.</th>";
-				$html .=  "            <th>Day</th>";
-				$html .=  "            <th>Time</th>";
-				$html .=  "            <th>Location</th>";
-				$html .=  "            <th>Div</th>";
-				$html .=  "            <th>Home</th>";
-				$html .=  "            <th>Away</th>";
-				$html .=  "            <th>Referee<br>Team</th>";
-				$html .=  "         </tr>\n";
-				foreach ($games as $game) {
-					$day = date('D',strtotime($game->date));
-	
-					if ( $game->assignor == $this->rep ) {
-						$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
-					}
-					else {
-						$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorNotGroup\">";
-					}
-					$html .=  "            <td>$game->game_number</td>";
-					$html .=  "            <td>$day<br>$game->date</td>";
-					$html .=  "            <td>$game->time</td>";
-					$html .=  "            <td>$game->field</td>";
-					$html .=  "            <td>$game->division</td>";
-					$html .=  "            <td>$game->home</td>";
-					$html .=  "            <td>$game->visitor</td>";
-					$html .=  "            <td>$game->assignor</td>";
-					$html .=  "            </tr>\n";
-				}
-				$html .=  "      </table>\n";
-	
-				$this->menu = $this->menu();
-			}
-		}	
-		if ( !$this->authed ) {
-		   $html .=  $this->errorCheck();
-		   $this->menu = null;
-		}
+			$this->page_title = $event->name;
+			$this->dates = $event->dates;
+			$this->location = $event->location;
 
+			$games = $this->sr->getGames($projectKey);
+			
+			$html .=  "      <table width=\"100%\">\n";
+			$html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+			$html .=  "            <th>Game No.</th>";
+			$html .=  "            <th>Day</th>";
+			$html .=  "            <th>Time</th>";
+			$html .=  "            <th>Location</th>";
+			$html .=  "            <th>Div</th>";
+			$html .=  "            <th>Home</th>";
+			$html .=  "            <th>Away</th>";
+			$html .=  "            <th>Referee<br>Team</th>";
+			$html .=  "         </tr>\n";
+			foreach ($games as $game) {
+				$day = date('D',strtotime($game->date));
+				$time = date('H:i', strtotime($game->time));
+
+				if ( $game->assignor == $this->rep ) {
+					$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+				}
+				else {
+					$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorNotGroup\">";
+				}
+				$html .=  "            <td>$game->game_number</td>";
+				$html .=  "            <td>$day<br>$game->date</td>";
+				$html .=  "            <td>$time</td>";
+				$html .=  "            <td>$game->field</td>";
+				$html .=  "            <td>$game->division</td>";
+				$html .=  "            <td>$game->home</td>";
+				$html .=  "            <td>$game->visitor</td>";
+				$html .=  "            <td>$game->assignor</td>";
+				$html .=  "            </tr>\n";
+			}
+			$html .=  "      </table>\n";
+
+			$this->menu = $this->menu();
+		}
+		
         return $html;
           
     }

@@ -1,0 +1,149 @@
+<?php
+namespace App\Action\Refs;
+
+use Slim\Container;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+use App\Action\AbstractController;
+use App\Action\SchedulerRepository;
+
+class SchedRefsDBController extends AbstractController
+{
+    // SchedulerRepository //
+    private $sr;
+    
+	public function __construct(Container $container, SchedulerRepository $repository) {
+		
+		parent::__construct($container);
+        
+        $this->sr = $repository;
+		
+    }
+    public function __invoke(Request $request, Response $response, $args)
+    {
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+         if (!$this->authed) {
+            return $response->withRedirect($this->greetPath);
+         }
+
+        $this->logger->info("Schedule refs page action dispatched");
+        
+        $content = array(
+            'view' => array (
+                'content' => $this->renderRefs(),
+                'menu' => $this->menu(),
+                'title' => $this->page_title,
+				'dates' => $this->dates,
+				'location' => $this->location,
+				'description' => $this->rep . ' Referee Assignments',
+            )
+        );        
+        
+        $this->view->render($response, 'sched.html.twig', $content);
+
+    }
+
+    private function renderRefs()
+    {
+        $html = null;
+        
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        
+        $event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
+  
+        if ( !empty($event) ) {
+            $this->page_title = $event->name;
+            $this->dates = $event->dates;
+            $this->location = $event->location;
+            $projectKey = $event->projectKey;
+            $locked = $this->sr->getLocked($projectKey);
+
+            $games = $this->sr->getGames($projectKey);
+			$numRefs = $this->sr->numberOfReferees($projectKey);
+			
+            if (count($games)){
+                if ( $this->rep != 'Section 1') {
+                    $html .=  "<center><h2>You are currently scheduled for the following games</h2></center>\n";
+                }
+                $html .=  "      <form name=\"addref\" method=\"post\" action=\"$this->editrefPath\">\n";
+                $html .=  "      <table width=\"100%\">\n";
+                $html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+                $html .=  "            <th>Game<br>No.</th>";
+                $html .=  "            <th>Day</th>";
+                $html .=  "            <th>Time</th>";
+                $html .=  "            <th>Location</th>";
+                $html .=  "            <th>Div</th>";
+                $html .=  "            <th>Area</th>";
+                $html .=  "            <th>CR</th>";
+                $html .=  "            <th>AR1</th>";
+                $html .=  "            <th>AR2</th>";
+				if ($numRefs > 3){
+	                $html .=  "            <th>4th</th>";
+				}
+                $html .=  "            <th>Edit</th>";
+                $html .=  "            </tr>\n";
+
+                foreach($games as $game){
+					$day = date('D',strtotime($game->date));
+					$time = date('H:i', strtotime($game->time));
+                    if ( $game->assignor == $this->rep || $this->rep == 'Section 1') {
+                        if ( !$game->assignor && $this->rep == 'Section 1' ) {
+                           $html .=  "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
+                        }
+                        else {
+                           $html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+                        }
+                        $html .=  "            <td>$game->game_number</td>";
+                        $html .=  "            <td>$day<br>$game->date</td>";
+                        $html .=  "            <td>$time</td>";
+                        $html .=  "            <td>$game->field</td>";
+                        $html .=  "            <td>$game->division</td>";
+                        $html .=  "            <td>$game->assignor</td>";
+                        $html .=  "            <td>$game->cr</td>";
+                        $html .=  "            <td>$game->ar1</td>";
+                        $html .=  "            <td>$game->ar2</td>";
+						if ($numRefs > 3){
+	                        $html .=  "            <td>$game->r4th</td>";
+						}
+                        if ( $game->assignor ) {
+                           $html .=  "            <td><input type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\"></td>";
+                        }
+                        else {
+                           $html .=  "            <td>&nbsp;</td>\n";
+                        }
+                        $html .=  "            </tr>\n";
+                    }
+                }
+                $html .=  "      </table>\n";
+                $html .=  "      </form>\n";
+            }
+            else {
+                $html .=  "<center><h2>You do not currently have any games scheduled.</h2>\n";
+                $html .=  "  You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2></center>";
+            }
+        }
+        else {
+           $html .=  $this->errorCheck();
+        }
+  
+        return $html;
+          
+    }
+    private function menu()
+    {
+        $html =  "<h3 align=\"center\"><a href=\"$this->greetPath\">Go to main page</a>&nbsp;-&nbsp;\n";
+
+        if ( $this->rep == 'Section 1' ) {
+           $html .=  "<a href=\"$this->masterPath\">Go to Section 1 schedule</a>&nbsp;-&nbsp;\n";
+        }
+        else {
+           $html .=  "<a href=\"$this->schedPath\">Go to $this->rep schedule</a>&nbsp;-&nbsp;\n";
+        }
+
+        $html .=  "<a href=\"$this->endPath\">Logoff</a></h3>\n";
+      
+        return $html;
+    }
+}
+
+

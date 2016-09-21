@@ -21,6 +21,11 @@ class SchedSchedDBController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+         if (!$this->authed) {
+            return $response->withRedirect($this->greetPath);
+         }
+
         $this->logger->info("Schedule schedule database page action dispatched");
         
         $content = array(
@@ -41,7 +46,6 @@ class SchedSchedDBController extends AbstractController
     {
         $html = null;
         
-        $this->authed = isset($_SESSION['authed']) ?  $_SESSION['authed'] : false;
         $showgroup = null;
         
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
@@ -69,7 +73,7 @@ class SchedSchedDBController extends AbstractController
 			$used_list[ 'none' ] = null;
 			$assigned_list = null;
 			
-			if ( $this->authed && $this->rep != 'Section 1') {
+			if ( $this->rep != 'Section 1') {
 				$limits = $this->sr->getLimits($projectKey);
 				$groups = $this->sr->getGroups($projectKey);
 	
@@ -105,7 +109,7 @@ class SchedSchedDBController extends AbstractController
 				$date[] = $game->date;
 				$day[] = date('D',strtotime($game->date));
 				$field[] = $game->field;
-				$time[] = $game->time;
+				$time[] = date('H:i', strtotime($game->time));
 				$div[] = $game->division;
 				$home[] = $game->home;
 				$visitor[] = $game->visitor;
@@ -182,7 +186,7 @@ class SchedSchedDBController extends AbstractController
 	
 			$html .= "  <div align=\"left\">";
 	   
-			if ( (!$locked || !$allatlimit) && !empty($assigned_list) || $showavailable ) {
+			if ( !$locked && (!$allatlimit && !empty($assigned_list) || $showavailable) ) {
 				$html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
 				$html .=  "      <div class='clear-fix'></div>";
 			}
@@ -280,7 +284,7 @@ class SchedSchedDBController extends AbstractController
 				$html .= "<h3>Submit Disabled</h3>\n";
 			}
 			else {
-				if ( (!$locked || !$allatlimit) && !empty($assigned_list) || $showavailable ) {
+				if ( !$locked && (!$allatlimit && !empty($assigned_list) || $showavailable) ) {
 					$html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
 					$html .=  "      <div class='clear-fix'></div>";
 				}
@@ -288,20 +292,9 @@ class SchedSchedDBController extends AbstractController
 			$html .= "            </form>\n";      
 			$_SESSION['locked'] = $locked;
 	
-			if ( !$this->authed ) {
-				$html .=  "<center><h1>You are not Logged On</h1></center>";
-				$html .= "<p align=\"center\"><a href=\"$this->logonPath\">Logon Page</a></p>";
-				session_destroy();
-			}
-			elseif ( $this->authed && $this->rep == 'Section 1' ) {
+			if ( $this->rep == 'Section 1' ) {
 				$html .=  "<center><h1>You should be on this<br>";
 				$html .= "<a href=\"$this->masterPath\">Schedule Page</a></h1>";
-			}
-			elseif ( $this->rep != 'Section 1') {
-				
-			}
-			else {
-				$html .=  $this->errorCheck();
 			}
 		}
 		else {
@@ -317,6 +310,7 @@ class SchedSchedDBController extends AbstractController
 <<<EOD
     <h3 align="center"><a href="$this->greetPath">Go to main page</a>&nbsp;-&nbsp;
     <a href="$this->fullPath">Go to full schedule</a>&nbsp;-&nbsp;
+    <a href="$this->refsPath">Edit $this->rep assignments</a>&nbsp;-&nbsp;
     <a href="$this->endPath">Logoff</a></h3>
 EOD;
         

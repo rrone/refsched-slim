@@ -21,6 +21,11 @@ class SchedUnlockDBController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+         if (!$this->authed) {
+            return $response->withRedirect($this->greetPath);
+         }
+
         $this->logger->info("Schedule greet page action dispatched");
         
         $content = array(
@@ -32,15 +37,15 @@ class SchedUnlockDBController extends AbstractController
 				'location' => $this->location,
             )
         );        
-        
-        $this->view->render($response, 'sched.ulock.html.twig', $content);
+        return $response->withRedirect($this->greetPath);
+	
+        //$this->view->render($response, 'sched.ulock.html.twig', $content);
     }
 
     private function renderLock()
     {
         $html = null;
         
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;        
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
         
 		$event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
@@ -51,25 +56,20 @@ class SchedUnlockDBController extends AbstractController
             if ( !$locked ) {
                $html .= "<h3 align=\"center\">The schedule is already unlocked!</h3>\n";
             }
-			elseif ( $this->authed && $this->rep == 'Section 1') {
+			elseif ( $this->rep == 'Section 1') {
                $this->sr->unlockProject($projectKey); 
                $html .= "<h3 align=\"center\">The schedule has been unlocked!</h3>\n";
             }
         }
-        elseif ( $this->authed && $rep == 'Section 1') {
+        elseif ( $rep == 'Section 1') {
            $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
            $html .= "You should go to the <a href=\"$this->masterPath\">Schedule Page</a></h2></center>";
         }
-        elseif ( $this->authed ) {
+        else {
            $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
            $html .= "You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2></center>";
         }
-        elseif ( !$this->authed ) {
-           $html .= "<center><h2>You need to <a href=\"$this->logonPath\">logon</a> first.</h2></center>";
-        }
-        else {
-           $html .= "<center><h1>Something is not right</h1></center>";
-        }    
+
         return $html;
           
     }

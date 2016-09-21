@@ -97,4 +97,37 @@ class SchedulerRepository
 			->where('projectKey', $key)
 			->update(['locked' => false]);
 	}
+	public function updateAssignments($data)
+	{
+		if (empty($data)){
+			exit;
+		}
+
+		foreach($data as $key=>$value){
+			if ($value == 'Update Assignments'){
+				$game_id = $key;
+
+				$this->db->table('games')
+					->where('id', $game_id)
+					->update([
+						'cr' => trim($data['cr']),
+						'ar1' => trim($data['ar1']),
+						'ar2' => trim($data['ar2']),
+						'r4th' => trim($data['r4th'])
+					]);
+			}
+		}
+	}
+	public function gameIdToGameNumber($id)
+	{
+		$gameNo = $this->db->table('games')->select('game_number')->where('id', '=', $id)->get()[0]->game_number;
+		
+		return $gameNo;
+	}
+	public function numberOfReferees($projectKey)
+	{
+		$numRefs = $this->db->table('events')->select('num_refs')->where('projectKey', '=', $projectKey)->get()[0]->num_refs;
+		
+		return $numRefs;
+	}
 }

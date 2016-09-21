@@ -23,9 +23,13 @@ class SchedControlDBController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->logger->info("Schedule control page action dispatched");
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+         if (!$this->authed) {
+            return $response->withRedirect($this->greetPath);
+         }
+            
+		$this->logger->info("Schedule control page action dispatched");
         
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
         
         $this->handleRequest($request);
@@ -54,7 +58,7 @@ class SchedControlDBController extends AbstractController
         $url_ref = $this->masterPath;
 
         //only Section 1 may update
-        if ( $this->authed && $_SERVER['REQUEST_METHOD'] == 'POST' && $from == $url_ref  && $this->rep == 'Section 1') {
+        if ( $_SERVER['REQUEST_METHOD'] == 'POST' && $from == $url_ref  && $this->rep == 'Section 1') {
             $data = $request->getParsedBody();
     
             $this->sr->updateAssignor($data);
@@ -90,6 +94,7 @@ class SchedControlDBController extends AbstractController
                 $html .= "            </tr>\n";
                 foreach($games as $game){
                     $day = date('D',strtotime($game->date));
+					$time = date('H:i', strtotime($game->time));
                     if ( !empty($game->assignor) ) {
                         $html .= "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
                     } 
@@ -98,7 +103,7 @@ class SchedControlDBController extends AbstractController
                     } 
                     $html .=  "            <td>$game->game_number</td>";
                     $html .=  "            <td>$day<br>$game->date</td>";
-                    $html .=  "            <td>$game->time</td>";
+                    $html .=  "            <td>$time</td>";
                     $html .=  "            <td>$game->field</td>";
                     $html .=  "            <td>$game->division</td>";
                     $html .=  "            <td>$game->home</td>";

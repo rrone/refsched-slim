@@ -21,6 +21,11 @@ class SchedMasterDBController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+         if (!$this->authed) {
+            return $response->withRedirect($this->greetPath);
+         }
+
         $this->logger->info("Schedule master page action dispatched");
         
         $content = array(
@@ -40,8 +45,6 @@ class SchedMasterDBController extends AbstractController
     private function renderMaster()
     {
         $html = null;
-        
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : false;
         
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
         $event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
@@ -67,7 +70,7 @@ class SchedMasterDBController extends AbstractController
 				$html .=  "  <form name=\"master_sched\" method=\"post\" action=\"$this->controlPath\">\n";
 				$html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
 				$html .=  "      <div class='clear-fix'></div>";
-	 
+				
 				$html .=  "      <table width=\"100%\">\n";
 				$html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
 				$html .=  "            <th>Game No.</th>";
@@ -83,6 +86,7 @@ class SchedMasterDBController extends AbstractController
 				$games = $this->sr->getGames($projectKey);
 				foreach($games as $game){
 					$day = date('D',strtotime($game->date));
+					$time = date('H:i', strtotime($game->time));
 					if ( $game->assignor == "" ) {
 						$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
 					}
@@ -91,11 +95,12 @@ class SchedMasterDBController extends AbstractController
 					}
 					$html .=  "            <td>$game->game_number</td>";
 					$html .=  "            <td>$day<br>$game->date</td>";
-					$html .=  "            <td>$game->time</td>";
+					$html .=  "            <td>$time</td>";
 					$html .=  "            <td>$game->field</td>";
 					$html .=  "            <td>$game->division</td>";
 					$html .=  "            <td>$game->home</td>";
 					$html .=  "            <td>$game->visitor</td>";
+					
 					$html .=  "            <td><select name=\"$game->id\">\n";
 					foreach ($select_list as $user){
 						if ($user == $game->assignor) {
@@ -105,6 +110,7 @@ class SchedMasterDBController extends AbstractController
 							$html .=  "               <option>$user</option>\n";
 						}
 					}
+						
 					$html .=  "            </select></td>";
 					$html .=  "            </tr>\n";
 				}
@@ -114,11 +120,8 @@ class SchedMasterDBController extends AbstractController
 				$html .=  "      </form>\n";
 
 			}
-			elseif ( $this->authed ) {
+			else {
 			   $html .=  "<center><h2>You probably want the <a href=\"$this->schedPath\">scheduling</a> page.</h2></center>";
-			}
-			elseif ( !$this->authed ) {
-			   $html .=  $this->errorCheck();
 			}
 		}
 		else {

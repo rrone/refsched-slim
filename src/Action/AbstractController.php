@@ -39,7 +39,6 @@ abstract class AbstractController
     protected $colorSuccess = '#008800';
     
     //named routes
-    protected $addrefPath;
     protected $assignPath;
     protected $controlPath;
     protected $editrefPath;
@@ -66,7 +65,6 @@ abstract class AbstractController
         
         $this->page_title = "Section 1 Referee Scheduler";
 
-        $this->addrefPath = $this->container->get('router')->pathFor('addref');
         $this->assignPath = $this->container->get('router')->pathFor('assign');
         $this->controlPath = $this->container->get('router')->pathFor('control');
         $this->editrefPath = $this->container->get('router')->pathFor('editref');

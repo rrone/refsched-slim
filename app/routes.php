@@ -14,16 +14,13 @@ $app->get('/', App\Action\Logon\LogonDBController::class)
 
 $app->get('/logon', App\Action\Logon\LogonDBController::class);
 
-$app->map(['GET', 'POST'], '/addref', App\Action\AddRef\SchedAddRefController::class)
-    ->setName('addref');
-
-$app->map(['GET', 'POST'], '/assign', App\Action\Assign\SchedAssignController::class)
+$app->map(['GET', 'POST'], '/assign', App\Action\Assign\SchedAssignDBController::class)
     ->setName('assign');
 
 $app->map(['GET', 'POST'], '/control', App\Action\Control\SchedControlDBController::class)
     ->setName('control');
 
-$app->map(['GET', 'POST'], '/editref', App\Action\EditRef\SchedEditRefController::class)
+$app->map(['GET', 'POST'], '/editref', App\Action\EditRef\SchedEditRefDBController::class)
     ->setName('editref');
 
 $app->map(['GET', 'POST'], '/end', App\Action\End\SchedEndController::class)
@@ -38,7 +35,7 @@ $app->map(['GET', 'POST'], '/greet', App\Action\Greet\SchedGreetDBController::cl
 $app->map(['GET', 'POST'], '/lock', App\Action\Lock\SchedLockDBController::class)
     ->setName('lock');
 
-$app->map(['GET', 'POST'], '/refs', App\Action\Refs\SchedRefsController::class)
+$app->map(['GET', 'POST'], '/refs', App\Action\Refs\SchedRefsDBController::class)
     ->setName('refs');
 
 $app->map(['GET', 'POST'], '/master', App\Action\Master\SchedMasterDBController::class)

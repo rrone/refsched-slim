@@ -152,3 +152,24 @@ $container[App\Action\Lock\SchedUnlockDBController::class] = function ($c) {
 
     return new \App\Action\Lock\SchedUnlockDBController($c, $repo);
 };
+
+$container[App\Action\Refs\SchedRefsDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\Refs\SchedRefsDBController($c, $repo);
+};
+
+$container[App\Action\EditRef\SchedEditRefDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\EditRef\SchedEditRefDBController($c, $repo);
+};
+
+$container[App\Action\Assign\SchedAssignDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\Assign\SchedAssignDBController($c, $repo);
+};
