@@ -25,10 +25,15 @@ class SchedAssignDBController extends AbstractController
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
          if (!$this->authed) {
-            return $response->withRedirect($this->greetPath);
+            return $response->withRedirect($this->logonPath);
          }
 
         $this->logger->info("Schedule greet page action dispatched");
+
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+		$this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
+
+		$this->handleRequest($request);
         
         $content = array(
             'view' => array (
@@ -37,256 +42,169 @@ class SchedAssignDBController extends AbstractController
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
+				'menu' => $this->menu(),
 				'description' => 'Assign Assignors'
             )
         );        
         
-        $this->view->render($response, 'sched.assign.html.twig', $content);
-;
+        $this->view->render($response, 'sched.html.twig', $content);
+		
     }
+	private function handleRequest($request)
+	{
+		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && $this->rep != 'Section 1' ) {
+			$projectKey = $this->event->projectKey;
+			$locked = $this->sr->getLocked($projectKey);
+			$msgHtml = null;
 
+			//load limits if any or none
+			$limits = $this->sr->getLimits($projectKey);
+			if ( !count( $limits ) ) {
+				$no_limit = true;
+			}
+			else {
+				foreach($limits as $group){
+					$limit_list[ $group->division ] = $group->limit;
+				}
+			}
+			
+			$array_of_keys = array_keys( $_POST );
+			
+			//parse the POST data
+			$adds = [];
+			$assign = [];
+			foreach ($array_of_keys as $key){
+				$change = explode(':',$key);
+				switch  ($change[0]) {
+					case 'assign':
+						$adds[ $change[1] ] = $this->rep;
+						break;
+					case 'games':
+						$assign[ $change[1] ] = $this->rep;
+						break;
+					default:
+						continue;
+				}
+			}
+
+			if ( !$locked ) {
+				//remove drops if not locked
+				$assigned_games = $this->sr->getGamesByRep($projectKey, $this->rep);
+				if(count($assign) != count($assigned_games)){
+					$removed = [];
+					$unassign = [];
+					foreach($assigned_games as $game) {
+						if(!in_array($game->id, array_keys($assign)) ){
+							$removed[$game->id] = $game;
+							$unassign[$game->id] = '';
+							$msgHtml .= "<p>You have <strong>removed</strong> your referee team from Game no. $game->game_number on $game->date at $game->time on $game->field</p>\n";
+						}					
+					}
+					$this->sr->updateAssignor($unassign);	
+					//initialize counting groups
+					$assigned_games = $this->sr->getGamesByRep($projectKey, $this->rep);
+					foreach ($assigned_games as $game) {
+						$div = $this->divisionAge($game->division);
+						$games_now[ $div ] = isset($games_now[ $div ]) ? $games_now[ $div ]++ : 0;
+					}
+				}
+			}
+			
+			if ( count($assign)) {
+				//Update based on add/returned games
+				$added = [];
+				$unavailable = [];
+				$games = $this->sr->getGames($projectKey);		
+				foreach($games as $game) {
+					$div = $this->divisionAge($game->division);
+					//ensure all indexes exist
+					$games_now[ $div ] = isset($games_now[ $div ]) ? $games_now[$div] : 0;
+					$atLimit[ $div ] = isset($atLimit[ $div ]) ? $atLimit[$div] : 0;;
+					//if requested
+					if(in_array($game->id, array_keys($adds)) ) {
+						//and available
+						if ( $game->assignor == '') {
+							//and below the limit if there is one
+							if ($games_now[$div] < $limit_list[$div] or $no_limit)  {
+								//make the assignment
+								$data = [ $game->id => $this->rep ];
+								$this->sr->updateAssignor($data);
+								$added[$game->id] = $game;
+								$games_now[$div]++;
+							}
+							else {
+								$atLimit[$div]++;
+							}
+						}
+						else {
+							$unavailable[$game_id] = $game;
+						}
+					}
+				}
+
+				$assigned_update = $this->sr->getGamesByRep($projectKey, $this->rep);
+			}
+
+//				$html .= "<p>You have <strong>scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
+//				$html .= "<p>You have <strong>scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
+//				$html .= "<p>You have <strong>not scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3] because you are at your game limit!</p>\n";
+//			   $html .= "<p>You have <strong>removed</strong> your referee team from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
+//                       $html .= "<p>Your referee team has been <strong>removed</strong> from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3] because you are over the game limit.</p>\n";
+//				$html .= "<p>I'm sorry, game no. $record[0] has been taken.</p>";
+		}
+	}
     private function renderAssign()
     {
         $html = null;
         
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+		if (!empty($this->event)) {
+			$projectKey = $this->event->projectKey;
+			$locked = $this->sr->getLocked($projectKey);
+  
+			$games = $this->sr->getGamesByRep($projectKey, $this->rep);
+			if (count($games)){
+				$html .= "<center><h2>You are currently scheduled for the following games</h2></center>\n";
+				$html .= "      <table width=\"100%\">\n";
+				$html .= "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+				$html .= "            <th>Game No.</th>";
+				$html .= "            <th>Day</th>";
+				$html .= "            <th>Time</th>";
+				$html .= "            <th>Location</th>";
+				$html .= "            <th>Division</th>";
+				$html .= "            <th>Home</th>";
+				$html .= "            <th>Away</th>";
+				$html .= "            <th>Referee<br>Team</th>";
+				$html .= "            </tr>\n";
 
-		$locked = $this->sr->getLocked($projectKey);
-		$event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-		
-		if (!empty($event)) {
-			$projectKey = $event->projectKey;
-  
-            $games_now = [];
-            $games_requested = [];
-            $limits = $this->sr->getLimits($projectKey);
-            $groups = $this->sr->getGroups($projectKey);
-        
-                $limit_list[ $record[0] ] = $record[1];   //The limit on each div
-                $used_list[ $record[0] ] = 0;           //Yes-no divisions used
-                $assigned_list[ $record[0] ] = 0;       //Yes-no divisions for this user
-                $no_posted[ $record[0] ] = 0;           //Number of games counted as posted
-                $games_requested[ $record[0] ] = 0;
-                $games_now[ $record[0] ] = 0;
-                $games_both[ $record[0] ] = 0;
-            }
+				foreach($games as $game) {
+					$day = date('D',strtotime($game->date));
+					$time = date('H:i', strtotime($game->time));
+					$html .= "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+					$html .= "            <td>$game->game_number</td>";
+					$html .= "            <td>$day<br>$game->date</td>";
+					$html .= "            <td>$time</td>";
+					$html .= "            <td>$game->field</td>";
+					$html .= "            <td>$game->division</td>";
+					$html .= "            <td>$game->home</td>";
+					$html .= "            <td>$game->away</td>";
+					$html .= "            <td>$game->assignor</td>";
+					$html .= "            </tr>\n";
+				}					
 
-            if ( !count( $limit_list ) ) { $limit_list[ 'none' ] = 1; }
-  
-  
-        if ( $_SERVER['REQUEST_METHOD'] == 'POST' && $this->rep != 'Section 1' ) {
-  //         print_r($_POST);
-            $array_of_keys = array_keys( $_POST );
-   //         $html .= "<p>";
-   //         print_r($array_of_keys);
-   //         $html .= "</p>";
-            $num_mod = count($array_of_keys)-1;
-            if ( $num_mod > 0 || $locked ) {
-                for ( $kount = 0; $kount < $num_mod; $kount++ ) {
-                    $array_of_keys[$kount] = substr( $array_of_keys[$kount], 4 );
-                }
-   //           $html .= "<p>";
-   //           print_r($array_of_keys);
-   //           $html .= "</p>";
-                $fp = fopen( $schedule_file, "r");
-                    while ( $line = fgets( $fp, 1024 ) ) {
-                        if ( substr( $line, 0, 1 ) != '#' ) {
-                            $record = explode( ',', $line );
-                            if ( in_array( $record[0], $array_of_keys ) ) { 
-                                $games_requested[ substr( $record[5], 1, 3 ) ]++;
-                                if ( $record[8] == $this->rep ) {
-                                    $games_both[ substr( $record[5], 1, 3 ) ]++;
-                                }
-                            }
-                            if ( $record[8] == $this->rep ) {
-                                $games_now[ substr( $record[5], 1, 3 ) ]++;
-                                if ( array_key_exists( 'all', $limit_list ) ) { $games_now[ 'all' ]++; }
-                            }
-                        }
-                    }
-                   
-                fclose( $fp );
-       //  Debugging output
-       //            print_r( $games_requested );
-       //            $html .= "\n";
-       //            print_r( $games_now );
-       //            $html .= "\n";
-       //            print_r( $games_both );
-       //            $html .= "\n";
-       
-       //   Begin the file rewrite loop
-                copy( $schedule_file, $this->refdata . "temp.dat");
-                $outfile = fopen( $schedule_file, "w");
-                if (flock( $outfile, LOCK_EX )) {
-      //              $html .= "<p>Got lock</p>\n<ul>\n";
-                    $tmpfile = fopen( $this->refdata . "temp.dat", "r");
-                    $sched_no = fgets( $tmpfile, 1024 );
-                    fputs( $outfile, $sched_no );
-                    $sched_title = fgets( $tmpfile, 1024 );
-                    fputs( $outfile, $sched_title );
-                    $this->page_title = substr( $sched_title, 1);
-      
-                    while ( $line = fgets( $tmpfile, 1024 ) ) {
-                        if ( substr( $line, 0, 1 ) == '#' ) {
-                                     //  Pass through a comment line
-                            fputs( $outfile, $line );
-                        }
-                        else {
-                                     //  Process anything else
-                            $record = explode( ',', trim($line) );
-                            $tempdiv = substr( $record[5], 1, 3 );
-                            if ( array_key_exists( 'all', $limit_list ) ) { $tempdiv = 'all'; }
-                            if ( array_key_exists( 'none', $limit_list ) && in_array( $record[0], $array_of_keys ) && $record[8] == "" ) {
-                                      //  No limits in place - Game number match - game not taken
-                                $record[8] = $this->rep;
-                                $line = implode( ',', $record )."\n";
-                                $html .= "<p>You have <strong>scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
-                            }
-                            elseif ( in_array( $record[0], $array_of_keys ) && $record[8] == "" && $games_now[ $tempdiv ] < $limit_list[ $tempdiv ] ) {
-                                      //  Game number match - game not taken - below limit
-                                $record[8] = $this->rep;
-                                $no_posted[$tempdiv]++;
-                                $games_now[$tempdiv]++;
-                                $line = implode( ',', $record )."\n";
-                                $html .= "<p>You have <strong>scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
-                            }
-                            elseif ( in_array( $record[0], $array_of_keys ) && $record[8] == "" && $games_now[ $tempdiv ] >= $limit_list[ $tempdiv ] ) {
-                                     //   Game number match - game not taken - at or over limit
-                                $line = implode( ',', $record )."\n";
-                                $html .= "<p>You have <strong>not scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3] because you are at your game limit!</p>\n";
-                            }
-                            elseif ( !in_array( $record[0], $array_of_keys ) && $record[8] == $this->rep && !$locked ) {
-                                     //   No game number match - game was reserved - no locked - game to be removed
-                               $record[8] = "";
-                               $record[9] = "";
-                               $record[10] = "";
-                               $record[11] = "";
-                               $games_now[$tempdiv]--;
-                               $html .= "<p>You have <strong>removed</strong> your referee team from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
-                               $line = implode( ',', $record )."\n";
-                            }
-                            elseif ( array_key_exists( 'none', $limit_list ) && in_array( $record[0], $array_of_keys ) && $record[8] == $this->rep ) {
-                                $line = implode( ',', $record )."\n";
-                            }
-                            elseif ( in_array( $record[0], $array_of_keys ) && $record[8] == $this->rep && $games_now[ $tempdiv ] < $limit_list[ $tempdiv ]) {
-                                $no_posted[ $tempdiv ]++;
-                                $line = implode( ',', $record )."\n";
-                            }
-        //                    elseif ( in_array( $record[0], $array_of_keys ) && $record[8] == $this->rep && !$locked && $games_now[ $tempdiv] >= $limit_list[ $tempdiv ]) {
-        //                       $record[8] = "";
-        //                       $record[9] = "";
-        //                       $record[10] = "";
-        //                       $record[11] = "";
-        //                       $games_now[$tempdiv]--;
-        //                       $html .= "<p>Your referee team has been <strong>removed</strong> from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3] because you are over the game limit.</p>\n";
-        //                       $line = implode( ',', $record )."\n";
-        //                    }
-                            elseif ( in_array( $record[0], $array_of_keys ) && $record[8] != $this->rep && $record[8] != "") {
-                                $html .= "<p>I'm sorry, game no. $record[0] has been taken.</p>";
-                                $line = implode( ',', $record )."\n";
-                            }
-                            elseif ( $record[8] == $this->rep ) {
-                                $no_posted[ $tempdiv ]++;
-                                $line = implode( ',', $record )."\n";
-                            }
-                            else {
-                                $line = implode( ',', $record )."\n";
-                            }
-        //                    $html .= "<li>$line</li>\n";
-                            fputs( $outfile, $line );
-                        }
-                    }
-      //              $html .= "</ul>";
-                    fclose ( $tmpfile );
-                    flock( $outfile, LOCK_UN );
-                }
-                fclose ( $outfile );
-                
-                $any_games = 0;
-                $fp = fopen( $schedule_file, "r" );
-                while ( $line = fgets( $fp, 1024 ) ) {
-                    if ( substr( $line, 0, 1 ) != '#' ) {
-                        $record = explode( ',', trim($line) );
-                        if ( $record[8] == $this->rep ) {
-                            if ( !$any_games ) {
-                                 $html .= "<center><h2>You are currently scheduled for the following games</h2></center>\n";
-                                    $html .= "      <table width=\"100%\">\n";
-                                    $html .= "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
-                                    $html .= "            <th>Game No.</th>";
-                                    $html .= "            <th>Day</th>";
-                                    $html .= "            <th>Time</th>";
-                                    $html .= "            <th>Location</th>";
-                                    $html .= "            <th>Div</th>";
-                                    $html .= "            <th>Home</th>";
-                                    $html .= "            <th>Away</th>";
-                                    $html .= "            <th>Referee<br>Team</th>";
-                                    $html .= "            </tr>\n";
-                                    $any_games = 1;
-                            }
-                            $html .= "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
-                            $html .= "            <td>$record[0]</td>";
-                            $html .= "            <td>$record[2]<br>$record[1]</td>";
-                            $html .= "            <td>$record[4]</td>";
-                            $html .= "            <td>$record[3]</td>";
-                            $html .= "            <td>$record[5]</td>";
-                            $html .= "            <td>$record[6]</td>";
-                            $html .= "            <td>$record[7]</td>";
-                            $html .= "            <td>$record[8]</td>";
-                            $html .= "            </tr>\n";
-                        }
-                    }
-                }
-                if ( $any_games ) {
-                  $html .= "      </table>\n";
-                }
-                fclose( $fp );
-                $this->topmenu = $this->menu();
-            }
-            else {
-                copy( $schedule_file, $this->refdata . "temp.dat");
-                $outfile = fopen( $schedule_file, "w");
-                if (flock( $outfile, LOCK_EX )) {
-    //              $html .= "<p>Got lock</p>\n<ul>\n";
-                    $tmpfile = fopen( $this->refdata . "temp.dat", "r");
-                    $sched_no = fgets( $tmpfile, 1024 );
-                    fputs( $outfile, $sched_no );
-                    $sched_title = fgets( $tmpfile, 1024 );
-                    fputs( $outfile, $sched_title );
-                    $this->page_title = substr( $sched_title, 1);
-        
-                    while ( $line = fgets( $tmpfile, 1024 ) ) {
-                        if ( substr( $line, 0, 1 ) == '#' ) {
-                           fputs( $outfile, $line );
-                        }
-                        else {
-                            $record = explode( ',', trim($line) );
-                            if ( $record[8] == $this->rep ) {
-                                $record[8] = "";
-                                $record[9] = "";
-                                $record[10] = "";
-                                $record[11] = "";
-                                $html .= "<p>You have <strong>removed</strong> your referee team from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
-                                $line = implode( ',', $record )."\n";
-                            }
-          //                    $html .= "<li>$line</li>\n";
-                            fputs( $outfile, $line );
-                        }
-                    }
-    //              $html .= "</ul>";
-                    fclose ( $tmpfile );
-                    flock( $outfile, LOCK_UN );
-                }
-                fclose ( $outfile );
-                $html .= "<center><h2>You do not currently have any games scheduled.</h2></center>\n";
-                $this->topmenu = null;
-            }
-        }
-        else {
-            $html .= $this->errorCheck();
-        }
-      
-        return $html;
-          
+				$html .= "      </table>\n";
+				$this->topmenu = $this->menu();
+			}
+			else {
+				$html .= "<center><h2>You do not currently have any games scheduled.</h2></center>\n";
+				$this->topmenu = null;
+			}
+		}
+		else {
+			$html .= $this->errorCheck();
+		}
+
+		return $html;
+
     }
     private function menu()
     {
@@ -295,10 +213,10 @@ class SchedAssignDBController extends AbstractController
       <h3 align="center"><a href="$this->greetPath">Go to main page</a>&nbsp;-&nbsp;
       <a href="$this->fullPath">Go to the full schedule</a>&nbsp;-&nbsp;
       <a href="$this->schedPath">Go to $this->rep schedule</a>&nbsp;-&nbsp;
+      <a href="$this->refsPath">Edit $this->rep referees</a>&nbsp;-&nbsp;
       <a href="$this->endPath">Logoff</a></h3>
 EOD;
         return $html;   
     }
 }
-
 

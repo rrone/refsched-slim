@@ -24,6 +24,13 @@ class SchedGreetDBController extends AbstractController
         $this->logger->info("Schedule greet page action dispatched");
 
 		$this->handleRequest($request);
+
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+         if (!$this->authed) {
+            return $response->withRedirect($this->logonPath);
+         }
+		$this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
+		$this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 		
         $content = array(
             'view' => array (
@@ -31,7 +38,6 @@ class SchedGreetDBController extends AbstractController
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
-                'menu' => null
                 )
             );        
         
@@ -41,43 +47,30 @@ class SchedGreetDBController extends AbstractController
 	private function handleRequest($request)
 	{
         if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
-            $this->rep = $_POST['area'];
-           
             $pass = crypt( $_POST['passwd'], 11);
-   //             for debugging
-            //$html .= "<h3>$pass</h3>";
-            //$pass = $_POST['passwd'];
-            //$html .= "<h3>$pass</h3>";
             $user = $this->sr->getUserByPW($pass);
 
             if (!empty($user)) {
-				$event = $this->sr->getEvent($_POST['event']);
-
                 $_SESSION['authed'] = 1;
-                $_SESSION['unit'] = $this->rep;
+                $_SESSION['unit'] = $_POST['area'];
+				$event = $this->sr->getEventByLabel($_POST['event']);
                 $_SESSION['event'] = $event;
-            }
-        }
-		
+	        }
+        }		
 	}
     private function renderGreet()
     {
         $html = null;
         
-		$this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+		$event = $this->event;
+		
+		if ( !empty($event) ) { 		
+			$projectKey = $event->projectKey;
 
-		if ( $this->authed ) { 		
-			$event = null;
-			$projectKey = null;
-			$this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
-			$event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
-	
 			$used_list[ 'none' ] = null;
 			$assigned_list = null;
 			$limit_list = null;
-	
-			$projectKey = $event->projectKey;
-		
+			
 			$limits = $this->sr->getLimits($projectKey);
 			$groups = $this->sr->getGroups($projectKey);
 			foreach($limits as $group){
@@ -85,12 +78,6 @@ class SchedGreetDBController extends AbstractController
 				$used_list[ $group->division ] = 0;
 				$assigned_list[ $group->division ] = 0;
 			}
-			$delim = ' - ';
-			$no_assigned = 0;
-			$no_unassigned = 0;
-			$no_area = 0;
-			$oneatlimit = 0;
-	  
 			$this->page_title = $event->name;
 			$this->dates = $event->dates;
 			$this->location = $event->location;
@@ -98,27 +85,34 @@ class SchedGreetDBController extends AbstractController
 			$locked = $this->sr->getLocked($projectKey);
 
 			$games = $this->sr->getGames($projectKey);
+			$delim = ' - ';
+			$num_assigned = 0;
+			$no_area = 0;
+			$oneatlimit = 0;
+	  
 			foreach( $games as $game ) {
-				if ( $this->rep == "Section 1" && $game->assignor ) { $no_assigned++; }
-				elseif ( $this->rep == "Section 1" ) { $no_unassigned++; }
+				if ( $this->rep == "Section 1" && $game->assignor != 'None' ) {
+					$num_assigned++;
+				}
 				elseif ( $this->rep == $game->assignor ) { 
 				   $no_area++;
-				   $assigned_list[ substr($game->division,0,3) ]++;
+				   $assigned_list[ $this->divisionAge($game->division) ]++;
 				}
-				$used_list[ substr($game->division,0,3) ] = 1;
+				$used_list[ $this->divisionAge($game->division) ] = 1;
 			}
+			$num_unassigned = count($games) - $num_assigned;
 			
 			$html = null;
 			if ( $this->rep == 'Section 1' ) {
 			   $html .= "<h3 align=\"center\">Welcome $this->rep Scheduler</h3>\n";
-			   $html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">STATUS</font> - At this time:<br>\n";
+			   $html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">STATUS</font> - At this time:</h3>\n<h3 align=\"center\">";
 			   if ( $locked ) {
 				  $html .= "The schedule is:&nbsp;<font color=\"$this->colorAlert\">Locked</font>&nbsp;-&nbsp;(<a href=\"$this->unlockPath\">Unlock</a> the schedule now)<br>\n";
 			   }
 			   else {
 				  $html .= "The schedule is:&nbsp;<font color=\"$this->colorSuccess\">Unlocked</font>&nbsp;-&nbsp;(<a href=\"$this->lockPath\">Lock</a> the schedule now)<br>\n";
 			   }
-			   $html .= "<font color=\"#008800\">$no_assigned</font> games are assigned and <font color=\"$this->colorAlert\">$no_unassigned</font> are unassigned.<br>\n";
+			   $html .= "<font color=\"#008800\">$num_assigned</font> games are assigned and <font color=\"$this->colorAlert\">$num_unassigned</font> are unassigned.<br>\n";
 			   if ( array_key_exists( 'all', $limit_list ) ) {
 				  $tmplimit = $limit_list['all'];
 				  $html .= "There is a <font color=\"$this->colorWarning\">$tmplimit</font> game limit.</h3>\n";

@@ -100,7 +100,7 @@ class SchedControlController extends AbstractController
                         $html .= "            <th>Day</th>";
                         $html .= "            <th>Time</th>";
                         $html .= "            <th>Location</th>";
-                        $html .= "            <th>Div</th>";
+                        $html .= "            <th>Division</th>";
                         $html .= "            <th>Home</th>";
                         $html .= "            <th>Away</th>";
                         $html .= "            <th>Referee<br>Team</th>";

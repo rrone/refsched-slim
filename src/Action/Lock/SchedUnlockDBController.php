@@ -23,7 +23,7 @@ class SchedUnlockDBController extends AbstractController
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
          if (!$this->authed) {
-            return $response->withRedirect($this->greetPath);
+            return $response->withRedirect($this->logonPath);
          }
 
         $this->logger->info("Schedule greet page action dispatched");
@@ -31,6 +31,7 @@ class SchedUnlockDBController extends AbstractController
         $content = array(
             'sched' => array (
                 'ulock' => $this->renderLock(),
+                'topmenu' => $this->menu(),
                 'menu' => $this->menu(),
                 'title' => $this->page_title,
 				'dates' => $this->dates,

@@ -8,6 +8,8 @@ return [
         'view' => [
             'template_path' => [
                 __DIR__ . '/../templates',
+                __DIR__ . '/../src/Action/AddRef',
+                __DIR__ . '/../src/Action/Assign',
                 __DIR__ . '/../src/Action/Control',
                 __DIR__ . '/../src/Action/EditRef',
                 __DIR__ . '/../src/Action/End',

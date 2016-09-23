@@ -92,7 +92,7 @@ class SchedAddRefController extends AbstractController
                      $html .= "            <th>Day</th>";
                      $html .= "            <th>Time</th>";
                      $html .= "            <th>Location</th>";
-                     $html .= "            <th>Div</th>";
+                     $html .= "            <th>Division</th>";
                      $html .= "            <th>Ref<br>Team</th>";
                      $html .= "            <th>Center</th>";
                      $html .= "            <th>AR1</th>";

@@ -96,6 +96,9 @@ table {
 	width: 100%;
 	border: 0px;
 }
+th {
+	line-height: 2rem;
+}
 .contentarea {
 	padding-right: 15px;
 	padding-left: 15px;

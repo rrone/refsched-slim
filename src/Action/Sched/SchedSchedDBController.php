@@ -23,7 +23,7 @@ class SchedSchedDBController extends AbstractController
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
          if (!$this->authed) {
-            return $response->withRedirect($this->greetPath);
+            return $response->withRedirect($this->logonPath);
          }
 
         $this->logger->info("Schedule schedule database page action dispatched");
@@ -31,6 +31,7 @@ class SchedSchedDBController extends AbstractController
         $content = array(
             'view' => array (
                 'content' => $this->renderSched(),
+                'topmenu' => $this->menu(),
                 'menu' => $this->menu(),
                 'title' => $this->page_title,
 				'dates' => $this->dates,
@@ -64,8 +65,8 @@ class SchedSchedDBController extends AbstractController
 	
 			$locked = $this->sr->getLocked($projectKey);
 	
-			$thiscolor = '#00FFFF';
-			$othercolor = '#FFFacd';
+			$color1 = '#D3D3D3';
+			$color2 = '#B7B7B7';
 			$allatlimit = 1;
 			$oneatlimit = 0;
 			$showavailable = 1;
@@ -105,6 +106,7 @@ class SchedSchedDBController extends AbstractController
 			$games = $this->sr->getGames($projectKey, $showgroup);
 
 			foreach( $games as $game ) {
+				$game_id[] = $game->id;
 				$game_no[] = $game->game_number;
 				$date[] = $game->date;
 				$day[] = date('D',strtotime($game->date));
@@ -112,15 +114,15 @@ class SchedSchedDBController extends AbstractController
 				$time[] = date('H:i', strtotime($game->time));
 				$div[] = $game->division;
 				$home[] = $game->home;
-				$visitor[] = $game->visitor;
+				$away[] = $game->away;
 				$ref_team[] = $game->assignor;
 				if ( $game->assignor == $this->rep ) { 
 					$no_assigned++;
-					if (isset($assigned_list[ substr( $game->division, 0, 3 ) ])) {
-						$assigned_list[ substr( $game->division, 0, 3 ) ]++;
+					if (isset($assigned_list[ $this->divisionAge( $game->division ) ])) {
+						$assigned_list[ $this->divisionAge( $game->division ) ]++;
 					}
 			   }
-			   $used_list[ substr( $game->division, 0, 3 ) ] = 1;
+			   $used_list[ $this->divisionAge( $game->division ) ] = 1;
 			   $cr[] = $game->cr;
 			   $ar1[] = $game->ar1;
 			   $ar2[] = $game->ar2;
@@ -184,52 +186,53 @@ class SchedSchedDBController extends AbstractController
 	  
 			$html .= "<form name=\"form1\" method=\"post\" action=\"$this->assignPath\">\n";
 	
-			$html .= "  <div align=\"left\">";
+			$html .= "<div align=\"left\">";
 	   
+			$html .= "<h3>Available games - Color change indicates different start times.";
 			if ( !$locked && (!$allatlimit && !empty($assigned_list) || $showavailable) ) {
-				$html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-				$html .=  "      <div class='clear-fix'></div>";
+				$html .=  "<input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+				$html .=  "<div class='clear-fix'></div>";
 			}
-			$html .= "    <h3>Available games - Color change indicates different start times.</h3>\n";
+			$html .= "</h3>\n";
 			if ( !$showavailable ) {
-				$html .= "		<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";   
-				$html .= "		<td>No other games available.</td>";
-				$html .= "		</tr>\n";
+				$html .= "<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";   
+				$html .= "	<td>No other games available.</td>";
+				$html .= "</tr>\n";
 			} else {
-				$html .= "      <table>\n";
-				$html .= "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
-				$html .= "        <th>Game No.</th>";
-				$html .= "        <th>Assigned</th>";
+				$html .= "<table>\n";
+				$html .= "   <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+				$html .= "     <th>Game No.</th>";
+				$html .= "       <th>Assign to $this->rep</th>";
 				$html .= "		  <th>Day</th>";
 				$html .= "		  <th>Time</th>";
 				$html .= "		  <th>Field</th>";
-				$html .= "    	  <th>Div</th>";
+				$html .= "    	  <th>Division</th>";
 				$html .= "		  <th>Home</th>";
 				$html .= "	      <th>Away</th>";
 				$html .= "		  <th>Referee<br>Team</th>";
 				$html .= "		</tr>";
 	  
 				for ( $kant=0; $kant < $kount; $kant++ ) {
-					if ( ( $showgroup && $showgroup == substr( $div[$kant], 0, 3 ) ) || !$showgroup ) {
-						if ( substr( $game_no[$kant], 0, 1 ) != "#" && $a_init != substr( $home[$kant], 0, 1) && $a_init != substr( $visitor[$kant], 0, 1) && !$ref_team[$kant] && $showavailable ) {
+					if ( ( $showgroup && $showgroup == $this->divisionAge( $div[$kant] ) ) || !$showgroup ) {
+						if ( substr( $game_no[$kant], 0, 1 ) != "#" && $a_init != substr( $home[$kant], 0, 1) && $a_init != substr( $away[$kant], 0, 1) && !$ref_team[$kant] && $showavailable ) {
 			   
 							if ( !$testtime ) { $testtime = $time[$kant]; }
 							elseif ( $testtime != $time[$kant] ) {
 								$testtime = $time[$kant];
-								$tempcolor = $thiscolor;
-								$thiscolor = $othercolor;
-								$othercolor = $tempcolor;
+								$tempcolor = $color1;
+								$color1 = $color2;
+								$color2 = $tempcolor;
 							}
 	
-							$html .= "		<tr align=\"center\" bgcolor=\"$thiscolor\">";
+							$html .= "		<tr align=\"center\" bgcolor=\"$color1\">";
 							$html .= "		<td>$game_no[$kant]</td>";
-							$html .= "		<td><input type=\"checkbox\" name=\"game$game_no[$kant]\" value=\"assign$game_no[$kant]\"></td>";
+							$html .= "		<td><input type=\"checkbox\" name=\"assign:$game_id[$kant]\" value=\"$game_id[$kant]\"></td>";
 							$html .= "		<td>$day[$kant]<br>$date[$kant]</td>";
 							$html .= "		<td>$time[$kant]</td>";
 							$html .= "		<td>$field[$kant]</td>";
 							$html .= "		<td>$div[$kant]</td>";
 							$html .= "		<td>$home[$kant]</td>";
-							$html .= "		<td>$visitor[$kant]</td>";
+							$html .= "		<td>$away[$kant]</td>";
 							$html .= "		<td>&nbsp;</td>";
 							$html .= "		</tr>\n";
 						}
@@ -252,7 +255,7 @@ class SchedSchedDBController extends AbstractController
 				$html .= "		<th>Day</th>\n";
 				$html .= "		<th>Time</th>\n";
 				$html .= "		<th>Field</th>\n";
-				$html .= "		<th>Div</th>\n";
+				$html .= "		<th>Division</th>\n";
 				$html .= "		<th>Home</th>\n";
 				$html .= "		<th>Away</th>\n";
 				$html .= "		<th>Referee<br>Team</th>\n";
@@ -266,14 +269,14 @@ class SchedSchedDBController extends AbstractController
 						   $html .= "		<td>Locked</td>";
 						}
 						else {
-						   $html .= "		<td><input name=\"game$game_no[$kant]\" type=\"checkbox\" value=\"assign$game_no[$kant]\" checked></td>";
+						   $html .= "		<td><input name=\"games:$game_id[$kant]\" type=\"checkbox\" value=\"$game_id[$kant]\" checked></td>";
 						}
 						$html .= "		<td>$day[$kant]<br>$date[$kant]</td>";
 						$html .= "		<td>$time[$kant]</td>";
 						$html .= "		<td>$field[$kant]</td>";
 						$html .= "		<td>$div[$kant]</td>";
 						$html .= "		<td>$home[$kant]</td>";
-						$html .= "		<td>$visitor[$kant]</td>";
+						$html .= "		<td>$away[$kant]</td>";
 						$html .= "		<td>$ref_team[$kant]</td>";
 						$html .= "		</tr>\n";
 					}
@@ -310,7 +313,7 @@ class SchedSchedDBController extends AbstractController
 <<<EOD
     <h3 align="center"><a href="$this->greetPath">Go to main page</a>&nbsp;-&nbsp;
     <a href="$this->fullPath">Go to full schedule</a>&nbsp;-&nbsp;
-    <a href="$this->refsPath">Edit $this->rep assignments</a>&nbsp;-&nbsp;
+    <a href="$this->refsPath">Edit $this->rep referees</a>&nbsp;-&nbsp;
     <a href="$this->endPath">Logoff</a></h3>
 EOD;
         

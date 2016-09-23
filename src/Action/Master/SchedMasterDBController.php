@@ -31,6 +31,7 @@ class SchedMasterDBController extends AbstractController
         $content = array(
             'view' => array (
                 'content' => $this->renderMaster(),
+                'topmenu' => $this->menu(),
                 'menu' => $this->menu(),
                 'title' => $this->page_title,
 				'dates' => $this->dates,
@@ -77,17 +78,17 @@ class SchedMasterDBController extends AbstractController
 				$html .=  "            <th>Day</th>";
 				$html .=  "            <th>Time</th>";
 				$html .=  "            <th>Location</th>";
-				$html .=  "            <th>Div</th>";
+				$html .=  "            <th>Division</th>";
 				$html .=  "            <th>Home</th>";
 				$html .=  "            <th>Away</th>";
-				$html .=  "            <th>Referee<br>Team</th>";
+				$html .=  "            <th>Referee Team</th>";
 				$html .=  "         </tr>\n";
 				
 				$games = $this->sr->getGames($projectKey);
 				foreach($games as $game){
 					$day = date('D',strtotime($game->date));
 					$time = date('H:i', strtotime($game->time));
-					if ( $game->assignor == "" ) {
+					if ( $game->assignor == "None" ) {
 						$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
 					}
 					else {
@@ -99,7 +100,7 @@ class SchedMasterDBController extends AbstractController
 					$html .=  "            <td>$game->field</td>";
 					$html .=  "            <td>$game->division</td>";
 					$html .=  "            <td>$game->home</td>";
-					$html .=  "            <td>$game->visitor</td>";
+					$html .=  "            <td>$game->away</td>";
 					
 					$html .=  "            <td><select name=\"$game->id\">\n";
 					foreach ($select_list as $user){

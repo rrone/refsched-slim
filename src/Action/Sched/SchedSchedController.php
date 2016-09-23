@@ -78,7 +78,7 @@ class SchedSchedController extends AbstractController
                     $time[ $kount ] = $line[ 4 ];
                     $div[ $kount ] = $line[ 5 ];
                     $home[ $kount ] = $line[ 6 ];
-                    $visitor[ $kount ] = $line[ 7 ];
+                    $away[ $kount ] = $line[ 7 ];
                     $ref_team[ $kount ] = $line[ 8 ];
                     if ( $ref_team[ $kount ] == $this->rep ) { 
                         $no_assigned++;
@@ -170,7 +170,7 @@ class SchedSchedController extends AbstractController
                 $html .= "		  <th>Day</th>";
                 $html .= "		  <th>Time</th>";
                 $html .= "		  <th>Location</th>";
-                $html .= "    	  <th>Div</th>";
+                $html .= "    	  <th>Division</th>";
                 $html .= "		  <th>Home</th>";
                 $html .= "	      <th>Away</th>";
                 $html .= "		  <th>Referee<br>Team</th>";
@@ -178,7 +178,7 @@ class SchedSchedController extends AbstractController
       
                 for ( $kant=0; $kant < $kount; $kant++ ) {
                     if ( ( $showgroup && $showgroup == substr( $div[$kant], 0, 3 ) ) || !$showgroup ) {
-                        if ( substr( $game_no[$kant], 0, 1 ) != "#" && $a_init != substr( $home[$kant], 0, 1) && $a_init != substr( $visitor[$kant], 0, 1) && !$ref_team[$kant] && $showavailable ) {
+                        if ( substr( $game_no[$kant], 0, 1 ) != "#" && $a_init != substr( $home[$kant], 0, 1) && $a_init != substr( $away[$kant], 0, 1) && !$ref_team[$kant] && $showavailable ) {
                
                             if ( !$testtime ) { $testtime = $time[$kant]; }
                             elseif ( $testtime != $time[$kant] ) {
@@ -196,7 +196,7 @@ class SchedSchedController extends AbstractController
                             $html .= "		<td>$field[$kant]</td>";
                             $html .= "		<td>$div[$kant]</td>";
                             $html .= "		<td>$home[$kant]</td>";
-                            $html .= "		<td>$visitor[$kant]</td>";
+                            $html .= "		<td>$away[$kant]</td>";
                             $html .= "		<td>&nbsp;</td>";
                             $html .= "		</tr>\n";
                         }
@@ -219,7 +219,7 @@ class SchedSchedController extends AbstractController
                 $html .= "		<th>Day</th>\n";
                 $html .= "		<th>Time</th>\n";
                 $html .= "		<th>Location</th>\n";
-                $html .= "		<th>Div</th>\n";
+                $html .= "		<th>Division</th>\n";
                 $html .= "		<th>Home</th>\n";
                 $html .= "		<th>Away</th>\n";
                 $html .= "		<th>Referee<br>Team</th>\n";
@@ -240,7 +240,7 @@ class SchedSchedController extends AbstractController
                         $html .= "		<td>$field[$kant]</td>";
                         $html .= "		<td>$div[$kant]</td>";
                         $html .= "		<td>$home[$kant]</td>";
-                        $html .= "		<td>$visitor[$kant]</td>";
+                        $html .= "		<td>$away[$kant]</td>";
                         $html .= "		<td>$ref_team[$kant]</td>";
                         $html .= "		</tr>\n";
                     }

@@ -25,7 +25,7 @@ class SchedFullDBController extends AbstractController
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
          if (!$this->authed) {
-            return $response->withRedirect($this->greetPath);
+            return $response->withRedirect($this->logonPath);
          }
 
         $this->logger->info("Schedule full page action dispatched");
@@ -33,6 +33,7 @@ class SchedFullDBController extends AbstractController
         $content = array(
             'view' => array (
                 'content' => $this->renderFull(),
+                'topmenu' => $this->menu(),
                 'menu' => $this->menu,
                 'title' => $this->page_title,
 				'dates' => $this->dates,
@@ -66,7 +67,7 @@ class SchedFullDBController extends AbstractController
 			$html .=  "            <th>Day</th>";
 			$html .=  "            <th>Time</th>";
 			$html .=  "            <th>Location</th>";
-			$html .=  "            <th>Div</th>";
+			$html .=  "            <th>Division</th>";
 			$html .=  "            <th>Home</th>";
 			$html .=  "            <th>Away</th>";
 			$html .=  "            <th>Referee<br>Team</th>";
@@ -87,7 +88,7 @@ class SchedFullDBController extends AbstractController
 				$html .=  "            <td>$game->field</td>";
 				$html .=  "            <td>$game->division</td>";
 				$html .=  "            <td>$game->home</td>";
-				$html .=  "            <td>$game->visitor</td>";
+				$html .=  "            <td>$game->away</td>";
 				$html .=  "            <td>$game->assignor</td>";
 				$html .=  "            </tr>\n";
 			}

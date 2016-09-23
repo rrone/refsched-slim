@@ -23,12 +23,12 @@ class SchedEditRefDBController extends AbstractController
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
          if (!$this->authed) {
-            return $response->withRedirect($this->greetPath);
+            return $response->withRedirect($this->logonPath);
          }
 
         $this->logger->info("Schedule edit refs page action dispatched");
         
-        if ( $_SERVER['REQUEST_METHOD'] == 'POST' && count( $_POST ) == 5 ) {
+        if ( $_SERVER['REQUEST_METHOD'] == 'POST' && count( $_POST ) > 3 ) {
             $this->handleRequest($request);
             
             return $response->withRedirect($this->refsPath);
@@ -39,6 +39,7 @@ class SchedEditRefDBController extends AbstractController
         $content = array(
             'view' => array (
                 'content' => $this->renderEditRef(),
+                'topmenu' => $this->menu(),
                 'menu' => $this->menu(),
                 'title' => $this->page_title,
 				'dates' => $this->dates,
@@ -72,12 +73,11 @@ class SchedEditRefDBController extends AbstractController
             $projectKey = $event->projectKey;
 		
             if ( $_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST) == 1) {
-    //           print_r($_POST);
-                $target_id = array_keys( $_POST );;
-       //         echo "<p>$key[0] $target_game</p>\n";
+                $target_id = array_keys( $_POST );
        
                 $target_game = $this->sr->gameIdToGameNumber($target_id);
-                $html .=  "<center><h2>Adding or editing referees for game number $target_game.</h2></center>";
+                $html .=  "<center><h2>Enter Referee's First and Last name.<br>
+					<span style=\"color:#FF0000\"><i>NOTE: Adding ?? or Area name is NOT helpful.</i></span></h2></center>";
        
                 $games = $this->sr->getGames($projectKey);
 				$numRefs = $this->sr->numberOfReferees($projectKey);
@@ -94,7 +94,7 @@ class SchedEditRefDBController extends AbstractController
                             $html .=  "            <th>Day</th>";
                             $html .=  "            <th>Time</th>";
                             $html .=  "            <th>Location</th>";
-                            $html .=  "            <th>Div</th>";
+                            $html .=  "            <th>Division</th>";
                             $html .=  "            <th>Referee<br>Team</th>";
                             $html .=  "            <th>Center</th>";
                             $html .=  "            <th>AR1</th>";

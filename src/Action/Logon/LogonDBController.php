@@ -21,8 +21,8 @@ class LogonDBController extends AbstractController
 		$this->sr = $repository;
 		
 		$this->users = $repository->getUsers();
-		$this->events = $repository->getEvents();
-		$this->enabled = $repository->getEnabled();
+		$this->events = $repository->getCurrentEvents();
+		$this->enabled = $repository->getEnabledEvents();
 		
     }
     public function __invoke(Request $request, Response $response, $args)
@@ -66,7 +66,7 @@ EOD;
                 <select name="event">
 EOD;
 		foreach($enabled as $option) {
-			$html .= "<option>$option->eventKey</option>";
+			$html .= "<option>$option->label</option>";
 		}
 		
 		$html .=

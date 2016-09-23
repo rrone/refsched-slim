@@ -22,11 +22,11 @@ abstract class AbstractController
     protected $page_title;
 	protected $dates;
 	protected $location;
-	
-    protected $refdata;
+
+	//session variables	
+	protected $event;
     protected $rep;
     protected $authed;
-    protected $authdat;
     
     //default layout colors
     protected $colorTitle = '#80ccff';
@@ -97,4 +97,8 @@ abstract class AbstractController
         
         return $html;
     }
+	protected function divisionAge($div)
+	{
+		return substr($div,0,3);
+	}
 }
