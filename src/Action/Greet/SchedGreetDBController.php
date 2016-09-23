@@ -164,7 +164,7 @@ class SchedGreetDBController extends AbstractController
 			}
 			else {
 				$html .= "<h3 align=\"center\"><a href=\"$this->schedPath\">Schedule $this->rep Referee Teams</a></h3>";
-				$html .= "<h3 align=\"center\">Schedule 1 division: ";
+				$html .= "<h3 align=\"center\">Schedule a division: ";
 				foreach ($groups as $group) {
 					$html .= "<a href=\"$this->schedPath?group=$group\">$group</a>" . $delim;
 				}
