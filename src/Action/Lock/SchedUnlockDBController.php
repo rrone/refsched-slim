@@ -80,7 +80,7 @@ class SchedUnlockDBController extends AbstractController
 <<<EOT
       <h3 align="center"><a href="$this->greetPath">Go to main screen</a>&nbsp;-&nbsp;
       <a href="$this->masterPath">Go to schedule</a>&nbsp;-&nbsp;
-      <a href="$this->endPath">Logoff</a></h3>
+      <a href="$this->endPath">Log off</a></h3>
 EOT;
         return $html;
     }

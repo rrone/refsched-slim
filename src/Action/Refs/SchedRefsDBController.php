@@ -143,7 +143,7 @@ class SchedRefsDBController extends AbstractController
            $html .=  "<a href=\"$this->schedPath\">Go to $this->rep schedule</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .=  "<a href=\"$this->endPath\">Logoff</a></h3>\n";
+        $html .=  "<a href=\"$this->endPath\">Log off</a></h3>\n";
       
         return $html;
     }

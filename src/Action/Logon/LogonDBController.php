@@ -28,10 +28,11 @@ class LogonDBController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->logger->info("Logon database page action dispatched");
-        
+       
 		$content = array(
-			'events' => $this->getEventList(),
-            'content' => $this->renderLogon()
+			'events' => $this->sr->getCurrentEvents(),
+            'content' => $this->renderLogon(),
+			'message' => isset($_SESSION['msg']) ? $_SESSION['msg'] : null,
         );
       
         $this->view->render($response, 'logon.html.twig', $content);      
@@ -49,7 +50,7 @@ class LogonDBController extends AbstractController
         <div align="center">
 		  <table>
           <tr><td width="50%"><div align="right">ARA or representative from: </div></td>
-            <td width="50%"><select name="area">
+            <td width="50%"><select class="left-margin" name="area">
 EOD;
 		foreach($users as $user) {
 			$html .= "<option>$user->name</option>";
@@ -63,7 +64,7 @@ EOD;
             <td><input type="password" name="passwd"></td></tr>
             <tr><td width="50%"><div align="right">Competition: </div></td>
             <td width="50%">
-                <select name="event">
+                <select class="left-margin" name="event">
 EOD;
 		foreach($enabled as $option) {
 			$html .= "<option>$option->label</option>";
@@ -76,7 +77,7 @@ EOD;
           </tr>
 		  </table>
           <p>
-            <input type="submit" name="Submit" value="Logon">      
+            <input type="submit" type="button" class="btn btn-primary btn-xs active" name="Submit" value="Logon">      
           </p>
         </div>
       </form>
@@ -84,18 +85,4 @@ EOD;
 
         return $html;
     }
-	private function getEventList()
-	{
-		$eventList = [];
-		
-		foreach($this->events as $event){
-			$eventList[] = array(
-				'name' => $event->name,
-				'location' => $event->location,
-				'dates' => $event->dates
-			);
-		}
-		
-		return $eventList;
-	}
 }

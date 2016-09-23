@@ -49,12 +49,14 @@ class SchedGreetDBController extends AbstractController
         if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
             $pass = crypt( $_POST['passwd'], 11);
             $user = $this->sr->getUserByPW($pass);
-
-            if (!empty($user)) {
-                $_SESSION['authed'] = 1;
-                $_SESSION['unit'] = $_POST['area'];
+            if (!empty($user) && $_POST['area'] == $user->name) {				
+                $_SESSION['authed'] = true;
 				$event = $this->sr->getEventByLabel($_POST['event']);
                 $_SESSION['event'] = $event;
+				unset($_SESSION['msg']);
+			}
+			else {
+				$_SESSION['msg'] = 'Unrecognized password for ' . $_POST['area'];
 	        }
         }		
 	}
@@ -105,7 +107,7 @@ class SchedGreetDBController extends AbstractController
 			$html = null;
 			if ( $this->rep == 'Section 1' ) {
 			   $html .= "<h3 align=\"center\">Welcome $this->rep Scheduler</h3>\n";
-			   $html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">STATUS</font> - At this time:</h3>\n<h3 align=\"center\">";
+			   $html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">CURRENT STATUS</font></h3>\n<h3 align=\"center\">";
 			   if ( $locked ) {
 				  $html .= "The schedule is:&nbsp;<font color=\"$this->colorAlert\">Locked</font>&nbsp;-&nbsp;(<a href=\"$this->unlockPath\">Unlock</a> the schedule now)<br>\n";
 			   }
@@ -133,7 +135,7 @@ class SchedGreetDBController extends AbstractController
 			}
 			else {
 				$html .= "<h3 align=\"center\">Welcome $this->rep Representative</h3>";
-				$html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">Status</font><br>";
+				$html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">CURRENT STATUS</font><br>";
 				if ( $no_area == 0 ) { $html .= "$this->rep is not currently assigned to any games.<br>"; }
 				elseif ( $no_area == 1 ) { $html .= "$this->rep is currently assigned to <font color=\"$this->colorSuccess\">$no_area</font> game.<br>"; }
 				else { $html .= "$this->rep is currently assigned to <font color=\"$this->colorSuccess\">$no_area</font> games.<br>"; }

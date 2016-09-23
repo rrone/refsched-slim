@@ -155,7 +155,7 @@ class SchedAddRefController extends AbstractController
 
         $html .= "<a href=\"$this->refsPath\">Add/Modify Referee assignments</a>&nbsp;-&nbsp;\n";
         
-        $html .=  "<a href=\"$this->endPath\">Logoff</a></h3>\n";              
+        $html .=  "<a href=\"$this->endPath\">Log off</a></h3>\n";              
 
         return $html;
     }

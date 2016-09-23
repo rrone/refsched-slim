@@ -154,7 +154,7 @@ EOD;
 		
 		$html .=
 <<<EOD
-		<a href="$this->endPath">Logoff</a></h3>
+		<a href="$this->endPath">Log off</a></h3>
 EOD;
         
         return $html;

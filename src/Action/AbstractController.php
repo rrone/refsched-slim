@@ -22,6 +22,7 @@ abstract class AbstractController
     protected $page_title;
 	protected $dates;
 	protected $location;
+	protected $msg;
 
 	//session variables	
 	protected $event;
@@ -78,11 +79,6 @@ abstract class AbstractController
         $this->schedPath = $this->container->get('router')->pathFor('sched');
         $this->unlockPath = $this->container->get('router')->pathFor('unlock');
         
-    }
-    public function __invoke(Request $request, Response $response, $args)
-    {
-        $this->view->render($response, 'base.html.twig');
-        return $response;
     }
     protected function errorCheck()
     {

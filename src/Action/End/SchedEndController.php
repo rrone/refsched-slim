@@ -14,19 +14,12 @@ class SchedEndController extends AbstractController
         $_SESSON['authed'] = FALSE;
         session_destroy();
         
-        $content = array (
-            "logon" => $this->logonPath  
-        );
+        //$content = array (
+        //    "logon" => $this->logonPath  
+        //);
         
-        $this->view->render($response, 'sched.end.html.twig', $content);
-    }
-
-    private function renderAddRef($response)
-    {
-        $html = null;
-    
-        return $html;
-          
+        //$this->view->render($response, 'sched.end.html.twig', $content);
+        return $response->withRedirect($this->logonPath);
     }
 }
 

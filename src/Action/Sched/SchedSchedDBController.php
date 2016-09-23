@@ -314,7 +314,7 @@ class SchedSchedDBController extends AbstractController
     <h3 align="center"><a href="$this->greetPath">Go to main page</a>&nbsp;-&nbsp;
     <a href="$this->fullPath">Go to full schedule</a>&nbsp;-&nbsp;
     <a href="$this->refsPath">Edit $this->rep referees</a>&nbsp;-&nbsp;
-    <a href="$this->endPath">Logoff</a></h3>
+    <a href="$this->endPath">Log off</a></h3>
 EOD;
         
         return $html;

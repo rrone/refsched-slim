@@ -29,6 +29,9 @@ a:active {
 	color: #CC0000;
 	background-color: #FFFFCC;
 }
+h1, h2, h3 {
+	font-weight: bold;
+}
 h1 {
 	font-size: 16px;
 }
@@ -98,6 +101,7 @@ table {
 }
 th {
 	line-height: 2rem;
+	text-align: center;
 }
 .contentarea {
 	padding-right: 15px;
@@ -135,4 +139,7 @@ th {
 }
 input {
 	margin: 10px 20px;
+}
+.left-margin {
+	margin-left: 20px;
 }

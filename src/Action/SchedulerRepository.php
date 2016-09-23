@@ -18,25 +18,26 @@ class SchedulerRepository
     public function getUsers()
     {
         return $this->db->table('users')
-			->where('enabled', 'like', 1)
+			->where('enabled', true)
 			->get();
     }
     public function getUserByPW($pw)
 	{
 		return $this->db->table('users')
-			->where('password', 'like', $pw);
+			->where('password', 'like', $pw)
+			->get()[0];
 	}
 	//Events table functions
 	public function getCurrentEvents()
     {
         return $this->db->table('events')
-			->where('enabled', 'like', 1)
+			->where('view', true)
 			->get();
     }
     public function getEnabledEvents()
     {
         return $this->db->table('events')
-			->where('enabled', 'like', 1)
+			->where('enabled', true)
 			->get();
     }
     public function getEvent($projectKey)
