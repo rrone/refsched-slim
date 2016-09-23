@@ -31,8 +31,11 @@ class SchedControlDBController extends AbstractController
 		$this->logger->info("Schedule control page action dispatched");
         
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+		$this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
         
-        $this->handleRequest($request);
+		if ( $request->isPost()) {
+			$this->handleRequest($request);
+		}
         
         $content = array(
             'view' => array (
@@ -42,7 +45,7 @@ class SchedControlDBController extends AbstractController
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
-				'description' => $this->rep . ' Schedule'
+				'description' => $this->rep . ' Schedule',
             )
         );        
      
@@ -51,25 +54,14 @@ class SchedControlDBController extends AbstractController
     }
     private function handleRequest($request)
     {
-        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_SERVER['HTTP_HOST'];
-        $from_url = parse_url( $referer );
-        $from = $from_url['path'];
-  //      $html .= "<p>$from</p>\n";
-        $url_ref = $this->masterPath;
 
-        //only Section 1 may update
-        if ( $_SERVER['REQUEST_METHOD'] == 'POST' && $from == $url_ref  && $this->rep == 'Section 1') {
-            $data = $request->getParsedBody();
-    
-            $this->sr->updateAssignor($data);
-        }
     }
     private function renderControl()
     {
         $html = null;
-        
-        $event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
 		
+		$event = $this->event;
+        
 		if (!empty($event)){
 
     //         print_r($_POST);
@@ -81,7 +73,7 @@ class SchedControlDBController extends AbstractController
     
             $games = $this->sr->getGames($projectKey);
             if (count($games) ) {
-                $html .= "      <table width=\"100%\">\n";
+                $html .= "      <table class=\"sched_table\" width=\"100%\">\n";
                 $html .= "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";                 
                 $html .= "            <th>Game No.</th>";
                 $html .= "            <th>Day</th>";
@@ -90,7 +82,7 @@ class SchedControlDBController extends AbstractController
                 $html .= "            <th>Division</th>";
                 $html .= "            <th>Home</th>";
                 $html .= "            <th>Away</th>";
-                $html .= "            <th>Referee<br>Team</th>";
+                $html .= "            <th>Referee Team</th>";
                 $html .= "            </tr>\n";
                 foreach($games as $game){
                     $day = date('D',strtotime($game->date));

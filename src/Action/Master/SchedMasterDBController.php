@@ -28,6 +28,13 @@ class SchedMasterDBController extends AbstractController
 
         $this->logger->info("Schedule master page action dispatched");
         
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
+		
+		if ( $request->isPost()) {
+			$this->handleRequest($request);
+		}
+
         $content = array(
             'view' => array (
                 'content' => $this->renderMaster(),
@@ -42,17 +49,30 @@ class SchedMasterDBController extends AbstractController
         
         $this->view->render($response, 'sched.html.twig', $content);
     }
-
+    private function handleRequest($request)
+    {
+		if( $from == $url_ref  && $this->rep == 'Section 1') {
+			//only Section 1 may update
+			
+			$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_SERVER['HTTP_HOST'];
+			$from_url = parse_url( $referer );
+			$from = $from_url['path'];
+			$url_ref = $this->masterPath;
+	
+			$data = $request->getParsedBody();
+	
+			$this->sr->updateAssignor($data);
+		}
+    }
     private function renderMaster()
     {
         $html = null;
         
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
-        $event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
+		$event = $this->event;
 		
 		if (!empty($event)){
 		
-			$select_list = array( "None");
+			$select_list = array( '' );
 			$users = $this->sr->getUsers();
 
 			foreach ($users as $user){
@@ -68,11 +88,11 @@ class SchedMasterDBController extends AbstractController
 				$projectKey = $event->projectKey;
 				$locked = $this->sr->getLocked($projectKey);
 			
-				$html .=  "  <form name=\"master_sched\" method=\"post\" action=\"$this->controlPath\">\n";
-				$html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+				$html .=  "  <form name=\"master_sched\" method=\"post\" action=\"$this->masterPath\">\n";
+				$html .=  "      <input  class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
 				$html .=  "      <div class='clear-fix'></div>";
 				
-				$html .=  "      <table width=\"100%\">\n";
+				$html .=  "      <table class=\"sched_table\" width=\"100%\">\n";
 				$html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
 				$html .=  "            <th>Game No.</th>";
 				$html .=  "            <th>Day</th>";
@@ -88,7 +108,7 @@ class SchedMasterDBController extends AbstractController
 				foreach($games as $game){
 					$day = date('D',strtotime($game->date));
 					$time = date('H:i', strtotime($game->time));
-					if ( $game->assignor == "None" ) {
+					if ( empty($game->assignor) ) {
 						$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
 					}
 					else {
@@ -116,7 +136,7 @@ class SchedMasterDBController extends AbstractController
 					$html .=  "            </tr>\n";
 				}
 				$html .=  "      </table>\n";
-				$html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+				$html .=  "      <input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
 				$html .=  "      <div class='clear-fix'></div>";
 				$html .=  "      </form>\n";
 

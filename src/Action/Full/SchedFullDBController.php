@@ -24,7 +24,7 @@ class SchedFullDBController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
-         if (!$this->authed) {
+        if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
          }
 
@@ -61,7 +61,7 @@ class SchedFullDBController extends AbstractController
 
 			$games = $this->sr->getGames($projectKey);
 			
-			$html .=  "      <table width=\"100%\">\n";
+			$html .=  "      <table class=\"sched_table\" width=\"100%\">\n";
 			$html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
 			$html .=  "            <th>Game No.</th>";
 			$html .=  "            <th>Day</th>";
@@ -70,7 +70,7 @@ class SchedFullDBController extends AbstractController
 			$html .=  "            <th>Division</th>";
 			$html .=  "            <th>Home</th>";
 			$html .=  "            <th>Away</th>";
-			$html .=  "            <th>Referee<br>Team</th>";
+			$html .=  "            <th>Referee Team</th>";
 			$html .=  "         </tr>\n";
 			foreach ($games as $game) {
 				$day = date('D',strtotime($game->date));
@@ -79,7 +79,7 @@ class SchedFullDBController extends AbstractController
 				if ( $game->assignor == $this->rep ) {
 					$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
 				}
-				elseif ($game->assignor != 'None') {
+				elseif ( !empty($game->assignor) ) {
 					$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorNotGroup\">";
 				}
 				else {
@@ -93,7 +93,7 @@ class SchedFullDBController extends AbstractController
 				$html .=  "            <td>$game->division</td>";
 				$html .=  "            <td>$game->home</td>";
 				$html .=  "            <td>$game->away</td>";
-				$html .=  "            <td>$game->assignor</td>";
+				$html .= "            <td>$game->assignor</td>";
 				$html .=  "            </tr>\n";
 			}
 			$html .=  "      </table>\n";

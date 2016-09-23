@@ -9,10 +9,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 //Request::setTrustedProxies(array('127.0.0.1'));
 
-$app->get('/', App\Action\Logon\LogonDBController::class)
+$app->map(['GET', 'POST'], '/', App\Action\Logon\LogonDBController::class)
     ->setName('logon');
 
-$app->get('/logon', App\Action\Logon\LogonDBController::class);
+$app->map(['GET', 'POST'], '/logon', App\Action\Logon\LogonDBController::class);
 
 $app->map(['GET', 'POST'], '/assign', App\Action\Assign\SchedAssignDBController::class)
     ->setName('assign');

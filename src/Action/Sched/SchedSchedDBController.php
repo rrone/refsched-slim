@@ -27,7 +27,14 @@ class SchedSchedDBController extends AbstractController
          }
 
         $this->logger->info("Schedule schedule database page action dispatched");
-        
+
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;        
+		$this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;		
+
+		if ( $request->isPost() ) {
+			$this->handleRequest($request);
+		}
+		
         $content = array(
             'view' => array (
                 'content' => $this->renderSched(),
@@ -42,17 +49,118 @@ class SchedSchedDBController extends AbstractController
       
         $this->view->render($response, 'sched.html.twig', $content);
     }
+	private function handleRequest($request)
+	{
+		if ( $this->rep != 'Section 1' ) {
+			$projectKey = $this->event->projectKey;
+			$locked = $this->sr->getLocked($projectKey);
+			$msgHtml = null;
+
+			//load limits if any or none
+			$limits = $this->sr->getLimits($projectKey);
+			if ( !count( $limits ) ) {
+				$no_limit = true;
+			}
+			else {
+				foreach($limits as $group){
+					$limit_list[ $group->division ] = $group->limit;
+				}
+			}
+			
+			$array_of_keys = array_keys( $_POST );
+			
+			//parse the POST data
+			$adds = [];
+			$assign = [];
+			foreach ($array_of_keys as $key){
+				$change = explode(':',$key);
+				switch  ($change[0]) {
+					case 'assign':
+						$adds[ $change[1] ] = $this->rep;
+						break;
+					case 'games':
+						$assign[ $change[1] ] = $this->rep;
+						break;
+					default:
+						continue;
+				}
+			}
+
+			if ( !$locked ) {
+				//remove drops if not locked
+				$assigned_games = $this->sr->getGamesByRep($projectKey, $this->rep);
+				if(count($assign) != count($assigned_games)){
+					$removed = [];
+					$unassign = [];
+					foreach($assigned_games as $game) {
+						if(!in_array($game->id, array_keys($assign)) ){
+							$removed[$game->id] = $game;
+							$unassign[$game->id] = '';
+							$msgHtml .= "<p>You have <strong>removed</strong> your referee team from Game no. $game->game_number on $game->date at $game->time on $game->field</p>\n";
+						}					
+					}
+					$this->sr->updateAssignor($unassign);	
+					//initialize counting groups
+					$assigned_games = $this->sr->getGamesByRep($projectKey, $this->rep);
+					foreach ($assigned_games as $game) {
+						$div = $this->divisionAge($game->division);
+						$games_now[ $div ] = isset($games_now[ $div ]) ? $games_now[ $div ]++ : 0;
+					}
+				}
+			}
+			
+			if ( count($assign)) {
+				//Update based on add/returned games
+				$added = [];
+				$unavailable = [];
+				$games = $this->sr->getGames($projectKey);		
+				foreach($games as $game) {
+					$div = $this->divisionAge($game->division);
+					//ensure all indexes exist
+					$games_now[ $div ] = isset($games_now[ $div ]) ? $games_now[$div] : 0;
+					$atLimit[ $div ] = isset($atLimit[ $div ]) ? $atLimit[$div] : 0;;
+					//if requested
+					if(in_array($game->id, array_keys($adds)) ) {
+						//and available
+
+						if ( empty($game->assignor) ) {
+							//and below the limit if there is one
+							if ($games_now[$div] < $limit_list[$div] or $no_limit)  {
+								//make the assignment
+								$data = [ $game->id => $this->rep ];
+								$this->sr->updateAssignor($data);
+								$added[$game->id] = $game;
+								$games_now[$div]++;
+							}
+							else {
+								$atLimit[$div]++;
+							}
+						}
+						else {
+							$unavailable[$game->id] = $game;
+						}
+					}
+				}
+
+				$assigned_update = $this->sr->getGamesByRep($projectKey, $this->rep);
+			}
+
+//				$html .= "<p>You have <strong>scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
+//				$html .= "<p>You have <strong>scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
+//				$html .= "<p>You have <strong>not scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3] because you are at your game limit!</p>\n";
+//			   $html .= "<p>You have <strong>removed</strong> your referee team from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
+//                       $html .= "<p>Your referee team has been <strong>removed</strong> from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3] because you are over the game limit.</p>\n";
+//				$html .= "<p>I'm sorry, game no. $record[0] has been taken.</p>";
+		}
+	}
 
     private function renderSched()
     {
         $html = null;
         
         $showgroup = null;
+		$event = $this->event;
         
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
-        
-		$event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-		
 		if (!empty($event)) {
 			$projectKey = $event->projectKey;
 	
@@ -184,13 +292,13 @@ class SchedSchedDBController extends AbstractController
 				$html .= "</h3></center>\n";
 			}
 	  
-			$html .= "<form name=\"form1\" method=\"post\" action=\"$this->assignPath\">\n";
+			$html .= "<form name=\"form1\" method=\"post\" action=\"$this->schedPath\">\n";
 	
 			$html .= "<div align=\"left\">";
-	   
-			$html .= "<h3>Available games - Color change indicates different start times.";
+   
+			$html .= "<h3 class=\"h3-btn\" >Available games - Color change indicates different start times.";
 			if ( !$locked && (!$allatlimit && !empty($assigned_list) || $showavailable) ) {
-				$html .=  "<input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+				$html .=  "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
 				$html .=  "<div class='clear-fix'></div>";
 			}
 			$html .= "</h3>\n";
@@ -199,7 +307,7 @@ class SchedSchedDBController extends AbstractController
 				$html .= "	<td>No other games available.</td>";
 				$html .= "</tr>\n";
 			} else {
-				$html .= "<table>\n";
+				$html .= "<table class=\"sched_table\" >\n";
 				$html .= "   <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
 				$html .= "     <th>Game No.</th>";
 				$html .= "       <th>Assign to $this->rep</th>";
@@ -209,12 +317,12 @@ class SchedSchedDBController extends AbstractController
 				$html .= "    	  <th>Division</th>";
 				$html .= "		  <th>Home</th>";
 				$html .= "	      <th>Away</th>";
-				$html .= "		  <th>Referee<br>Team</th>";
+				$html .= "		  <th>Referee Team</th>";
 				$html .= "		</tr>";
 	  
 				for ( $kant=0; $kant < $kount; $kant++ ) {
 					if ( ( $showgroup && $showgroup == $this->divisionAge( $div[$kant] ) ) || !$showgroup ) {
-						if ( substr( $game_no[$kant], 0, 1 ) != "#" && $a_init != substr( $home[$kant], 0, 1) && $a_init != substr( $away[$kant], 0, 1) && !$ref_team[$kant] && $showavailable ) {
+						if ( $a_init != substr( $home[$kant], 0, 1) && $a_init != substr( $away[$kant], 0, 1) && !$ref_team[$kant] && $showavailable ) {
 			   
 							if ( !$testtime ) { $testtime = $time[$kant]; }
 							elseif ( $testtime != $time[$kant] ) {
@@ -223,7 +331,6 @@ class SchedSchedDBController extends AbstractController
 								$color1 = $color2;
 								$color2 = $tempcolor;
 							}
-	
 							$html .= "		<tr align=\"center\" bgcolor=\"$color1\">";
 							$html .= "		<td>$game_no[$kant]</td>";
 							$html .= "		<td><input type=\"checkbox\" name=\"assign:$game_id[$kant]\" value=\"$game_id[$kant]\"></td>";
@@ -243,12 +350,12 @@ class SchedSchedDBController extends AbstractController
 	  
 			$html .= "	  <h3>Assigned games</h3>\n";
 			if ( empty($kount) ) {
-				$html .= "	  <table>\n";
+				$html .= "	  <table class=\"sched_table\" >\n";
 				$html .= "		<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";   
 				$html .= "		<td>$this->rep has no games assigned.</td>";
 				$html .= "		</tr>\n";
 			} else {            
-				$html .= "	  <table>\n";
+				$html .= "	  <table class=\"sched_table\" >\n";
 				$html .= "	    <tr align=\"center\" bgcolor=\"$this->colorTitle\">\n";
 				$html .= "		<th>Game No.</th>\n";
 				$html .= "		<th>Assigned</th>\n";
@@ -258,7 +365,7 @@ class SchedSchedDBController extends AbstractController
 				$html .= "		<th>Division</th>\n";
 				$html .= "		<th>Home</th>\n";
 				$html .= "		<th>Away</th>\n";
-				$html .= "		<th>Referee<br>Team</th>\n";
+				$html .= "		<th>Referee Team</th>\n";
 				$html .= "          </tr>\n";
 		  
 				for ( $kant=0; $kant < $kount; $kant++ ) {
@@ -288,7 +395,7 @@ class SchedSchedDBController extends AbstractController
 			}
 			else {
 				if ( !$locked && (!$allatlimit && !empty($assigned_list) || $showavailable) ) {
-					$html .=  "      <input class=\"right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+					$html .=  "      <input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
 					$html .=  "      <div class='clear-fix'></div>";
 				}
 			}

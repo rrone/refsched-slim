@@ -29,16 +29,45 @@ class LogonDBController extends AbstractController
     {
         $this->logger->info("Logon database page action dispatched");
        
-		$content = array(
-			'events' => $this->sr->getCurrentEvents(),
-            'content' => $this->renderLogon(),
-			'message' => isset($_SESSION['msg']) ? $_SESSION['msg'] : null,
-        );
-      
-        $this->view->render($response, 'logon.html.twig', $content);      
+        if ( $request->isPost() ) {
+			$this->handleRequest($request);
+		}
 
-        return $response;
+		$this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+		if ($this->authed) {
+			return $response->withRedirect($this->greetPath);
+			}
+		else {
+			$content = array(
+				'events' => $this->sr->getCurrentEvents(),
+				'content' => $this->renderLogon(),
+				'message' => $this->msg,
+			);
+		  
+			$this->view->render($response, 'logon.html.twig', $content);      
+	
+			return $response;
+		}
     }
+	private function handleRequest($request)
+	{
+		$pass = crypt( $_POST['passwd'], 11);
+		$user = $this->sr->getUserByPW($pass);
+		$this->authed = !empty($user) && $_POST['area'] == $user->name;
+
+		if ($this->authed) {
+			$_SESSION['authed'] = true;
+			$_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
+			$_SESSION['unit'] = $_POST['area'];
+			$this->msg = null;
+		}
+		else {
+			$_SESSION['authed'] = false;
+			$_SESSION['event'] = null;
+			$_SESSION['unit'] = null;
+			$this->msg = 'Unrecognized password for ' . $_POST['area'];
+		}		
+	}
     private function renderLogon()
     {
 		$users = $this->users;
@@ -46,11 +75,11 @@ class LogonDBController extends AbstractController
 		
         $html =
 <<<EOD
-      <form name="form1" method="post" action="$this->greetPath">
+      <form name="form1" method="post" action="$this->logonPath">
         <div align="center">
 		  <table>
           <tr><td width="50%"><div align="right">ARA or representative from: </div></td>
-            <td width="50%"><select class="left-margin" name="area">
+            <td width="50%"><select class="form-control left-margin" name="area">
 EOD;
 		foreach($users as $user) {
 			$html .= "<option>$user->name</option>";
@@ -61,10 +90,10 @@ EOD;
             </select></td>
           </tr>
           <tr><td width="50%"><div align="right">Password: </div></td>
-            <td><input type="password" name="passwd"></td></tr>
+            <td><input class="form-control" type="password" name="passwd"></td></tr>
             <tr><td width="50%"><div align="right">Competition: </div></td>
             <td width="50%">
-                <select class="left-margin" name="event">
+                <select class="form-control left-margin" name="event">
 EOD;
 		foreach($enabled as $option) {
 			$html .= "<option>$option->label</option>";

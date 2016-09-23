@@ -26,9 +26,9 @@ class SchedGreetDBController extends AbstractController
 		$this->handleRequest($request);
 
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
-         if (!$this->authed) {
+        if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
-         }
+        }
 		$this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
 		$this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 		
@@ -46,19 +46,6 @@ class SchedGreetDBController extends AbstractController
     }
 	private function handleRequest($request)
 	{
-        if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
-            $pass = crypt( $_POST['passwd'], 11);
-            $user = $this->sr->getUserByPW($pass);
-            if (!empty($user) && $_POST['area'] == $user->name) {				
-                $_SESSION['authed'] = true;
-				$event = $this->sr->getEventByLabel($_POST['event']);
-                $_SESSION['event'] = $event;
-				unset($_SESSION['msg']);
-			}
-			else {
-				$_SESSION['msg'] = 'Unrecognized password for ' . $_POST['area'];
-	        }
-        }		
 	}
     private function renderGreet()
     {
@@ -93,7 +80,7 @@ class SchedGreetDBController extends AbstractController
 			$oneatlimit = 0;
 	  
 			foreach( $games as $game ) {
-				if ( $this->rep == "Section 1" && $game->assignor != 'None' ) {
+				if ( $this->rep == "Section 1" && !empty($game->assignor) ) {
 					$num_assigned++;
 				}
 				elseif ( $this->rep == $game->assignor ) { 

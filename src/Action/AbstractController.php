@@ -31,7 +31,7 @@ abstract class AbstractController
     
     //default layout colors
     protected $colorTitle = '#80ccff';
-    protected $colorOpen = '#00FFFF';
+    protected $colorOpen = '#FFF484';
     protected $colorGroup = '#00FF88';
     protected $colorNotGroup = '#ffcccc';
     protected $colorHighlight = '#FFBC00';

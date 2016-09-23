@@ -33,8 +33,10 @@ class SchedAssignDBController extends AbstractController
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 		$this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 
-		$this->handleRequest($request);
-        
+		if ( $request->isPost() ) {
+			$this->handleRequest($request);
+		}
+		        
         $content = array(
             'view' => array (
                 'content' => $this->renderAssign(),
@@ -52,106 +54,6 @@ class SchedAssignDBController extends AbstractController
     }
 	private function handleRequest($request)
 	{
-		if ( $_SERVER['REQUEST_METHOD'] == 'POST' && $this->rep != 'Section 1' ) {
-			$projectKey = $this->event->projectKey;
-			$locked = $this->sr->getLocked($projectKey);
-			$msgHtml = null;
-
-			//load limits if any or none
-			$limits = $this->sr->getLimits($projectKey);
-			if ( !count( $limits ) ) {
-				$no_limit = true;
-			}
-			else {
-				foreach($limits as $group){
-					$limit_list[ $group->division ] = $group->limit;
-				}
-			}
-			
-			$array_of_keys = array_keys( $_POST );
-			
-			//parse the POST data
-			$adds = [];
-			$assign = [];
-			foreach ($array_of_keys as $key){
-				$change = explode(':',$key);
-				switch  ($change[0]) {
-					case 'assign':
-						$adds[ $change[1] ] = $this->rep;
-						break;
-					case 'games':
-						$assign[ $change[1] ] = $this->rep;
-						break;
-					default:
-						continue;
-				}
-			}
-
-			if ( !$locked ) {
-				//remove drops if not locked
-				$assigned_games = $this->sr->getGamesByRep($projectKey, $this->rep);
-				if(count($assign) != count($assigned_games)){
-					$removed = [];
-					$unassign = [];
-					foreach($assigned_games as $game) {
-						if(!in_array($game->id, array_keys($assign)) ){
-							$removed[$game->id] = $game;
-							$unassign[$game->id] = '';
-							$msgHtml .= "<p>You have <strong>removed</strong> your referee team from Game no. $game->game_number on $game->date at $game->time on $game->field</p>\n";
-						}					
-					}
-					$this->sr->updateAssignor($unassign);	
-					//initialize counting groups
-					$assigned_games = $this->sr->getGamesByRep($projectKey, $this->rep);
-					foreach ($assigned_games as $game) {
-						$div = $this->divisionAge($game->division);
-						$games_now[ $div ] = isset($games_now[ $div ]) ? $games_now[ $div ]++ : 0;
-					}
-				}
-			}
-			
-			if ( count($assign)) {
-				//Update based on add/returned games
-				$added = [];
-				$unavailable = [];
-				$games = $this->sr->getGames($projectKey);		
-				foreach($games as $game) {
-					$div = $this->divisionAge($game->division);
-					//ensure all indexes exist
-					$games_now[ $div ] = isset($games_now[ $div ]) ? $games_now[$div] : 0;
-					$atLimit[ $div ] = isset($atLimit[ $div ]) ? $atLimit[$div] : 0;;
-					//if requested
-					if(in_array($game->id, array_keys($adds)) ) {
-						//and available
-						if ( $game->assignor == '') {
-							//and below the limit if there is one
-							if ($games_now[$div] < $limit_list[$div] or $no_limit)  {
-								//make the assignment
-								$data = [ $game->id => $this->rep ];
-								$this->sr->updateAssignor($data);
-								$added[$game->id] = $game;
-								$games_now[$div]++;
-							}
-							else {
-								$atLimit[$div]++;
-							}
-						}
-						else {
-							$unavailable[$game_id] = $game;
-						}
-					}
-				}
-
-				$assigned_update = $this->sr->getGamesByRep($projectKey, $this->rep);
-			}
-
-//				$html .= "<p>You have <strong>scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
-//				$html .= "<p>You have <strong>scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
-//				$html .= "<p>You have <strong>not scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3] because you are at your game limit!</p>\n";
-//			   $html .= "<p>You have <strong>removed</strong> your referee team from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
-//                       $html .= "<p>Your referee team has been <strong>removed</strong> from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3] because you are over the game limit.</p>\n";
-//				$html .= "<p>I'm sorry, game no. $record[0] has been taken.</p>";
-		}
 	}
     private function renderAssign()
     {
@@ -164,7 +66,7 @@ class SchedAssignDBController extends AbstractController
 			$games = $this->sr->getGamesByRep($projectKey, $this->rep);
 			if (count($games)){
 				$html .= "<center><h2>You are currently scheduled for the following games</h2></center>\n";
-				$html .= "      <table width=\"100%\">\n";
+				$html .= "      <table class=\"sched_table\" width=\"100%\">\n";
 				$html .= "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
 				$html .= "            <th>Game No.</th>";
 				$html .= "            <th>Day</th>";
@@ -173,7 +75,7 @@ class SchedAssignDBController extends AbstractController
 				$html .= "            <th>Division</th>";
 				$html .= "            <th>Home</th>";
 				$html .= "            <th>Away</th>";
-				$html .= "            <th>Referee<br>Team</th>";
+				$html .= "            <th>Referee Team</th>";
 				$html .= "            </tr>\n";
 
 				foreach($games as $game) {

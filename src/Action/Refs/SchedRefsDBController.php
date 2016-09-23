@@ -27,6 +27,17 @@ class SchedRefsDBController extends AbstractController
          }
 
         $this->logger->info("Schedule refs page action dispatched");
+
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;        
+        $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
+          
+        if ( $request->isPost()) {
+            if ($this->handleRequest($request)) {
+				$_SESSION['target_id'] = array_keys($_POST);
+
+				return $response->withRedirect($this->editrefPath);
+			}
+        }
         
         $content = array(
             'view' => array (
@@ -43,15 +54,16 @@ class SchedRefsDBController extends AbstractController
         $this->view->render($response, 'sched.html.twig', $content);
 
     }
-
+	private function handleRequest($request)
+	{
+		return true;
+	}
     private function renderRefs()
     {
         $html = null;
         
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
-        
-        $event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
-  
+		$event = $this->event;
+		
         if ( !empty($event) ) {
             $this->page_title = $event->name;
             $this->dates = $event->dates;
@@ -66,10 +78,10 @@ class SchedRefsDBController extends AbstractController
                 if ( $this->rep != 'Section 1') {
                     $html .=  "<center><h2>You are currently scheduled for the following games</h2></center>\n";
                 }
-                $html .=  "      <form name=\"addref\" method=\"post\" action=\"$this->editrefPath\">\n";
-                $html .=  "      <table width=\"100%\">\n";
+                $html .=  "      <form name=\"addref\" method=\"post\" action=\"$this->refsPath\">\n";
+                $html .=  "      <table class=\"sched_table\" width=\"100%\">\n";
                 $html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
-                $html .=  "            <th>Game<br>No.</th>";
+                $html .=  "            <th>Game No.</th>";
                 $html .=  "            <th>Day</th>";
                 $html .=  "            <th>Time</th>";
                 $html .=  "            <th>Location</th>";
@@ -107,7 +119,7 @@ class SchedRefsDBController extends AbstractController
 	                        $html .=  "            <td>$game->r4th</td>";
 						}
                         if ( $game->assignor ) {
-                           $html .=  "            <td><input type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\"></td>";
+                           $html .=  "            <td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\"></td>";
                         }
                         else {
                            $html .=  "            <td>&nbsp;</td>\n";

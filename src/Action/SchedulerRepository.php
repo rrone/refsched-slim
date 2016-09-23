@@ -14,6 +14,10 @@ class SchedulerRepository
         $this->db = $db;
 		        
     }
+	private function getZero($elem)
+	{
+		return isset($elem[0]) ? $elem[0] : null;
+	}
 	//User table functions
     public function getUsers()
     {
@@ -23,9 +27,16 @@ class SchedulerRepository
     }
     public function getUserByPW($pw)
 	{
-		return $this->db->table('users')
+		if(empty($pw)) {
+			return null;
+		}
+		
+		$user = $this->db->table('users')
 			->where('password', 'like', $pw)
-			->get()[0];
+			->get();
+		
+		return $this->getZero($user);
+
 	}
 	//Events table functions
 	public function getCurrentEvents()
@@ -42,15 +53,23 @@ class SchedulerRepository
     }
     public function getEvent($projectKey)
     {
-        return $this->db->table('events')
-			->where('eventKey', '=', $key)
-			->get()[0];
+		if(empty($projectKey)) {
+			return null;
+		}
+		
+        $event = $this->db->table('events')
+			->where('eventKey', '=', $projectKey)
+			->get();
+
+		return $this->getZero($event);
     }
     public function getEventByLabel($label)
     {
-        return $this->db->table('events')
+        $event = $this->db->table('events')
 			->where('label', '=', $label)
-			->get()[0];
+			->get();
+
+		return $this->getZero($event);
     }
 	public function getEventLabel($projectKey)
 	{
@@ -60,20 +79,32 @@ class SchedulerRepository
 	}
 	public function getLocked($projectKey)
 	{
-		return $this->db->table('events')
+		$status = $this->db->table('events')
 			->where('projectKey', '=', $projectKey)
-			->get()[0]
-			->locked;
+			->get();
+			
+		$status = $this->getZero($status);
+		if (!is_null($status)) {
+			return $status->locked;
+		}
+		else {
+			return null;
+		}
 	}
 	public function numberOfReferees($projectKey)
 	{
 		$numRefs = $this->db->table('events')
 			->select('num_refs')
 			->where('projectKey', '=', $projectKey)
-			->get()[0]
-			->num_refs;
+			->get();
+		$numRefs = $this->getZero($numRefs);
 		
-		return $numRefs;
+		if (!is_null($numRefs)) {
+			return $numRefs->num_refs;
+		}
+		else {
+			return null;
+		}
 	}
 	public function lockProject($key)
 	{
@@ -175,11 +206,17 @@ class SchedulerRepository
 		$gameNo = $this->db->table('games')
 			->select('game_number')
 			->where('id', '=', $id)
-			->get()[0]
-			->game_number;
+			->get();
+		$gameNo = $this->getZero($gameNo);
 		
-		return $gameNo;
-	}	//Limits table functions
+		if (!is_null($gameNo)) {
+			return $gameNo->game_number;
+		}
+		else {
+			return null;
+		}
+	}
+	//Limits table functions
 	public function getLimits($projectKey)
 	{
 		return $this->db->table('limits')
