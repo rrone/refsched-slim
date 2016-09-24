@@ -125,8 +125,8 @@ class SchedControlDBController extends AbstractController
     {
         $html =
 <<<EOT
-      <h3 align="center"><a href="$this->greetPath">Go to main page</a>&nbsp;-&nbsp;
-      <a href="$this->fullPath">Go to full schedule</a>&nbsp;-&nbsp;
+      <h3 align="center"><a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
+      <a href="$this->fullPath">View the full schedule</a>&nbsp;-&nbsp;
       <a href="$this->masterPath">Schedule referee teams</a>&nbsp;-&nbsp;
       <a href="$this->endPath">Log off</a></h3>
 EOT;

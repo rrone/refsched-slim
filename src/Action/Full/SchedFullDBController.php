@@ -106,7 +106,7 @@ class SchedFullDBController extends AbstractController
     }
     private function menu()
     {
-        $html =  "<h3 align=\"center\"><a href=\"$this->greetPath\">Go to main page</a>&nbsp;-&nbsp;\n";
+        $html =  "<h3 align=\"center\"><a href=\"$this->greetPath\">Home</a>&nbsp;-&nbsp;\n";
 
         if ( $this->rep == 'Section 1' ) {
            $html .=  "<a href=\"$this->masterPath\">Schedule referee teams</a>&nbsp;-&nbsp;\n";

@@ -11,6 +11,8 @@ class SchedMasterDBController extends AbstractController
 {
     // SchedulerRepository //
     private $sr;
+	private $topmenu;
+	private $justOpen;
     
 	public function __construct(Container $container, SchedulerRepository $repository) {
 		
@@ -31,6 +33,9 @@ class SchedMasterDBController extends AbstractController
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
 		
+		if ( count( $_GET ) ) {
+		   $this->justOpen = array_key_exists( 'open', $_GET );
+		}
 		if ( $request->isPost()) {
 			$this->handleRequest($request);
 		}
@@ -38,7 +43,7 @@ class SchedMasterDBController extends AbstractController
         $content = array(
             'view' => array (
                 'content' => $this->renderMaster(),
-                'topmenu' => $this->menu(),
+                'topmenu' => $this->topmenu,
                 'menu' => $this->menu(),
                 'title' => $this->page_title,
 				'dates' => $this->dates,
@@ -72,16 +77,15 @@ class SchedMasterDBController extends AbstractController
 		
 		if (!empty($event)){
 		
-			$select_list = array( '' );
-			$users = $this->sr->getUsers();
-
-			foreach ($users as $user){
-				$select_list[] = $user->name;
-			}
-			$select_list[] = 'Other';
-	
 			if ( $this->authed && $this->rep == 'Section 1' ) {
-				
+				$select_list = array( '' );
+				$users = $this->sr->getUsers();
+					
+				foreach ($users as $user){
+					$select_list[] = $user->name;
+				}
+				$select_list[] = 'Other';
+					
 				$this->page_title = $event->name;
 				$this->dates = $event->dates;
 				$this->location = $event->location;
@@ -106,43 +110,47 @@ class SchedMasterDBController extends AbstractController
 				
 				$games = $this->sr->getGames($projectKey);
 				foreach($games as $game){
-					$day = date('D',strtotime($game->date));
-					$time = date('H:i', strtotime($game->time));
-					if ( empty($game->assignor) ) {
-						$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
-					}
-					else {
-						$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
-					}
-					$html .=  "            <td>$game->game_number</td>";
-					$html .=  "            <td>$day<br>$game->date</td>";
-					$html .=  "            <td>$time</td>";
-					$html .=  "            <td>$game->field</td>";
-					$html .=  "            <td>$game->division</td>";
-					$html .=  "            <td>$game->home</td>";
-					$html .=  "            <td>$game->away</td>";
-					
-					$html .=  "            <td><select name=\"$game->id\">\n";
-					foreach ($select_list as $user){
-						if ($user == $game->assignor) {
-							$html .=  "               <option selected>$user</option>\n";
+					if ( !$this->justOpen || ($this->justOpen && empty($game->assignor)) ) {
+						$day = date('D',strtotime($game->date));
+						$time = date('H:i', strtotime($game->time));
+						if ( empty($game->assignor) ) {
+							$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
 						}
 						else {
-							$html .=  "               <option>$user</option>\n";
+							$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
 						}
-					}
+						$html .=  "            <td>$game->game_number</td>";
+						$html .=  "            <td>$day<br>$game->date</td>";
+						$html .=  "            <td>$time</td>";
+						$html .=  "            <td>$game->field</td>";
+						$html .=  "            <td>$game->division</td>";
+						$html .=  "            <td>$game->home</td>";
+						$html .=  "            <td>$game->away</td>";
 						
-					$html .=  "            </select></td>";
-					$html .=  "            </tr>\n";
+						$html .=  "            <td><select name=\"$game->id\">\n";
+						foreach ($select_list as $user){
+							if ($user == $game->assignor) {
+								$html .=  "               <option selected>$user</option>\n";
+							}
+							else {
+								$html .=  "               <option>$user</option>\n";
+							}
+						}
+							
+						$html .=  "            </select></td>";
+						$html .=  "            </tr>\n";
+					}
 				}
 				$html .=  "      </table>\n";
 				$html .=  "      <input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
 				$html .=  "      <div class='clear-fix'></div>";
 				$html .=  "      </form>\n";
+				$this->topmenu = $this->menu();
 
 			}
 			else {
-			   $html .=  "<center><h2>You probably want the <a href=\"$this->schedPath\">scheduling</a> page.</h2></center>";
+				$html .=  "<center><h2>You probably want the <a href=\"$this->schedPath\">scheduling</a> page.</h2></center>";
+				$this->topmenu = null;
 			}
 		}
 		else {
@@ -154,8 +162,14 @@ class SchedMasterDBController extends AbstractController
     }
     private function menu()
     {
-        $html =  "<h3 align=\"center\"><a href=\"$this->greetPath\">Go to main page</a>&nbsp;-&nbsp;\n";
-        $html .=  "<a href=\"$this->fullPath\">Go to full schedule</a>&nbsp;-&nbsp;\n";
+        $html =  "<h3 align=\"center\"><a href=\"$this->greetPath\">Home</a>&nbsp;-&nbsp;\n";
+        $html .=  "<a href=\"$this->fullPath\">View the full schedule</a>&nbsp;-&nbsp;\n";
+		if ($this->justOpen) {
+			$html .=  "<a href=\"$this->masterPath\">Select all referee teams</a>&nbsp;-&nbsp;\n";
+		}
+		else {
+			$html .=  "<a href=\"$this->masterPath?open\">Select open referee teams</a>&nbsp;-&nbsp;\n";
+		}
         $html .=  "<a href=\"$this->endPath\">Log off</a></h3>\n";
       
         return $html;

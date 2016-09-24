@@ -150,7 +150,7 @@ class SchedEditRefDBController extends AbstractController
     {
         $html =
 <<<EOD
-		<h3 align="center"><a href="$this->greetPath">Go to main page</a>&nbsp;-&nbsp;
+		<h3 align="center"><a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
 EOD;
 
         if ( $this->rep == 'Section 1' ) {

@@ -159,8 +159,9 @@ class SchedGreetDBController extends AbstractController
 			  
 			}
 			$html .= "<center><hr width=\"25%\"><h3><font color=\"$this->colorAlert\">ACTIONS</font></h3>\n";
+			$html .= "<h3 align=\"center\"><a href=\"$this->fullPath\">View the full game schedule</a></h3>";
 			if ( $this->rep == 'Section 1' ) {
-				$html .= "<h3 align=\"center\"><a href=\"$this->masterPath\">Schedule All Referee Teams</a></h3>";
+				$html .= "<h3 align=\"center\"><a href=\"$this->masterPath\">Select Referee Teams</a></h3>";
 			}
 			else {
 				$html .= "<h3 align=\"center\"><a href=\"$this->schedPath\">Schedule $this->rep Referee Teams</a></h3>";
@@ -170,8 +171,7 @@ class SchedGreetDBController extends AbstractController
 				}
 				$html = substr($html, 0, strlen($html)-3) ."</h3>";
 			}
-			$html .= "<h3 align=\"center\"><a href=\"$this->fullPath\">Go to the full game schedule</a></h3>";
-			$html .= "<h3 align=\"center\"><a href=\"$this->refsPath\">Add/Modify Referee Names to Assigned Games</a></h3>";
+			$html .= "<h3 align=\"center\"><a href=\"$this->refsPath\">Edit Referee Assignments</a></h3>";
    //         $html .= "<h3 align=\"center\"><a href=\"/summary.htm\">Summary of the playoffs</a></h3>";
 			$html .= "<h3 align=\"center\"><a href=\"$this->endPath\">LOG OFF</a></h3>";
 			$html .= "</center>";
