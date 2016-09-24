@@ -52,6 +52,7 @@ abstract class AbstractController
     protected $refsPath;
     protected $schedPath;
     protected $unlockPath;
+	protected $schedXlsPath;
 
     public function __construct(Container $container)
     {
@@ -78,6 +79,8 @@ abstract class AbstractController
         $this->refsPath = $this->container->get('router')->pathFor('refs');
         $this->schedPath = $this->container->get('router')->pathFor('sched');
         $this->unlockPath = $this->container->get('router')->pathFor('unlock');
+        $this->fullXlsPath = $this->container->get('router')->pathFor('full.xls');
+		
         
     }
     protected function errorCheck()

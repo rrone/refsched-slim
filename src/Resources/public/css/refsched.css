@@ -155,3 +155,8 @@ select.form-control, input.form-control {
     font-size: 13px;
 	height: 2.25em;
 }
+a.btn:visited, a.btn:link {
+	color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}

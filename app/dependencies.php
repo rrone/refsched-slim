@@ -173,3 +173,12 @@ $container[App\Action\Assign\SchedAssignDBController::class] = function ($c) {
 
     return new \App\Action\Assign\SchedAssignDBController($c, $repo);
 };
+
+$container[App\Action\Full\SchedExportController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+    $exporter = new \App\Action\AbstractExporter('xls');
+
+    return new \App\Action\Full\SchedExportController($c, $repo, $exporter);
+};
+

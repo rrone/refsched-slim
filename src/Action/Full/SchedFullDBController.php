@@ -61,12 +61,15 @@ class SchedFullDBController extends AbstractController
 
 			$games = $this->sr->getGames($projectKey);
 			
+			$html .=  "<a href=\"$this->fullXlsPath\" class=\"btn btn-primary btn-xs right\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>\n";
+			$html .=  "<div class='clear-fix'></div>";
+
 			$html .=  "      <table class=\"sched_table\" width=\"100%\">\n";
 			$html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
 			$html .=  "            <th>Game No.</th>";
 			$html .=  "            <th>Day</th>";
 			$html .=  "            <th>Time</th>";
-			$html .=  "            <th>Location</th>";
+			$html .=  "            <th>Field</th>";
 			$html .=  "            <th>Division</th>";
 			$html .=  "            <th>Home</th>";
 			$html .=  "            <th>Away</th>";

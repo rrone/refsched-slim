@@ -102,7 +102,7 @@ class SchedEditRefDBController extends AbstractController
 						$html .=  "            <th>Game No.</th>";
 						$html .=  "            <th>Day</th>";
 						$html .=  "            <th>Time</th>";
-						$html .=  "            <th>Location</th>";
+						$html .=  "            <th>Field</th>";
 						$html .=  "            <th>Division</th>";
 						$html .=  "            <th>Referee Team</th>";
 						$html .=  "            <th>Center</th>";
