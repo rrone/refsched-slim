@@ -25,6 +25,7 @@ session_start();
 $settings = require __DIR__ . '/../app/settings.php';
 
 $settings['debug'] = true;
+$settings['displayErrorDetails'] = $settings['debug'];
 
 $app = new \Slim\App($settings);
 
