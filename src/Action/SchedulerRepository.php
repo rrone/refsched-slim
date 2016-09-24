@@ -176,6 +176,7 @@ class SchedulerRepository
 
 		foreach($data as $id=>$rep){
 			if ($id != 'Submit'){
+				$rep = $rep == 'None' ? null : $rep;
 				$this->db->table('games')
 					->where('id', $id)
 					->update(['assignor' => $rep]);							

@@ -154,4 +154,5 @@ input, .btn {
 select.form-control, input.form-control {
 	width: 50%;
     font-size: 13px;
+	height: 2.25em;
 }
