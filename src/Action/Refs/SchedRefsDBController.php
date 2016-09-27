@@ -97,7 +97,7 @@ class SchedRefsDBController extends AbstractController
                 $html .=  "            </tr>\n";
 
                 foreach($games as $game){
-					$day = date('D',strtotime($game->date));
+					$date = date('D, d M',strtotime($game->date));
 					$time = date('H:i', strtotime($game->time));
                     if ( $game->assignor == $this->rep || $this->rep == 'Section 1') {
                         if ( !$game->assignor && $this->rep == 'Section 1' ) {
@@ -107,7 +107,7 @@ class SchedRefsDBController extends AbstractController
                            $html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
                         }
                         $html .=  "            <td>$game->game_number</td>";
-                        $html .=  "            <td>$day<br>$game->date</td>";
+                        $html .=  "            <td>$date</td>";
                         $html .=  "            <td>$time</td>";
                         $html .=  "            <td>$game->field</td>";
                         $html .=  "            <td>$game->division</td>";

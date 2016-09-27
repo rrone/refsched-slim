@@ -62,7 +62,17 @@ class SchedEditRefDBController extends AbstractController
 		switch (count( $_POST ) > 3 ) {
 			case 3:				
 				$data = $request->getParsedBody();
-		
+
+				foreach($data as $key=>&$value){
+					if ($value != 'Update Assignments') {
+						$pattern = "/^[a-z ,.'-]+$/i";
+						$matches = [];
+						preg_match($pattern, $value, $matches);
+						if (empty($matches)){
+							$value = '';	
+						}
+					}
+				}
 				$this->sr->updateAssignments($data);
 				
 				return true;

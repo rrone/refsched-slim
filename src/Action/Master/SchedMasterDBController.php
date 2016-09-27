@@ -19,6 +19,7 @@ class SchedMasterDBController extends AbstractController
 		parent::__construct($container);
         
         $this->sr = $repository;
+		$this->justOpen = false;
 		
     }
     public function __invoke(Request $request, Response $response, $args)
@@ -99,7 +100,7 @@ class SchedMasterDBController extends AbstractController
 				$html .=  "      <table class=\"sched_table\" width=\"100%\">\n";
 				$html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
 				$html .=  "            <th>Game No.</th>";
-				$html .=  "            <th>Day</th>";
+				$html .=  "            <th>Date</th>";
 				$html .=  "            <th>Time</th>";
 				$html .=  "            <th>Field</th>";
 				$html .=  "            <th>Division</th>";
@@ -111,7 +112,7 @@ class SchedMasterDBController extends AbstractController
 				$games = $this->sr->getGames($projectKey);
 				foreach($games as $game){
 					if ( !$this->justOpen || ($this->justOpen && empty($game->assignor)) ) {
-						$day = date('D',strtotime($game->date));
+						$date = date('D, d M',strtotime($game->date));
 						$time = date('H:i', strtotime($game->time));
 						if ( empty($game->assignor) ) {
 							$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
@@ -120,7 +121,7 @@ class SchedMasterDBController extends AbstractController
 							$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
 						}
 						$html .=  "            <td>$game->game_number</td>";
-						$html .=  "            <td>$day<br>$game->date</td>";
+						$html .=  "            <td>$date</td>";
 						$html .=  "            <td>$time</td>";
 						$html .=  "            <td>$game->field</td>";
 						$html .=  "            <td>$game->division</td>";
@@ -170,6 +171,7 @@ class SchedMasterDBController extends AbstractController
 		else {
 			$html .=  "<a href=\"$this->masterPath?open\">Select open referee teams</a>&nbsp;-&nbsp;\n";
 		}
+		$html .= "<a href=\"$this->refsPath\">Edit referees</a>&nbsp;-&nbsp;\n";
         $html .=  "<a href=\"$this->endPath\">Log off</a></h3>\n";
       
         return $html;

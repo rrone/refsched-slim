@@ -43,7 +43,8 @@ class SchedSchedDBController extends AbstractController
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
-				'description' => $this->rep . ' Schedule'
+				'description' => $this->rep . ' Schedule',
+				'message' => $this->msg,
             )
         );        
       
@@ -54,10 +55,11 @@ class SchedSchedDBController extends AbstractController
 		if ( $this->rep != 'Section 1' ) {
 			$projectKey = $this->event->projectKey;
 			$locked = $this->sr->getLocked($projectKey);
-			$msgHtml = null;
+			$this->msg = null;
 
 			//load limits if any or none
 			$limits = $this->sr->getLimits($projectKey);
+			$no_limit = false;
 			if ( !count( $limits ) ) {
 				$no_limit = true;
 			}
@@ -89,6 +91,7 @@ class SchedSchedDBController extends AbstractController
 			if ( !$locked ) {
 				//remove drops if not locked
 				$assigned_games = $this->sr->getGamesByRep($projectKey, $this->rep);
+
 				if(count($assign) != count($assigned_games)){
 					$removed = [];
 					$unassign = [];
@@ -96,29 +99,44 @@ class SchedSchedDBController extends AbstractController
 						if(!in_array($game->id, array_keys($assign)) ){
 							$removed[$game->id] = $game;
 							$unassign[$game->id] = '';
-							$msgHtml .= "<p>You have <strong>removed</strong> your referee team from Game no. $game->game_number on $game->date at $game->time on $game->field</p>\n";
+							$data = array (
+								'cr' => '',
+								'ar1' => '',
+								'ar2' => '',
+								'r4th' => '',
+								$game->id => 'Update Assignments',
+							);
+							
+							$this->sr->updateAssignments($data);
+							$this->msg .= "<p>You have <strong>removed</strong> your referee team from Game no. $game->game_number on $game->date at $game->time on $game->field</p>";
 						}					
 					}
 					$this->sr->updateAssignor($unassign);	
-					//initialize counting groups
-					$assigned_games = $this->sr->getGamesByRep($projectKey, $this->rep);
-					foreach ($assigned_games as $game) {
-						$div = $this->divisionAge($game->division);
-						$games_now[ $div ] = isset($games_now[ $div ]) ? $games_now[ $div ]++ : 0;
-					}
 				}
 			}
 			
-			if ( count($assign)) {
+			//initialize counting groups
+			$assigned_games = $this->sr->getGamesByRep($projectKey, $this->rep);
+			foreach ($assigned_games as $game) {
+				$div = $this->divisionAge($game->division);
+				if (!isset($games_now[ $div ]) ){
+					$games_now[$div] = 0;
+				}
+				$games_now[ $div ] ++;
+			}
+		
+			if ( count($adds)) {
 				//Update based on add/returned games
 				$added = [];
 				$unavailable = [];
-				$games = $this->sr->getGames($projectKey);		
+				$games = $this->sr->getGames($projectKey);
 				foreach($games as $game) {
+					$date = date('D, d M Y',strtotime($game->date));
+					$time = date('H:i', strtotime($game->time));
 					$div = $this->divisionAge($game->division);
 					//ensure all indexes exist
 					$games_now[ $div ] = isset($games_now[ $div ]) ? $games_now[$div] : 0;
-					$atLimit[ $div ] = isset($atLimit[ $div ]) ? $atLimit[$div] : 0;;
+					$atLimit[ $div ] = isset($atLimit[ $div ]) ? $atLimit[$div] : 0;
 					//if requested
 					if(in_array($game->id, array_keys($adds)) ) {
 						//and available
@@ -131,13 +149,16 @@ class SchedSchedDBController extends AbstractController
 								$this->sr->updateAssignor($data);
 								$added[$game->id] = $game;
 								$games_now[$div]++;
+								$this->msg .= "<p>You have <strong>scheduled</strong> Game no. $game->id on $date on $game->field at $time</p>";
 							}
 							else {
 								$atLimit[$div]++;
+								$this->msg .= "<p>You have <strong>not scheduled</strong> Game no. $game->id on $date on $game->field at $time because you are at your game limit!</p>";
 							}
 						}
 						else {
 							$unavailable[$game->id] = $game;
+							$this->msg = "<p>Sorry, game no. $game->id has been taken.</p>";
 						}
 					}
 				}
@@ -145,12 +166,7 @@ class SchedSchedDBController extends AbstractController
 				$assigned_update = $this->sr->getGamesByRep($projectKey, $this->rep);
 			}
 
-//				$html .= "<p>You have <strong>scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
-//				$html .= "<p>You have <strong>scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
-//				$html .= "<p>You have <strong>not scheduled</strong> Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3] because you are at your game limit!</p>\n";
-//			   $html .= "<p>You have <strong>removed</strong> your referee team from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3]</p>\n";
-//                       $html .= "<p>Your referee team has been <strong>removed</strong> from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3] because you are over the game limit.</p>\n";
-//				$html .= "<p>I'm sorry, game no. $record[0] has been taken.</p>";
+//              $html .= "<p>Your referee team has been <strong>removed</strong> from Game no. $record[0] on $record[2], $record[1], $record[4] at $record[3] because you are over the game limit.</p>\n";
 		}
 	}
 
@@ -175,9 +191,9 @@ class SchedSchedDBController extends AbstractController
 	
 			$color1 = '#D3D3D3';
 			$color2 = '#B7B7B7';
-			$allatlimit = 1;
-			$oneatlimit = 0;
-			$showavailable = 1;
+			$allatlimit = true;
+			$oneatlimit = false;
+			$showavailable = true;
 			$a_init = substr( $this->rep, -1 );
 			$used_list[ 'none' ] = null;
 			$assigned_list = null;
@@ -238,7 +254,7 @@ class SchedSchedDBController extends AbstractController
 			   
 			   $kount = count($games);
 			}
-	
+
 			//$free_board = $limit - $no_assigned;
 			if ( $locked && array_key_exists( 'none', $limit_list ) ) { 
 				$html .= "<center><h3><font color=\"#CC0000\">The schedule has been locked.<br>You may sign up for games but not unassign yourself.</font></h3></center>\n"; 
@@ -250,11 +266,11 @@ class SchedSchedDBController extends AbstractController
 			}
 			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $no_assigned == $limit_list[ 'all' ] ) { 
 				$html .= "<center><h3><font color=\"#CC0000\">The schedule has been locked and you are at your game limit.<br>\nYou will not be able to unassign yourself from games to sign up for others.<br>\nThe submit button on this page has been disabled and available games are not shown.<br>\nYou probably want to <a href=\"$this->greetPath\">Go to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></font></h3></center>\n";
-				$showavailable = 0;
+				$showavailable = false;
 			}
 			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $no_assigned > $limit_list[ 'all' ] ) { 
 				$html .= "<center><h3><font color=\"#CC0000\">The schedule has been locked and you are above your game limit.<br>\nThe extra games were probably assigned by the Section staff.<br>\nYou will not be able to unassign yourself from games to sign up for others.<br>\nThe Submit button has been disabled and available games are not shown.<br>\nYou probably want to <a href=\"$this->greetPath\">Go to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></font></h3></center>\n";
-				$showavailable = 0; 
+				$showavailable = false; 
 			}
 			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $no_assigned < $limit_list['all'] ) { 
 				$tmplimit = $limit_list['all'];
@@ -273,7 +289,7 @@ class SchedSchedDBController extends AbstractController
 					}
 				if ( $allatlimit ) { 
 				   $html .= "<br><font color=\"#CC0000\">All of your divisions are at or above their limits.<br>Because the system is locked, games can not be unassigned to select new ones.<br>No changes are possible: Available games are not shown and the Submit button has been disabled.</font>\n";
-				   $showavailable = 0;
+				   $showavailable = false;
 				} 
 				$html .= "</h3></center>\n";
 			}
@@ -296,11 +312,12 @@ class SchedSchedDBController extends AbstractController
 	
 			$html .= "<div align=\"left\">";
    
-			$html .= "<h3 class=\"h3-btn\" >Available games - Color change indicates different start times.";
-			if ( !$locked && (!$allatlimit && !empty($assigned_list) || $showavailable) ) {
-				$html .=  "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-				$html .=  "<div class='clear-fix'></div>";
-			}
+			$html .= "<h3 class=\"h3-btn\" >Available games<span style=\"font-weight: normal\"> : Shading change indicates different start times.</span>";
+
+			$submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled' ;
+			$html .=  "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+			$html .=  "<div class='clear-fix'></div>";
+
 			$html .= "</h3>\n";
 			if ( !$showavailable ) {
 				$html .= "<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";   
@@ -348,7 +365,7 @@ class SchedSchedDBController extends AbstractController
 			}
 			$html .= "            </table>";
 	  
-			$html .= "	  <h3>Assigned games</h3>\n";
+			$html .= "	  <h3>Games assigned to $this->rep</h3>\n";
 			if ( empty($kount) ) {
 				$html .= "	  <table class=\"sched_table\" >\n";
 				$html .= "		<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";   
@@ -390,15 +407,10 @@ class SchedSchedDBController extends AbstractController
 				}
 				}
 			$html .= "            </table>";
-			if ( $locked && $allatlimit ) {
-				$html .= "<h3>Submit Disabled</h3>\n";
-			}
-			else {
-				if ( !$locked && (!$allatlimit && !empty($assigned_list) || $showavailable) ) {
-					$html .=  "      <input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-					$html .=  "      <div class='clear-fix'></div>";
-				}
-			}
+			
+			$html .=  "      <h3 class=\"h3-btn\">&nbsp;<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
+			$html .=  "      <div class='clear-fix'></div>";
+
 			$html .= "            </form>\n";      
 			$_SESSION['locked'] = $locked;
 	

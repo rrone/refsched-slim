@@ -110,6 +110,9 @@ th {
 .sched_table th, .sched_table td {
 	border: 1px solid #9c9c9c;
 }
+.sched_table tr {
+	line-height: 2em;
+}
 .contentarea {
 	padding-right: 15px;
 	padding-left: 15px;

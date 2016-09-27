@@ -85,7 +85,7 @@ class SchedExportController extends AbstractController
 					$game->ar2,
 				);
 				if ($has4th) {
-					$row[] = '4th';
+					$row[] = $game->r4th;
 				}
 				$data[] = $row;
 			}
