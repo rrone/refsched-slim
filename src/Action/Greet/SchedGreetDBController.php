@@ -21,17 +21,17 @@ class SchedGreetDBController extends AbstractController
     }
      public function __invoke(Request $request, Response $response, $args)
     {
-        $this->logger->info("Schedule greet page action dispatched");
-
-		$this->handleRequest($request);
-
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
         }
+        $this->logger->info("Schedule greet page action dispatched");
+
 		$this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
 		$this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 		
+		$this->handleRequest($request);
+
         $content = array(
             'view' => array (
                 'content' => $this->renderGreet(),

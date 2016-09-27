@@ -26,6 +26,7 @@
         "phpoffice/phpexcel": "^1.8",
         "flexsounds/slim-symfony-di-container": "^1.0",
         "illuminate/database": "~5.1",
-        "phpoffice/phpExcel": "~1.8.1"
+        "phpoffice/phpExcel": "~1.8.1",
+        "ircmaxell/password-compat": "^1.0"
     }
 }

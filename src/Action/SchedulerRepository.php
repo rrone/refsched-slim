@@ -19,6 +19,11 @@ class SchedulerRepository
 		return isset($elem[0]) ? $elem[0] : null;
 	}
 	//User table functions
+    public function getAllUsers()
+    {
+        return $this->db->table('users')
+			->get();
+    }
     public function getUsers()
     {
         return $this->db->table('users')
@@ -37,6 +42,50 @@ class SchedulerRepository
 		
 		return $this->getZero($user);
 
+	}
+    public function getUserByName($name)
+	{
+		if(empty($name)) {
+			return null;
+		}
+		
+		$user = $this->db->table('users')
+			->where('name', 'like', $name)
+			->get();
+		
+		return $this->getZero($user);
+
+	}
+	public function setUser($user)
+	{
+		if(empty($user)) {
+			return null;
+		}
+		
+		$u = $this->getUserByName($user['name']);
+		if (empty($u)){
+			$newUser = array (
+				'name' => $user['name'],
+				'enabled' => $user['enabled'],
+				'password' => $user['password'],
+				'hash' => $user['hash'],
+			);
+
+			$this->db->table('users')
+				->create([$newUser]);
+			
+		}
+		else {
+			$pw = $user['password'];
+			$hash = $user['hash'];
+			
+			$this->db->table('users')
+				->where('id', $u->id)
+				->update([
+					'password' => $pw,
+					'hash' => $hash,
+				]);	
+		}
 	}
 	//Events table functions
 	public function getCurrentEvents()

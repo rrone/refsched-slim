@@ -182,3 +182,10 @@ $container[App\Action\Full\SchedExportController::class] = function ($c) {
     return new \App\Action\Full\SchedExportController($c, $repo, $exporter);
 };
 
+$container[App\Action\User\UserUpdateDBController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\User\UserUpdateDBController($c, $repo);
+};
+

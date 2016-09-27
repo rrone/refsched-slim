@@ -160,3 +160,13 @@ a.btn:visited, a.btn:link {
     background-color: #337ab7;
     border-color: #2e6da4;
 }
+legend {
+	line-height: 3em;
+}
+.user-update select.form-control,
+.user-update input.form-control {
+	width: 100%;
+}
+input#passwordInput {
+	margin: 0;
+}

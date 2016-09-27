@@ -51,9 +51,13 @@ class LogonDBController extends AbstractController
     }
 	private function handleRequest($request)
 	{
-		$pass = crypt( $_POST['passwd'], 11);
-		$user = $this->sr->getUserByPW($pass);
-		$this->authed = !empty($user) && $_POST['area'] == $user->name;
+		$userName = isset($_POST['area']) ? $_POST['area'] : null;
+		$user = $this->sr->getUserByName($userName);
+		$pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
+		
+		$hash = isset($user) ? $user->hash : null;
+		
+		$this->authed = password_verify($pass, $hash);
 
 		if ($this->authed) {
 			$_SESSION['authed'] = true;
