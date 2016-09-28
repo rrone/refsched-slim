@@ -80,7 +80,7 @@ abstract class AbstractController
         $this->refsPath = $this->container->get('router')->pathFor('refs');
         $this->schedPath = $this->container->get('router')->pathFor('sched');
         $this->unlockPath = $this->container->get('router')->pathFor('unlock');
-        $this->fullXlsPath = $this->container->get('router')->pathFor('full.xls');
+        $this->fullXlsPath = $this->container->get('router')->pathFor('fullexport');
         $this->userUpdatePath = $this->container->get('router')->pathFor('userUpdate');
 		
     }

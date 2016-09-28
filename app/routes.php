@@ -47,8 +47,8 @@ $app->map(['GET', 'POST'], '/sched', App\Action\Sched\SchedSchedDBController::cl
 $app->map(['GET', 'POST'], '/unlock', App\Action\Lock\SchedUnlockDBController::class)
     ->setName('unlock');
     
-$app->map(['GET', 'POST'], '/full.xls', App\Action\Full\SchedExportController::class)
-    ->setName('full.xls');
+$app->map(['GET', 'POST'], '/fullexport', App\Action\Full\SchedExportController::class)
+    ->setName('fullexport');
     
 $app->map(['GET', 'POST'], '/user', App\Action\User\UserUpdateDBController::class)
     ->setName('userUpdate');
