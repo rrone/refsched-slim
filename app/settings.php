@@ -1,5 +1,5 @@
 <?php
-return [
+$settings = [
     'settings' => [
         // Slim Settings
         'determineRouteBeforeAppMiddleware' => false,
@@ -36,15 +36,11 @@ return [
             'path' => __DIR__ . '/../var/logs/app.log',
         ],
         
-        'db' => [
-            'driver' => 'mysql',
-            'host' => '127.0.0.1',
-            'database' => 'wp_ayso1ref',
-            'username' => 'ayso1ref',
-            'password' => 'kjtAQV1bnSw6y0UXfc8j',
-            'charset'   => 'utf8',
-            'collation' => 'utf8_general_ci',
-            'prefix'    => 'rs_',        
-        ],
+
     ],
 ];
+
+$local = include(__DIR__ . '/../config/local.php');
+$settings['settings']['db'] = $local['db'];
+
+return $settings;
