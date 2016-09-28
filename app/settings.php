@@ -38,7 +38,7 @@ return [
         
         'db' => [
             'driver' => 'mysql',
-            'host' => 'localhost',
+            'host' => '127.0.0.1',
             'database' => 'wp_ayso1ref',
             'username' => 'ayso1ref',
             'password' => 'kjtAQV1bnSw6y0UXfc8j',

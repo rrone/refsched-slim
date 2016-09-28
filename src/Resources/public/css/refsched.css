@@ -154,7 +154,7 @@ input, .btn {
 	margin-left: 20px;
 }
 select.form-control, input.form-control {
-	width: 50%;
+	width: 80%;
     font-size: 13px;
 	height: 2.25em;
 }
@@ -172,4 +172,9 @@ legend {
 }
 input#passwordInput {
 	margin: 0;
+}
+@media only screen and (max-width: 768px){
+	select.form-control, input.form-control {
+		width: 90%;
+	}
 }
