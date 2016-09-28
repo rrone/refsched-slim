@@ -92,12 +92,14 @@ class SchedulerRepository
     {
         return $this->db->table('events')
 			->where('view', true)
+			->orderBy('start_date', 'asc')
 			->get();
     }
     public function getEnabledEvents()
     {
         return $this->db->table('events')
 			->where('enabled', true)
+			->orderBy('start_date', 'asc')
 			->get();
     }
     public function getEvent($projectKey)
