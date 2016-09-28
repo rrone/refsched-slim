@@ -81,23 +81,10 @@ class LogonDBController extends AbstractController
 <<<EOD
       <form name="form1" method="post" action="$this->logonPath">
         <div align="center">
-		  <table>
-          <tr><td width="50%"><div align="right">ARA or representative from: </div></td>
-            <td width="50%"><select class="form-control left-margin" name="area">
-EOD;
-		foreach($users as $user) {
-			$html .= "<option>$user->name</option>";
-		}
-		
-		$html .=
-<<<EOD
-            </select></td>
-          </tr>
-          <tr><td width="50%"><div align="right">Password: </div></td>
-            <td><input class="form-control" type="password" name="passwd"></td></tr>
-            <tr><td width="50%"><div align="right">Competition: </div></td>
-            <td width="50%">
-                <select class="form-control left-margin" name="event">
+			<table>
+				<tr><td width="50%"><div align="right">Event: </div></td>
+					<td width="50%">
+						<select class="form-control left-margin" name="event">
 EOD;
 		foreach($enabled as $option) {
 			$html .= "<option>$option->label</option>";
@@ -105,13 +92,31 @@ EOD;
 		
 		$html .=
 <<<EOD
-                </select>
-            </td>
-          </tr>
-		  </table>
-          <p>
+						</select>
+					</td>
+				</tr>
+		
+				<tr>
+					<td width="50%"><div align="right">ARA or representative from: </div></td>
+					<td width="50%"><select class="form-control left-margin" name="area">
+EOD;
+		foreach($users as $user) {
+			$html .= "<option>$user->name</option>";
+		}
+		
+		$html .=
+<<<EOD
+			            </select></td>
+				</tr>
+
+				<tr>
+					<td width="50%"><div align="right">Password: </div></td>
+					<td><input class="form-control" type="password" name="passwd"></td>
+				</tr>
+			</table>
+			<p>
             <input type="submit" type="button" class="btn btn-primary btn-xs active" name="Submit" value="Logon">      
-          </p>
+			</p>
         </div>
       </form>
 EOD;

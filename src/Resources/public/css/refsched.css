@@ -147,13 +147,15 @@ th {
 .clear-fix {
 	clear: both;
 }
-input, .btn {
+.btn  {
 	margin: 10px 20px;
 }
 .left-margin {
 	margin-left: 20px;
 }
-select.form-control, input.form-control {
+select.form-control,
+input.form-control {
+	margin: 5px 20px;
 	width: 80%;
     font-size: 13px;
 	height: 2.25em;
