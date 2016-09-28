@@ -45,7 +45,7 @@ class SchedControlDBController extends AbstractController
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
-				'description' => $this->rep . ' Schedule',
+				'description' => $this->rep . ': Referee Team Schedule',
             )
         );        
      
@@ -85,7 +85,7 @@ class SchedControlDBController extends AbstractController
                 $html .= "            <th>Referee Team</th>";
                 $html .= "            </tr>\n";
                 foreach($games as $game){
-                    $day = date('D',strtotime($game->date));
+                    $date = date('D, d M',strtotime($game->date));
 					$time = date('H:i', strtotime($game->time));
                     if ( !empty($game->assignor) ) {
                         $html .= "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
@@ -94,7 +94,7 @@ class SchedControlDBController extends AbstractController
                         $html .= "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
                     } 
                     $html .=  "            <td>$game->game_number</td>";
-                    $html .=  "            <td>$day<br>$game->date</td>";
+                    $html .=  "            <td>$date</td>";
                     $html .=  "            <td>$time</td>";
                     $html .=  "            <td>$game->field</td>";
                     $html .=  "            <td>$game->division</td>";

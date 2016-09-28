@@ -49,7 +49,7 @@ class SchedMasterDBController extends AbstractController
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
-				'description' => $this->rep . ' Schedule'
+				'description' => $this->rep . ': Schedule Referee Teams'
             )
         );        
         
