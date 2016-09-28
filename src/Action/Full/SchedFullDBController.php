@@ -97,7 +97,17 @@ class SchedFullDBController extends AbstractController
 						$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
 					}
 					elseif ( !empty($game->assignor) ) {
-						$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorNotGroup\">";
+						if ($this->rep == 'Section 1') {
+							if (empty($game->cr)) {
+								$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";							
+							}
+							else {
+								$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorSuccess\">";															
+							}
+						}
+						else {
+							$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorNotGroup\">";								
+						}
 					}
 					else {
 						$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";

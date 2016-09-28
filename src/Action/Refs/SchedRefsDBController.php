@@ -118,7 +118,7 @@ class SchedRefsDBController extends AbstractController
 						if ($numRefs > 3){
 	                        $html .=  "            <td>$game->r4th</td>";
 						}
-                        if ( $game->assignor ) {
+                        if ( $game->assignor || $this->rep == 'Section 1') {
                            $html .=  "            <td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\"></td>";
                         }
                         else {

@@ -37,7 +37,7 @@ abstract class AbstractController
     protected $colorHighlight = '#FFBC00';
     protected $colorAlert = '#CC0000';
     protected $colorWarning = '#CC00CC';
-    protected $colorSuccess = '#008800';
+    protected $colorSuccess = '#02C902';
     
     //named routes
     protected $assignPath;
