@@ -22,7 +22,7 @@ class SchedExportController extends AbstractController
 		parent::__construct($container);
         
         $this->sr = $repository;
-		$exporter->setFormat('xls');
+		//$exporter->setFormat('xls');
 		$this->exporter = $exporter;
 		$this->outFileName = 'GameSchedule_' . date('Ymd_His') . '.' . $exporter->getFileExtension();
 		

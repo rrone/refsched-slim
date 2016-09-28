@@ -7,7 +7,7 @@ use PHPExcel_IOFactory;
 use PHPExcel_Style_Protection;
 use PHPExcel_Style_Alignment;
 use PHPExcel_Settings;
-use PHPExcel\Writer\PDF\DomPDF\PHPExcel_Writer_PDF_DomPDF;
+//use PHPExcel\Writer\PDF\DomPDF\PHPExcel_Writer_PDF_DomPDF;
 
 /*
     // Sample array of data to publish
@@ -43,9 +43,9 @@ class AbstractExporter
                 $this->fileExtension = 'xlsx';
                 $this->contentType   = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
                 break;
-            case 'pdf':
-                $this->fileExtension = "pdf";
-                $this->contentType = "application/pdf";
+            //case 'pdf':
+            //    $this->fileExtension = "pdf";
+            //    $this->contentType = "application/pdf";
         }
     }
     public function getFileExtension()
@@ -64,22 +64,22 @@ class AbstractExporter
             case 'pdf': return $this->exportPdf($content);
         }
     }
-    public function exportPdf($content, $padlen = 18)
-    {
-        $rendererName = PHPExcel_Settings::PDF_RENDERER_DOMPDF;
-        $rendererLibrary = 'domPDF0.6.0beta3';
-        $rendererLibraryPath = dirname(__FILE__). 'libs/classes/dompdf' . $rendererLibrary;
-
-        $this->writeWorksheet($content);
-
-        $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'PDF');
-
-        ob_start();
-        $objWriter->save('php://output'); // Instead of file name
-
-        return ob_get_clean();
-
-    }
+    //public function exportPdf($content, $padlen = 18)
+    //{
+    //    $rendererName = PHPExcel_Settings::PDF_RENDERER_DOMPDF;
+    //    $rendererLibrary = 'domPDF0.6.0beta3';
+    //    $rendererLibraryPath = dirname(__FILE__). 'libs/classes/dompdf' . $rendererLibrary;
+    //
+    //    $this->writeWorksheet($content);
+    //
+    //    $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'PDF');
+    //
+    //    ob_start();
+    //    $objWriter->save('php://output'); // Instead of file name
+    //
+    //    return ob_get_clean();
+    //
+    //}
     public function exportCSV($content) {
 
         //for csv type, only export first sheet
