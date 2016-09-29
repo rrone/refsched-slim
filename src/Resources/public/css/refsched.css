@@ -123,7 +123,7 @@ th {
 .flinks {
 	text-decoration: none;
 }
-div.footer {
+iframe div.footer {
 	display: none;
 }
 .foottext {
