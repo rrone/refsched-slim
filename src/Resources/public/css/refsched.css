@@ -123,6 +123,9 @@ th {
 .flinks {
 	text-decoration: none;
 }
+iframe div.footer {
+	display: none;
+}
 .foottext {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: xx-small;
