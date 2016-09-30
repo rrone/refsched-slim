@@ -6,8 +6,6 @@ use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Protection;
 use PHPExcel_Style_Alignment;
-use PHPExcel_Settings;
-//use PHPExcel\Writer\PDF\DomPDF\PHPExcel_Writer_PDF_DomPDF;
 
 /*
     // Sample array of data to publish
@@ -27,7 +25,6 @@ class AbstractExporter
 
     public $fileExtension;
     public $contentType;
-    private $options;
 
     public function __construct($format)
     {
@@ -56,6 +53,11 @@ class AbstractExporter
     {
          $this->format = $format;
     }
+
+    /**
+     * @param $content
+     * @return null|string
+     */
     public function export($content)
     {
         switch ($this->format) {
@@ -63,6 +65,8 @@ class AbstractExporter
             case 'xls': return $this->exportXLSX($content);
             case 'pdf': return $this->exportPdf($content);
         }
+
+        return null;
     }
     //public function exportPdf($content, $padlen = 18)
     //{
@@ -122,7 +126,7 @@ class AbstractExporter
         }
 
         //remove first sheet -- is blank
-        $ws = $xl->removeSheetByIndex(0);
+        $xl->removeSheetByIndex(0);
 
         //write to application output buffer
         $objWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel2007');
@@ -197,7 +201,7 @@ class AbstractExporter
         //reference: http://stackoverflow.com/questions/20543937/disable-few-cells-in-phpexcel
 
         if (isset($options['protection']['pw']) and isset($options['protection']['unlocked'])) {
-            $pw = $options['protection']['pw'];
+//            $pw = $options['protection']['pw'];
             $range = $options['protection']['unlocked'];
 
             //turn protection on

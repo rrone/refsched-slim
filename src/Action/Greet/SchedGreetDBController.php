@@ -9,9 +9,6 @@ use App\Action\SchedulerRepository;
 
 class SchedGreetDBController extends AbstractController
 {
-    // SchedulerRepository //
-    private $sr;
-    
 	public function __construct(Container $container, SchedulerRepository $repository) {
 		
 		parent::__construct($container);
@@ -42,6 +39,8 @@ class SchedGreetDBController extends AbstractController
             );        
         
         $this->view->render($response, 'sched.html.twig', $content);
+
+        return $response;
 
     }
 	private function handleRequest($request)
@@ -93,52 +92,52 @@ class SchedGreetDBController extends AbstractController
 			
 			$html = null;
 			if ( $this->rep == 'Section 1' ) {
-			   $html .= "<h3 align=\"center\">Welcome $this->rep Scheduler</h3>\n";
-			   $html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">CURRENT STATUS</font></h3>\n<h3 align=\"center\">";
+			   $html .= "<h3 class=\"center\">Welcome $this->rep Scheduler</h3>\n";
+			   $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">CURRENT STATUS</h3>\n<h3 align=\"center\">";
 			   if ( $locked ) {
-				  $html .= "The schedule is:&nbsp;<font color=\"$this->colorAlert\">Locked</font>&nbsp;-&nbsp;(<a href=\"$this->unlockPath\">Unlock</a> the schedule now)<br>\n";
+				  $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;-&nbsp;(<a href=\"$this->unlockPath\">Unlock</a> the schedule now)<br>\n";
 			   }
 			   else {
-				  $html .= "The schedule is:&nbsp;<font color=\"$this->colorSuccess\">Unlocked</font>&nbsp;-&nbsp;(<a href=\"$this->lockPath\">Lock</a> the schedule now)<br>\n";
+				  $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;-&nbsp;(<a href=\"$this->lockPath\">Lock</a> the schedule now)<br>\n";
 			   }
-			   $html .= "<font color=\"#008800\">$num_assigned</font> games are assigned and <font color=\"$this->colorAlert\">$num_unassigned</font> are unassigned.<br>\n";
+			   $html .= "<span style=\"color:#008800\">$num_assigned</span> games are assigned and <span style=\"color:$this->colorAlert\">$num_unassigned</span> are unassigned.<br>\n";
 			   if ( array_key_exists( 'all', $limit_list ) ) {
 				  $tmplimit = $limit_list['all'];
-				  $html .= "There is a <font color=\"$this->colorWarning\">$tmplimit</font> game limit.</h3>\n";
+				  $html .= "There is a <span style=\"color:$this->colorWarning\">$tmplimit</span> game limit.</h3>\n";
 			   }
 			   elseif ( array_key_exists( 'none', $limit_list ) ) {
-				  $html .= "There is <font color=\"$this->colorWarning\">no</font> game limit.</h3>\n";
+				  $html .= "There is <span style=\"color:$this->colorWarning\">no game limit</span>.</h3>\n";
 			   }
 			   elseif ( !array_key_exists( 'all', $limit_list ) && count( $limit_list) ) {
 				  foreach ( $limit_list as $k => $v ) {
-					 if ( $used_list[ $k ] ) { $html .= "There is a <font color=\"$this->colorWarning\">$v</font> game limit for $k.<br>\n"; }
+					 if ( $used_list[ $k ] ) { $html .= "There is a <span style=\"color:$this->colorWarning\">$v</span> game limit for $k.<br>\n"; }
 				  }
 				  $html .= "</h3>\n";
 			   }
 			   else {
-				  $html .= "There is <font color=\"$this->colorWarning\">no</font> game limit at this time.</h3>\n";
+				  $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time.</h3>\n";
 			   }
 				  
 			}
 			else {
-				$html .= "<h3 align=\"center\">Welcome $this->rep Representative</h3>";
-				$html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">CURRENT STATUS</font><br>";
+				$html .= "<h3 class=\"center\">Welcome $this->rep Representative</h3>";
+				$html .= "<h3 class=\"center\" style=\"style=\"color:$this->colorAlert\">CURRENT STATUS<br>";
 				if ( $no_area == 0 ) { $html .= "$this->rep is not currently assigned to any games.<br>"; }
-				elseif ( $no_area == 1 ) { $html .= "$this->rep is currently assigned to <font color=\"$this->colorSuccess\">$no_area</font> game.<br>"; }
-				else { $html .= "$this->rep is currently assigned to <font color=\"$this->colorSuccess\">$no_area</font> games.<br>"; }
+				elseif ( $no_area == 1 ) { $html .= "$this->rep is currently assigned to <span style=\"color:$this->colorSuccess\">$no_area</span> game.<br>"; }
+				else { $html .= "$this->rep is currently assigned to <span style=\"color:$this->colorSuccess\">$no_area</span> games.<br>"; }
 
 				if ( array_key_exists( 'all', $limit_list ) ) {
 				   $tmplimit = $limit_list[ 'all' ];
-				   $html .= "There is a limit of <font color=\"$this->colorWarning\">$tmplimit</font> Area assigned games at this time.</h3>\n";
+				   $html .= "There is a limit of <span style=\"color:$this->colorWarning\">$tmplimit</span> Area assigned games at this time.</h3>\n";
 				}
 				elseif ( array_key_exists( 'none', $limit_list ) ) {
-				   $html .= "There is <font color=\"$this->colorWarning\">no</font> limit on Area assigned games at this time.</h3>\n";
+				   $html .= "There is <span style=\"color:$this->colorWarning\">no</span> limit on Area assigned games at this time.</h3>\n";
 				}
 				elseif ( count( $limit_list ) ) {
 					foreach ( $limit_list as $k => $v ) {
 						$tmpassigned = $assigned_list[ $k ];
 						if ( $used_list[ $k ] ) { 
-						   $html .= "You have assigned <font color=\"$this->colorWarning\">$tmpassigned</font> of your <font color=\"$this->colorWarning\">$v</font> game limit for $k.<br>\n";
+						   $html .= "You have assigned <span style=\"color:$this->colorWarning\">$tmpassigned</span> of your <span style=\"color:$this->colorWarning\">$v</span> game limit for $k.<br>\n";
 						   if ( $tmpassigned >= $v ) { $oneatlimit = 1; }
 						}
 					}
@@ -148,7 +147,7 @@ class SchedGreetDBController extends AbstractController
 				   $html .= "There is no game limit at this time.</h3>\n";
 				}
 				if ( $locked && !array_key_exists( 'none', $limit_list ) ) {
-					$html .= "<h3 align=\"center\"><font color=\"$this->colorAlert\">The schedule is presently locked.</font><br>\n";
+					$html .= "<h3 class=\"center\" style=\"style=\"color:$this->colorAlert\">The schedule is presently locked.<br>\n";
 					if ( !$oneatlimit ) {
 					  $html .= "You may sign $this->rep teams up for games but not remove them.</h3>\n";
 					}
@@ -158,27 +157,28 @@ class SchedGreetDBController extends AbstractController
 				}
 			  
 			}
-			$html .= "<center><hr width=\"25%\"><h3><font color=\"$this->colorAlert\">ACTIONS</font></h3>\n";
-			$html .= "<h3 align=\"center\"><a href=\"$this->fullPath\">View the full game schedule</a></h3>";
+			$html .= "<hr class=\"center\" width=\"25%\">";
+            $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">ACTIONS</h3>\n";
+			$html .= "<h3 class=\"center\"><a href=\"$this->fullPath\">View the full game schedule</a></h3>";
 			if ( $this->rep == 'Section 1' ) {
-				$html .= "<h3 align=\"center\"><a href=\"$this->masterPath\">Select Referee Teams</a></h3>";
+				$html .= "<h3 class=\"center\"><a href=\"$this->masterPath\">Select Referee Teams</a></h3>";
 			}
 			else {
-				$html .= "<h3 align=\"center\"><a href=\"$this->schedPath\">Schedule $this->rep Referee Teams</a></h3>";
-				$html .= "<h3 align=\"center\">Schedule a division: ";
+				$html .= "<h3 class=\"center\"><a href=\"$this->schedPath\">Schedule $this->rep Referee Teams</a></h3>";
+				$html .= "<h3 class=\"center\">Schedule a division: ";
 				foreach ($groups as $group) {
 					$html .= "<a href=\"$this->schedPath?group=$group\">$group</a>" . $delim;
 				}
 				$html = substr($html, 0, strlen($html)-3) ."</h3>";
 			}
-			$html .= "<h3 align=\"center\"><a href=\"$this->refsPath\">Edit Referee Assignments</a></h3>";
-   //         $html .= "<h3 align=\"center\"><a href=\"/summary.htm\">Summary of the playoffs</a></h3>";
-			$html .= "<h3 align=\"center\"><a href=\"$this->endPath\">LOG OFF</a></h3>";
+			$html .= "<h3 class=\"center\"><a href=\"$this->refsPath\">Edit Referee Assignments</a></h3>";
+   //         $html .= "<h3 class=\"center\"><a href=\"/summary.htm\">Summary of the playoffs</a></h3>";
+			$html .= "<h3 class=\"center\"><a href=\"$this->endPath\">LOG OFF</a></h3>";
 			$html .= "</center>";
 		}
 		else {
-		   $html .=  "<center><h1>You are not Logged On</h1></center>";
-		   $html .= "<h3 align=\"center\"><a href=\"$this->logonPath\">Logon Page</a></h3>";
+		   $html .=  "<h1 class=\"center\">You are not Logged On</h1>";
+		   $html .= "<h3 class=\"center\"><a href=\"$this->logonPath\">Logon Page</a></h3>";
 		   //session_destroy();
 		}
     

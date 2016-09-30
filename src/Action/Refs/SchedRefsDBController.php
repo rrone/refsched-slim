@@ -9,9 +9,6 @@ use App\Action\SchedulerRepository;
 
 class SchedRefsDBController extends AbstractController
 {
-    // SchedulerRepository //
-    private $sr;
-    
 	public function __construct(Container $container, SchedulerRepository $repository) {
 		
 		parent::__construct($container);
@@ -31,14 +28,12 @@ class SchedRefsDBController extends AbstractController
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;        
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
           
-        if ( $request->isPost()) {
-            if ($this->handleRequest($request)) {
-				$_SESSION['target_id'] = array_keys($_POST);
+        if ($this->handleRequest($request)) {
+            $_SESSION['target_id'] = array_keys($_POST);
 
-				return $response->withRedirect($this->editrefPath);
-			}
+            return $response->withRedirect($this->editrefPath);
         }
-        
+
         $content = array(
             'view' => array (
                 'content' => $this->renderRefs(),
@@ -53,10 +48,12 @@ class SchedRefsDBController extends AbstractController
         
         $this->view->render($response, 'sched.html.twig', $content);
 
+        return $response;
+
     }
 	private function handleRequest($request)
 	{
-		return true;
+            return $request->isPost();
 	}
     private function renderRefs()
     {
@@ -69,14 +66,13 @@ class SchedRefsDBController extends AbstractController
             $this->dates = $event->dates;
             $this->location = $event->location;
             $projectKey = $event->projectKey;
-            $locked = $this->sr->getLocked($projectKey);
 
             $games = $this->sr->getGames($projectKey);
 			$numRefs = $this->sr->numberOfReferees($projectKey);
 			
             if (count($games)){
                 if ( $this->rep != 'Section 1') {
-                    $html .=  "<center><h2>You are currently scheduled for the following games</h2></center>\n";
+                    $html .= "<h2  class=\"center\">You are currently scheduled for the following games</h2></div>\n";
                 }
                 $html .=  "      <form name=\"addref\" method=\"post\" action=\"$this->refsPath\">\n";
                 $html .=  "      <table class=\"sched_table\" width=\"100%\">\n";
@@ -131,8 +127,8 @@ class SchedRefsDBController extends AbstractController
                 $html .=  "      </form>\n";
             }
             else {
-                $html .=  "<center><h2>You do not currently have any games scheduled.</h2>\n";
-                $html .=  "  You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2></center>";
+                $html .=  "<h2 class=\"center\">You do not currently have any games scheduled.</h2>\n";
+                $html .=  "  You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2>";
             }
         }
         else {

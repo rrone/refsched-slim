@@ -11,9 +11,6 @@ class SchedAssignDBController extends AbstractController
 {
     private $topmenu;
     
-    // SchedulerRepository //
-    private $sr;
-    
 	public function __construct(Container $container, SchedulerRepository $repository) {
 		
 		parent::__construct($container);
@@ -50,6 +47,8 @@ class SchedAssignDBController extends AbstractController
         );        
         
         $this->view->render($response, 'sched.html.twig', $content);
+
+        return $response;
 		
     }
 	private function handleRequest($request)
@@ -61,11 +60,10 @@ class SchedAssignDBController extends AbstractController
         
 		if (!empty($this->event)) {
 			$projectKey = $this->event->projectKey;
-			$locked = $this->sr->getLocked($projectKey);
-  
+
 			$games = $this->sr->getGamesByRep($projectKey, $this->rep);
 			if (count($games)){
-				$html .= "<center><h2>You are currently scheduled for the following games</h2></center>\n";
+				$html .= "<h2  class=\"center\">You are currently scheduled for the following games</h2>\n";
 				$html .= "      <table class=\"sched_table\" width=\"100%\">\n";
 				$html .= "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
 				$html .= "            <th>Game No.</th>";
@@ -97,7 +95,7 @@ class SchedAssignDBController extends AbstractController
 				$this->topmenu = $this->menu();
 			}
 			else {
-				$html .= "<center><h2>You do not currently have any games scheduled.</h2></center>\n";
+				$html .= "<h2 class=\"center\">You do not currently have any games scheduled.</h2>\n";
 				$this->topmenu = null;
 			}
 		}

@@ -10,7 +10,6 @@ use App\Action\SchedulerRepository;
 class SchedMasterDBController extends AbstractController
 {
     // SchedulerRepository //
-    private $sr;
 	private $topmenu;
 	private $justOpen;
     
@@ -54,17 +53,15 @@ class SchedMasterDBController extends AbstractController
         );        
         
         $this->view->render($response, 'sched.html.twig', $content);
+
+        return $response;
+
     }
     private function handleRequest($request)
     {
-		if( $from == $url_ref  && $this->rep == 'Section 1') {
+		if( $this->rep == 'Section 1') {
 			//only Section 1 may update
-			
-			$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_SERVER['HTTP_HOST'];
-			$from_url = parse_url( $referer );
-			$from = $from_url['path'];
-			$url_ref = $this->masterPath;
-	
+
 			$data = $request->getParsedBody();
 	
 			$this->sr->updateAssignor($data);
@@ -91,8 +88,7 @@ class SchedMasterDBController extends AbstractController
 				$this->dates = $event->dates;
 				$this->location = $event->location;
 				$projectKey = $event->projectKey;
-				$locked = $this->sr->getLocked($projectKey);
-			
+
 				$html .=  "  <form name=\"master_sched\" method=\"post\" action=\"$this->masterPath\">\n";
 				$html .=  "      <input  class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
 				$html .=  "      <div class='clear-fix'></div>";
@@ -150,7 +146,7 @@ class SchedMasterDBController extends AbstractController
 
 			}
 			else {
-				$html .=  "<center><h2>You probably want the <a href=\"$this->schedPath\">scheduling</a> page.</h2></center>";
+				$html .=  "<h2 class=\"center\">You probably want the <a href=\"$this->schedPath\">scheduling</a> page.</h2>";
 				$this->topmenu = null;
 			}
 		}

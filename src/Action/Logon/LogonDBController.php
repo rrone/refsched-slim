@@ -12,8 +12,7 @@ class LogonDBController extends AbstractController
 	private $users;
 	private $events;
 	private $enabled;
-	private $sr;
-	
+
 	public function __construct(Container $container, SchedulerRepository $repository) {
 		
 		parent::__construct($container);
@@ -29,9 +28,7 @@ class LogonDBController extends AbstractController
     {
         $this->logger->info("Logon database page action dispatched");
        
-        if ( $request->isPost() ) {
-			$this->handleRequest($request);
-		}
+        $this->handleRequest($request);
 
 		$this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
 		if ($this->authed) {
@@ -51,26 +48,29 @@ class LogonDBController extends AbstractController
     }
 	private function handleRequest($request)
 	{
-		$userName = isset($_POST['area']) ? $_POST['area'] : null;
-		$user = $this->sr->getUserByName($userName);
-		$pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
-		
-		$hash = isset($user) ? $user->hash : null;
-		
-		$this->authed = password_verify($pass, $hash);
+        if ( $request->isPost() ) {
 
-		if ($this->authed) {
-			$_SESSION['authed'] = true;
-			$_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
-			$_SESSION['unit'] = $_POST['area'];
-			$this->msg = null;
-		}
-		else {
-			$_SESSION['authed'] = false;
-			$_SESSION['event'] = null;
-			$_SESSION['unit'] = null;
-			$this->msg = 'Unrecognized password for ' . $_POST['area'];
-		}		
+            $userName = isset($_POST['area']) ? $_POST['area'] : null;
+            $user = $this->sr->getUserByName($userName);
+            $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
+
+            $hash = isset($user) ? $user->hash : null;
+
+            $this->authed = password_verify($pass, $hash);
+
+            if ($this->authed) {
+                $_SESSION['authed'] = true;
+                $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
+                $_SESSION['unit'] = $_POST['area'];
+                $this->msg = null;
+            }
+            else {
+                $_SESSION['authed'] = false;
+                $_SESSION['event'] = null;
+                $_SESSION['unit'] = null;
+                $this->msg = 'Unrecognized password for ' . $_POST['area'];
+            }
+        }
 	}
     private function renderLogon()
     {

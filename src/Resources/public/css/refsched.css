@@ -6,10 +6,7 @@ body,td,th {
 }
 body {
 	background-color: #FFFFFF;
-	margin-left: 0px;
-	margin-top: 0px;
-	margin-right: 0px;
-	margin-bottom: 0px;
+	margin: 0;
 }
 a:link {
 	color: #0066CC;
@@ -45,22 +42,6 @@ h3 {
 .h3-btn {
 	line-height: 3em;
 }
-.style1 {
-	color: #FFFFFF;
-	font-weight: bold;
-}
-.style4 {
-	font-size: 9px;
-	font-weight: bold;
-	color: #FFFFFF;
-}
-table.banner {
-	padding-top: 2px;
-	padding-right: 4px;
-	padding-bottom: 1px;
-	padding-left: 1px;
-	background-color: #0066FF;
-}
 .style4 a:link {
 	color: #FFFFFF;
 	text-decoration: underline;
@@ -69,39 +50,11 @@ table.banner {
 	color: #FFFFFF;
 	text-decoration: underline;
 }
-.style4 a:hover {
-	color: #0000FF;
-	text-decoration: none;
-	background-color: #66CCFF;
-}
-.style4 a:active {
-	color: #0000FF;
-	text-decoration: none;
-	background-color: #66CCFF;
-}
-.colhead {
-	font-size: small;
-	font-weight: bold;
-	color: #000000;
-	background-color: #66FFFF;
-	text-align: center;
-	border: thick solid #0066FF;
-}
-.colcontent {
-}
-.colhighlight {
-	font-weight: bold;
-}
-.maincontent {
-/*	padding: 10px;
-	margin-top: 10px;
-*/	border: 0px;
-}
 table {
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 	width: 100%;
-	border: 0px;
+	border: 0;
 }
 th {
 	line-height: 3rem;
@@ -120,26 +73,12 @@ th {
 	vertical-align: top;
 	text-align: left;
 }
-.flinks {
-	text-decoration: none;
-}
-iframe div.footer {
-	display: none;
-}
 .foottext {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: xx-small;
 }
-.bannertext {
-	font-size: large;
-	font-weight: bold;
-	font-variant: small-caps;
-	color: #CC0000;
+.center {
 	text-align: center;
-	vertical-align: middle;
-}
-.topspace {
-	padding-top: 5px;
 }
 .right {
 	float: right;

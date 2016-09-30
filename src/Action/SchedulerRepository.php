@@ -1,8 +1,6 @@
 <?php
 namespace App\Action;
 
-use Slim\Views\Twig;
-use Psr\Log\LoggerInterface;
 use Illuminate\Database\Capsule\Manager;
 
 class SchedulerRepository

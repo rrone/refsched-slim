@@ -9,25 +9,24 @@ use App\Action\SchedulerRepository;
 
 class SchedLockDBController extends AbstractController
 {
-    // SchedulerRepository //
-    private $sr;
-    
-	public function __construct(Container $container, SchedulerRepository $repository) {
-		
-		parent::__construct($container);
-        
+    public function __construct(Container $container, SchedulerRepository $repository)
+    {
+
+        parent::__construct($container);
+
         $this->sr = $repository;
-		
+
     }
+
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
-         if (!$this->authed) {
+        if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
-         }
+        }
 
         $this->logger->info("Schedule greet page action dispatched");
-        
+
         $content = array(
             'sched' => array (
                 'ulock' => $this->renderLock(),
@@ -37,9 +36,9 @@ class SchedLockDBController extends AbstractController
 				'dates' => $this->dates,
 				'location' => $this->location,
             )
-        );        
-                
-		return $response->withRedirect($this->greetPath);
+        );
+
+        return $response->withRedirect($this->greetPath);
 
         //$this->view->render($response, 'sched.ulock.html.twig', $content);
     }
@@ -47,36 +46,36 @@ class SchedLockDBController extends AbstractController
     private function renderLock()
     {
         $html = null;
-        
+
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
-        
+
 		$event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 		if (!empty($event)) {
 			$projectKey = $event->projectKey;
             $locked = $this->sr->getLocked($projectKey);
-		
+
             if ( $locked ) {
                $html .= "<h3 align=\"center\">The schedule is already locked!</h3>\n";
             }
 			elseif ( $this->rep == 'Section 1') {
-               $this->sr->lockProject($projectKey); 
+               $this->sr->lockProject($projectKey);
                $html .= "<h3 align=\"center\">The schedule has been locked!</h3>\n";
             }
         }
         elseif ( $this->rep == 'Section 1') {
-           $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"$this->masterPath\">Schedule Page</a></h2></center>";
+           $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
+           $html .= "You should go to the <a href=\"$this->masterPath\">Schedule Page</a></h2>";
         }
         elseif ( $this->rep != 'Section 1' ) {
-           $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2></center>";
+           $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
+           $html .= "You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2>";
         }
         else {
-           $html .= "<center><h2>You need to <a href=\"$this->logonPath\">logon</a> first.</h2></center>";
+           $html .= "<h2 class=\"center\">You need to <a href=\"$this->logonPath\">logon</a> first.</h2>";
         }
-		
+
         return $html;
-          
+
     }
     private function menu()
     {

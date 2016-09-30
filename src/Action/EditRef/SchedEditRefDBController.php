@@ -9,9 +9,6 @@ use App\Action\SchedulerRepository;
 
 class SchedEditRefDBController extends AbstractController
 {
-    // SchedulerRepository //
-    private $sr;
-	
 	private $target_id;
     
 	public function __construct(Container $container, SchedulerRepository $repository) {
@@ -55,6 +52,8 @@ class SchedEditRefDBController extends AbstractController
         
         $this->view->render($response, 'sched.html.twig', $content);
 
+        return $response;
+
     }
     private function handleRequest($request)
     {
@@ -95,8 +94,8 @@ class SchedEditRefDBController extends AbstractController
             $projectKey = $event->projectKey;
 
 			$target_game = $this->sr->gameIdToGameNumber($this->target_id);
-			$html .=  "<center><h2>Enter Referee's First and Last name.</h2></center>\n" . 
-				"<center><h2><span style=\"color:#FF0000\"><i>NOTE: Adding ?? or Area name is NOT helpful.</i></span></h2></center>";
+			$html .=  "<h2 class=\"center\">Enter Referee's First and Last name.</h2>\n" .
+				"<h2 class=\"center\"><span style=\"color:#FF0000\"><i>NOTE: Adding ?? or Area name is NOT helpful.</i></span></h2>";
    
 			$games = $this->sr->getGames($projectKey);
 			$numRefs = $this->sr->numberOfReferees($projectKey);
@@ -144,13 +143,13 @@ class SchedEditRefDBController extends AbstractController
 				}                
             }
             else {
-                $html .= "<center><h2>The matching game was not found or your Area was not assigned to it.<br>You might want to check the schedule and try again.</h2></center>\n";
+                $html .= "<h2 class=\"center\">The matching game was not found or your Area was not assigned to it.<br>You might want to check the schedule and try again.</h2>\n";
             }
 
         }
         else {
-           $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"$this->refsPath\">Referee Edit Page</a></h2></center>";
+           $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
+           $html .= "You should go to the <a href=\"$this->refsPath\">Referee Edit Page</a></h2>";
         }
       
         return $html;

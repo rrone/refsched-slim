@@ -9,9 +9,6 @@ use App\Action\SchedulerRepository;
 
 class SchedUnlockDBController extends AbstractController
 {
-    // SchedulerRepository //
-    private $sr;
-    
 	public function __construct(Container $container, SchedulerRepository $repository) {
 		
 		parent::__construct($container);
@@ -37,7 +34,8 @@ class SchedUnlockDBController extends AbstractController
 				'dates' => $this->dates,
 				'location' => $this->location,
             )
-        );        
+        );
+
         return $response->withRedirect($this->greetPath);
 	
         //$this->view->render($response, 'sched.ulock.html.twig', $content);
@@ -46,33 +44,33 @@ class SchedUnlockDBController extends AbstractController
     private function renderLock()
     {
         $html = null;
-        
+
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
-        
+
 		$event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 		if (!empty($event)) {
 			$projectKey = $event->projectKey;
             $locked = $this->sr->getLocked($projectKey);
-		
+
             if ( !$locked ) {
                $html .= "<h3 align=\"center\">The schedule is already unlocked!</h3>\n";
             }
 			elseif ( $this->rep == 'Section 1') {
-               $this->sr->unlockProject($projectKey); 
+               $this->sr->unlockProject($projectKey);
                $html .= "<h3 align=\"center\">The schedule has been unlocked!</h3>\n";
             }
         }
         elseif ( $rep == 'Section 1') {
-           $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"$this->masterPath\">Schedule Page</a></h2></center>";
+           $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
+           $html .= "You should go to the <a href=\"$this->masterPath\">Schedule Page</a></h2>";
         }
         else {
-           $html .= "<center><h2>You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2></center>";
+           $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
+           $html .= "You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2>";
         }
 
         return $html;
-          
+
     }
     private function menu()
     {

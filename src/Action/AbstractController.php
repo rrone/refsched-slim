@@ -2,15 +2,15 @@
 
 namespace App\Action;
 
-use Slim\App;
 use Slim\Container;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
 
 abstract class AbstractController
 {
     //database connection
     protected $conn;
+
+    //schedule repository
+    protected $sr;
 	
     //shared variables
     protected $view;
@@ -89,10 +89,10 @@ abstract class AbstractController
         $html = null;
         
         if ( !$this->authed ) {
-            $html .= "<center><h2>You need to <a href=\"$this->logonPath\">logon</a> first.</h2></center>";
+            $html .= "<h2 class=\"center\">You need to <a href=\"$this->logonPath\">logon</a> first.</h2>";
         }
         else {
-            $html .= "<center><h1>Something is not right</h1></center>";
+            $html .= "<h1 class=\"center\">Something is not right</h1>";
         }
         
         return $html;

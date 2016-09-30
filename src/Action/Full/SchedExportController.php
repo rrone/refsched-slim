@@ -47,15 +47,13 @@ class SchedExportController extends AbstractController
     }
     public function generateFile()
     {
-        $html = null;
+        $content = null;
         
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 
 		$event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 		if (!empty($event)) {
 			$projectKey = $event->projectKey;
-
-            $exporter = $this->exporter;
 
 			$games = $this->sr->getGames($projectKey);
 			$has4th = $this->sr->numberOfReferees($projectKey) > 3;
@@ -93,7 +91,9 @@ class SchedExportController extends AbstractController
 			$content['FullSchedule']['data'] = $data;
 			$content['FullSchedule']['options']['freezePane'] = 'A2';
 	
-			return $content;
 		}
+
+        return $content;
+
 	}
 }

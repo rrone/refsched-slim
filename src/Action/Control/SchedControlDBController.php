@@ -11,9 +11,6 @@ class SchedControlDBController extends AbstractController
 {
     private $topmenu;
     
-    // SchedulerRepository //
-    private $sr;
-    
 	public function __construct(Container $container, SchedulerRepository $repository) {
 		
 		parent::__construct($container);
@@ -50,6 +47,8 @@ class SchedControlDBController extends AbstractController
         );        
      
         $this->view->render($response, 'sched.control.html.twig', $content);
+
+        return $response;
 
     }
     private function handleRequest($request)
