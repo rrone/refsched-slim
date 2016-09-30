@@ -72,27 +72,31 @@ class LogonDBController extends AbstractController
             }
         }
 	}
+
+    /**
+     * @return string
+     */
     private function renderLogon()
     {
 		$users = $this->users;
 		$enabled = $this->enabled;
-		
-        $html =
-<<<EOD
-      <form name="form1" method="post" action="$this->logonPath">
+
+        if (count($enabled) > 0) {
+
+            $html = <<<EOD
+                      <form name="form1" method="post" action="$this->logonPath">
         <div align="center">
 			<table>
 				<tr><td width="50%"><div align="right">Event: </div></td>
 					<td width="50%">
 						<select class="form-control left-margin" name="event">
 EOD;
-		foreach($enabled as $option) {
-			$html .= "<option>$option->label</option>";
-		}
-		
-		$html .=
-<<<EOD
-						</select>
+            foreach ($enabled as $option) {
+                $html .= "<option>$option->label</option>";
+            }
+
+            $html .= <<<EOD
+                						</select>
 					</td>
 				</tr>
 		
@@ -100,13 +104,12 @@ EOD;
 					<td width="50%"><div align="right">ARA or representative from: </div></td>
 					<td width="50%"><select class="form-control left-margin" name="area">
 EOD;
-		foreach($users as $user) {
-			$html .= "<option>$user->name</option>";
-		}
-		
-		$html .=
-<<<EOD
-			            </select></td>
+            foreach ($users as $user) {
+                $html .= "<option>$user->name</option>";
+            }
+
+            $html .= <<<EOD
+                			            </select></td>
 				</tr>
 
 				<tr>
@@ -120,6 +123,15 @@ EOD;
         </div>
       </form>
 EOD;
+        }
+        else {
+            $html = <<<EOD
+            <div class="center">
+                <h2>No events are available to schedule.</h2>
+                <p>Questions?  Contact the <a href="mailto:jodykinsey23@gmail.com">Section 1 Referee Assignor</a></p>
+            </div>
+EOD;
+        }
 
         return $html;
     }
