@@ -80,6 +80,9 @@ th {
 .center {
 	text-align: center;
 }
+.center.no-content h2 {
+	margin: 20px 0;
+}
 .right {
 	float: right;
 }

@@ -126,9 +126,8 @@ EOD;
         }
         else {
             $html = <<<EOD
-            <div class="center">
+            <div class="center no-content">
                 <h2>No events are available to schedule.</h2>
-                <p>Questions?  Contact the <a href="mailto:jodykinsey23@gmail.com">Section 1 Referee Assignor</a></p>
             </div>
 EOD;
         }
