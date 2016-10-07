@@ -87,10 +87,6 @@ $container['db'] = function ($c) {
 // Action dependency Injection
 // -----------------------------------------------------------------------------
 
-$container[App\Action\AbstractController::class] = function ($c) {
-    return new \App\Action\AbstractController($c);
-};
-
 $container[App\Action\SchedulerRepository::class] = function ($c) {
     $db = $c->get('db');
 
@@ -182,10 +178,18 @@ $container[App\Action\Full\SchedExportController::class] = function ($c) {
     return new \App\Action\Full\SchedExportController($c, $repo, $exporter);
 };
 
-$container[App\Action\User\UserUpdateDBController::class] = function ($c) {
+$container[App\Action\Admin\UserUpdateDBController::class] = function ($c) {
     $db = $c->get('db');
     $repo = new \App\Action\SchedulerRepository($db);
 
-    return new \App\Action\User\UserUpdateDBController($c, $repo);
+    return new \App\Action\Admin\UserUpdateDBController($c, $repo);
+};
+
+$container[App\Action\Admin\SchedTemplateExportController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+    $exporter = new \App\Action\AbstractExporter('xls');
+
+    return new \App\Action\Admin\SchedTemplateExportController($c, $repo, $exporter);
 };
 

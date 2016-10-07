@@ -1,5 +1,5 @@
 <?php
-namespace App\Action\User;
+namespace App\Action\Admin;
 
 use Slim\Container;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -31,8 +31,15 @@ class UserUpdateDBController extends AbstractController
 
         $result = $this->handleRequest($request);
 
-        if ($result == 'Cancel'){
-            return $response->withRedirect($this->greetPath);
+        switch ($result) {
+             case 'Cancel':
+
+                 return $response->withRedirect($this->greetPath);
+
+            case 'SchedTemplateExport':
+
+                return $response->withRedirect($this->schedTemplatePath);
+
         }
 
         $content = array(
@@ -40,9 +47,10 @@ class UserUpdateDBController extends AbstractController
                 'users' => $this->renderUsers(),
                 'action' => $this->userUpdatePath,
 				'message' => $this->msg,
+                'messageStyle' => $this->msgStyle,
             )
         );        
-        
+
         $this->view->render($response, 'user.html.twig', $content);
 
         return $response;
@@ -78,26 +86,35 @@ class UserUpdateDBController extends AbstractController
                     $this->sr->setUser($userData);
 
                     $this->msg = "$userName password has been updated.";
+                    $this->msgStyle = "color:#000000";
                 } else {
                     $this->msg = "Password may not be blank.";
+                    $this->msgStyle = "color:#FF0000";
                 }
 
-                return true;
+                return 'Update';
 
             } elseif (in_array('btnCancel', array_keys($_POST))) {
 
                 return 'Cancel';
+
+            } elseif (in_array('btnExport', array_keys($_POST))) {
+
+                $this->msg = null;
+
+                return 'SchedTemplateExport';
             }
+        } else {
+            $this->msg = null;
         }
 
-		return false;
+		return null;
 
 	}
     private function renderUsers()
     {
 		$users = $this->sr->getAllUsers();
-		$this->msg = '';
-		
+
 		$selectOptions = null;
 		foreach($users as $user) {
 			if ($user->name == $this->userName) {

@@ -266,6 +266,32 @@ class SchedulerRepository
 			return null;
 		}
 	}
+	public function getGamesHeader($projectKey)
+    {
+        $games = $this->getGames($projectKey);
+        $gameLabels = (array) $this->getZero($games);
+
+        if (!empty($gameLabels)){
+
+            return array_keys($gameLabels);
+        }
+
+        return null;
+    }
+    public function getNextGameId()
+    {
+        $games = $this->db->table('games')
+            ->get();
+
+        foreach ($games as $game){
+            $id = $game->id;
+        };
+
+        $id++;
+
+        return $id;
+    }
+
 	//Limits table functions
 	public function getLimits($projectKey)
 	{

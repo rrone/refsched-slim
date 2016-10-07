@@ -117,11 +117,11 @@ legend {
 .user-update input.form-control {
 	width: 100%;
 }
-input#passwordInput {
-	margin: 0;
-}
 @media only screen and (max-width: 768px){
 	select.form-control, input.form-control {
 		width: 90%;
 	}
 }
+.panel { margin-bottom: inherit }
+.noborder { border: 0 }
+.border { border: 1 }

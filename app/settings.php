@@ -19,7 +19,7 @@ $settings = [
                 __DIR__ . '/../src/Action/Master',
                 __DIR__ . '/../src/Action/Refs',
                 __DIR__ . '/../src/Action/Sched',
-                __DIR__ . '/../src/Action/User',
+                __DIR__ . '/../src/Action/Admin',
             ],
             'twig' => [
                 'cache' => __DIR__ . '/../var/cache/twig',

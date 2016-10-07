@@ -50,5 +50,8 @@ $app->map(['GET', 'POST'], '/unlock', App\Action\Lock\SchedUnlockDBController::c
 $app->map(['GET', 'POST'], '/fullexport', App\Action\Full\SchedExportController::class)
     ->setName('fullexport');
     
-$app->map(['GET', 'POST'], '/user', App\Action\User\UserUpdateDBController::class)
-    ->setName('userUpdate');
+$app->map(['GET', 'POST'], '/adm', App\Action\Admin\UserUpdateDBController::class)
+    ->setName('admin');
+
+$app->map(['GET', 'POST'], '/adm/template', App\Action\Admin\SchedTemplateExportController::class)
+    ->setName('sched_template');

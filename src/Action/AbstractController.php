@@ -23,6 +23,7 @@ abstract class AbstractController
 	protected $dates;
 	protected $location;
 	protected $msg;
+    protected $msgStyle;
 
 	//session variables	
 	protected $event;
@@ -54,6 +55,7 @@ abstract class AbstractController
     protected $unlockPath;
 	protected $fullXlsPath;
 	protected $userUpdatePath;
+    protected $schedTemplatePath;
 
     public function __construct(Container $container)
     {
@@ -81,8 +83,9 @@ abstract class AbstractController
         $this->schedPath = $this->container->get('router')->pathFor('sched');
         $this->unlockPath = $this->container->get('router')->pathFor('unlock');
         $this->fullXlsPath = $this->container->get('router')->pathFor('fullexport');
-        $this->userUpdatePath = $this->container->get('router')->pathFor('userUpdate');
-		
+        $this->userUpdatePath = $this->container->get('router')->pathFor('admin');
+        $this->schedTemplatePath = $this->container->get('router')->pathFor('sched_template');
+
     }
     protected function errorCheck()
     {
