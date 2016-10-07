@@ -24,14 +24,14 @@ class UserUpdateDBController extends AbstractController
 		$this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;        
 
          if (!$this->authed || $this->rep != 'Section 1') {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->greetPath);
          }
 
         $this->logger->info("Schedule user update page action dispatched");
 
         $result = $this->handleRequest($request);
 
-        if ($result == false){
+        if ($result == 'Cancel'){
             return $response->withRedirect($this->greetPath);
         }
 
@@ -86,11 +86,11 @@ class UserUpdateDBController extends AbstractController
 
             } elseif (in_array('btnCancel', array_keys($_POST))) {
 
-                return false;
+                return 'Cancel';
             }
         }
 
-		return null;
+		return false;
 
 	}
     private function renderUsers()
