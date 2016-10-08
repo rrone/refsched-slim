@@ -178,11 +178,11 @@ $container[App\Action\Full\SchedExportController::class] = function ($c) {
     return new \App\Action\Full\SchedExportController($c, $repo, $exporter);
 };
 
-$container[App\Action\Admin\UserUpdateDBController::class] = function ($c) {
+$container[App\Action\Admin\AdminController::class] = function ($c) {
     $db = $c->get('db');
     $repo = new \App\Action\SchedulerRepository($db);
 
-    return new \App\Action\Admin\UserUpdateDBController($c, $repo);
+    return new \App\Action\Admin\AdminController($c, $repo);
 };
 
 $container[App\Action\Admin\SchedTemplateExportController::class] = function ($c) {

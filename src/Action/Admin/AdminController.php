@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\AbstractController;
 use App\Action\SchedulerRepository;
 
-class UserUpdateDBController extends AbstractController
+class AdminController extends AbstractController
 {
 	private $userName;
 	
@@ -51,7 +51,7 @@ class UserUpdateDBController extends AbstractController
             )
         );        
 
-        $this->view->render($response, 'user.html.twig', $content);
+        $this->view->render($response, 'admin.html.twig', $content);
 
         return $response;
 
