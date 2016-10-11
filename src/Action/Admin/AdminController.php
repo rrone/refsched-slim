@@ -84,7 +84,6 @@ class AdminController extends AbstractController
                     }
 
                     $userData['hash'] = password_hash($pw, PASSWORD_BCRYPT);
-                    $userData['password'] = crypt($pw, 11);
 
                     $this->sr->setUser($userData);
 

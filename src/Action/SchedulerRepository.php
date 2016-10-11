@@ -28,14 +28,14 @@ class SchedulerRepository
 			->where('enabled', true)
 			->get();
     }
-    public function getUserByPW($pw)
+    public function getUserByPW($hash)
 	{
-		if(empty($pw)) {
+		if(empty($hash)) {
 			return null;
 		}
 		
 		$user = $this->db->table('users')
-			->where('password', 'like', $pw)
+			->where('hash', 'like', $hash)
 			->get();
 		
 		return $this->getZero($user);
@@ -65,7 +65,6 @@ class SchedulerRepository
 			$newUser = array (
 				'name' => $user['name'],
 				'enabled' => $user['enabled'],
-				'password' => $user['password'],
 				'hash' => $user['hash'],
 			);
 
@@ -74,13 +73,11 @@ class SchedulerRepository
 			
 		}
 		else {
-			$pw = $user['password'];
 			$hash = $user['hash'];
 			
 			$this->db->table('users')
 				->where('id', $u->id)
 				->update([
-					'password' => $pw,
 					'hash' => $hash,
 				]);	
 		}
