@@ -193,3 +193,11 @@ $container[App\Action\Admin\SchedTemplateExportController::class] = function ($c
     return new \App\Action\Admin\SchedTemplateExportController($c, $repo, $exporter);
 };
 
+$container[App\Action\Admin\SchedImportController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+    $importer = new \App\Action\AbstractImporter('csv');
+
+    return new \App\Action\Admin\SchedImportController($c, $repo, $importer);
+};
+

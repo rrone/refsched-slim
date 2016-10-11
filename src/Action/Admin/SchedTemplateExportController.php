@@ -16,7 +16,8 @@ class SchedTemplateExportController extends AbstractController
 	public function __construct(
 			Container $container,
             SchedulerRepository $repository,
-			AbstractExporter $exporter) {
+			AbstractExporter $exporter)
+    {
 		
 		parent::__construct($container);
 
@@ -77,18 +78,17 @@ class SchedTemplateExportController extends AbstractController
             $labels = $this->sr->getGamesHeader($projectKey);
 
             if (!is_null($labels)){
-                foreach($labels as $label) {
+                foreach($labels as $key=>$label) {
                     $hdr[] = $label;
                     switch ($label) {
-                        case 'id':
-                            $row[] = $this->sr->getNextGameId();
-                            break;
                         case 'projectKey':
                             $row[] = $projectKey;
                             break;
                         case 'medalRound':
                             $row[] = '0';
                             break;
+                        case 'date':
+                            $dateCol = $key;
                         default:
                             $row[] = null;
                     }
@@ -97,8 +97,11 @@ class SchedTemplateExportController extends AbstractController
                 $data[] = $hdr;
                 $data[] = $row;
 
+                $dateCol = chr($dateCol+65) . ":" . chr($dateCol+65);
+
                 $wkbk['FullSchedule']['data'] = $data;
                 $wkbk['FullSchedule']['options']['freezePane'] = 'A2';
+                $wkbk['FullSchedule']['options']['style'] = array($dateCol=>'yyyy-mm-dd');
 
                 $content = array('valid'=>true, 'content'=>$wkbk);
 

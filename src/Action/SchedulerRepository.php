@@ -168,13 +168,13 @@ class SchedulerRepository
 			->update(['locked' => false]);
 	}
 	//Games table functions
-	public function getGames($projectKey, $group='%')
+	public function getGames($projectKey='%', $group='%')
 	{
 		$group .= '%';
 
 		return $this->db->table('games')
 			->where([
-				['projectKey', '=', $projectKey],
+				['projectKey', 'like', $projectKey],
 				['division', 'like', $group],
 			])
 			->get();
@@ -266,9 +266,9 @@ class SchedulerRepository
 			return null;
 		}
 	}
-	public function getGamesHeader($projectKey)
+	public function getGamesHeader()
     {
-        $games = $this->getGames($projectKey);
+        $games = $this->getGames();
         $gameLabels = (array) $this->getZero($games);
 
         if (!empty($gameLabels)){
@@ -291,7 +291,93 @@ class SchedulerRepository
 
         return $id;
     }
+    public function addGames($data)
+    {
+        if (is_null($data)) {
+            return null;
+        }
 
+        $hdr = $data['hdr'];
+        $games = $data['data'];
+        $changes = array('adds'=>0, 'updates'=>0);
+
+        //convert float to int
+        foreach($games as &$game){
+            foreach($game as $key=>&$value) {
+                if(is_float($value)) {
+                    $value = (int)$value;
+                }
+            }
+        }
+        if (!empty($games)) {
+            foreach ($games as $game){
+                $nextData = [];
+                foreach ($hdr as $key=>$field) {
+                    $nextData[$hdr[$key]] = $game[$key];
+                }
+                $result = $this->updateGame($nextData);
+
+                $changes['adds'] += $result['adds'];
+                $changes['updates'] += $result['updates'];
+            }
+        }
+
+        return $changes;
+
+    }
+    private function getGame($id)
+    {
+        $game = $this->db->table('games')
+            ->where('id', '=', $id)
+            ->get();
+
+        return $this->getZero($game);
+    }
+    private function updateGame($data)
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        $changes = array('adds'=>0, 'updates'=>0);
+
+        $id = isset($data['id']) ? $data['id'] : null;
+
+        if (is_null($id)) {
+            $changes = $this->insertGame($data);
+        } else {
+            $game = $this->getGame($id);
+
+            if (array_diff((array)$game, $data)){
+                $this->db->table('games')
+                    ->where('id', $id)
+                    ->update($data);
+                $changes['updates']++;
+            }
+        }
+
+        return $changes;
+    }
+    private function insertGame($data)
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        $changes = array('adds'=>0, 'updates'=>0);
+
+        $id = isset($data['id']) ? $data['id'] : null;
+
+        if (is_null($id)) {
+            $this->db->table('games')
+                ->insert($data);
+            $changes['adds']++;
+        } else {
+            $changes = $this->updateGame($id, $data);
+        }
+
+        return $changes;
+    }
 	//Limits table functions
 	public function getLimits($projectKey)
 	{

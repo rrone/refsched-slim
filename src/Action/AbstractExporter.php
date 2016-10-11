@@ -173,6 +173,16 @@ class AbstractExporter
             $ws->freezePane($options['freezePane']);
         }
         
+        // date format
+        // ['options']['style'] = array('M:M'=>'yyyy-mm-dd');
+        if (isset($options['style'])){
+            foreach ($options['style'] as $rng=>$format) {
+                $ws->getStyle($rng)
+                    ->getNumberFormat()
+                    ->setFormatCode($format);
+            }
+        }
+
         //horizontal alignment
         //$options['horizontalAlignment'] = 'left';
         if (isset($options['horizontalAlignment'])){

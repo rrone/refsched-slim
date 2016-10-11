@@ -55,3 +55,6 @@ $app->map(['GET', 'POST'], '/adm', App\Action\Admin\AdminController::class)
 
 $app->map(['GET', 'POST'], '/adm/template', App\Action\Admin\SchedTemplateExportController::class)
     ->setName('sched_template');
+
+$app->map(['GET', 'POST'], '/adm/import', App\Action\Admin\SchedImportController::class)
+    ->setName('sched_import');

@@ -17,6 +17,7 @@ abstract class AbstractController
     protected $logger;
     protected $container;
     protected $root;
+    protected $uploadPath;
 
 	//view variables
     protected $page_title;
@@ -54,8 +55,9 @@ abstract class AbstractController
     protected $schedPath;
     protected $unlockPath;
 	protected $fullXlsPath;
-	protected $userUpdatePath;
+	protected $adminUpdatePath;
     protected $schedTemplatePath;
+    protected $schedImportPath;
 
     public function __construct(Container $container)
     {
@@ -65,9 +67,8 @@ abstract class AbstractController
         $this->logger = $container->get('logger');
         $this->root = __DIR__ . '/../../var';
 
-        $this->refdata = $this->root . '/refdata/';
-        $this->authdat = $this->root . '/dat/';
-        
+        $this->uploadPath = $this->root . '/uploads/';
+
         $this->page_title = "Section 1 Referee Scheduler";
 
         $this->assignPath = $this->container->get('router')->pathFor('assign');
@@ -83,8 +84,9 @@ abstract class AbstractController
         $this->schedPath = $this->container->get('router')->pathFor('sched');
         $this->unlockPath = $this->container->get('router')->pathFor('unlock');
         $this->fullXlsPath = $this->container->get('router')->pathFor('fullexport');
-        $this->userUpdatePath = $this->container->get('router')->pathFor('admin');
+        $this->adminPath = $this->container->get('router')->pathFor('admin');
         $this->schedTemplatePath = $this->container->get('router')->pathFor('sched_template');
+        $this->schedImportPath = $this->container->get('router')->pathFor('sched_import');
 
     }
     protected function errorCheck()

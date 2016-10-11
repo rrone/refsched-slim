@@ -40,12 +40,15 @@ class AdminController extends AbstractController
 
                 return $response->withRedirect($this->schedTemplatePath);
 
+            case 'SchedImport':
+
+                return $response->withRedirect($this->schedImportPath);
         }
 
         $content = array(
             'view' => array (
                 'users' => $this->renderUsers(),
-                'action' => $this->userUpdatePath,
+                'action' => $this->adminPath,
 				'message' => $this->msg,
                 'messageStyle' => $this->msgStyle,
             )
@@ -103,9 +106,16 @@ class AdminController extends AbstractController
                 $this->msg = null;
 
                 return 'SchedTemplateExport';
+
+            } elseif (in_array('btnImport', array_keys($_POST))) {
+
+                $this->msg = null;
+
+                return 'SchedImport';
+
+            } else {
+                $this->msg = null;
             }
-        } else {
-            $this->msg = null;
         }
 
 		return null;
