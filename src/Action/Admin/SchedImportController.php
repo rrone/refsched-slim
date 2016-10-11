@@ -11,16 +11,19 @@ use App\Action\AbstractImporter;
 class SchedImportController extends AbstractController
 {
     private $importer;
+    private $uploadPath;
 
 	public function __construct(
 	    Container $container,
         SchedulerRepository $sr,
-        AbstractImporter $importer)
+        AbstractImporter $importer,
+        $upload_path)
     {
 		parent::__construct($container);
 
         $this->sr = $sr;
         $this->importer = $importer;
+        $this->uploadPath = $upload_path;
 
     }
     public function __invoke(Request $request, Response $response, $args)
@@ -28,16 +31,19 @@ class SchedImportController extends AbstractController
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
-         }
+        }
 
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 
-        $this->handleRequest($request);
+        $path = $this->handleRequest($request);
+
+        if (!empty($path)){
+            return $response->withRedirect($path);
+        }
 
         $content = array(
             'view' => array(
                 'action' => $this->schedImportPath,
-                'done' => $this->adminPath,
                 'message' => $this->msg,
                 'messageStyle' => $this->msgStyle,
             )
@@ -51,29 +57,43 @@ class SchedImportController extends AbstractController
 
         if ($request->isPost()){
             $parsedBody = $request->getParsedBody();
+            $key = strtolower(array_keys($parsedBody)[0]);
+
             $files = $request->getUploadedFiles();
 
-            if (empty($files['uploadfile']->getClientFilename())) {
+            $upload = $files['uploadfile'];
+
+            if (empty($upload->file)) {
                 $this->msg = "Select a file and try again.";
                 $this->msgStyle = "color:#FF0000";
-
-                return null;
             }
-            $key = array_keys($parsedBody)[0];
 
             switch ($key) {
-                case 'Test':
-                    if ($this->testFile($files['uploadfile']) ) {
-                        $this->msg = "Success! File contains recognized fields.<br>You should select the file again and click 'Upload File' button.";
-                        $this->msgStyle = "color:#0000FF";
-                    } else {
-                        $this->msg = "Whoa there! file contains unrecognized fields.<br> You should export the template and ensure input data fields match the template.";
-                        $this->msgStyle = "color:#FF0000";
+                case 'test':
+                    if (!empty($upload->file)) {
+                        if ($this->testFile($upload)) {
+                            $this->msg = "Success! The file contains recognized fields.<br>You should select the file again and click 'Upload File' button.";
+                            $this->msgStyle = "color:#0000FF";
+                        } else {
+                            $this->msg = "Whoa there! The file contains unrecognized fields.<br> You should export the template and ensure input data fields match the template.";
+                            $this->msgStyle = "color:#FF0000";
+                        }
+                    }
+                    break;
+                case 'upload':
+                    if (!empty($upload->file)) {
+                        $this->importFile($upload);
+                    }
+                    break;
+                case 'done':
+                    $files = glob($this->uploadPath . '*'); // get all file names
+
+                    foreach($files as $file){ // iterate files
+                        if(is_file($file))
+                            unlink($file); // delete file
                     };
-                    break;
-                case 'Upload':
-                    $this->importFile($files['uploadfile']);
-                    break;
+
+                    return $this->adminPath;
             }
 
         }
@@ -104,7 +124,7 @@ class SchedImportController extends AbstractController
     }
     public function testFile($file)
     {
-        $result = false;
+        $result = null;
 
         $data = $this->getData($file);
 

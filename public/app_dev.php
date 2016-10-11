@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\Debug\Debug;
+
 // To help the built-in PHP dev server, check if the request was actually for
 // something which should probably be served as a static file
 if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
@@ -18,6 +20,8 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
 }
 
 require __DIR__ . '/../vendor/autoload.php';
+
+Debug::enable();
 
 session_start();
 

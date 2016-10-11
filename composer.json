@@ -17,6 +17,10 @@
             "Upload\\": "vendor/codeguy/upload/src"
         }
     },
+    "require-dev": {
+        "symfony/debug": "^3.1",
+        "phpunit/phpunit": "^5.6"
+    },
     "require": {
         "slim/slim": "^3.0",
         "slim/twig-view": "^2.0",

@@ -197,7 +197,8 @@ $container[App\Action\Admin\SchedImportController::class] = function ($c) {
     $db = $c->get('db');
     $repo = new \App\Action\SchedulerRepository($db);
     $importer = new \App\Action\AbstractImporter('csv');
+    $uploadPath = $c->get('settings')['upload_path'];
 
-    return new \App\Action\Admin\SchedImportController($c, $repo, $importer);
+    return new \App\Action\Admin\SchedImportController($c, $repo, $importer, $uploadPath);
 };
 

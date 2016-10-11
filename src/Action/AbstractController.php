@@ -17,7 +17,6 @@ abstract class AbstractController
     protected $logger;
     protected $container;
     protected $root;
-    protected $uploadPath;
 
 	//view variables
     protected $page_title;
@@ -57,7 +56,6 @@ abstract class AbstractController
 	protected $fullXlsPath;
 	protected $adminUpdatePath;
     protected $schedTemplatePath;
-    protected $schedImportPath;
 
     public function __construct(Container $container)
     {
@@ -66,8 +64,6 @@ abstract class AbstractController
         $this->view = $container->get('view');
         $this->logger = $container->get('logger');
         $this->root = __DIR__ . '/../../var';
-
-        $this->uploadPath = $this->root . '/uploads/';
 
         $this->page_title = "Section 1 Referee Scheduler";
 

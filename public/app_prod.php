@@ -14,6 +14,11 @@ session_start();
 $settings = require __DIR__ . '/../app/settings.php';
 
 $settings['debug'] = false;
+ini_set("display_errors", 0);
+ini_set("log_errors", 1);
+
+//Define where the log goes: syslog
+ini_set("error_log", "syslog");
 
 $app = new \Slim\App($settings);
 

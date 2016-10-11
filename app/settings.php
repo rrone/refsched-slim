@@ -28,7 +28,7 @@ $settings = [
             ],
         ],
 
-        'upload_path' => __DIR__ . '/../var/uploads',
+        'upload_path' => __DIR__ . '/../var/uploads/',
         
         // monolog settings
         'logger' => [
