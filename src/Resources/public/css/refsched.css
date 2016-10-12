@@ -98,10 +98,12 @@ th {
 .left-margin {
 	margin-left: 20px;
 }
+form {
+	margin: 0 60px;
+}
 select.form-control,
 input.form-control {
 	margin: 5px 20px;
-	width: 80%;
     font-size: 13px;
 	height: 2.25em;
 }

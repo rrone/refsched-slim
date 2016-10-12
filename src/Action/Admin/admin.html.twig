@@ -1,87 +1,89 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-<div class="col-md-10 col-md-offset-1" xmlns="http://www.w3.org/1999/html">
-  <div class="panel panel-default">
-    <div class="panel-heading center"><h1>Administrative Functions</h1></div>
+    <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-default">
+            <div class="panel-heading center"><h1>Administrative Functions</h1></div>
 
-  <div class="panel panel-default">
-    <!-- Form Name -->
-    <div class="panel-heading"><h2>Update Assignor Password</h2></div>
-  <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
-    <fieldset>
-      
-      <!-- Select Basic -->
-      <p></p>
-      <div class="form-group">
-        <label class="col-md-4 control-label" for="selectUser">Select Assignor</label>
-        <div class="col-md-6">
-          <select id="selectUser" name="selectUser" class="form-control">
-              {{ view.users | raw }}
-          </select>
-        </div>
-      </div>
-      
-      <!-- Password input-->
-      <div class="form-group">
-        <label class="col-md-4 control-label" for="passwordInput">Password Input</label>
-        <div class="col-md-6">
-          <input id="passwordInput" name="passwordInput" type="text" placeholder="" class="form-control input-md">
-          <span class="help-block"></span>
-        </div>
-      </div>
-      
-      <!-- Button -->
-      <div class="form-group">
-        <div class="col-md-11 col-md-offset-5">
-          <button id="btnUpdate" name="btnUpdate" class="btn btn-primary center">Update</button>
-        </div>
-      </div>
-    
-      <div class="form-group">
-        {% if (view.messageStyle != null) %}
-        <p class="center" style={{ view.messageStyle }}> {{ view.message | raw }}</p>
-        {% endif %}
-      </div>
-      
-    </fieldset>
-  </form>
-  </div>
+            <div class="panel panel-default">
+                <!-- Form Name -->
+                <div class="panel-heading"><h2>Update Assignor Password</h2></div>
+                <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
+                    <fieldset>
 
-    <div class="panel panel-default">
-    <!-- Form Name -->
-      <div class="panel-heading"><h2>Schedule Functions</h2></div>
+                        <!-- Select Basic -->
+                        <p></p>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label col-md-offset-1" for="selectUser">Select
+                                Assignor</label>
+                            <div class="col-md-4">
+                                <select id="selectUser" name="selectUser" class="form-control">
+                                    {{ view.users | raw }}
+                                </select>
+                            </div>
+                        </div>
 
-    <!-- Action -->
-    <div class="form-group">
-        <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
-        <fieldset>
-        <div class="col-md-4 col-md-offset-3">
-          <button id="btnExport" name="btnExport" class="btn btn-primary center">Export Schedule Template</button>
+                        <!-- Password input-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label col-md-offset-1" for="passwordInput">Password
+                                Input</label>
+                            <div class="col-md-4">
+                                <input id="passwordInput" name="passwordInput" type="text" placeholder=""
+                                       class="form-control input-md">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <!-- Button -->
+                        <div class="form-group">
+                            <div class="col-md-11 col-md-offset-5">
+                                <button id="btnUpdate" name="btnUpdate" class="btn btn-primary center">Update</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {% if (view.messageStyle != null) %}
+                                <p class="center" style={{ view.messageStyle }}> {{ view.message | raw }}</p>
+                            {% endif %}
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+
+            <div class="panel panel-default">
+                <!-- Form Name -->
+                <div class="panel-heading"><h2>Schedule Functions</h2></div>
+
+                <!-- Action -->
+                <div class="form-group">
+                    <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
+                        <fieldset class="center">
+                            <button id="btnExport" name="btnExport" class="btn btn-primary center">Export Schedule
+                                Template
+                            </button>
+                            <button id="btnExport" name="btnImport" class="btn btn-primary center">Import Schedule
+                            </button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
         </div>
-          <div class="col-md-4">
-            <button id="btnExport" name="btnImport" class="btn btn-primary center">Import Schedule</button>
-          </div>
-        </fieldset>
-        </form>
+
+        <!-- Button -->
+        <div class="panel panel-default no-border">
+            <div class="form-group">
+                <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
+                    <fieldset>
+                        <label class="col-md-4 control-label" for="butUpdate"></label>
+                        <div class="col-md-8">
+                            <button id="btnCancel" name="btnCancel" class="btn btn-inverse right">Done</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
     </div>
-  </div>
-</div>
-
-  <!-- Button -->
-<div class="panel panel-default no-border">
-  <div class="form-group">
-    <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
-    <fieldset>
-    <label class="col-md-4 control-label" for="butUpdate"></label>
-    <div class="col-md-8">
-      <button id="btnCancel" name="btnCancel" class="btn btn-inverse right">Done</button>
-    </div>
-    </fieldset>
-      </form>
-  </div>
-</div>
-
-</div>
 
 {% endblock %}
