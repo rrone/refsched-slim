@@ -6,7 +6,7 @@ body,td,th {
 }
 body {
 	background-color: #FFFFFF;
-	margin: 0;
+	padding: 20px;
 }
 a:link {
 	color: #0066CC;
@@ -112,10 +112,6 @@ a.btn:visited, a.btn:link {
 }
 legend {
 	line-height: 3em;
-}
-.user-update select.form-control,
-.user-update input.form-control {
-	width: 100%;
 }
 @media only screen and (max-width: 768px){
 	select.form-control, input.form-control {
