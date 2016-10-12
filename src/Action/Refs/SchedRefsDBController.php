@@ -25,9 +25,9 @@ class SchedRefsDBController extends AbstractController
 
         $this->logger->info("Schedule refs page action dispatched");
 
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;        
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
-          
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+
         if ($this->handleRequest($request)) {
             $_SESSION['target_id'] = array_keys($_POST);
 
@@ -36,6 +36,7 @@ class SchedRefsDBController extends AbstractController
 
         $content = array(
             'view' => array (
+                'rep' => $this->rep,
                 'content' => $this->renderRefs(),
                 'topmenu' => $this->menu(),
                 'menu' => $this->menu(),

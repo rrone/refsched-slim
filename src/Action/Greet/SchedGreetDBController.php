@@ -31,6 +31,7 @@ class SchedGreetDBController extends AbstractController
 
         $content = array(
             'view' => array (
+                'rep' => $this->rep,
                 'content' => $this->renderGreet(),
                 'title' => $this->page_title,
 				'dates' => $this->dates,

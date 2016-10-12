@@ -36,6 +36,7 @@ class SchedAssignDBController extends AbstractController
 		        
         $content = array(
             'view' => array (
+                'rep' => $this->rep,
                 'content' => $this->renderAssign(),
                 'topmenu' => $this->topmenu,
                 'title' => $this->page_title,

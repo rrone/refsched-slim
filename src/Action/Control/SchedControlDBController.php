@@ -26,16 +26,17 @@ class SchedControlDBController extends AbstractController
          }
             
 		$this->logger->info("Schedule control page action dispatched");
-        
+
+        $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
-		$this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
-        
+
 		if ( $request->isPost()) {
 			$this->handleRequest($request);
 		}
         
         $content = array(
             'view' => array (
+                'rep' => $this->rep,
                 'content' => $this->renderControl(),
                 'topmenu' => $this->topmenu,
                 'menu' => $this->menu(),

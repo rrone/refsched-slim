@@ -33,7 +33,10 @@ class SchedImportController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
+        $this->logger->info("Schedule import dispatched");
+
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 
         $path = $this->handleRequest($request);
 
@@ -43,6 +46,7 @@ class SchedImportController extends AbstractController
 
         $content = array(
             'view' => array(
+                'rep' => $this->rep,
                 'action' => $this->schedImportPath,
                 'message' => $this->msg,
                 'messageStyle' => $this->msgStyle,

@@ -34,7 +34,10 @@ class SchedTemplateExportController extends AbstractController
             return $response->withRedirect($this->logonPath);
          }
 
+        $this->logger->info("Schedule template export dispatched");
+
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 
 		$file = $this->generateFile();
         if ($file['valid']) {
@@ -53,6 +56,7 @@ class SchedTemplateExportController extends AbstractController
                 $msg = $this->event->name . ' at ' . $this->event->location . ' on ' . $this->event->dates;
                 $content = array(
                     'view' => array(
+                        'rep' => $this->rep,
                         'action' => $this->userUpdatePath,
                         'message' => "There are no games in the database for the event: \"$msg\"",
                     )
@@ -68,7 +72,6 @@ class SchedTemplateExportController extends AbstractController
     {
         $content = null;
         
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
         $event = $this->event;
 
 		if (!empty($event)) {

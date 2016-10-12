@@ -29,10 +29,10 @@ class SchedMasterDBController extends AbstractController
          }
 
         $this->logger->info("Schedule master page action dispatched");
-        
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
-		
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+
 		if ( count( $_GET ) ) {
 		   $this->justOpen = array_key_exists( 'open', $_GET );
 		}
@@ -42,6 +42,7 @@ class SchedMasterDBController extends AbstractController
 
         $content = array(
             'view' => array (
+                'rep' => $this->rep,
                 'content' => $this->renderMaster(),
                 'topmenu' => $this->topmenu,
                 'menu' => $this->menu(),
@@ -70,7 +71,6 @@ class SchedMasterDBController extends AbstractController
     private function renderMaster()
     {
         $html = null;
-        
 		$event = $this->event;
 		
 		if (!empty($event)){

@@ -10,15 +10,11 @@ class SchedEndController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->logger->info("Schedule end page action dispatched");
-        
-        $_SESSON['authed'] = FALSE;
+
+        session_unset();
+
         session_destroy();
         
-        //$content = array (
-        //    "logon" => $this->logonPath  
-        //);
-        
-        //$this->view->render($response, 'sched.end.html.twig', $content);
         return $response->withRedirect($this->logonPath);
     }
 }

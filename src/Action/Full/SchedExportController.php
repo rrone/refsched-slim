@@ -34,6 +34,11 @@ class SchedExportController extends AbstractController
             return $response->withRedirect($this->logonPath);
          }
 
+        $this->logger->info("Schedule export action dispatched");
+
+        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+
         // generate the response
         $response = $response->withHeader('Content-Type', $this->exporter->contentType);
         $response = $response->withHeader('Content-Disposition', 'attachment; filename='. $this->outFileName);
@@ -48,10 +53,8 @@ class SchedExportController extends AbstractController
     public function generateFile()
     {
         $content = null;
-        
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $event = $this->event;
 
-		$event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 		if (!empty($event)) {
 			$projectKey = $event->projectKey;
 

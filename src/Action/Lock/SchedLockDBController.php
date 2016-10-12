@@ -25,31 +25,33 @@ class SchedLockDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info("Schedule greet page action dispatched");
-
-        $content = array(
-            'sched' => array (
-                'ulock' => $this->renderLock(),
-                'topmenu' => $this->menu(),
-                'menu' => $this->menu(),
-                'title' => $this->page_title,
-				'dates' => $this->dates,
-				'location' => $this->location,
-            )
-        );
+        $this->logger->info("Schedule lock action dispatched");
 
         return $response->withRedirect($this->greetPath);
 
-        //$this->view->render($response, 'sched.ulock.html.twig', $content);
+//        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
+//        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+
+//        $content = array(
+//            'view' => array (
+//                'rep' => $this->rep,
+//                'ulock' => $this->renderLock(),
+//                'topmenu' => $this->menu(),
+//                'menu' => $this->menu(),
+//                'title' => $this->page_title,
+//				'dates' => $this->dates,
+//				'location' => $this->location,
+//            )
+//        );
+
+//        $this->view->render($response, 'sched.ulock.html.twig', $content);
     }
 
     private function renderLock()
     {
         $html = null;
+        $event = $this->event;
 
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
-
-		$event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 		if (!empty($event)) {
 			$projectKey = $event->projectKey;
             $locked = $this->sr->getLocked($projectKey);

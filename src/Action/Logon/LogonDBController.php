@@ -26,7 +26,7 @@ class LogonDBController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->logger->info("Logon database page action dispatched");
+        $this->logger->info("Logon page action dispatched");
        
         $this->handleRequest($request);
 

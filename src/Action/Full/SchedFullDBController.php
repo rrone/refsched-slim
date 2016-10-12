@@ -29,12 +29,16 @@ class SchedFullDBController extends AbstractController
 
         $this->logger->info("Schedule full page action dispatched");
 
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
+
 		if ( count( $_GET ) ) {
 		   $this->justOpen = array_key_exists( 'open', $_GET );
 		}
         
         $content = array(
             'view' => array (
+                'rep' => $this->rep,
                 'content' => $this->renderFull(),
                 'topmenu' => $this->menu(),
                 'menu' => $this->menu,
@@ -53,10 +57,8 @@ class SchedFullDBController extends AbstractController
     private function renderFull()
     {
         $html = null;
-        
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $event = $this->event;
 
-		$event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 		if (!empty($event)) {
 			$projectKey = $event->projectKey;
 		

@@ -40,6 +40,7 @@ class SchedEditRefDBController extends AbstractController
         
         $content = array(
             'view' => array (
+                'rep' => $this->rep,
                 'content' => $this->renderEditRef(),
                 'topmenu' => $this->menu(),
                 'menu' => $this->menu(),
