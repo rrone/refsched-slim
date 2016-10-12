@@ -25,15 +25,18 @@ class SchedUnlockDBController extends AbstractController
 
         $this->logger->info("Schedule lock action dispatched");
 
+        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+
+        $this->renderUnlock();
+
         return $response->withRedirect($this->greetPath);
 
-//        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-//        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 //
 //        $content = array(
 //            'view' => array (
 //                'rep' => $this->rep,
-//                'ulock' => $this->renderLock(),
+//                'ulock' => $this->renderUnlock(),
 //                'topmenu' => $this->menu(),
 //                'menu' => $this->menu(),
 //                'title' => $this->page_title,
@@ -45,7 +48,7 @@ class SchedUnlockDBController extends AbstractController
 //        $this->view->render($response, 'sched.ulock.html.twig', $content);
     }
 
-    private function renderLock()
+    private function renderUnlock()
     {
         $html = null;
         $event = $this->event;
