@@ -54,6 +54,8 @@ class SchedImportController extends AbstractController
         );
 
         $this->view->render($response, 'import.html.twig', $content);
+
+        return null;
     }
     private function handleRequest($request)
     {
@@ -144,6 +146,7 @@ class SchedImportController extends AbstractController
     {
         $data = $this->getData($file);
         $projectKey = $this->event->projectKey;
+        $changes = array('adds'=>0, 'updates'=>0);
 
         if(!empty($data)) {
             $games['hdr'] = $data[0];
@@ -170,10 +173,8 @@ class SchedImportController extends AbstractController
         $event = $this->event;
 
         if (!empty($event)) {
-            $projectKey = $event->projectKey;
-
             //set the header labels
-            $labels = $this->sr->getGamesHeader($projectKey);
+            $labels = $this->sr->getGamesHeader();
         } else {
         $labels = null;
         }

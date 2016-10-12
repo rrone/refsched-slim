@@ -370,7 +370,7 @@ class SchedulerRepository
                 ->insert($data);
             $changes['adds']++;
         } else {
-            $changes = $this->updateGame($id, $data);
+            $changes = $this->updateGame($data);
         }
 
         return $changes;

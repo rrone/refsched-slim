@@ -122,4 +122,4 @@ legend {
 }
 .panel { margin-bottom: inherit }
 .no-border { border: 0 }
-.border { border: 1 }
+.border { border: 1px solid #ddd }

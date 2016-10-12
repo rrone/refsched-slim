@@ -4,8 +4,6 @@ namespace App\Action;
 
 use PHPExcel;
 use PHPExcel_IOFactory;
-use PHPExcel_Style_Protection;
-use PHPExcel_Style_Alignment;
 
 /*
     // Sample array of data to publish
@@ -76,8 +74,6 @@ class AbstractImporter
     }
     private function _import($inputFileName, $inputFileType)
     {
-        $inputFileName = $inputFileName;
-
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
         $objPHPExcel = $objReader->load($inputFileName);
 

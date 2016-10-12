@@ -78,7 +78,7 @@ class SchedTemplateExportController extends AbstractController
 			$projectKey = $event->projectKey;
 
 			//set the header labels
-            $labels = $this->sr->getGamesHeader($projectKey);
+            $labels = $this->sr->getGamesHeader();
 
             if (!is_null($labels)){
                 foreach($labels as $key=>$label) {
@@ -92,6 +92,7 @@ class SchedTemplateExportController extends AbstractController
                             break;
                         case 'date':
                             $dateCol = $key;
+                            break;
                         default:
                             $row[] = null;
                     }
