@@ -1,19 +1,19 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <div class="col-md-10 col-md-offset-1" xmlns="http://www.w3.org/1999/html">
+    <div class="col-xs-10 col-xs-offset-1" xmlns="http://www.w3.org/1999/html">
         <div class="panel panel-default">
             <div class="panel-heading center">
                 <h1>Schedule Import</h1>
             </div>
 
 
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-xs-8 col-xs-offset-2">
                 <form action="{{ view.action | raw }}" method="post" enctype="multipart/form-data" name="form1"
                       id="form1">
                     <fieldset>
                         <div class="form-group">
-                            <div class="col-md-12">
+                            <div class="col-xs-12">
                                 {% if (view.messageStyle != null) %}
                                     <br/>
                                     <p class="center" style={{ view.messageStyle }}> {{ view.message | raw }}</p>
@@ -24,12 +24,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-5 control-label text-right" for="uploadfile">Select a CSV file to
+                            <label class="col-xs-5 control-label text-right" for="uploadfile">Select a CSV file to
                                 upload:</label>
-                            <div class="col-md-5">
+                            <div class="col-xs-5">
                                 <input name="uploadfile" type="file" id="uploadfile" accept=".csv, text/csv" />
                             </div>
-                            <div class="col-md-12 col-md-offset-4">
+                            <div class="col-xs-12 col-xs-offset-4">
                                 <button id="test" name="Test" class="btn btn-xs btn-default">Test Upload</button>
                                 <button id="upload" name="Upload" class="btn btn-xs btn-primary">Upload File
                                 </button>
@@ -42,7 +42,7 @@
                     <div class="form-group">
                         <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
                             <fieldset>
-                                <div class="col-md-12">
+                                <div class="col-xs-12">
                                     <button id="done" name="Done" class="btn btn-inverse right">Done</button>
                                 </div>
                             </fieldset>

@@ -28,6 +28,10 @@ class SchedRefsDBController extends AbstractController
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 
+        if (is_null($this->event) || is_null($this->rep)) {
+            return $response->withRedirect($this->logonPath);
+        }
+
         if ($this->handleRequest($request)) {
             $_SESSION['target_id'] = array_keys($_POST);
 
@@ -75,57 +79,57 @@ class SchedRefsDBController extends AbstractController
                 if ( $this->rep != 'Section 1') {
                     $html .= "<h2  class=\"center\">You are currently scheduled for the following games</h2></div>\n";
                 }
-                $html .=  "      <form name=\"addref\" method=\"post\" action=\"$this->refsPath\">\n";
-                $html .=  "      <table class=\"sched_table\" width=\"100%\">\n";
-                $html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
-                $html .=  "            <th>Game No.</th>";
-                $html .=  "            <th>Day</th>";
-                $html .=  "            <th>Time</th>";
-                $html .=  "            <th>Field</th>";
-                $html .=  "            <th>Division</th>";
-                $html .=  "            <th>Area</th>";
-                $html .=  "            <th>CR</th>";
-                $html .=  "            <th>AR1</th>";
-                $html .=  "            <th>AR2</th>";
+                $html .=  "<form name=\"addref\" method=\"post\" action=\"$this->refsPath\">\n";
+                $html .=  "<table class=\"sched_table\" width=\"100%\">\n";
+                $html .=  "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+                $html .=  "<th>Game No.</th>";
+                $html .=  "<th>Date</th>";
+                $html .=  "<th>Time</th>";
+                $html .=  "<th>Field</th>";
+                $html .=  "<th>Division</th>";
+                $html .=  "<th>Area</th>";
+                $html .=  "<th>CR</th>";
+                $html .=  "<th>AR1</th>";
+                $html .=  "<th>AR2</th>";
 				if ($numRefs > 3){
-	                $html .=  "            <th>4th</th>";
+	                $html .=  "<th>4th</th>";
 				}
-                $html .=  "            <th>Edit</th>";
-                $html .=  "            </tr>\n";
+                $html .=  "<th>Edit</th>";
+                $html .=  "</tr>\n";
 
                 foreach($games as $game){
 					$date = date('D, d M',strtotime($game->date));
 					$time = date('H:i', strtotime($game->time));
                     if ( $game->assignor == $this->rep || $this->rep == 'Section 1') {
                         if ( !$game->assignor && $this->rep == 'Section 1' ) {
-                           $html .=  "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
+                           $html .=  "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";
                         }
                         else {
-                           $html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+                           $html .=  "<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
                         }
-                        $html .=  "            <td>$game->game_number</td>";
-                        $html .=  "            <td>$date</td>";
-                        $html .=  "            <td>$time</td>";
-                        $html .=  "            <td>$game->field</td>";
-                        $html .=  "            <td>$game->division</td>";
-                        $html .=  "            <td>$game->assignor</td>";
-                        $html .=  "            <td>$game->cr</td>";
-                        $html .=  "            <td>$game->ar1</td>";
-                        $html .=  "            <td>$game->ar2</td>";
+                        $html .=  "<td>$game->game_number</td>";
+                        $html .=  "<td>$date</td>";
+                        $html .=  "<td>$time</td>";
+                        $html .=  "<td>$game->field</td>";
+                        $html .=  "<td>$game->division</td>";
+                        $html .=  "<td>$game->assignor</td>";
+                        $html .=  "<td>$game->cr</td>";
+                        $html .=  "<td>$game->ar1</td>";
+                        $html .=  "<td>$game->ar2</td>";
 						if ($numRefs > 3){
-	                        $html .=  "            <td>$game->r4th</td>";
+	                        $html .=  "<td>$game->r4th</td>";
 						}
                         if ( $game->assignor || $this->rep == 'Section 1') {
-                           $html .=  "            <td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\"></td>";
+                           $html .=  "<td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\"></td>";
                         }
                         else {
-                           $html .=  "            <td>&nbsp;</td>\n";
+                           $html .=  "<td>&nbsp;</td>\n";
                         }
-                        $html .=  "            </tr>\n";
+                        $html .=  "</tr>\n";
                     }
                 }
-                $html .=  "      </table>\n";
-                $html .=  "      </form>\n";
+                $html .=  "</table>\n";
+                $html .=  "</form>\n";
             }
             else {
                 $html .=  "<h2 class=\"center\">You do not currently have any games scheduled.</h2>\n";

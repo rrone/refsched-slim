@@ -39,6 +39,10 @@ class SchedTemplateExportController extends AbstractController
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 
+        if (is_null($this->event) || is_null($this->rep)) {
+            return $response->withRedirect($this->logonPath);
+        }
+
 		$file = $this->generateFile();
         if ($file['valid']) {
             // generate the response

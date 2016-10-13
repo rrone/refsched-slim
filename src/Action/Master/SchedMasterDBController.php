@@ -33,6 +33,10 @@ class SchedMasterDBController extends AbstractController
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 
+        if (is_null($this->event) || is_null($this->rep)) {
+            return $response->withRedirect($this->logonPath);
+        }
+
 		if ( count( $_GET ) ) {
 		   $this->justOpen = array_key_exists( 'open', $_GET );
 		}

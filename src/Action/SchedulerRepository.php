@@ -165,7 +165,7 @@ class SchedulerRepository
 			->update(['locked' => false]);
 	}
 	//Games table functions
-	public function getGames($projectKey='%', $group='%')
+	public function getGames($projectKey='%', $group='%', $medalRound = false)
 	{
 		$group .= '%';
 
@@ -173,6 +173,7 @@ class SchedulerRepository
 			->where([
 				['projectKey', 'like', $projectKey],
 				['division', 'like', $group],
+                ['medalRound', 'like', $medalRound],
 			])
 			->get();
 	}

@@ -27,8 +27,12 @@ class SchedAssignDBController extends AbstractController
 
         $this->logger->info("Schedule greet page action dispatched");
 
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 		$this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+
+        if (is_null($this->event) || is_null($this->rep)) {
+            return $response->withRedirect($this->logonPath);
+        }
 
 		if ( $request->isPost() ) {
 			$this->handleRequest($request);
@@ -65,34 +69,34 @@ class SchedAssignDBController extends AbstractController
 			$games = $this->sr->getGamesByRep($projectKey, $this->rep);
 			if (count($games)){
 				$html .= "<h2  class=\"center\">You are currently scheduled for the following games</h2>\n";
-				$html .= "      <table class=\"sched_table\" width=\"100%\">\n";
-				$html .= "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
-				$html .= "            <th>Game No.</th>";
-				$html .= "            <th>Day</th>";
-				$html .= "            <th>Time</th>";
-				$html .= "            <th>Field</th>";
-				$html .= "            <th>Division</th>";
-				$html .= "            <th>Home</th>";
-				$html .= "            <th>Away</th>";
-				$html .= "            <th>Referee Team</th>";
-				$html .= "            </tr>\n";
+				$html .= "<table class=\"sched_table\" width=\"100%\">\n";
+				$html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+				$html .= "<th>Game No.</th>";
+				$html .= "<th>Date</th>";
+				$html .= "<th>Time</th>";
+				$html .= "<th>Field</th>";
+				$html .= "<th>Division</th>";
+				$html .= "<th>Home</th>";
+				$html .= "<th>Away</th>";
+				$html .= "<th>Referee Team</th>";
+				$html .= "</tr>\n";
 
 				foreach($games as $game) {
-					$day = date('D',strtotime($game->date));
+					$date = date('D, d M',strtotime($game->date));
 					$time = date('H:i', strtotime($game->time));
-					$html .= "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
-					$html .= "            <td>$game->game_number</td>";
-					$html .= "            <td>$day<br>$game->date</td>";
-					$html .= "            <td>$time</td>";
-					$html .= "            <td>$game->field</td>";
-					$html .= "            <td>$game->division</td>";
-					$html .= "            <td>$game->home</td>";
-					$html .= "            <td>$game->away</td>";
-					$html .= "            <td>$game->assignor</td>";
-					$html .= "            </tr>\n";
+					$html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+					$html .= "<td>$game->game_number</td>";
+					$html .= "<td>$date</td>";
+					$html .= "<td>$time</td>";
+					$html .= "<td>$game->field</td>";
+					$html .= "<td>$game->division</td>";
+					$html .= "<td>$game->home</td>";
+					$html .= "<td>$game->away</td>";
+					$html .= "<td>$game->assignor</td>";
+					$html .= "</tr>\n";
 				}					
 
-				$html .= "      </table>\n";
+				$html .= "</table>\n";
 				$this->topmenu = $this->menu();
 			}
 			else {

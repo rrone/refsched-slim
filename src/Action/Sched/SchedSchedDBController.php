@@ -25,8 +25,12 @@ class SchedSchedDBController extends AbstractController
 
         $this->logger->info("Schedule schedule database page action dispatched");
 
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;        
-		$this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;		
+		$this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
+        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+
+        if (is_null($this->event) || is_null($this->rep)) {
+            return $response->withRedirect($this->logonPath);
+        }
 
         $this->handleRequest($request);
 
@@ -107,7 +111,7 @@ class SchedSchedDBController extends AbstractController
                                 );
 
                                 $this->sr->updateAssignments($data);
-                                $this->msg .= "<p>You have <strong>removed</strong> your referee team from Game no. $game->game_number on $game->date at $game->time on $game->field</p>";
+                                $this->msg .= "<p>You have <strong>removed</strong> your referee team from Game No. $game->game_number on $game->date at $game->time on $game->field</p>";
                             }
                         }
                         $this->sr->updateAssignor($unassign);
@@ -130,7 +134,7 @@ class SchedSchedDBController extends AbstractController
                     $unavailable = [];
                     $games = $this->sr->getGames($projectKey);
                     foreach ($games as $game) {
-                        $date = date('D, d M Y', strtotime($game->date));
+                        $date = date('D, d M',strtotime($game->date));
                         $time = date('H:i', strtotime($game->time));
                         $div = $this->divisionAge($game->division);
                         //ensure all indexes exist
@@ -139,23 +143,22 @@ class SchedSchedDBController extends AbstractController
                         //if requested
                         if (in_array($game->id, array_keys($adds))) {
                             //and available
-
                             if (empty($game->assignor)) {
                                 //and below the limit if there is one
-                                if ($games_now[$div] < $limit_list[$div] or $no_limit) {
+                                if (is_null($limit_list[$div]) || [$div] < $limit_list[$div] || $no_limit) {
                                     //make the assignment
                                     $data = [$game->id => $this->rep];
                                     $this->sr->updateAssignor($data);
                                     $added[$game->id] = $game;
                                     $games_now[$div]++;
-                                    $this->msg .= "<p>You have <strong>scheduled</strong> Game no. $game->id on $date on $game->field at $time</p>";
+                                    $this->msg .= "<p>You have <strong>scheduled</strong> Game No. $game->id on $date on $game->field at $time</p>";
                                 } else {
                                     $atLimit[$div]++;
-                                    $this->msg .= "<p>You have <strong>not scheduled</strong> Game no. $game->id on $date on $game->field at $time because you are at your game limit!</p>";
+                                    $this->msg .= "<p>You have <strong>not scheduled</strong> Game No. $game->id on $date on $game->field at $time because you are at your game limit!</p>";
                                 }
                             } else {
                                 $unavailable[$game->id] = $game;
-                                $this->msg = "<p>Sorry, game no. $game->id has been taken.</p>";
+                                $this->msg = "<p>Sorry, Game No. $game->id has been scheduled by $game->assignor</p>";
                             }
                         }
                     }
@@ -222,8 +225,7 @@ class SchedSchedDBController extends AbstractController
 			foreach( $games as $game ) {
 				$game_id[] = $game->id;
 				$game_no[] = $game->game_number;
-				$date[] = $game->date;
-				$day[] = date('D',strtotime($game->date));
+                $date[] = date('D, d M',strtotime($game->date));
 				$field[] = $game->field;
 				$time[] = date('H:i', strtotime($game->time));
 				$div[] = $game->division;
@@ -318,7 +320,7 @@ class SchedSchedDBController extends AbstractController
 				$html .= "   <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
 				$html .= "     <th>Game No.</th>";
 				$html .= "       <th>Assign to $this->rep</th>";
-				$html .= "		  <th>Day</th>";
+				$html .= "		  <th>Date</th>";
 				$html .= "		  <th>Time</th>";
 				$html .= "		  <th>Field</th>";
 				$html .= "    	  <th>Division</th>";
@@ -341,7 +343,7 @@ class SchedSchedDBController extends AbstractController
 							$html .= "		<tr align=\"center\" bgcolor=\"$color1\">";
 							$html .= "		<td>$game_no[$kant]</td>";
 							$html .= "		<td><input type=\"checkbox\" name=\"assign:$game_id[$kant]\" value=\"$game_id[$kant]\"></td>";
-							$html .= "		<td>$day[$kant]<br>$date[$kant]</td>";
+							$html .= "		<td>$date[$kant]</td>";
 							$html .= "		<td>$time[$kant]</td>";
 							$html .= "		<td>$field[$kant]</td>";
 							$html .= "		<td>$div[$kant]</td>";
@@ -366,7 +368,7 @@ class SchedSchedDBController extends AbstractController
 				$html .= "	    <tr align=\"center\" bgcolor=\"$this->colorTitle\">\n";
 				$html .= "		<th>Game No.</th>\n";
 				$html .= "		<th>Assigned</th>\n";
-				$html .= "		<th>Day</th>\n";
+				$html .= "		<th>Date</th>\n";
 				$html .= "		<th>Time</th>\n";
 				$html .= "		<th>Field</th>\n";
 				$html .= "		<th>Division</th>\n";
@@ -385,7 +387,7 @@ class SchedSchedDBController extends AbstractController
 						else {
 						   $html .= "		<td><input name=\"games:$game_id[$kant]\" type=\"checkbox\" value=\"$game_id[$kant]\" checked></td>";
 						}
-						$html .= "		<td>$day[$kant]<br>$date[$kant]</td>";
+						$html .= "		<td>$date[$kant]</td>";
 						$html .= "		<td>$time[$kant]</td>";
 						$html .= "		<td>$field[$kant]</td>";
 						$html .= "		<td>$div[$kant]</td>";

@@ -30,6 +30,10 @@ class SchedControlDBController extends AbstractController
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
         $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
 
+        if (is_null($this->event) || is_null($this->rep)) {
+            return $response->withRedirect($this->logonPath);
+        }
+
 		if ( $request->isPost()) {
 			$this->handleRequest($request);
 		}
@@ -73,38 +77,38 @@ class SchedControlDBController extends AbstractController
     
             $games = $this->sr->getGames($projectKey);
             if (count($games) ) {
-                $html .= "      <table class=\"sched_table\" width=\"100%\">\n";
-                $html .= "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";                 
-                $html .= "            <th>Game No.</th>";
-                $html .= "            <th>Day</th>";
-                $html .= "            <th>Time</th>";
-                $html .= "            <th>Field</th>";
-                $html .= "            <th>Division</th>";
-                $html .= "            <th>Home</th>";
-                $html .= "            <th>Away</th>";
-                $html .= "            <th>Referee Team</th>";
-                $html .= "            </tr>\n";
+                $html .= "<table class=\"sched_table\" width=\"100%\">\n";
+                $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";                 
+                $html .= "<th>Game No.</th>";
+                $html .= "<th>Date</th>";
+                $html .= "<th>Time</th>";
+                $html .= "<th>Field</th>";
+                $html .= "<th>Division</th>";
+                $html .= "<th>Home</th>";
+                $html .= "<th>Away</th>";
+                $html .= "<th>Referee Team</th>";
+                $html .= "</tr>\n";
                 foreach($games as $game){
                     $date = date('D, d M',strtotime($game->date));
 					$time = date('H:i', strtotime($game->time));
                     if ( !empty($game->assignor) ) {
-                        $html .= "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
                     } 
                     else {
-                        $html .= "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
+                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";
                     } 
-                    $html .=  "            <td>$game->game_number</td>";
-                    $html .=  "            <td>$date</td>";
-                    $html .=  "            <td>$time</td>";
-                    $html .=  "            <td>$game->field</td>";
-                    $html .=  "            <td>$game->division</td>";
-                    $html .=  "            <td>$game->home</td>";
-                    $html .=  "            <td>$game->away</td>";
-                    $html .= "            <td>$game->assignor</td>";
-                    $html .= "            </tr>\n";
+                    $html .=  "<td>$game->game_number</td>";
+                    $html .=  "<td>$date</td>";
+                    $html .=  "<td>$time</td>";
+                    $html .=  "<td>$game->field</td>";
+                    $html .=  "<td>$game->division</td>";
+                    $html .=  "<td>$game->home</td>";
+                    $html .=  "<td>$game->away</td>";
+                    $html .= "<td>$game->assignor</td>";
+                    $html .= "</tr>\n";
                 }
                 
-                $html .= "      </table>\n";
+                $html .= "</table>\n";
                 $this->topmenu = $this->menu();
             }
             else {
