@@ -73,9 +73,6 @@ class SchedFullDBController extends AbstractController
 			$games = $this->sr->getGames($projectKey);
 			$has4th = $this->sr->numberOfReferees($projectKey) > 3;
 			
-			$html .=  "<a href=\"$this->fullXlsPath\" class=\"btn btn-primary btn-xs right\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>\n";
-			$html .=  "<div class='clear-fix'></div>";
-
 			$html .=  "      <table class=\"sched_table\" width=\"100%\">\n";
 			$html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
 			$html .=  "            <th>Game No.</th>";
@@ -146,7 +143,7 @@ class SchedFullDBController extends AbstractController
     }
     private function menu()
     {
-        $html =  "<h3 align=\"center\"><a href=\"$this->greetPath\">Home</a>&nbsp;-&nbsp;\n";
+        $html =  "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\"><a href=\"$this->greetPath\">Home</a>&nbsp;-&nbsp;\n";
 		if ($this->justOpen) {
 			$html .=  "<a href=\"$this->fullPath\">View full schedule</a>&nbsp;-&nbsp;\n";
 		}
@@ -162,8 +159,13 @@ class SchedFullDBController extends AbstractController
 		   $html .= "<a href=\"$this->refsPath\">Edit $this->rep referees</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .=  "<a href=\"$this->endPath\">Log off</a></h3>\n";
-        
+        $html .=  "<a href=\"$this->endPath\">Log off</a>";
+
+        $html .=  "<a href=\"$this->fullXlsPath\" class=\"btn btn-primary btn-xs right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>\n";
+        $html .=  "<div class='clear-fix'></div>";
+
+        $html .= "</h3>\n";
+
         return $html;
     }
 }

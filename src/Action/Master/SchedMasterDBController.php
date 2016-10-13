@@ -93,21 +93,19 @@ class SchedMasterDBController extends AbstractController
 				$this->location = $event->location;
 				$projectKey = $event->projectKey;
 
-				$html .=  "  <form name=\"master_sched\" method=\"post\" action=\"$this->masterPath\">\n";
-				$html .=  "      <input  class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-				$html .=  "      <div class='clear-fix'></div>";
-				
-				$html .=  "      <table class=\"sched_table\" width=\"100%\">\n";
-				$html .=  "        <tr align=\"center\" bgcolor=\"$this->colorTitle\">";
-				$html .=  "            <th>Game No.</th>";
-				$html .=  "            <th>Date</th>";
-				$html .=  "            <th>Time</th>";
-				$html .=  "            <th>Field</th>";
-				$html .=  "            <th>Division</th>";
-				$html .=  "            <th>Home</th>";
-				$html .=  "            <th>Away</th>";
-				$html .=  "            <th>Referee Team</th>";
-				$html .=  "         </tr>\n";
+				$html .=  "<form name=\"master_sched\" method=\"post\" action=\"$this->masterPath\">\n";
+
+				$html .=  "<table class=\"sched_table\" width=\"100%\">\n";
+				$html .=  "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+				$html .=  "<th>Game No.</th>";
+				$html .=  "<th>Date</th>";
+				$html .=  "<th>Time</th>";
+				$html .=  "<th>Field</th>";
+				$html .=  "<th>Division</th>";
+				$html .=  "<th>Home</th>";
+				$html .=  "<th>Away</th>";
+				$html .=  "<th>Referee Team</th>";
+				$html .=  "</tr>\n";
 				
 				$games = $this->sr->getGames($projectKey);
 				foreach($games as $game){
@@ -115,37 +113,36 @@ class SchedMasterDBController extends AbstractController
 						$date = date('D, d M',strtotime($game->date));
 						$time = date('H:i', strtotime($game->time));
 						if ( empty($game->assignor) ) {
-							$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorOpen\">";
+							$html .=  "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";
 						}
 						else {
-							$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+							$html .=  "<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
 						}
-						$html .=  "            <td>$game->game_number</td>";
-						$html .=  "            <td>$date</td>";
-						$html .=  "            <td>$time</td>";
-						$html .=  "            <td>$game->field</td>";
-						$html .=  "            <td>$game->division</td>";
-						$html .=  "            <td>$game->home</td>";
-						$html .=  "            <td>$game->away</td>";
+						$html .=  "<td>$game->game_number</td>";
+						$html .=  "<td>$date</td>";
+						$html .=  "<td>$time</td>";
+						$html .=  "<td>$game->field</td>";
+						$html .=  "<td>$game->division</td>";
+						$html .=  "<td>$game->home</td>";
+						$html .=  "<td>$game->away</td>";
 						
-						$html .=  "            <td><select name=\"$game->id\">\n";
+						$html .=  "<td><select name=\"$game->id\">\n";
 						foreach ($select_list as $user){
 							if ($user == $game->assignor) {
-								$html .=  "               <option selected>$user</option>\n";
+								$html .=  "<option selected>$user</option>\n";
 							}
 							else {
-								$html .=  "               <option>$user</option>\n";
+								$html .=  "<option>$user</option>\n";
 							}
 						}
 							
-						$html .=  "            </select></td>";
-						$html .=  "            </tr>\n";
+						$html .=  "</select></td>";
+						$html .=  "</tr>\n";
 					}
 				}
-				$html .=  "      </table>\n";
-				$html .=  "      <input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-				$html .=  "      <div class='clear-fix'></div>";
-				$html .=  "      </form>\n";
+				$html .=  "</table>\n";
+
+				$html .=  "</form>\n";
 				$this->topmenu = $this->menu();
 
 			}
@@ -163,16 +160,19 @@ class SchedMasterDBController extends AbstractController
     }
     private function menu()
     {
-        $html =  "<h3 align=\"center\"><a href=\"$this->greetPath\">Home</a>&nbsp;-&nbsp;\n";
-        $html .=  "<a href=\"$this->fullPath\">View the full schedule</a>&nbsp;-&nbsp;\n";
+        $html =  "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\"><a href=\"$this->greetPath\">Home</a>&nbsp;-&nbsp;\n";
+        $html .=  "<a href=\"$this->fullPath\">View the full schedule</a> - \n";
 		if ($this->justOpen) {
-			$html .=  "<a href=\"$this->masterPath\">Select all referee teams</a>&nbsp;-&nbsp;\n";
+			$html .=  "<a href=\"$this->masterPath\">View all referee teams</a> - \n";
 		}
 		else {
-			$html .=  "<a href=\"$this->masterPath?open\">Select open referee teams</a>&nbsp;-&nbsp;\n";
+			$html .=  "<a href=\"$this->masterPath?open\">View open referee teams</a> - \n";
 		}
-		$html .= "<a href=\"$this->refsPath\">Edit referees</a>&nbsp;-&nbsp;\n";
-        $html .=  "<a href=\"$this->endPath\">Log off</a></h3>\n";
+		$html .= "<a href=\"$this->refsPath\">Edit referee assignments</a> - \n";
+        $html .=  "<a href=\"$this->endPath\">Log off</a>";
+        $html .=  "<input  class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+        $html .=  "<div class='clear-fix'></div>";
+        $html .= "</h3>\n";
       
         return $html;
 
