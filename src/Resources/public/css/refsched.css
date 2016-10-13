@@ -6,7 +6,6 @@ body,td,th {
 }
 body {
 	background-color: #FFFFFF;
-	padding: 20px;
 }
 a:link {
 	color: #0066CC;
@@ -98,8 +97,8 @@ th {
 .left-margin {
 	margin-left: 20px;
 }
-form {
-	margin: 0 60px;
+.form-control {
+	width: 80%;
 }
 select.form-control,
 input.form-control {
