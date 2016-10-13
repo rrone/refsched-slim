@@ -288,10 +288,10 @@ class SchedSchedDBController extends AbstractController
                     $tempassign = $assigned_list[$k];
                     if ( $tempassign ) {
                         if (isset($limit_list[$k])) {
-                            $html .= "For $k you are assigned to <span color=\"$this->colorAlert\">$tempassign</span> with a limit of <span color=\"$this->colorAlert\">$v</span> games<br>\n";
+                            $html .= "For $k, you are assigned to <span color=\"$this->colorAlert\">$tempassign</span> games with a limit of <span color=\"$this->colorAlert\">$v</span> games<br>\n";
                         }
                         else {
-                            $html .= "For $k you are assigned to <span color=\"$this->colorAlert\">$tempassign</span> with no limit<br>\n";
+                            $html .= "For $k, you are assigned to <span color=\"$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
                         }
                         if ( ($assigned_list[$k] < $limit_list[$k]) || (!isset($limit_list[$k]))) {
                             $allatlimit = false;
@@ -299,10 +299,8 @@ class SchedSchedDBController extends AbstractController
                     }
                 }
 
-				if ( $allatlimit ) { 
-				   $html .= "<br><span color=\"$this->colorAlert\">All of your divisions are at or above their limits<br>Because the system is locked, games can not be unassigned to select new ones<br>No changes are possible: Available games are not shown and the Submit button has been disabled</span>\n";
-				   $showavailable = false;
-				} 
+                $showavailable =  !$allatlimit;
+
 				$html .= "</h3>\n";
 			}
 			elseif ( !$locked && count( $limit_list ) ) {
