@@ -199,10 +199,10 @@ class SchedGreetDBController extends AbstractController
             $html .= "<h3 class=\"center\"><a href=\"$this->fullPath\">View the full game schedule</a></h3>";
 
             if ($this->rep == 'Section 1') {
-                $html .= "<h3 class=\"center\"><a href=\"$this->masterPath\">Select Referee Teams</a></h3>";
+                $html .= "<h3 class=\"center\"><a href=\"$this->masterPath\">Select Assignors for games</a></h3>";
             } else {
-                $html .= "<h3 class=\"center\"><a href=\"$this->schedPath\">Schedule $this->rep Referee Teams</a></h3>";
-                $html .= "<h3 class=\"center\">Schedule a division: ";
+                $html .= "<h3 class=\"center\"><a href=\"$this->schedPath\">Schedule $this->rep games</a></h3>";
+                $html .= "<h3 class=\"center\">Schedule $this->rep games by division: ";
                 foreach ($groups as $group) {
                     $html .= "<a href=\"$this->schedPath?group=$group\">$group</a>" . $delim;
                 }

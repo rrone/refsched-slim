@@ -218,7 +218,7 @@ class SchedulerRepository
 	public function updateAssignor($data)
 	{
 		if (empty($data)){
-			exit;
+			return null;
 		}
 
 		foreach($data as $id=>$rep){
@@ -233,7 +233,7 @@ class SchedulerRepository
 	public function updateAssignments($data)
 	{
 		if (empty($data)){
-			exit;
+            return null;
 		}
 
 		foreach($data as $id=>$value){
