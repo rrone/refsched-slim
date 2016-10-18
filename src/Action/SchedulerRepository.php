@@ -236,6 +236,7 @@ class SchedulerRepository
             return null;
 		}
 
+        $data['r4th'] = isset($data['r4th']) ? $data['r4th'] : null;
 		foreach($data as $id=>$value){
 			if ($value == 'Update Assignments'){
 				$this->db->table('games')

@@ -28,9 +28,9 @@ class SchedLockDBController extends AbstractController
         $this->logger->info("Schedule lock action dispatched");
 
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        if (is_null($this->event) || is_null($this->rep)) {
+        if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
 
@@ -40,7 +40,7 @@ class SchedLockDBController extends AbstractController
 
 //        $content = array(
 //            'view' => array (
-//                'rep' => $this->rep,
+//                'user' => $this->user,
 //                'ulock' => $this->renderLock(),
 //                'topmenu' => $this->menu(),
 //                'menu' => $this->menu(),
@@ -65,16 +65,16 @@ class SchedLockDBController extends AbstractController
             if ( $locked ) {
                $html .= "<h3 align=\"center\">The schedule is already locked!</h3>\n";
             }
-			elseif ( $this->rep == 'Section 1') {
+			elseif ( $this->user == 'Section 1') {
                $this->sr->lockProject($projectKey);
                $html .= "<h3 align=\"center\">The schedule has been locked!</h3>\n";
             }
         }
-        elseif ( $this->rep == 'Section 1') {
+        elseif ( $this->user == 'Section 1') {
            $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
            $html .= "You should go to the <a href=\"$this->masterPath\">Schedule Page</a></h2>";
         }
-        elseif ( $this->rep != 'Section 1' ) {
+        elseif ( $this->user != 'Section 1' ) {
            $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
            $html .= "You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2>";
         }

@@ -31,6 +31,7 @@ class LogonDBController extends AbstractController
         $this->handleRequest($request);
 
 		$this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+
 		if ($this->authed) {
 			return $response->withRedirect($this->greetPath);
 			}
@@ -50,25 +51,24 @@ class LogonDBController extends AbstractController
 	{
         if ( $request->isPost() ) {
 
-            $userName = isset($_POST['area']) ? $_POST['area'] : null;
+            $userName = isset($_POST['user']) ? $_POST['user'] : null;
             $user = $this->sr->getUserByName($userName);
             $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
 
             $hash = isset($user) ? $user->hash : null;
 
             $this->authed = password_verify($pass, $hash);
-
             if ($this->authed) {
                 $_SESSION['authed'] = true;
                 $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
-                $_SESSION['unit'] = $_POST['area'];
+                $_SESSION['user'] = $_POST['user'];
                 $this->msg = null;
             }
             else {
                 $_SESSION['authed'] = false;
                 $_SESSION['event'] = null;
-                $_SESSION['unit'] = null;
-                $this->msg = 'Unrecognized password for ' . $_POST['area'];
+                $_SESSION['user'] = null;
+                $this->msg = 'Unrecognized password for ' . $_POST['user'];
             }
         }
 	}
@@ -102,7 +102,7 @@ EOD;
 		
 				<tr>
 					<td width="50%"><div align="right">ARA or representative from: </div></td>
-					<td width="50%"><select class="form-control left-margin" name="area">
+					<td width="50%"><select class="form-control left-margin" name="user">
 EOD;
             foreach ($users as $user) {
                 $html .= "<option>$user->name</option>";

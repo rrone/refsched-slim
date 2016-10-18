@@ -26,9 +26,9 @@ class SchedUnlockDBController extends AbstractController
         $this->logger->info("Schedule lock action dispatched");
 
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        if (is_null($this->event) || is_null($this->rep)) {
+        if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
 
@@ -39,7 +39,7 @@ class SchedUnlockDBController extends AbstractController
 //
 //        $content = array(
 //            'view' => array (
-//                'rep' => $this->rep,
+//                'user' => $this->user,
 //                'ulock' => $this->renderUnlock(),
 //                'topmenu' => $this->menu(),
 //                'menu' => $this->menu(),
@@ -64,7 +64,7 @@ class SchedUnlockDBController extends AbstractController
             if ( !$locked ) {
                $html .= "<h3 align=\"center\">The schedule is already unlocked!</h3>\n";
             }
-			elseif ( $this->rep == 'Section 1') {
+			elseif ( $this->user == 'Section 1') {
                $this->sr->unlockProject($projectKey);
                $html .= "<h3 align=\"center\">The schedule has been unlocked!</h3>\n";
             }

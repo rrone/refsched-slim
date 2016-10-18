@@ -27,7 +27,7 @@ abstract class AbstractController
 
 	//session variables	
 	protected $event;
-    protected $rep;
+    protected $user;
     protected $authed;
     
     //default layout colors

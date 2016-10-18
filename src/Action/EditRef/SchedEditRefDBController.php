@@ -30,10 +30,10 @@ class SchedEditRefDBController extends AbstractController
         $this->logger->info("Schedule edit refs page action dispatched");
 
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : false;
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
         $this->target_id = isset($_SESSION['target_id']) ? $_SESSION['target_id'] : null;
 
-        if (is_null($this->event) || is_null($this->rep)) {
+        if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
 
@@ -46,14 +46,14 @@ class SchedEditRefDBController extends AbstractController
 
         $content = array(
             'view' => array(
-                'rep' => $this->rep,
+                'rep' => $this->user,
                 'content' => $this->renderEditRef(),
                 'topmenu' => $this->menu(),
                 'menu' => $this->menu(),
                 'title' => $this->page_title,
                 'dates' => $this->dates,
                 'location' => $this->location,
-                'description' => "Assign " . $this->rep . " Referees",
+                'description' => "Assign " . $this->user . " Referees",
             )
         );
 
@@ -114,7 +114,7 @@ class SchedEditRefDBController extends AbstractController
                     foreach ($games as $game) {
                         $date = date('D, d M', strtotime($game->date));
                         $time = date('H:i', strtotime($game->time));
-                        if ($game->game_number == $target_game && ($game->assignor == $this->rep || $this->rep == 'Section 1')) {
+                        if ($game->game_number == $target_game && ($game->assignor == $this->user || $this->user == 'Section 1')) {
                             $html .= "<form name=\"editref\" method=\"post\" action=\"$this->editrefPath\">\n";
                             $html .= "<table class=\"sched_table\" width=\"100%\">\n";
                             $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
@@ -171,10 +171,10 @@ class SchedEditRefDBController extends AbstractController
             		<h3 align="center"><a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
 EOD;
 
-        if ($this->rep == 'Section 1') {
+        if ($this->user == 'Section 1') {
             $html .= "<a href=\"$this->masterPath\">Go to Section 1 schedule</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a href=\"$this->refsPath\">Go to $this->rep schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->refsPath\">Go to $this->user schedule</a>&nbsp;-&nbsp;\n";
         }
 
         $html .=

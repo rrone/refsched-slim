@@ -28,9 +28,9 @@ class SchedControlDBController extends AbstractController
 		$this->logger->info("Schedule control page action dispatched");
 
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        if (is_null($this->event) || is_null($this->rep)) {
+        if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
 
@@ -40,14 +40,14 @@ class SchedControlDBController extends AbstractController
         
         $content = array(
             'view' => array (
-                'rep' => $this->rep,
+                'rep' => $this->user,
                 'content' => $this->renderControl(),
                 'topmenu' => $this->topmenu,
                 'menu' => $this->menu(),
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
-				'description' => $this->rep . ': Referee Team Schedule',
+				'description' => $this->user . ': Referee Team Schedule',
             )
         );        
      

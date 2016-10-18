@@ -27,9 +27,9 @@ class SchedGreetDBController extends AbstractController
         $this->logger->info("Schedule greet page action dispatched");
 
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        if (is_null($this->event) || is_null($this->rep)) {
+        if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
 
@@ -37,7 +37,7 @@ class SchedGreetDBController extends AbstractController
 
         $content = array(
             'view' => array(
-                'rep' => $this->rep,
+                'rep' => $this->user,
                 'content' => $this->renderGreet(),
                 'title' => $this->page_title,
                 'dates' => $this->dates,
@@ -68,15 +68,19 @@ class SchedGreetDBController extends AbstractController
             $assigned_list = null;
             $limit_list = null;
 
-            $limits = $this->sr->getLimits($projectKey);
             $groups = $this->sr->getGroups($projectKey);
+            foreach ($groups as $group) {
+                $used_list[$group] = 0;
+                $assigned_list[$group] = 0;
+            }
+
+            $limits = $this->sr->getLimits($projectKey);
             foreach ($limits as $group) {
                 if ( ($group->division != 'none') && !empty($group->division) ){
                     $limit_list[$group->division] = $group->limit;
-                    $used_list[$group->division] = 0;
-                    $assigned_list[$group->division] = 0;
                 }
             }
+
             $this->page_title = $event->name;
             $this->dates = $event->dates;
             $this->location = $event->location;
@@ -90,9 +94,9 @@ class SchedGreetDBController extends AbstractController
             $oneatlimit = 0;
 
             foreach ($games as $game) {
-                if ($this->rep == "Section 1" && !empty($game->assignor)) {
+                if ($this->user == "Section 1" && !empty($game->assignor)) {
                     $num_assigned++;
-                } elseif ($this->rep == $game->assignor) {
+                } elseif ($this->user == $game->assignor) {
                     $num_area++;
                     $assigned_list[$this->divisionAge($game->division)]++;
                 }
@@ -101,10 +105,10 @@ class SchedGreetDBController extends AbstractController
             $num_unassigned = count($games) - $num_assigned;
 
             $html = null;
-            $html .= "<h3 class=\"center\">Welcome $this->rep Assignor</h3>\n";
+            $html .= "<h3 class=\"center\">Welcome $this->user Assignor</h3>\n";
             $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">CURRENT STATUS</h3>\n<h3 align=\"center\">";
 
-            if ($this->rep == 'Section 1') {
+            if ($this->user == 'Section 1') {
                 if ($locked) {
                     $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;-&nbsp;(<a href=\"$this->unlockPath\">Unlock</a> the schedule now)<br>\n";
                 } else {
@@ -151,11 +155,11 @@ class SchedGreetDBController extends AbstractController
 
             } else {
                 if ($num_area == 0) {
-                    $html .= "$this->rep is not currently assigned to any games.<br>";
+                    $html .= "$this->user is not currently assigned to any games.<br>";
                 } elseif ($num_area == 1) {
-                    $html .= "$this->rep is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> game.<br>";
+                    $html .= "$this->user is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> game.<br>";
                 } else {
-                    $html .= "$this->rep is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> games.<br>";
+                    $html .= "$this->user is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> games.<br>";
                 }
 
                 if (count($limit_list) == 0){
@@ -187,9 +191,9 @@ class SchedGreetDBController extends AbstractController
                 if ($locked && !array_key_exists('none', $limit_list)) {
                     $html .= "<h3 class=\"center\" style=\"style=\"color:$this->colorAlert\">The schedule is presently locked<br>\n";
                     if (!$oneatlimit) {
-                        $html .= "You may sign $this->rep teams up for games but you may not remove them</h3>\n";
+                        $html .= "You may sign $this->user teams up for games but you may not remove them</h3>\n";
                     } else {
-                        $html .= "Since $this->rep is at or above your limit, you will not be able to sign teams up for games</h3>\n";
+                        $html .= "Since $this->user is at or above your limit, you will not be able to sign teams up for games</h3>\n";
                     }
                 }
             }
@@ -198,17 +202,17 @@ class SchedGreetDBController extends AbstractController
             $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">ACTIONS</h3>\n";
             $html .= "<h3 class=\"center\"><a href=\"$this->fullPath\">View the full game schedule</a></h3>";
 
-            if ($this->rep == 'Section 1') {
+            if ($this->user == 'Section 1') {
                 $html .= "<h3 class=\"center\"><a href=\"$this->masterPath\">Select Assignors for games</a></h3>";
             } else {
-                $html .= "<h3 class=\"center\">Goto $this->rep Schedule: <a href=\"$this->schedPath\">All games</a> - ";
+                $html .= "<h3 class=\"center\">Goto $this->user Schedule: <a href=\"$this->schedPath\">All games</a> - ";
                 foreach ($groups as $group) {
                     $html .= "<a href=\"$this->schedPath?group=$group\">$group</a>" . $delim;
                 }
                 $html = substr($html, 0, strlen($html) - 3) . "</h3>";
             }
 
-            $html .= "<h3 class=\"center\"><a href=\"$this->refsPath\">Edit $this->rep Referee Assignments</a></h3>";
+            $html .= "<h3 class=\"center\"><a href=\"$this->refsPath\">Edit $this->user Referee Assignments</a></h3>";
             //         $html .= "<h3 class=\"center\"><a href=\"/summary.htm\">Summary of the playoffs</a></h3>";
             $html .= "<h3 class=\"center\"><a href=\"$this->endPath\">LOG OFF</a></h3>";
             $html .= "</center>";

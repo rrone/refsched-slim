@@ -31,9 +31,9 @@ class SchedMasterDBController extends AbstractController
         $this->logger->info("Schedule master page action dispatched");
 
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        if (is_null($this->event) || is_null($this->rep)) {
+        if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
 
@@ -46,14 +46,14 @@ class SchedMasterDBController extends AbstractController
 
         $content = array(
             'view' => array (
-                'rep' => $this->rep,
+                'rep' => $this->user,
                 'content' => $this->renderMaster(),
                 'topmenu' => $this->topmenu,
                 'menu' => $this->menu(),
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
-				'description' => $this->rep . ': Schedule Referee Teams'
+				'description' => $this->user . ': Schedule Referee Teams'
             )
         );        
         
@@ -64,7 +64,7 @@ class SchedMasterDBController extends AbstractController
     }
     private function handleRequest($request)
     {
-		if( $this->rep == 'Section 1') {
+		if( $this->user == 'Section 1') {
 			//only Section 1 may update
 
 			$data = $request->getParsedBody();
@@ -79,7 +79,7 @@ class SchedMasterDBController extends AbstractController
 		
 		if (!empty($event)){
 		
-			if ( $this->authed && $this->rep == 'Section 1' ) {
+			if ( $this->authed && $this->user == 'Section 1' ) {
 				$select_list = array( '' );
 				$users = $this->sr->getUsers();
 					

@@ -28,9 +28,9 @@ class SchedAssignDBController extends AbstractController
         $this->logger->info("Schedule greet page action dispatched");
 
 		$this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        if (is_null($this->event) || is_null($this->rep)) {
+        if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
 
@@ -40,7 +40,7 @@ class SchedAssignDBController extends AbstractController
 		        
         $content = array(
             'view' => array (
-                'rep' => $this->rep,
+                'rep' => $this->user,
                 'content' => $this->renderAssign(),
                 'topmenu' => $this->topmenu,
                 'title' => $this->page_title,
@@ -66,7 +66,7 @@ class SchedAssignDBController extends AbstractController
 		if (!empty($this->event)) {
 			$projectKey = $this->event->projectKey;
 
-			$games = $this->sr->getGamesByRep($projectKey, $this->rep);
+			$games = $this->sr->getGamesByRep($projectKey, $this->user);
 			if (count($games)){
 				$html .= "<h2  class=\"center\">You are currently scheduled for the following games</h2>\n";
 				$html .= "<table class=\"sched_table\" width=\"100%\">\n";
@@ -117,8 +117,8 @@ class SchedAssignDBController extends AbstractController
 <<<EOD
       <h3 align="center"><a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
       <a href="$this->fullPath">View the full schedule</a>&nbsp;-&nbsp;
-      <a href="$this->schedPath">Go to $this->rep schedule</a>&nbsp;-&nbsp;
-      <a href="$this->refsPath">Edit $this->rep referees</a>&nbsp;-&nbsp;
+      <a href="$this->schedPath">Go to $this->user schedule</a>&nbsp;-&nbsp;
+      <a href="$this->refsPath">Edit $this->user referees</a>&nbsp;-&nbsp;
       <a href="$this->endPath">Log off</a></h3>
 EOD;
         return $html;   

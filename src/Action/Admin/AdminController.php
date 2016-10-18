@@ -21,9 +21,9 @@ class AdminController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        if (!$this->authed || $this->rep != 'Section 1') {
+        if (!$this->authed || $this->user != 'Section 1') {
             return $response->withRedirect($this->greetPath);
          }
 
@@ -47,7 +47,7 @@ class AdminController extends AbstractController
 
         $content = array(
             'view' => array (
-                'rep' => $this->rep,
+                'rep' => $this->user,
                 'users' => $this->renderUsers(),
                 'action' => $this->adminPath,
 				'message' => $this->msg,

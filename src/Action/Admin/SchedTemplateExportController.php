@@ -37,9 +37,9 @@ class SchedTemplateExportController extends AbstractController
         $this->logger->info("Schedule template export dispatched");
 
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        if (is_null($this->event) || is_null($this->rep)) {
+        if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
 
@@ -60,7 +60,7 @@ class SchedTemplateExportController extends AbstractController
                 $msg = $this->event->name . ' at ' . $this->event->location . ' on ' . $this->event->dates;
                 $content = array(
                     'view' => array(
-                        'rep' => $this->rep,
+                        'rep' => $this->user,
                         'action' => $this->userUpdatePath,
                         'message' => "There are no games in the database for the event: \"$msg\"",
                     )

@@ -30,9 +30,9 @@ class SchedFullDBController extends AbstractController
         $this->logger->info("Schedule full page action dispatched");
 
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-        $this->rep = isset($_SESSION['unit']) ? $_SESSION['unit'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        if (is_null($this->event) || is_null($this->rep)) {
+        if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
 
@@ -42,7 +42,7 @@ class SchedFullDBController extends AbstractController
         
         $content = array(
             'view' => array (
-                'rep' => $this->rep,
+                'rep' => $this->user,
                 'content' => $this->renderFull(),
                 'topmenu' => $this->menu(),
                 'menu' => $this->menu,
@@ -95,11 +95,11 @@ class SchedFullDBController extends AbstractController
 					$date = date('D, d M',strtotime($game->date));
 					$time = date('H:i', strtotime($game->time));
 	
-					if ( $game->assignor == $this->rep ) {
+					if ( $game->assignor == $this->user ) {
 						$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";
 					}
 					elseif ( !empty($game->assignor) ) {
-						if ($this->rep == 'Section 1') {
+						if ($this->user == 'Section 1') {
 							if (empty($game->cr)) {
 								$html .=  "            <tr align=\"center\" bgcolor=\"$this->colorGroup\">";							
 							}
@@ -150,13 +150,13 @@ class SchedFullDBController extends AbstractController
 		else {
 			$html .=  "<a href=\"$this->fullPath?open\">View schedule with no referees</a>&nbsp;-&nbsp;\n";
 		}
-        if ( $this->rep == 'Section 1' ) {
+        if ( $this->user == 'Section 1' ) {
            $html .=  "<a href=\"$this->masterPath\">Schedule referee teams</a>&nbsp;-&nbsp;\n";
 		   $html .= "<a href=\"$this->refsPath\">Edit referees</a>&nbsp;-&nbsp;\n";
         }
         else {
-           $html .=  "<a href=\"$this->schedPath\">Go to $this->rep schedule</a>&nbsp;-&nbsp;\n";
-		   $html .= "<a href=\"$this->refsPath\">Edit $this->rep referees</a>&nbsp;-&nbsp;\n";
+           $html .=  "<a href=\"$this->schedPath\">Go to $this->user schedule</a>&nbsp;-&nbsp;\n";
+		   $html .= "<a href=\"$this->refsPath\">Edit $this->user referees</a>&nbsp;-&nbsp;\n";
         }
 
         $html .=  "<a href=\"$this->endPath\">Log off</a>";
