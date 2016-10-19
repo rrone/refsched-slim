@@ -6,6 +6,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\AbstractController;
 use App\Action\SchedulerRepository;
+use Firebase\JWT\JWT;
+use Tuupola\Base62;
+use Dflydev\FigCookies\SetCookie;
+use Dflydev\FigCookies\FigResponseCookies;
 
 class LogonDBController extends AbstractController
 {
@@ -27,14 +31,16 @@ class LogonDBController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->logger->info("Logon page action dispatched");
-       
-        $this->handleRequest($request);
 
-		$this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+        $jwt = $this->handleRequest($request);
 
-		if ($this->authed) {
+		if (!empty($this->authed)) {
+            $response = FigResponseCookies::set($response, SetCookie::create('token')
+                ->withValue($jwt)
+            );
+
 			return $response->withRedirect($this->greetPath);
-			}
+		}
 		else {
 			$content = array(
 				'events' => $this->sr->getCurrentEvents(),
@@ -42,36 +48,70 @@ class LogonDBController extends AbstractController
 				'message' => $this->msg,
 			);
 		  
-			$this->view->render($response, 'logon.html.twig', $content);      
-	
+			$this->view->render($response, 'logon.html.twig', $content);
+
 			return $response;
 		}
     }
 	private function handleRequest($request)
 	{
+        $jwt = null;
+        $this->authed = null;
+
         if ( $request->isPost() ) {
 
             $userName = isset($_POST['user']) ? $_POST['user'] : null;
             $user = $this->sr->getUserByName($userName);
             $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
+            $event = isset($_POST['event']) ? $_POST['event'] : null;
 
             $hash = isset($user) ? $user->hash : null;
 
             $this->authed = password_verify($pass, $hash);
+
             if ($this->authed) {
-                $_SESSION['authed'] = true;
+                $tokenId    = Base62::encode(random_bytes(16));
+
+                $issuedAt   = time();
+                $notBefore  = $issuedAt - 10;             //Adding 10 seconds
+                $expire     = $notBefore + 3600;            // Adding 1 hour
+                $serverName = $_SERVER['SERVER_NAME'];      // Retrieve the server name from config file
+
+                /*
+                 * Create the token as an array
+                 */
+                $data = [
+                    'iat'  => $issuedAt,         // Issued at: time when the token was generated
+                    'jti'  => $tokenId,          // Json Token Id: an unique identifier for the token
+                    'iss'  => $serverName,       // Issuer
+                    'nbf'  => $notBefore,        // Not before
+                    'exp'  => $expire,           // Expire
+                    'data' => [                  // Data related to the signer user
+                        'userId'   => $user->id, // userid from the users table
+                        'user' => $user->name, // User name
+                        'event' => $event,
+                    ],
+                    'status' => "ok"
+                ];
+
+                $secret = getenv("JWT_SECRET");
+                $jwt = JWT::encode($data, $secret);
+
                 $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
                 $_SESSION['user'] = $_POST['user'];
                 $this->msg = null;
             }
             else {
-                $_SESSION['authed'] = false;
                 $_SESSION['event'] = null;
                 $_SESSION['user'] = null;
+                $jwt = null;
                 $this->msg = 'Unrecognized password for ' . $_POST['user'];
             }
+
         }
-	}
+
+        return $jwt;
+    }
 
     /**
      * @return string

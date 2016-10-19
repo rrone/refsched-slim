@@ -20,7 +20,8 @@ class SchedGreetDBController extends AbstractController
 
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+        $this->authed = $this->isAuthorized($request);
+
         if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
         }
