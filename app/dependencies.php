@@ -209,3 +209,4 @@ $container[App\Action\Admin\SchedImportController::class] = function ($c) {
     return new \App\Action\Admin\SchedImportController($c, $repo, $importer, $uploadPath);
 };
 
+unset($_SERVER['JWT_SECRET']);

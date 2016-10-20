@@ -34,7 +34,6 @@
         "ircmaxell/password-compat": "^1.0",
         "tuupola/slim-jwt-auth": "^2.3",
         "vlucas/phpdotenv": "^2.4",
-        "firebase/php-jwt": "^4.0",
-        "dflydev/fig-cookies": "^1.0"
+        "firebase/php-jwt": "^4.0"
     }
 }

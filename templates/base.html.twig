@@ -34,8 +34,9 @@
 	{#</span></p>#}
     </div>
 
-</body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.7.2/jquery.serializejson.min.js"></script>
 
 <script type="text/javascript">
 
@@ -49,28 +50,63 @@
 		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	 })();
 
-	 https://www.tutorialspoint.com/php/php_and_ajax.htm
 
-	 //Browser Support Code
-	 $('#frmLogon').click(function (e){
+     $(document).ready(function(){
+         $("#frmLogon").click(function(e)
+         {
+             var formData = JSON.stringify({
+                 "user" : document.getElementById('user').value,
+                 "passwd" : document.getElementById('passwd').value,
+                 "event" : document.getElementById('event').value
+             });
 
-         e.preventDefault();
+             console.log(formData);
 
-         var request = $.ajax({
-             url: 'http://refsched.slim.vhx.host/logon',
-             type: 'PUT',
-             data: {
-                 format: 'json'
-             },
-             dataType: 'jsonp',
-             error: function(msg) {
-                 alert('error');
-             },
-             success: function(data) {
-                 sessionStorage.accessToken = data;
-                 alert('token received');
-         }});
-	 });
+             $.ajax(
+             {
+                 url : "/logon/auth/",
+                 type: "PUT",
+                 data : {ValArray:formData},
+                 success:function(maindta)
+                 {
+                     sessionStorage.accessToken = maindta;
+                     console.log(maindta);
+                 },
+                 error: function(jqXHR, textStatus, errorThrown)
+                 {
+                 }
+             });
+
+             e.preventDefault(); //STOP default action
+
+         });
+     });
+
+//	 https://www.tutorialspoint.com/php/php_and_ajax.htm
+//
+//	 //Browser Support Code
+//	 $('#frmLogon').click(function (e){
+//
+//         e.preventDefault();
+//alert('form#login_form #user').val();
+//         $.ajax({
+//             url: '/logon/auth/',
+//             type: 'GET',
+//             dataType: 'jsonp',
+//             data: {
+////                     'action': 'ajaxlogin', //calls wp_ajax_nopriv_ajaxlogin
+//                     "user": form#login_form#user'.val(),
+//                     "passwd": 'form#login_form #passwd'.val(),
+//                     "event": 'form#login_form #event'.val()
+//             },
+//             error: function() {
+//                 alert('error');
+//             },
+//             success: function(data) {
+//                 sessionStorage.accessToken = data;
+//                 alert('token received');
+//         }});
+//	 });
 
 ////	 https://www.sitepoint.com/php-authorization-jwt-json-web-tokens/
 //
@@ -119,4 +155,5 @@
 	 {% block script %}{% endblock %}
 
 </script>
+</body>
 </html>

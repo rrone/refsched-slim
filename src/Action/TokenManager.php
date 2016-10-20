@@ -5,10 +5,6 @@ use Slim\App;
 use Slim\Container;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Dflydev\FigCookies\Cookie;
-use Dflydev\FigCookies\SetCookie;
-use Dflydev\FigCookies\FigRequestCookies;
-use Dflydev\FigCookies\FigResponseCookies;
 use Firebase\JWT\JWT;
 use Tuupola\Base62;
 
@@ -27,25 +23,6 @@ class TokenManager
         else {
             $this->tokenName = $tokenName;
         }
-    }
-    public function setRequest(Request $request, $data)
-    {
-        $jwt = $this->jwt($data);
-
-        $request = FigRequestCookies::set($request, Cookie::create($this->tokenName, $jwt));
-
-        return $request;
-    }
-    public function setResponse(Response $response, $data)
-    {
-        $jwt = $this->jwt($data);
-
-        $response = FigResponseCookies::remove($response, $this->tokenName);
-        $response = FigResponseCookies::set($response, SetCookie::create($this->tokenName)
-            ->withValue($jwt)
-        );
-
-        return $response;
     }
     public function jwt($appData)
     {
@@ -83,12 +60,6 @@ class TokenManager
         $unencodedArray = ['jwt' => $jwt];
 
         return json_encode($unencodedArray);
-    }
-    public function clearRequest(Request $request)
-    {
-        $request = FigRequestCookies::remove($request, $this->tokenName);
-
-        return $request;
     }
     public function isValid(Request $request)
     {

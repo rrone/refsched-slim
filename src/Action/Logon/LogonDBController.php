@@ -7,8 +7,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\SchedulerRepository;
 use App\Action\AbstractController;
 
-use Dflydev\FigCookies\FigResponseCookies;
-
 class LogonDBController extends AbstractController
 {
 	private $users;
@@ -47,39 +45,41 @@ class LogonDBController extends AbstractController
             return $response->withRedirect($this->greetPath);
 		}
     }
+    public function getAuth($request)
+    {
+        return $this->handleRequest($request);
+    }
 	private function handleRequest($request)
 	{
-        $request = $this->tm->clearRequest($request);
         $this->authed = null;
-        $data = null;
-var_dump($request);die();
-        if ( $request->isPost() ) {
 
-            $event = isset($_POST['event']) ? $this->sr->getEventByLabel($_POST['event']) : null;
+        if ( $request->isPut() ) {
 
-            $userName = isset($_POST['user']) ? $_POST['user'] : null;
+            $json = $request->getParsedBody();
+            $data = json_decode($json['ValArray']);
+
+            $user = $data->user;
+            $event = $data->event;
+            $passwd = $data->passwd;
+
+            $event = !empty($event) ? $this->sr->getEventByLabel($event) : null;
+            $userName = !empty($user) ? $user : null;
             $user = $this->sr->getUserByName($userName);
-            $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
+            $pass = !empty($passwd) ? $passwd : null;
 
             $hash = isset($user) ? $user->hash : null;
 
             $this->authed = password_verify($pass, $hash);
 
             if ($this->authed) {
-                $data = array (
+                $data = array(
                     'event' => $event,
                     'user' => $user
                 );
 
-                $this->msg = null;
-
                 echo $this->tm->jwt($data);
-            }
-            else {
-                $data['event'] = null;
-                $data['user'] = null;
-
-                $this->msg = 'Unrecognized password for ' . $_POST['user'];
+            } else {
+                return ('HTTP/1.0 401 Unauthorized');
             }
         }
 
@@ -97,12 +97,12 @@ var_dump($request);die();
         if (count($enabled) > 0) {
 
             $html = <<<EOD
-                      <form name="form1" method="post" action="$this->logonPath">
+                      <form name="login_form" method="post" action="$this->logonPath">
         <div align="center">
 			<table>
 				<tr><td width="50%"><div align="right">Event: </div></td>
 					<td width="50%">
-						<select class="form-control left-margin" name="event">
+						<select class="form-control left-margin" name="event" id="event">
 EOD;
             foreach ($enabled as $option) {
                 $html .= "<option>$option->label</option>";
@@ -115,7 +115,7 @@ EOD;
 		
 				<tr>
 					<td width="50%"><div align="right">ARA or representative from: </div></td>
-					<td width="50%"><select class="form-control left-margin" name="user">
+					<td width="50%"><select class="form-control left-margin" name="user" id="user">
 EOD;
             foreach ($users as $user) {
                 $html .= "<option>$user->name</option>";
@@ -127,7 +127,7 @@ EOD;
 
 				<tr>
 					<td width="50%"><div align="right">Password: </div></td>
-					<td><input class="form-control" type="password" name="passwd"></td>
+					<td><input class="form-control" type="password" name="passwd" id="passwd"></td>
 				</tr>
 			</table>
 			<p>
