@@ -22,28 +22,50 @@ $app->add(function (Request $request, Response $response, callable $next) {
     return $next($request, $response);
 });
 
+$c = $app->getContainer();
+$logger = $c->get('logger');
+$c["jwt"] = function ($c) {
+    return new StdClass;
+};
+
 $app->add(new \Slim\Middleware\JwtAuthentication([
-    "secret" => getenv("JWT_KEY"),
+    "secret" => getenv("JWT_SECRET"),
     "secure" => false,
-    "path" => "/",
-    "passthrough" => ["/", "logon"],
-    "attribute" => false
+    "path" => ["/"],
+    "passthrough" => ["/","/logon"],
+    "attribute" => "jwt",
+    "logger" => $logger,
+    "callback" => function ($request, $response, $arguments) use ($c) {
+        $c['jwt'] = $arguments;
+    }
 ]));
 
-$app->add(function (Request $request, Response $response, callable $next) {
-
-    $requestCookie = FigRequestCookies::get($request, 'token');
-
-//print_r('middleware 1');var_dump($request);
-
-    $response = $next($request, $response);
-
-    $response = FigResponseCookies::set($response, SetCookie::create('token')
-        ->withValue($requestCookie->getValue())
-    );
-
-//    print_r('middleware 2');var_dump($response);
-
-
-    return $response;
-});
+//$app->add(function (Request $request, Response $response, callable $next) use ($app) {
+//
+//    $c = $app->getContainer();
+//    $tm = $c->get('tokenManager');
+//    $lg = $c->get('logger');
+//
+//    $cookie = $tm->getData($request);
+//    if(is_object($cookie)) {
+//        $user = $cookie->data->user;
+//        $lg->info("middleware 1 : request : user: " . $user);
+//        $event = $cookie->data->event;
+//        $lg->info("middleware 1 : request : event: " . $event->name);
+//    }
+//
+//    $response = $next($request, $response);
+//
+//    $requestCookie = FigRequestCookies::get($request, 'token');
+//    $requestCookie = $requestCookie->getValue();
+//
+//    $response = FigResponseCookies::set($response, SetCookie::create('token')
+//        ->withValue($requestCookie)
+//    );
+//
+//    $responseCookie = FigRequestCookies::get($request, 'token');
+//    $responseCookie = $responseCookie->getValue();
+//    print_r('middleware 2');var_dump($responseCookie);
+//
+//    return $response;
+//});

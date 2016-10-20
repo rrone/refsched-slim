@@ -16,6 +16,7 @@ mv -f dist/public/app_prod.php dist/public/app.php
 cp -f -r templates dist/templates
 cp -f -r config dist/config
 cp -f -r src/Action dist/src
+cp -f -r var/.htaccess dist/var/.htaccess
 
 find dist -type f -name '.DS_Store' -delete
 find dist -type f -name 'app_*' -delete

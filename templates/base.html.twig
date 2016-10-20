@@ -35,8 +35,10 @@
     </div>
 
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 <script type="text/javascript">
+
 	 var _gaq = _gaq || [];
 	 _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
 	 _gaq.push(['_trackPageview']);
@@ -46,6 +48,73 @@
 		  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	 })();
+
+	 https://www.tutorialspoint.com/php/php_and_ajax.htm
+
+	 //Browser Support Code
+	 $('#frmLogon').click(function (e){
+
+         e.preventDefault();
+
+         var request = $.ajax({
+             url: 'http://refsched.slim.vhx.host/logon',
+             type: 'PUT',
+             data: {
+                 format: 'json'
+             },
+             dataType: 'jsonp',
+             error: function(msg) {
+                 alert('error');
+             },
+             success: function(data) {
+                 sessionStorage.accessToken = data;
+                 alert('token received');
+         }});
+	 });
+
+////	 https://www.sitepoint.com/php-authorization-jwt-json-web-tokens/
+//
+//	 var store = store || {};
+//
+//	 /*
+//	  * Sets the jwt to the store object
+//	  */
+//	 store.setJWT = function(data){
+//		 alert('in store');
+//		 this.JWT = data;
+//		 console.log(data);
+//	 }
+//
+//	 /*
+//	  * Submit the login form via ajax
+//	  */
+//	 $("#frmLogon").click(function(e){
+//		 alert('in submit');
+//		 e.preventDefault();
+//		 $.post('/logon', $("#frmLogon").serialize(), function(data){
+//			 store.setJWT(data.JWT);
+//		 }).fail(function(){
+//			 alert('error');
+//		 });
+//	 });
+//
+//	 $("#frmLogin").click(function(e){
+//		 e.preventDefault();
+//		 $.ajax({
+//			 url: '/logon',
+//			 beforeSend: function(request){
+//				 request.setRequestHeader('Authorization', 'Bearer ' + store.JWT);
+//			 },
+//			 type: 'GET',
+//			 success: function(data) {
+//				 alert('success');
+//				 // Decode and show the returned data nicely.
+//			 },
+//			 error: function() {
+//				 alert('error');
+//			 }
+//		 });
+//	 });
 
 	 {% block script %}{% endblock %}
 

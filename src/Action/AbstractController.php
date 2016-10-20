@@ -3,10 +3,6 @@
 namespace App\Action;
 
 use Slim\Container;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Firebase\JWT\JWT;
-use Dflydev\FigCookies\FigResponseCookies;
-use Dflydev\FigCookies\FigRequestCookies;
 
 abstract class AbstractController
 {
@@ -15,7 +11,10 @@ abstract class AbstractController
 
     //schedule repository
     protected $sr;
-	
+
+    //token manager
+    protected $tm;
+
     //shared variables
     protected $view;
     protected $logger;
@@ -30,10 +29,11 @@ abstract class AbstractController
     protected $msgStyle;
 
 	//session variables	
+    protected $authed;
 	protected $event;
     protected $user;
-    protected $authed;
-    
+    protected $target_id;
+
     //default layout colors
     protected $colorTitle = '#80ccff';
     protected $colorOpen = '#FFF484';
@@ -65,6 +65,7 @@ abstract class AbstractController
     {
         $this->container = $container;
 
+        $this->tm = $container->get('tokenManager');
         $this->view = $container->get('view');
         $this->logger = $container->get('logger');
         $this->root = __DIR__ . '/../../var';
@@ -106,62 +107,11 @@ abstract class AbstractController
 	{
 		return substr($div,0,3);
 	}
-    protected function isAuthorized(Request $request)
+    protected function getData($request)
     {
-        $result = $this->hasAuthorizedCookie($request);
-
-        return $result['valid'];
-    }
-	protected function hasAuthorizedCookie(Request $request)
-    {
-        $isValid = array(
-            'valid' => false,
-            'data' => null
-        );
-
-        /*
-         * Look for the 'token' cookie
-         */
-        $requestCookie = FigRequestCookies::get($request, 'token');
-
-        if (!empty($requestCookie)) {
-            /*
-             * Extract the jwt from the cookie value
-             */
-            $jwt = $requestCookie->getValue();
-            if ($jwt) {
-                try {
-                    /*
-                     * decode the jwt using the key from config
-                     */
-                    $secret = getenv("JWT_SECRET");
-                    $data = JWT::decode($jwt, $secret, array('HS256'));
-
-                    $isValid = array(
-                        'valid' => true,
-                        'data' => $data
-                    );
-
-                } catch (\Exception $e) {
-                    /*
-                     * the token was not able to be decoded.
-                     * this is likely because the signature was not able to be verified (tampered token)
-                     */
-                    $isValid['data'] = 'HTTP/1.0 401 Unauthorized';
-                }
-            } else {
-                /*
-                 * No token was able to be extracted from the authorization header
-                 */
-                $isValid['data'] = 'HTTP/1.0 400 Bad Request';
-            }
-        } else {
-            /*
-             * The request lacks the authorization token
-             */
-            $isValid['data'] = 'HTTP/1.0 400 Bad Request';
-        }
-
-        return $isValid;
+        $pkg = $this->tm->getData($request);
+        $this->user = $pkg->data->user;
+        $this->event = $pkg->data->event;
+        $this->target_id = $pkg->data->target_id;
     }
 }
