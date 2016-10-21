@@ -34,7 +34,7 @@ class LogonDBController extends AbstractController
 
 		if ($this->authed) {
 			return $response->withRedirect($this->greetPath);
-			}
+        }
 		else {
 			$content = array(
 				'events' => $this->sr->getCurrentEvents(),
@@ -58,6 +58,7 @@ class LogonDBController extends AbstractController
             $hash = isset($user) ? $user->hash : null;
 
             $this->authed = password_verify($pass, $hash);
+
             if ($this->authed) {
                 $_SESSION['authed'] = true;
                 $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
