@@ -34,7 +34,7 @@ class TokenManager
 
         $issuedAt   = time();
         $notBefore  = $issuedAt;                    //Subtracting 10 seconds
-        $expire     = $notBefore + 30;              // Adding 30 seconds
+        $expire     = $notBefore + 1200;              // Adding 20 minutes
         $serverName = $_SERVER['SERVER_NAME'];      // Retrieve the server name from config file
 
         /*
@@ -90,8 +90,8 @@ class TokenManager
         /*
          * Look for the cookie
          */
-        $authHeader = $request->getHeader('authorization');
-
+        $authHeader = $request->getHeader('Authorization');
+//        var_dump($authHeader);die();
         if ($authHeader) {
             /*
              * Extract the jwt from the cookie value
@@ -129,7 +129,6 @@ class TokenManager
              * The request lacks the authorization token
              */
             $token['hdr'] = 'HTTP/1.0 400 Bad Request';
-            $token['data'] = 'Token not found in request';
         }
 
         return $token;

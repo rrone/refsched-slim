@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 $app->map(['GET', 'POST'], '/', App\Action\Logon\LogonDBController::class)
     ->setName('logon');
 
-$app->get('/logon', App\Action\Logon\LogonDBController::class);
+$app->map(['GET', 'POST'], '/logon', App\Action\Logon\LogonDBController::class);
 $app->put('/logon/auth', 'App\Action\Logon\LogonDBController:getAuth')
     ->setName('auth');
 

@@ -34,6 +34,7 @@ class LogonDBController extends AbstractController
                 'events' => $this->sr->getCurrentEvents(),
                 'content' => $this->renderLogon(),
                 'message' => $this->msg,
+                'script' => $this->getScript(),
             );
 
             $this->view->render($response, 'logon.html.twig', $content);
@@ -47,10 +48,6 @@ class LogonDBController extends AbstractController
     }
     public function getAuth($request)
     {
-        return $this->handleRequest($request);
-    }
-	private function handleRequest($request)
-	{
         $this->authed = null;
 
         if ( $request->isPut() ) {
@@ -78,9 +75,20 @@ class LogonDBController extends AbstractController
                 );
 
                 echo $this->tm->jwt($data);
+
             } else {
+
                 return ('HTTP/1.0 401 Unauthorized');
             }
+        }
+
+        return null;
+    }
+	private function handleRequest($request)
+	{
+        if ($request->isPost()){
+
+            $this->authed = !is_null($this->getData($request)); //load the event, user, target_id
         }
 
         return null;
@@ -97,7 +105,7 @@ class LogonDBController extends AbstractController
         if (count($enabled) > 0) {
 
             $html = <<<EOD
-                      <form name="login_form" method="post" action="$this->logonPath">
+                      <form id="login_form" name="login_form" method="post" action="$this->logonPath">
         <div align="center">
 			<table>
 				<tr><td width="50%"><div align="right">Event: </div></td>
@@ -146,5 +154,48 @@ EOD;
         }
 
         return $html;
+    }
+    protected function getScript()
+    {
+        $js = <<<JSO
+        
+        
+$("#frmLogon").click( function(){
+
+     var formData = JSON.stringify({
+         "user" : document.getElementById('user').value,
+         "passwd" : document.getElementById('passwd').value,
+         "event" : document.getElementById('event').value
+     });
+
+     $.ajax(
+     {
+         url : "/logon/auth/",
+         type: "PUT",
+         data : {ValArray:formData},
+         success:function(maindta)
+         {
+             sessionStorage.accessToken = maindta;
+             console.log(maindta);
+         },
+         error: function(jqXHR, textStatus, errorThrown)
+         {
+         }
+     })
+     .done(function(data) {
+        $.ajax(
+        {
+             url : "/logon",
+             type: "POST",
+             beforeSend: function (xhr){ 
+                xhr.setRequestHeader('Authorization', "Basic "+ sessionStorage.getItem('accessToken')); 
+             }
+        });         
+     });
+
+});
+JSO;
+
+        return $js;
     }
 }

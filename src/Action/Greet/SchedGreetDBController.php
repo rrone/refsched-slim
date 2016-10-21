@@ -20,13 +20,14 @@ class SchedGreetDBController extends AbstractController
 
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->authed = $this->tm->isValid($request);
+print_r('greet');die();
+        $this->authed = !is_null($this->getData($request)); //load the event, user, target_id
+
         if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
         }
         $this->logger->info("Schedule greet page action dispatched");
 
-        $this->getData($request); //load the event, user, target_id
 
         if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
@@ -41,6 +42,7 @@ class SchedGreetDBController extends AbstractController
                 'title' => $this->page_title,
                 'dates' => $this->dates,
                 'location' => $this->location,
+                'script' => $this->getScript(),
             )
         );
 
@@ -56,7 +58,7 @@ class SchedGreetDBController extends AbstractController
 
     private function renderGreet()
     {
-        $html = null;
+        $html = "<div id=\"pageContent\">\n";
 
         $event = $this->event;
 
@@ -103,7 +105,6 @@ class SchedGreetDBController extends AbstractController
             }
             $num_unassigned = count($games) - $num_assigned;
 
-            $html = null;
             $html .= "<h3 class=\"center\">Welcome $this->user Assignor</h3>\n";
             $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">CURRENT STATUS</h3>\n<h3 align=\"center\">";
 
@@ -217,8 +218,27 @@ class SchedGreetDBController extends AbstractController
             $html .= "</center>";
         }
 
+        $html .= "</div>";
+
         return $html;
 
+    }
+    protected function getScript()
+    {
+        $js = <<< EOT
+$("a").live("click", function(){
+  var href = $('#titleee').find('a').attr("href");
+  $.ajax({
+      method: 'GET',
+      url: href,
+      beforeSend: function (xhr) {
+    		xhr.setRequestHeader ("Authorization", "Bearer " + sessionStorage.getItem('accessToken');
+    },
+  });
+});
+EOT;
+
+        return $js;
     }
 }
 
