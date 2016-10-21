@@ -28,8 +28,9 @@ class LogonDBController extends AbstractController
         $this->logger->info("Logon page action dispatched");
 
         $this->handleRequest($request);
+//        print_r('post handler');var_dump($this->authed);die();
 
-		if (!$this->authed) {
+        if (!$this->authed) {
             $content = array(
                 'events' => $this->sr->getCurrentEvents(),
                 'content' => $this->renderLogon(),
@@ -37,11 +38,13 @@ class LogonDBController extends AbstractController
                 'script' => $this->getScript(),
             );
 
-            $this->view->render($response, 'logon.html.twig', $content);
+            $response = $this->view->render($response, 'logon.html.twig', $content);
+           print_r('post handler');var_dump($response->getBody());
 
             return $response;
 		}
 		else {
+//            print_r('off to greet');var_dump($response);die();
 
             return $response->withRedirect($this->greetPath);
 		}
@@ -74,7 +77,9 @@ class LogonDBController extends AbstractController
                     'user' => $user
                 );
 
-                echo $this->tm->jwt($data);
+                $jwt = $this->tm->jwt($data);
+
+                echo $jwt;
 
             } else {
 
@@ -160,39 +165,47 @@ EOD;
         $js = <<<JSO
         
         
-$("#frmLogon").click( function(){
-
-     var formData = JSON.stringify({
-         "user" : document.getElementById('user').value,
-         "passwd" : document.getElementById('passwd').value,
-         "event" : document.getElementById('event').value
-     });
-
-     $.ajax(
-     {
-         url : "/logon/auth/",
-         type: "PUT",
-         data : {ValArray:formData},
-         success:function(maindta)
-         {
-             sessionStorage.accessToken = maindta;
-             console.log(maindta);
-         },
-         error: function(jqXHR, textStatus, errorThrown)
-         {
-         }
-     })
-     .done(function(data) {
-        $.ajax(
+$("#frmLogon").click(function(e){
+    
+    e.preventDefault();
+    
+    var formData = JSON.stringify({
+        "user" : document.getElementById('user').value,
+        "passwd" : document.getElementById('passwd').value,
+        "event" : document.getElementById('event').value
+    });
+    
+    console.log(formData)
+    
+    $.ajax(
+    {
+        url : "/logon/auth/",
+        type: "PUT",
+        data : {ValArray:formData},
+        success:function(maindta)
         {
-             url : "/logon",
-             type: "POST",
-             beforeSend: function (xhr){ 
-                xhr.setRequestHeader('Authorization', "Basic "+ sessionStorage.getItem('accessToken')); 
-             }
-        });         
-     });
+            sessionStorage.accessToken = maindta;
+            console.log(maindta);
+        },
+        error: function(jqXHR, textStatus, errorThrown)
+        {
+        },
+        complete: function() {
+        
+            var token = sessionStorage.getItem('accessToken');
 
+            $.ajax(
+            {
+                url : "/logon",
+                type: "POST",
+                beforeSend: function (xhr){ 
+                    xhr.setRequestHeader('Authorization', "Bearer " + token); 
+                },
+                success: function() { alert('Success!'); },
+                error: function(jqXHR, textStatus, errorThrown) { alert('Failure! ' + textStatus + " : " + errorThrown); }
+            })
+        }
+    });
 });
 JSO;
 

@@ -57,9 +57,7 @@ class TokenManager
         $secret = getenv("JWT_SECRET");
         $jwt = JWT::encode($data, $secret);
 
-        $unencodedArray = ['jwt' => $jwt];
-
-        return json_encode($unencodedArray);
+        return $jwt;
     }
     public function isValid(Request $request)
     {
@@ -91,7 +89,7 @@ class TokenManager
          * Look for the cookie
          */
         $authHeader = $request->getHeader('Authorization');
-//        var_dump($authHeader);die();
+//        var_dump($authHeader);
         if ($authHeader) {
             /*
              * Extract the jwt from the cookie value
