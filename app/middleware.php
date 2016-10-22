@@ -18,3 +18,24 @@ $app->add(function (Request $request, Response $response, callable $next) {
 
     return $next($request, $response);
 });
+
+$app->add(function (Request $request, Response $response, callable $next) {
+
+//    print_r('pre');
+//    var_dump($request);
+//    print_r('*******************************************<br>');
+
+    $token = getenv('WP_TOKEN_RS');
+
+    $request = $request->withHeader("Authorization", "Basic " . $token);
+
+//    print_r('token');
+//    var_dump($request->getHeader('Authorization'));
+//    print_r('*******************************************<br>');
+
+//    print_r('post');
+//    var_dump($request);die();
+
+    return $next($request, $response);
+
+});

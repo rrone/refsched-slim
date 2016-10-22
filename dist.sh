@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-git checkout master
+##git checkout session_vars
 
 rm -f -r dist
 

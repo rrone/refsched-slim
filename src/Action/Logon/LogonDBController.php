@@ -135,4 +135,39 @@ EOD;
 
         return $html;
     }
+    private function getScript()
+    {
+        $js = <<<JQY
+        
+     $("a").live("click", function(){
+         $url = $('#titleee').find('a').attr("href");
+
+         $.ajax( {
+         type : "POST",
+         url : URL,
+         data: SOAP_INBOX_MAIL_QUERY,
+         dataType : "xml",
+         async: false,
+         xhrFields: {
+             withCredentials: true
+         },
+         beforeSend : function(xhr) {
+             var cookie = credentials["SiteKey"];
+             console.info( "adding cookie: "+ cookie );
+             xhr.setRequestHeader('Cookie', cookie);
+         },
+         success : function(data, textStatus, xmLHttpRequest){
+
+
+         },
+         error : function(xhr, ajaxOptions, thrownError) {
+             credentials = null;
+         }
+     });
+
+
+
+JQY;
+
+    }
 }
