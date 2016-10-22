@@ -94,6 +94,15 @@ $container['tokenManager'] = function ($c) {
 // Action dependency Injection
 // -----------------------------------------------------------------------------
 
+$container[App\Action\Handshake\HandshakeController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\Handshake\HandshakeController($c, $repo);
+};
+
+
+
 $container[App\Action\SchedulerRepository::class] = function ($c) {
     $db = $c->get('db');
 

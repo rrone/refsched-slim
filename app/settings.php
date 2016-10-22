@@ -21,6 +21,7 @@ $settings = [
                 __DIR__ . '/../src/Action/Refs',
                 __DIR__ . '/../src/Action/Sched',
                 __DIR__ . '/../src/Action/Admin',
+                __DIR__ . '/../src/Action/Handshake',
             ],
             'twig' => [
                 'cache' => __DIR__ . '/../var/cache/twig',
@@ -36,8 +37,6 @@ $settings = [
             'name' => 'app',
             'path' => __DIR__ . '/../var/logs/app.log',
         ],
-        
-
     ],
 ];
 

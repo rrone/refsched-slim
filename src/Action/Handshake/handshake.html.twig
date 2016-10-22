@@ -1,0 +1,21 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+	<div style="margin-top: 60px">
+<table width="98%"  class="maincontent">
+	<tr>
+		<td align="center" class="contentarea">
+
+		{{ content | raw }}
+
+		</td>
+	</tr>
+</table>
+	</div>
+{% endblock %}
+
+{% block script %}
+
+	{{ script | raw }}
+
+{% endblock %}

@@ -62,6 +62,9 @@ abstract class AbstractController
 	protected $adminUpdatePath;
     protected $schedTemplatePath;
 
+    protected $handshakePath;
+
+
     public function __construct(Container $container)
     {
         $this->container = $container;
@@ -91,6 +94,7 @@ abstract class AbstractController
         $this->schedTemplatePath = $this->container->get('router')->pathFor('sched_template');
         $this->schedImportPath = $this->container->get('router')->pathFor('sched_import');
 
+        $this->handshakePath = $this->container->get('router')->pathFor('handshake');
     }
     protected function errorCheck()
     {

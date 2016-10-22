@@ -1,5 +1,5 @@
 <?php
-namespace App\Action\Logon;
+namespace App\Action\Handshake;
 
 use Slim\Container;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -7,57 +7,59 @@ use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\SchedulerRepository;
 use App\Action\AbstractController;
 
-class LogonDBController extends AbstractController
+class HandshakeController extends AbstractController
 {
-	private $users;
-	private $events;
-	private $enabled;
+    private $users;
+    private $enabled;
 
-	public function __construct(Container $container, SchedulerRepository $repository) {
-		
-		parent::__construct($container);
-		
-		$this->sr = $repository;
-		
-		$this->users = $repository->getUsers();
-		$this->events = $repository->getCurrentEvents();
-		$this->enabled = $repository->getEnabledEvents();
+    public function __construct(Container $container, SchedulerRepository $repository) {
+
+        parent::__construct($container);
+
+        $this->sr = $repository;
+
+        $this->users = $repository->getUsers();
+        $this->enabled = $repository->getEnabledEvents();
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->logger->info("Logon page action dispatched");
+        $this->logger->info("Handshake page action dispatched");
 
         $this->handleRequest($request);
 
-		if (!$this->authed) {
+        if (!$this->authed) {
             $content = array(
-                'events' => $this->sr->getCurrentEvents(),
                 'content' => $this->renderLogon(),
                 'message' => $this->msg,
                 'script' => $this->getScript(),
             );
 
-            $this->view->render($response, 'logon.html.twig', $content);
+            $this->view->render($response, 'handshake.html.twig', $content);
 
             return $response;
-		}
-		else {
+        }
+        else {
 
             return $response->withRedirect($this->greetPath);
-		}
+        }
     }
     public function getAuth($request)
     {
         $this->authed = null;
+        $this->logger->info("Handshake page: getAuth"); ////
 
-        if ( $request->isPut() ) {
+        if ($request->isPut()) {
+            $this->logger->info("Handshake page: PUT"); ////
 
             $json = $request->getParsedBody();
             $data = json_decode($json['ValArray']);
-var_dump($data);die();
+
             $user = $data->user;
             $event = $data->event;
             $passwd = $data->passwd;
+
+            $logMsg = "Handshake page: Data received: " . $json;
+            $this->logger->info($logMsg);
 
             $event = !empty($event) ? $this->sr->getEventByLabel($event) : null;
             $userName = !empty($user) ? $user : null;
@@ -68,27 +70,39 @@ var_dump($data);die();
 
             $this->authed = password_verify($pass, $hash);
 
+            $logMsg = "Handshake page: Authorized: $this->authed";
+            $this->logger->info($logMsg);
+
             if ($this->authed) {
                 $data = array(
                     'event' => $event,
                     'user' => $user
                 );
 
-                echo $this->tm->jwt($data);
+                $jwt = $this->tm->jwt($data);
+
+                $logMsg = "Handshake page: JWT: " . $jwt; ////
+                $this->logger->info($logMsg);
+
+                echo $jwt;
 
             } else {
 
-                return ('HTTP/1.0 401 Unauthorized');
+                echo ('HTTP/1.0 401 Unauthorized');
             }
         }
-
-        return null;
     }
-	private function handleRequest($request)
-	{
+    private function handleRequest($request)
+    {
         if ($request->isPost()){
+            $this->logger->info("Handshake page: POST");////
 
             $this->authed = !is_null($this->getData($request)); //load the event, user, target_id
+
+            $logMsg = (string)"Handshake page: Authorized: " . $this->authed;////
+            $this->logger->info($logMsg);
+        } else {
+            $this->logger->info("Handshake page: GET"); ////
         }
 
         return null;
@@ -99,13 +113,13 @@ var_dump($data);die();
      */
     private function renderLogon()
     {
-		$users = $this->users;
-		$enabled = $this->enabled;
+        $users = $this->users;
+        $enabled = $this->enabled;
 
         if (count($enabled) > 0) {
 
             $html = <<<EOD
-                      <form id="login_form" name="login_form" method="post" action="$this->logonPath">
+                      <form id="login_form" name="login_form">
         <div align="center">
 			<table>
 				<tr><td width="50%"><div align="right">Event: </div></td>
@@ -159,7 +173,6 @@ EOD;
     {
         $js = <<<JSO
         
-        
 $("#frmLogon").click( function(){
 
      var formData = JSON.stringify({
@@ -168,14 +181,16 @@ $("#frmLogon").click( function(){
          "event" : document.getElementById('event').value
      });
      
-     sessionStorage.accessToken = formData;
+     sessionStorage.sessionKeys = formData;
      console.log(formData);
 
      $.ajax(
      {
          url : "/logon/auth/",
          type: "PUT",
-         data : {ValArray:formData},
+         beforeSend: function (xhr){ 
+            xhr.setRequestHeader('ValArray', formData); 
+         }
          success:function(maindta)
          {
              alert('Success');
@@ -184,11 +199,19 @@ $("#frmLogon").click( function(){
          {
             alert('Failure');
          }
-     });
-
+     })
+     .done(function(data) {
+        $.ajax(
+        {
+             url : "/shake",
+             type: "GET",
+             beforeSend: function (xhr){ 
+                xhr.setRequestHeader('SessionKeys', sessionStorage.getItem('sessionKeys')); 
+             }
+        });         
+     });         
 });
 JSO;
-
         return $js;
     }
 }

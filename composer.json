@@ -1,14 +1,14 @@
 {
-    "name": "akrabat/slim3-skeleton",
-    "description": "Simple Slim Framework 3 skeleton with Twig & Monolog.",
+    "name": "rrone/refsched",
+    "description": "Section 1 Referee Scheduler in Slim.  Uses Simple Slim Framework 3 skeleton with Twig & Monolog by Rob Allen.",
     "license": "BSD-3-Clause",
     "type": "project",
-    "keywords": ["slim-framework", "skeleton"],
+    "keywords": ["slim-framework", "referee scheduler"],
     "authors": [
         {
-            "name": "Rob Allen",
-            "email": "rob@akrabat.com",
-            "homepage": "http://akrabat.com"
+            "name": "Rick Roberts",
+            "email": "web.ayso@gmail.com",
+            "homepage": "http://ayso1ref.wpengine.com"
         }
     ],
     "autoload": {
@@ -30,10 +30,7 @@
         "phpoffice/phpexcel": "^1.8",
         "flexsounds/slim-symfony-di-container": "^1.0",
         "illuminate/database": "~5.1",
-        "phpoffice/phpExcel": "~1.8.1",
         "ircmaxell/password-compat": "^1.0",
-        "tuupola/slim-jwt-auth": "^2.3",
-        "vlucas/phpdotenv": "^2.4",
-        "firebase/php-jwt": "^4.0"
+        "vlucas/phpdotenv": "^2.4"
     }
 }

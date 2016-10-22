@@ -19,7 +19,7 @@ class controllersTest extends WebTestCase
         $app = require __DIR__.'/../public/app.php';
         require __DIR__.'/../config/dev.php';
         require __DIR__.'/../app/routes.php';
-        $app['session.test'] = true;
+        $app['session.Handshake'] = true;
 
         return $this->app = $app;
     }
