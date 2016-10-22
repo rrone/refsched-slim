@@ -34,7 +34,7 @@ class LogonDBController extends AbstractController
                 'events' => $this->sr->getCurrentEvents(),
                 'content' => $this->renderLogon(),
                 'message' => $this->msg,
-                'script' => $this->getScript(),
+                'script' => null//$this->getScript(),
             );
 
             $this->view->render($response, 'logon.html.twig', $content);

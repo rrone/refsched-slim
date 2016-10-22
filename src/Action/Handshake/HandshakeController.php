@@ -31,7 +31,7 @@ class HandshakeController extends AbstractController
             $content = array(
                 'content' => $this->renderLogon(),
                 'message' => $this->msg,
-                'script' => $this->getScript(),
+                'script' => null//$this->getScript()
             );
 
             $this->view->render($response, 'handshake.html.twig', $content);
@@ -119,7 +119,7 @@ class HandshakeController extends AbstractController
         if (count($enabled) > 0) {
 
             $html = <<<EOD
-                      <form id="login_form" name="login_form">
+                      <form id="login_form" name="login_form" method="post" action="$this->logonPath">
         <div align="center">
 			<table>
 				<tr><td width="50%"><div align="right">Event: </div></td>

@@ -21,10 +21,7 @@ $app->add(function (Request $request, Response $response, callable $next) {
 
 $app->add(function (Request $request, Response $response, callable $next) {
 
-    var_dump($request); die();
+//    var_dump($request); die();
 
     return $next($request, $response);
 });
-
-unset($_SERVER['JWT_SECRET']);
-unset($_SERVER['WP_TOKEN_RS']);
