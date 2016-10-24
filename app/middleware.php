@@ -5,6 +5,7 @@
 
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use App\Action\SessionManager;
 
 $app->add(function (Request $request, Response $response, callable $next) {
     $uri = $request->getUri();
@@ -19,23 +20,26 @@ $app->add(function (Request $request, Response $response, callable $next) {
     return $next($request, $response);
 });
 
-$app->add(function (Request $request, Response $response, callable $next) {
+$c = $app->getContainer();
 
-//    print_r('pre');
-//    var_dump($request);
-//    print_r('*******************************************<br>');
+$app->add(function (Request $request, Response $response, callable $next) use ($c) {
 
-    $token = getenv('WP_TOKEN_RS');
+//    $tm = $c['tm'];
+//    $tm->loadSessionToken($request);
+//var_dump($request);die();
+    $response = $next($request, $response);
 
-    $request = $request->withHeader("Authorization", "Basic " . $token);
+//    $user = isset($GLOBALS['user']) ? $GLOBALS['user'] : null;
+//
+//    if(!is_null($user)){
+//        $key = json_encode(array(
+//                'user' => $user->name
+//            )
+//        );
+//
+//        $response = $response->withHeader('sessionKey', $key);
+//    }
+//    var_dump($response);die();
 
-//    print_r('token');
-//    var_dump($request->getHeader('Authorization'));
-//    print_r('*******************************************<br>');
-
-//    print_r('post');
-//    var_dump($request);die();
-
-    return $next($request, $response);
-
+    return $response;
 });

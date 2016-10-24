@@ -11,7 +11,6 @@ class SchedGreetDBController extends AbstractController
 {
     public function __construct(Container $container, SchedulerRepository $repository)
     {
-
         parent::__construct($container);
 
         $this->sr = $repository;
@@ -20,16 +19,18 @@ class SchedGreetDBController extends AbstractController
 
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+        $this->authed = isset($GLOBALS['authed']) ? $GLOBALS['authed'] : null;
+//print_r('greet invoke');var_dump($request);die();
         if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
         }
         $this->logger->info("Schedule greet page action dispatched");
 
-        $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
-        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+        $this->event = isset($GLOBALS['event']) ? $GLOBALS['event'] : null;
+        $this->user = isset($GLOBALS['user']) ? $GLOBALS['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
+            $GLOBALS['authed'] = null;
             return $response->withRedirect($this->logonPath);
         }
 

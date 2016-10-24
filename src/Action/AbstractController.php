@@ -11,7 +11,10 @@ abstract class AbstractController
 
     //schedule repository
     protected $sr;
-	
+
+    //schedule repository
+    protected $tm;
+
     //shared variables
     protected $view;
     protected $logger;

@@ -22,15 +22,15 @@ class SchedSchedDBController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+        $this->authed = isset($GLOBALS['authed']) ? $GLOBALS['authed'] : null;
          if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
          }
 
         $this->logger->info("Schedule schedule database page action dispatched");
 
-		$this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+		$this->event = isset($GLOBALS['event']) ?  $GLOBALS['event'] : false;
+        $this->user = isset($GLOBALS['user']) ? $GLOBALS['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
@@ -228,7 +228,7 @@ class SchedSchedDBController extends AbstractController
 			$testtime = null;
 	
 			$locked = $this->sr->getLocked($projectKey);
-			$_SESSION['locked'] = $locked;
+			$GLOBALS['locked'] = $locked;
 	
 			$games = $this->sr->getGames($projectKey, $this->showgroup);
 
@@ -428,7 +428,7 @@ class SchedSchedDBController extends AbstractController
 			$html .=  "<div class='clear-fix'></div>";
 
 			$html .= "</form>\n";      
-			$_SESSION['locked'] = $locked;
+			$GLOBALS['locked'] = $locked;
 	
 			if ( $this->user == 'Section 1' ) {
 				$html .=  "<h1 class=\"center\">You should be on this<br>";

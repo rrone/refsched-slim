@@ -14,7 +14,12 @@ class SchedEndController extends AbstractController
         session_unset();
 
         session_destroy();
-        
+
+        $userName = $GLOBALS['user'];
+        $event = $GLOBALS['event'];
+        $user = $this->sr->getUserByName($userName);
+        $this->sr->setUserActive($user->id, $event->id, false);
+
         return $response->withRedirect($this->logonPath);
     }
 }

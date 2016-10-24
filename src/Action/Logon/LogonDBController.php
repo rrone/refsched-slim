@@ -6,6 +6,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\AbstractController;
 use App\Action\SchedulerRepository;
+use App\Action\SessionManager;
 
 class LogonDBController extends AbstractController
 {
@@ -13,11 +14,12 @@ class LogonDBController extends AbstractController
 	private $events;
 	private $enabled;
 
-	public function __construct(Container $container, SchedulerRepository $repository) {
+	public function __construct(Container $container, SchedulerRepository $repository, SessionManager $sessionManager) {
 		
 		parent::__construct($container);
 		
 		$this->sr = $repository;
+        $this->tm = $sessionManager;
 		
 		$this->users = $repository->getUsers();
 		$this->events = $repository->getCurrentEvents();
@@ -27,10 +29,10 @@ class LogonDBController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->logger->info("Logon page action dispatched");
-       
+
         $this->handleRequest($request);
 
-		$this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+		$this->authed = isset($GLOBALS['authed']) ? $GLOBALS['authed'] : null;
 
 		if ($this->authed) {
 			return $response->withRedirect($this->greetPath);
@@ -41,7 +43,7 @@ class LogonDBController extends AbstractController
 				'content' => $this->renderLogon(),
 				'message' => $this->msg,
 			);
-		  
+
 			$this->view->render($response, 'logon.html.twig', $content);      
 	
 			return $response;
@@ -60,16 +62,17 @@ class LogonDBController extends AbstractController
             $this->authed = password_verify($pass, $hash);
 
             if ($this->authed) {
-                $_SESSION['authed'] = true;
-                $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
-                $_SESSION['user'] = $_POST['user'];
+                $event = $this->sr->getEventByLabel($_POST['event']);
+                $GLOBALS['event'] = $event;
+                $GLOBALS['user'] = $userName;
+
+                $this->tm->setSessionGlobals($user, $event);
+//                print_r('logon handler');var_dump($GLOBALS);die();
                 $this->msg = null;
             }
             else {
-                $_SESSION['authed'] = false;
-                $_SESSION['event'] = null;
-                $_SESSION['user'] = null;
-                $this->msg = 'Unrecognized password for ' . $_POST['user'];
+                $this->tm->clearSessionGlobals($user);
+                $this->msg = 'Unrecognized password for ' . $userName;
             }
         }
 	}
@@ -139,34 +142,35 @@ EOD;
     {
         $js = <<<JQY
         
-     $("a").live("click", function(){
-         $url = $('#titleee').find('a').attr("href");
+     function submitForm(e)
+     {
+         var formData = JSON.stringify({
+             "user" : document.getElementById('user').value,
+             "passwd" : document.getElementById('passwd').value,
+             "event" : document.getElementById('event').value
+         });
 
-         $.ajax( {
-         type : "POST",
-         url : URL,
-         data: SOAP_INBOX_MAIL_QUERY,
-         dataType : "xml",
-         async: false,
-         xhrFields: {
-             withCredentials: true
-         },
-         beforeSend : function(xhr) {
-             var cookie = credentials["SiteKey"];
-             console.info( "adding cookie: "+ cookie );
-             xhr.setRequestHeader('Cookie', cookie);
-         },
-         success : function(data, textStatus, xmLHttpRequest){
+         console.log(formData);
 
+         $.ajax(
+         {
+             url : "/logon/",
+             type: "POST",
+             data : {ValArray:formData},
+             success:function(maindta)
+             {
+                 sessionStorage.accessToken = maindta;
+                 console.log(maindta);
+             },
+             error: function(jqXHR, textStatus, errorThrown)
+             {
+             }
+         });
 
-         },
-         error : function(xhr, ajaxOptions, thrownError) {
-             credentials = null;
-         }
+         e.preventDefault(); //STOP default action
+
      });
-
-
-
+ 
 JQY;
 
     }
