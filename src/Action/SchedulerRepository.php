@@ -28,6 +28,19 @@ class SchedulerRepository
 			->where('enabled', true)
 			->get();
     }
+    public function getUserByID($id)
+    {
+        if(empty($id)) {
+            return null;
+        }
+
+        $user = $this->db->table('users')
+            ->where('id', '=', $id)
+            ->get();
+
+        return $this->getZero($user);
+
+    }
     public function getUserByPW($hash)
 	{
 		if(empty($hash)) {
@@ -81,7 +94,20 @@ class SchedulerRepository
 					'hash' => $hash,
 				]);	
 		}
-	}
+
+        return null;
+    }
+    public function setUserActive($id, $event_id=null, $isActive = true)
+    {
+        $this->db->table('users')
+            ->where('id', $id)
+            ->update([
+                'active' => $isActive,
+                'active_event_id' => $event_id
+            ]);
+
+        return !is_null($this->getUserByID($id));
+    }
 	//Events table functions
 	public function getCurrentEvents()
     {
