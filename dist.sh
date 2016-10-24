@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-git checkout master
+#git checkout master
 
 rm -f -r dist
 

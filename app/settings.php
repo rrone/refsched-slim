@@ -22,7 +22,7 @@ $settings = [
                 __DIR__ . '/../src/Action/Admin',
             ],
             'twig' => [
-                'cache' => __DIR__ . '/../var/cache/twig',
+                'cache' => null,
                 'debug' => true,
                 'auto_reload' => true,
             ],
