@@ -1,4 +1,5 @@
 <?php
+
 $settings = [
     'settings' => [
         // Slim Settings
@@ -42,5 +43,8 @@ $settings = [
 
 $local = include(__DIR__ . '/../config/local.php');
 $settings['settings']['db'] = $local['db'];
+
+$dotenv = new \Dotenv\Dotenv(__DIR__ . '/../config/');
+$dotenv->load();
 
 return $settings;

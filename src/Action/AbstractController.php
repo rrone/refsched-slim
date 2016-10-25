@@ -11,12 +11,16 @@ abstract class AbstractController
 
     //schedule repository
     protected $sr;
-	
+
+    //token manager
+    protected $tm;
+
     //shared variables
     protected $view;
     protected $logger;
     protected $container;
     protected $root;
+    protected $var;
 
 	//view variables
     protected $page_title;
@@ -26,10 +30,11 @@ abstract class AbstractController
     protected $msgStyle;
 
 	//session variables	
+    protected $authed;
 	protected $event;
     protected $user;
-    protected $authed;
-    
+    protected $target_id;
+
     //default layout colors
     protected $colorTitle = '#80ccff';
     protected $colorOpen = '#FFF484';
@@ -61,9 +66,11 @@ abstract class AbstractController
     {
         $this->container = $container;
 
+        $this->tm = $container->get('tokenManager');
         $this->view = $container->get('view');
         $this->logger = $container->get('logger');
-        $this->root = __DIR__ . '/../../var';
+        $this->root = "http://" . $_SERVER['HTTP_HOST'];
+        $this->var = __DIR__ . '/../../var';
 
         $this->page_title = "Section 1 Referee Scheduler";
 
@@ -102,4 +109,15 @@ abstract class AbstractController
 	{
 		return substr($div,0,3);
 	}
+    protected function getData($request)
+    {
+        $pkg = $this->tm->getData($request);
+        $dataAvail = !empty($pkg);
+
+        $this->user = $dataAvail ? $pkg->data->user : null;
+        $this->event = $dataAvail ? $pkg->data->event : null;
+        $this->target_id = $dataAvail ? $pkg->data->target_id : null;
+
+        return $dataAvail ? true : null;
+    }
 }

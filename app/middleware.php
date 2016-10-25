@@ -18,3 +18,29 @@ $app->add(function (Request $request, Response $response, callable $next) {
 
     return $next($request, $response);
 });
+
+$c = $app->getContainer();
+$logger = $c->get('logger');
+$c["jwt"] = function ($c) {
+    return new StdClass;
+};
+
+//$app->add(new \Slim\Middleware\JwtAuthentication([
+//    "secret" => getenv("JWT_SECRET"),
+//    "secure" => false,
+//    "path" => ["/"],
+//    "passthrough" => ["/", "/logon", "/logon/auth"],
+//    "attribute" => "jwt",
+//    "logger" => $logger,
+//    "callback" => function ($request, $response, $arguments) use ($c) {
+//        $c['jwt'] = $arguments;
+//    }
+//]));
+
+$tm = $c->get('tokenManager');
+
+$app->add(function (Request $request, Response $response, callable $next) {
+
+    return $next($request, $response);
+
+});

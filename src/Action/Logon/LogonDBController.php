@@ -4,8 +4,8 @@ namespace App\Action\Logon;
 use Slim\Container;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use App\Action\AbstractController;
 use App\Action\SchedulerRepository;
+use App\Action\AbstractController;
 
 class LogonDBController extends AbstractController
 {
@@ -22,57 +22,77 @@ class LogonDBController extends AbstractController
 		$this->users = $repository->getUsers();
 		$this->events = $repository->getCurrentEvents();
 		$this->enabled = $repository->getEnabledEvents();
-		
     }
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->logger->info("Logon page action dispatched");
-       
+
         $this->handleRequest($request);
 
-		$this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+		if (!$this->authed) {
+            $content = array(
+                'events' => $this->sr->getCurrentEvents(),
+                'content' => $this->renderLogon(),
+                'message' => $this->msg,
+                'script' => $this->getScript(),
+            );
 
 		if ($this->authed) {
+
 			return $response->withRedirect($this->greetPath);
         }
 		else {
-			$content = array(
-				'events' => $this->sr->getCurrentEvents(),
-				'content' => $this->renderLogon(),
-				'message' => $this->msg,
-			);
-		  
-			$this->view->render($response, 'logon.html.twig', $content);      
-	
-			return $response;
+
+            return $response->withRedirect($this->greetPath);
 		}
     }
-	private function handleRequest($request)
-	{
-        if ( $request->isPost() ) {
+    public function getAuth($request)
+    {
+        $this->authed = null;
 
-            $userName = isset($_POST['user']) ? $_POST['user'] : null;
+        if ( $request->isPut() ) {
+
+            $json = $request->getParsedBody();
+            $data = json_decode($json['ValArray']);
+
+            $user = $data->user;
+            $event = $data->event;
+            $passwd = $data->passwd;
+
+            $event = !empty($event) ? $this->sr->getEventByLabel($event) : null;
+            $userName = !empty($user) ? $user : null;
             $user = $this->sr->getUserByName($userName);
-            $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
+            $pass = !empty($passwd) ? $passwd : null;
 
             $hash = isset($user) ? $user->hash : null;
 
             $this->authed = password_verify($pass, $hash);
 
             if ($this->authed) {
-                $_SESSION['authed'] = true;
-                $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
-                $_SESSION['user'] = $_POST['user'];
-                $this->msg = null;
-            }
-            else {
-                $_SESSION['authed'] = false;
-                $_SESSION['event'] = null;
-                $_SESSION['user'] = null;
-                $this->msg = 'Unrecognized password for ' . $_POST['user'];
+                $data = array(
+                    'event' => $event,
+                    'user' => $user
+                );
+
+                echo $this->tm->jwt($data);
+
+            } else {
+
+                return ('HTTP/1.0 401 Unauthorized');
             }
         }
-	}
+
+        return null;
+    }
+	private function handleRequest($request)
+	{
+        if ($request->isPost()){
+
+            $this->authed = !is_null($this->getData($request)); //load the event, user, target_id
+        }
+
+        return null;
+    }
 
     /**
      * @return string
@@ -85,12 +105,12 @@ class LogonDBController extends AbstractController
         if (count($enabled) > 0) {
 
             $html = <<<EOD
-                      <form name="form1" method="post" action="$this->logonPath">
+                      <form id="login_form" name="login_form" method="post" action="$this->logonPath">
         <div align="center">
 			<table>
 				<tr><td width="50%"><div align="right">Event: </div></td>
 					<td width="50%">
-						<select class="form-control left-margin" name="event">
+						<select class="form-control left-margin" name="event" id="event">
 EOD;
             foreach ($enabled as $option) {
                 $html .= "<option>$option->label</option>";
@@ -103,7 +123,7 @@ EOD;
 		
 				<tr>
 					<td width="50%"><div align="right">ARA or representative from: </div></td>
-					<td width="50%"><select class="form-control left-margin" name="user">
+					<td width="50%"><select class="form-control left-margin" name="user" id="user">
 EOD;
             foreach ($users as $user) {
                 $html .= "<option>$user->name</option>";
@@ -115,11 +135,11 @@ EOD;
 
 				<tr>
 					<td width="50%"><div align="right">Password: </div></td>
-					<td><input class="form-control" type="password" name="passwd"></td>
+					<td><input class="form-control" type="password" name="passwd" id="passwd"></td>
 				</tr>
 			</table>
 			<p>
-            <input type="submit" type="button" class="btn btn-primary btn-xs active" name="Submit" value="Logon">      
+            <input id="frmLogon" type="submit" class="btn btn-primary btn-xs active" name="Submit" value="Logon">      
 			</p>
         </div>
       </form>
@@ -134,5 +154,48 @@ EOD;
         }
 
         return $html;
+    }
+    protected function getScript()
+    {
+        $js = <<<JSO
+        
+        
+$("#frmLogon").click( function(){
+
+     var formData = JSON.stringify({
+         "user" : document.getElementById('user').value,
+         "passwd" : document.getElementById('passwd').value,
+         "event" : document.getElementById('event').value
+     });
+
+     $.ajax(
+     {
+         url : "/logon/auth/",
+         type: "PUT",
+         data : {ValArray:formData},
+         success:function(maindta)
+         {
+             sessionStorage.accessToken = maindta;
+             console.log(maindta);
+         },
+         error: function(jqXHR, textStatus, errorThrown)
+         {
+         }
+     })
+     .done(function(data) {
+        $.ajax(
+        {
+             url : "/logon",
+             type: "POST",
+             beforeSend: function (xhr){ 
+                xhr.setRequestHeader('Authorization', "Basic "+ sessionStorage.getItem('accessToken')); 
+             }
+        });         
+     });
+
+});
+JSO;
+
+        return $js;
     }
 }

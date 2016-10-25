@@ -23,6 +23,7 @@ cp -f -r public dist/public
 cp -f -r templates dist/templates
 cp -f -r config dist/config
 cp -f -r src/Action dist/src
+cp -f -r var/.htaccess dist/var/.htaccess
 
 echo "  Updating index to production..."
 mv -f dist/public/app_prod.php dist/public/app.php
