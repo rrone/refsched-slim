@@ -29,6 +29,7 @@ abstract class AbstractController
     protected $event;
     protected $user;
     protected $authed;
+    protected $vars;
 
     //default layout colors
     protected $colorTitle = '#80ccff';

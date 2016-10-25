@@ -16,48 +16,57 @@ class SessionManager
     {
         $this->sr = $scheduleRepository;
     }
-    public function getSessionToken($request)
+    public function getPhpSessionId($request)
     {
-        $GLOBALS['user'] = null;
-        $GLOBALS['event'] = null;
-        $GLOBALS['authed'] = false;
+        $sessionKey = FigRequestCookies::get($request, 'PHPSESSID', null);
 
-        $sessionKey = FigRequestCookies::get($request, 'sessionKey', null);
+        if(!empty($sessionKey)) {
+            return $sessionKey->getValue();
+        }
 
-        if(!is_null($sessionKey)){
-            $user = $this->sr->getUserByName($sessionKey->getValue());
+        return null;
+    }
+    public function getSessionVars($request)
+    {
+        $session = array(
+            'user' => null,
+            'event' => null,
+            'authed' => false
+        );
+
+        $sessId = $this->getPhpSessionId($request);
+
+        if(!is_null($sessId)){
+            $user = $this->sr->getUserBySessionId($sessId);
 
             if (!is_null($user)) {
+                $session['user'] = $user->name;
                 if ($user->active) {
                     $event = $this->sr->getEventById($user->active_event_id);
-                    $this->setSessionGlobals($user, $event);
+                    $session['event'] = $event;
+                    $session['authed'] = $this->sr->setUserActive($user->id, $event->id, $sessId);
                 }
             }
         }
+
+        return $session;
     }
-    public function setSessionToken($response)
+    public function setSessionVars($user, $event, $sessId)
     {
-        $response = FigResponseCookies::set($response, SetCookie::create('sessionKey')
-            ->withValue($GLOBALS['user'])
-        );
-
-        return $response;
-    }
-    public function setSessionGlobals($user, $event)
-    {
-        $GLOBALS['event'] = $event;
-        $GLOBALS['user'] = $user->name;
-
-        $GLOBALS['authed'] = $this->sr->setUserActive($user->id, $event->id);
-
+        $this->sr->setUserActive($user->id, $event->id, $sessId);
     }
     public function clearGlobals($user)
     {
-        $this->sr->setUserActive($user->id, null, false);
-        $GLOBALS['event'] = null;
-        $GLOBALS['user'] = null;
-
-        $GLOBALS['authed'] = false;
+        $this->sr->setUserActive($user->id, null, null, false);
     }
+    public function emptySessionVars()
+    {
+        $session = array(
+            'user' => null,
+            'event' => null,
+            'authed' => false
+        );
 
+        return $session;
+    }
 }

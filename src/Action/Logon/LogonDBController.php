@@ -14,6 +14,12 @@ class LogonDBController extends AbstractController
 	private $events;
 	private $enabled;
 
+    /**
+     * LogonDBController constructor.
+     * @param Container $container
+     * @param SchedulerRepository $repository
+     * @param SessionManager $sessionManager
+     */
     public function __construct(Container $container, SchedulerRepository $repository, SessionManager $sessionManager) {
 		
 		parent::__construct($container, $sessionManager);
@@ -24,13 +30,21 @@ class LogonDBController extends AbstractController
 		$this->events = $repository->getCurrentEvents();
 		$this->enabled = $repository->getEnabledEvents();
     }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return Response
+     */
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->logger->info("Logon page action dispatched");
        
         $this->handleRequest($request);
 
-		$this->authed = isset($GLOBALS['authed']) ? $GLOBALS['authed'] : null;
+        $this->vars = $this->tm->getSessionVars($request);
+        $this->authed = $this->vars['authed'];
 
 		if ($this->authed) {
             return $response->withRedirect($this->greetPath);
@@ -47,9 +61,13 @@ class LogonDBController extends AbstractController
 			return $response;
 		}
     }
-	private function handleRequest($request)
+
+    /**
+     * @param $request
+     */
+    private function handleRequest($request)
 	{
-        $GLOBALS['user'] = null;
+        $this->vars = $this->tm->emptySessionVars();
 
         if ( $request->isPost() ) {
 
@@ -63,12 +81,12 @@ class LogonDBController extends AbstractController
 
             if ($this->authed) {
                 $event = $this->sr->getEventByLabel($_POST['event']);
-
-                $this->tm->setSessionGlobals($user, $event);
+                $sessId = $this->tm->getPhpSessionId($request);
+                $this->tm->setSessionVars($user, $event, $sessId);
                 $this->msg = null;
             }
             else {
-                $this->tm->clearSessionGlobals($user);
+                $this->tm->clearGlobals($user);
                 $this->msg = 'Unrecognized password for ' . $_POST['user'];
             }
         }

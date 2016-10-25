@@ -67,6 +67,19 @@ class SchedulerRepository
 		return $this->getZero($user);
 
 	}
+    public function getUserBySessionId($sessionId)
+    {
+        if(empty($sessionId)) {
+            return null;
+        }
+
+        $user = $this->db->table('users')
+            ->where('phpsessid', '=', $sessionId)
+            ->get();
+
+        return $this->getZero($user);
+
+    }
 	public function setUser($user)
 	{
 		if(empty($user)) {
@@ -97,13 +110,14 @@ class SchedulerRepository
 
         return null;
     }
-    public function setUserActive($id, $event_id=null, $isActive = true)
+    public function setUserActive($id, $event_id=null, $sessionId=null, $isActive = true)
     {
         $this->db->table('users')
             ->where('id', $id)
             ->update([
                 'active' => $isActive,
-                'active_event_id' => $event_id
+                'active_event_id' => $event_id,
+                'phpsessid' => $sessionId
             ]);
 
         return !is_null($this->getUserByID($id));

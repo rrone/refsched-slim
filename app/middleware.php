@@ -18,17 +18,3 @@ $app->add(function (Request $request, Response $response, callable $next) {
 
     return $next($request, $response);
 });
-
-$c = $app->getContainer();
-$tm = $c->get('tm');
-
-$app->add(function (Request $request, Response $response, callable $next) use ($tm) {
-
-    $this->tm->getSessionToken($request);
-
-    $response = $next($request, $response);
-
-    $response = $this->tm->setSessionToken($response);
-
-    return $response;
-});

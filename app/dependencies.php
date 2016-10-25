@@ -129,7 +129,9 @@ $container[App\Action\Full\SchedFullDBController::class] = function ($c) {
     $db = $c->get('db');
     $repo = new \App\Action\SchedulerRepository($db);
 
-    return new \App\Action\Full\SchedFullDBController($c, $repo);
+    $tm = $c->get('tm');
+
+    return new \App\Action\Full\SchedFullDBController($c, $repo, $tm);
 };
 
 $container[App\Action\Master\SchedMasterDBController::class] = function ($c) {
@@ -214,10 +216,12 @@ $container[App\Action\Admin\SchedImportController::class] = function ($c) {
 };
 
 $container[App\Action\End\SchedEndController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
 
     $tm = $c->get('tm');
 
-    return new \App\Action\End\SchedEndController($c, $tm);
+    return new \App\Action\End\SchedEndController($c, $repo, $tm);
 };
 
 $container[App\Action\SessionManager::class] = function ($c) {
