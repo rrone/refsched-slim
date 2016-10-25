@@ -8,6 +8,8 @@ if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
 
 require __DIR__ . '/../vendor/autoload.php';
 
+session_start();
+
 // Instantiate the app
 $settings = require __DIR__ . '/../app/settings.php';
 

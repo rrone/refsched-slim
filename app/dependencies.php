@@ -83,13 +83,6 @@ $container['db'] = function ($c) {
     return $capsule;
 };
 
-$container['tokenManager'] = function ($c) {
-    $tokenManager = new App\Action\TokenManager($c);
-
-    return $tokenManager;
-};
-
-
 // -----------------------------------------------------------------------------
 // Action dependency Injection
 // -----------------------------------------------------------------------------

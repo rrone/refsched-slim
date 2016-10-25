@@ -82,15 +82,6 @@ class SchedulerRepository
 				]);	
 		}
 	}
-	//Session table
-    public function setSessionData($token)
-    {
-        return null;
-    }
-    public function getSessionData($token)
-    {
-        return null;
-    }
 	//Events table functions
 	public function getCurrentEvents()
     {

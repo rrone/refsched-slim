@@ -29,14 +29,14 @@ class SchedExportController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->authed = $this->tm->isValid($request);
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
          }
 
         $this->logger->info("Schedule export action dispatched");
 
-        $this->getData($request); //load the event, user, target_id
+        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 
         if (is_null($this->event)) {
             return $response->withRedirect($this->fullPath);
