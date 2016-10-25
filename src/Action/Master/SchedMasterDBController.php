@@ -11,6 +11,7 @@ class SchedMasterDBController extends AbstractController
 {
     // SchedulerRepository //
 	private $topmenu;
+    private $bottommenu;
 	private $justOpen;
     
 	public function __construct(Container $container, SchedulerRepository $repository) {
@@ -49,7 +50,7 @@ class SchedMasterDBController extends AbstractController
                 'rep' => $this->user,
                 'content' => $this->renderMaster(),
                 'topmenu' => $this->topmenu,
-                'menu' => $this->menu(),
+                'menu' => $this->bottommenu,
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
@@ -94,6 +95,8 @@ class SchedMasterDBController extends AbstractController
 				$projectKey = $event->projectKey;
 
 				$html .=  "<form name=\"master_sched\" method=\"post\" action=\"$this->masterPath\">\n";
+
+                $html .= $this->menu();
 
 				$html .=  "<table class=\"sched_table\" width=\"100%\">\n";
 				$html .=  "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
@@ -142,13 +145,16 @@ class SchedMasterDBController extends AbstractController
 				}
 				$html .=  "</table>\n";
 
-				$html .=  "</form>\n";
-				$this->topmenu = $this->menu();
+                $html .= $this->menu();
 
+				$html .=  "</form>\n";
+				$this->topmenu = null;
+                $this->bottommenu = null;
 			}
 			else {
 				$html .=  "<h2 class=\"center\">You probably want the <a href=\"$this->schedPath\">scheduling</a> page.</h2>";
 				$this->topmenu = null;
+                $this->bottommenu = $this->menu();
 			}
 		}
 		else {
