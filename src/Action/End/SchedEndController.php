@@ -7,6 +7,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\AbstractController;
 use App\Action\SchedulerRepository;
 use App\Action\SessionManager;
+use Dflydev\FigCookies\FigRequestCookies;
+use Dflydev\FigCookies\Cookie;
 
 class SchedEndController extends AbstractController
 {
@@ -21,7 +23,7 @@ class SchedEndController extends AbstractController
     {
         $this->logger->info("Schedule end page action dispatched");
 
-        $user = $this->sr->getUserByName($GLOBALS['user']);
+        $user = $this->tm->getSessionUser($request);
 
         $this->tm->clearGlobals($user);
 

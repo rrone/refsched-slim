@@ -7,6 +7,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\AbstractController;
 use App\Action\SchedulerRepository;
 use App\Action\SessionManager;
+use Dflydev\FigCookies\FigRequestCookies;
+use Dflydev\FigCookies\Cookie;
 
 class LogonDBController extends AbstractController
 {
@@ -41,12 +43,14 @@ class LogonDBController extends AbstractController
     {
         $this->logger->info("Logon page action dispatched");
        
-        $this->handleRequest($request);
+        $request = $this->handleRequest($request);
 
         $this->vars = $this->tm->getSessionVars($request);
+
         $this->authed = $this->vars['authed'];
 
 		if ($this->authed) {
+            $response = $this->tm->setSessionUser($response, $this->vars['user']);
             return $response->withRedirect($this->greetPath);
         }
 		else {
@@ -54,6 +58,7 @@ class LogonDBController extends AbstractController
 				'events' => $this->sr->getCurrentEvents(),
 				'content' => $this->renderLogon(),
 				'message' => $this->msg,
+//                'script' => $this->getJS()
 			);
 		  
 			$this->view->render($response, 'logon.html.twig', $content);      
@@ -81,8 +86,10 @@ class LogonDBController extends AbstractController
 
             if ($this->authed) {
                 $event = $this->sr->getEventByLabel($_POST['event']);
-                $sessId = $this->tm->getPhpSessionId($request);
-                $this->tm->setSessionVars($user, $event, $sessId);
+                $this->tm->setSessionVars($user, $event);
+
+                $request = FigRequestCookies::set($request, Cookie::create('user', $userName));
+
                 $this->msg = null;
             }
             else {
@@ -90,6 +97,8 @@ class LogonDBController extends AbstractController
                 $this->msg = 'Unrecognized password for ' . $_POST['user'];
             }
         }
+
+        return $request;
 	}
 
     /**
@@ -103,7 +112,7 @@ class LogonDBController extends AbstractController
         if (count($enabled) > 0) {
 
             $html = <<<EOD
-                      <form id="form1" name="form1" method="post" action="$this->logonPath">
+                      <form name="form1" method="post" action="$this->logonPath">
         <div align="center">
 			<table>
 				<tr><td width="50%"><div align="right">Event: </div></td>
@@ -153,4 +162,18 @@ EOD;
 
         return $html;
     }
+//    protected function getJS()
+//    {
+//        $js = <<<JQS
+//$("#logon_btn").on("click", function() {
+//     var key = sessionStorage.setItem('user', document.getElementById('user').value);
+//     var user = sessionStorage.getItem('user');
+//
+//     console.info('logon_btn: ' + user);
+//});
+//
+//JQS;
+//
+//        return $js;
+//    }
 }

@@ -51,85 +51,69 @@
 		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	 })();
 
-	 function api_call(url,method,data,onready)
-	 {
-         if (typeof(url) == 'undefined')  url = "/";
-         if (typeof(method) == 'undefined')  method = "GET";
-		 if (typeof(data) == 'undefined')    data = {};
-
-		 $.ajax({
-			 url: url,
-			 data: data,
-			 type: method,
-			 dataType: 'jsonp',
-			 beforeSend : function(xhr) {
-				 var cookie = 'Area 1B';
-				 console.info( "adding sessionKey: "+ cookie );
-				 xhr.setRequestHeader('sessionKey', cookie);
-			 },
-		 }).done(function( response ) {
-			 // done
-			 response = { isSuccess: (response.status == "OK"), connectionFailure: false, authorisationFailure: (response.status == "NOT_AUTHORIZED"), data: response.data};
-			 if ((typeof(onready) != 'undefined') && (onready != null)) onready( response );
-		 }).fail(function( status ) {
-			 // failed
-			 response = { isSuccess: false, connectionFailure: true,authorisationFailure: false, data: status};
-			 if ((typeof(onready) != 'undefined') && (onready != null)) onready( response );
-		 });
-	 };
-
-     $(document).ready( function() {
-         fetchSimilarHeaders()
-     });
-
-     function fetchSimilarHeaders () {
-         var request = new XMLHttpRequest();
-         request.onreadystatechange = function () {
-             if (request.readyState === 4) {
-                 //
-                 // The following headers may often be similar
-                 // to those of the original page request...
-                 //
-                 headers = request.getResponseHeader('sessionKey');
-                 storeHeaders(headers);
-             }
-         };
-
-         //
-         // Re-request the same page (document.location)
-         // We hope to get the same or similar response headers to those which
-         // came with the current page, but we have no guarantee.
-         // Since we are only after the headers, a HEAD request may be sufficient.
-         //
-         request.open('HEAD', document.location, true);
-         request.send(null);
-     }
-
-     function storeHeaders(data) {
-         if (typeof data !== 'undefined') {
-             sessionStorage.setItem('sessionKey', data);
-             $.cookie('sessionKey', data);
-         }
-     }
-
-     $("a").on("click", function() {
-         var linkAddress = $(this).attr('href');
-         var key = sessionStorage.getItem('sessionKey');
-
-//         $.ajaxSetup({
+//	 function api_call(url,method,data,onready) {
+//         if (typeof(url) == 'undefined')  url = "/";
+//         if (typeof(method) == 'undefined')  method = "GET";
+//         if (typeof(data) == 'undefined')    data = {};
+//
+//         $.ajax({
+//             url: url,
+//             data: data,
+//             type: method,
+//             beforeSend: function (xhr) {
+//                 var cookie = sessionStorage.getItem('user');
+//                 console.info("adding user: " + cookie);
+//                 xhr.setRequestHeader('user', cookie);
+//             },
+////             success: function (response) {
+////                alert('Success');
+////             },
+//             error: function (xhr, exception) {
+//                 var msg = '';
+//                 if (xhr.status === 0) {
+//                     msg = 'Not connect.\n Verify Network.';
+//                 } else if (xhr.status == 404) {
+//                     msg = 'Requested page not found. [404]';
+//                 } else if (xhr.status == 500) {
+//                     msg = 'Internal Server Error [500].';
+//                 } else if (exception === 'parsererror') {
+//                     msg = 'Requested JSON parse failed.';
+//                 } else if (exception === 'timeout') {
+//                     msg = 'Time out error.';
+//                 } else if (exception === 'abort') {
+//                     msg = 'Ajax request aborted.';
+//                 } else {
+//                     msg = 'Uncaught Error.\n' + xhr.responseText;
+//                 }
+//                 alert(msg);
+//             }
+//         }).done(function (response) {
+//             // done
+//             response = {
+//                 isSuccess: (response.status == "OK"),
+//                 connectionFailure: false,
+//                 authorisationFailure: (response.status == "NOT_AUTHORIZED"),
+//                 data: response.data
+//             };
+//             if ((typeof(onready) != 'undefined') && (onready != null)) onready(response);
+//         }).fail(function (status) {
+//             // failed
+//             response = {isSuccess: false, connectionFailure: true, authorisationFailure: false, data: status};
+//             if ((typeof(onready) != 'undefined') && (onready != null)) onready(response);
 //         });
+//     }
 //
-//         if(linkAddress.indexOf('?') == -1 ) {
-//             var newurl = linkAddress + "?info=" + key;
-//         } else {
-//             var newurl = linkAddress + "&info=" + key;
-//         }
+//     $(document).ready( function() {
+//     });
 //
-//         console.info (newurl);
-
-         // Sends your custom header
-//         window.location.href = newurl;
-     });
+//     $("a").on("click", function() {
+//         var linkAddress = 'http://refsched.slim.vhx.host' + $(this).attr('href');
+//         var user = sessionStorage.getItem('user');
+//
+//         console.info ('link click: ' + linkAddress);
+//
+//         api_call(linkAddress, 'GET');
+//     });
 
      {% block script %}{% endblock %}
 </script>
