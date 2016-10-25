@@ -64,7 +64,7 @@ class SchedExportController extends AbstractController
 			$has4th = $this->sr->numberOfReferees($projectKey) > 3;
 			
 			//set the header labels
-			$labels = array ('Game','Date','Time','Field','Division','Home','Away','Referee Team','Referee','AR1','AR2');
+			$labels = array ('Game','Date','Time','Field','Division','Pool','Home','Away','Referee Team','Referee','AR1','AR2');
 			if ($has4th){
 				$labels[] = '4th';
 			}
@@ -80,6 +80,7 @@ class SchedExportController extends AbstractController
 					$time,
 					$game->field,
 					$game->division,
+                    $game->pool,
 					$game->home,
 					$game->away,
 					$game->assignor,

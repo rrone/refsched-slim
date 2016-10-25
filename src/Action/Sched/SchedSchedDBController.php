@@ -160,14 +160,14 @@ class SchedSchedDBController extends AbstractController
                                     $this->sr->updateAssignor($data);
                                     $added[$game->id] = $game;
                                     $games_now[$div]++;
-                                    $this->msg .= "<p>You have <strong>scheduled</strong> $game->division Game No. $game->id on $date on $game->field at $time</p>";
+                                    $this->msg .= "<p>You have <strong>scheduled</strong> $game->division Game No. $game->game_number on $date on $game->field at $time</p>";
                                 } else {
                                     $atLimit[$div]++;
-                                    $this->msg .= "<p>You have <strong>not scheduled</strong> $game->division Game No. $game->id on $date on $game->field at $time because you are at your game limit!</p>";
+                                    $this->msg .= "<p>You have <strong>not scheduled</strong> $game->division Game No. $game->game_number on $date on $game->field at $time because you are at your game limit!</p>";
                                 }
                             } else {
                                 $unavailable[$game->id] = $game;
-                                $this->msg = "<p>Sorry, $game->division Game No. $game->id has been scheduled by $game->assignor</p>";
+                                $this->msg = "<p>Sorry, $game->division Game No. $game->game_number has been scheduled by $game->assignor</p>";
                             }
                         }
                     }
@@ -239,6 +239,7 @@ class SchedSchedDBController extends AbstractController
 				$field[] = $game->field;
 				$time[] = date('H:i', strtotime($game->time));
 				$div[] = $game->division;
+                $pool[] = $game->pool;
 				$home[] = $game->home;
 				$away[] = $game->away;
 				$ref_team[] = $game->assignor;
@@ -260,42 +261,41 @@ class SchedSchedDBController extends AbstractController
 			}
 
 			if ( $locked && array_key_exists( 'none', $limit_list ) ) {
-				$html .= "<h3 class=\"center\"><span color=\"$this->colorAlert\">The schedule has been locked<br>You may sign up for games but not unassign yourself</span></h3>\n";
+				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule has been locked<br>You may sign up for games but not unassign yourself</span></h3>\n";
 				$allatlimit = false;
 			}
-			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $num_assigned < $limit_list[ 'all' ] ) { 
-				$html .= "<h3 class=\"center\"><span color=\"$this->colorAlert\">The schedule has been locked<br>You may sign up for games but not unassign yourself</span></h3>\n";
+			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $num_assigned < $limit_list[ 'all' ] ) {
+				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule has been locked<br>You may sign up for games but not unassign yourself</span></h3>\n";
 				$allatlimit = false;
 			}
-			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $num_assigned == $limit_list[ 'all' ] ) { 
-				$html .= "<h3 class=\"center\"><span color=\"$this->colorAlert\">The schedule has been locked and you are at your game limit<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe submit button on this page has been disabled and available games are not shown<br>\nYou probably want to <a href=\"$this->greetPath\">Go to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></span></h3>\n";
+			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $num_assigned == $limit_list[ 'all' ] ) {
+				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule has been locked and you are at your game limit<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe submit button on this page has been disabled and available games are not shown<br>\nYou probably want to <a href=\"$this->greetPath\">Go to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></span></h3>\n";
 				$showavailable = false;
 			}
-			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $num_assigned > $limit_list[ 'all' ] ) { 
-				$html .= "<h3 class=\"center\"><span color=\"$this->colorAlert\">The schedule has been locked and you are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe Submit button has been disabled and available games are not shown<br>\nYou probably want to <a href=\"$this->greetPath\">Go to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></span></h3>\n";
-				$showavailable = false; 
+			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $num_assigned > $limit_list[ 'all' ] ) {
+				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule has been locked and you are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe Submit button has been disabled and available games are not shown<br>\nYou probably want to <a href=\"$this->greetPath\">Go to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></span></h3>\n";
+				$showavailable = false;
 			}
-			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $num_assigned < $limit_list['all'] ) { 
+			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $num_assigned < $limit_list['all'] ) {
 				$tmplimit = $limit_list['all'];
-				$html .= "<h3 class=\"center\">You are currently assigned to <span color=\"$this->colorAlert\">$num_assigned</span> of your <span color=\"$this->colorAlert\">$tmplimit</span> games</h3>\n";
+				$html .= "<h3 class=\"center\">You are currently assigned to <span style=\"color:$this->colorAlert\">$num_assigned</span> of your <span style=\"color:$this->colorAlert\">$tmplimit</span> games</h3>\n";
 			}
 			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $num_assigned == $limit_list['all'] ) {
-			    $html .= "<h3 class=\"center\"><span color=\"$this->colorAlert\">You are at your game limit<br>You will have to unassign yourself from games to sign up for others</span></h3>\n";
+			    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at your game limit<br>You will have to unassign yourself from games to sign up for others</span></h3>\n";
 			}
 			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $num_assigned > $limit_list['all'] ) {
-			    $html .= "<h3 class=\"center\"><span color=\"$this->colorAlert\">You are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nIf you continue from here you will not be able to keep all the games you are signed up for and may lose some of the games you already have<br>\nIf you want to keep these games and remain over the game limit it is recommended that you do not hit submit but do something else instead<br>\n<a href=\"$this->greetPath\">Go to the Main Page</a></span></h3>\n";
+			    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nIf you continue from here you will not be able to keep all the games you are signed up for and may lose some of the games you already have<br>\nIf you want to keep these games and remain over the game limit it is recommended that you do not hit submit but do something else instead<br>\n<a href=\"$this->greetPath\">Go to the Main Page</a></span></h3>\n";
 			}
 			elseif ( $locked && count( $limit_list ) ) {
-				$html .= "<h3 class=\"center\"><span color=\"$this->colorAlert\">The system is locked<br>You can add games to divisions that are below the limit but not unassign your Area from games</span><br><br>\n";
-
+				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The system is locked<br>You can add games to divisions that are below the limit but not unassign your Area from games</span><br><br>\n";
                 foreach ( $assigned_list as $k => $v ) {
                     $tempassign = $assigned_list[$k];
                     if ( $tempassign ) {
-                        if (isset($limit_list[$k])) {
-                            $html .= "For $k, you are assigned to <span color=\"$this->colorAlert\">$tempassign</span> games with a limit of <span color=\"$this->colorAlert\">$v</span> games<br>\n";
+                        if (isset($limit_list[$k]) && $limit_list[$k] != 'none') {
+                            $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$v</span> games<br>\n";
                         }
                         else {
-                            $html .= "For $k, you are assigned to <span color=\"$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
+                            $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
                         }
                         if ( ($assigned_list[$k] < $limit_list[$k]) || (!isset($limit_list[$k]))) {
                             $allatlimit = false;
@@ -316,16 +316,16 @@ class SchedSchedDBController extends AbstractController
 						if ( $assigned_list[$k] >= $limit_list[$k] ) { $oneatlimit = true;}
 					}
 				}
-				if ( $oneatlimit ) { 
-				   $html .= "<br><span color=\"$this->colorAlert\">One or more of your divisions are at or above their limits<br>You will need to unassign games in that division before you can select additional games</span>\n";
-				} 
+				if ( $oneatlimit ) {
+				   $html .= "<br><span style=\"color:$this->colorAlert\">One or more of your divisions are at or above their limits<br>You will need to unassign games in that division before you can select additional games</span>\n";
+				}
 				$html .= "</h3>\n";
 			}
 
 			$html .= "<form name=\"form1\" method=\"post\" action=\"$this->schedPath\">\n";
-	
+
 			$html .= "<div align=\"left\">";
-   
+
 			$html .= "<h3 class=\"h3-btn\" >Available games<span style=\"font-weight: normal\"> : Shading change indicates different start times</span>";
 
 			$submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled' ;
@@ -336,7 +336,7 @@ class SchedSchedDBController extends AbstractController
 
 			$html .= "</h3>\n";
 			if ( !$showavailable ) {
-				$html .= "<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";   
+				$html .= "<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";
 				$html .= "<td>No other games available</td>";
 				$html .= "</tr>\n";
 			} else {
@@ -348,6 +348,7 @@ class SchedSchedDBController extends AbstractController
 				$html .= "<th>Time</th>";
 				$html .= "<th>Field</th>";
 				$html .= "<th>Division</th>";
+                $html .= "<th>Pool</th>";
 				$html .= "<th>Home</th>";
 				$html .= "<th>Away</th>";
 				$html .= "<th>Referee Team</th>";
@@ -356,7 +357,7 @@ class SchedSchedDBController extends AbstractController
 				for ( $kant=0; $kant < $kount; $kant++ ) {
 					if ( ( $this->showgroup && $this->showgroup == $this->divisionAge( $div[$kant] ) ) || !$this->showgroup ) {
 						if ( $a_init != substr( $home[$kant], 0, 1) && $a_init != substr( $away[$kant], 0, 1) && !$ref_team[$kant] && $showavailable ) {
-			   
+
 							if ( !$testtime ) { $testtime = $time[$kant]; }
 							elseif ( $testtime != $time[$kant] ) {
 								$testtime = $time[$kant];
@@ -371,6 +372,7 @@ class SchedSchedDBController extends AbstractController
 							$html .= "<td>$time[$kant]</td>";
 							$html .= "<td>$field[$kant]</td>";
 							$html .= "<td>$div[$kant]</td>";
+                            $html .= "<td>$pool[$kant]</td>";
 							$html .= "<td>$home[$kant]</td>";
 							$html .= "<td>$away[$kant]</td>";
 							$html .= "<td>&nbsp;</td>";
@@ -384,10 +386,10 @@ class SchedSchedDBController extends AbstractController
 			$html .= "<h3>Games assigned to $this->user</h3>\n";
 			if ( empty($kount) ) {
 				$html .= "<table class=\"sched_table\" >\n";
-				$html .= "<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";   
+				$html .= "<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";
 				$html .= "<td>$this->user has no games assigned</td>";
 				$html .= "</tr>\n";
-			} else {            
+			} else {
 				$html .= "<table class=\"sched_table\" >\n";
 				$html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">\n";
 				$html .= "<th>Game No</th>\n";
@@ -396,11 +398,12 @@ class SchedSchedDBController extends AbstractController
 				$html .= "<th>Time</th>\n";
 				$html .= "<th>Field</th>\n";
 				$html .= "<th>Division</th>\n";
+                $html .= "<th>Pool</th>\n";
 				$html .= "<th>Home</th>\n";
 				$html .= "<th>Away</th>\n";
 				$html .= "<th>Referee Team</th>\n";
 				$html .= "</tr>\n";
-		  
+
 				for ( $kant=0; $kant < $kount; $kant++ ) {
 				   if ( $this->user == $ref_team[$kant]) {
 						$html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
@@ -414,7 +417,8 @@ class SchedSchedDBController extends AbstractController
 						$html .= "<td>$date[$kant]</td>";
 						$html .= "<td>$time[$kant]</td>";
 						$html .= "<td>$field[$kant]</td>";
-						$html .= "<td>$div[$kant]</td>";
+                        $html .= "<td>$div[$kant]</td>";
+                        $html .= "<td>$pool[$kant]</td>";
 						$html .= "<td>$home[$kant]</td>";
 						$html .= "<td>$away[$kant]</td>";
 						$html .= "<td>$ref_team[$kant]</td>";

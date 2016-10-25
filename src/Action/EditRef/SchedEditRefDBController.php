@@ -123,6 +123,7 @@ class SchedEditRefDBController extends AbstractController
                             $html .= "<th>Time</th>";
                             $html .= "<th>Field</th>";
                             $html .= "<th>Division</th>";
+                            $html .= "<th>pool</th>";
                             $html .= "<th>Referee Team</th>";
                             $html .= "<th>Center</th>";
                             $html .= "<th>AR1</th>";
@@ -137,6 +138,7 @@ class SchedEditRefDBController extends AbstractController
                             $html .= "<td>$time</td>";
                             $html .= "<td>$game->field</td>";
                             $html .= "<td>$game->division</td>";
+                            $html .= "<td>$game->pool</td>";
                             $html .= "<td>$game->assignor</td>";
                             $html .= "<td><input type=\"text\" name=\"cr\" size=\"15\" value=\"$game->cr\"></td>";
                             $html .= "<td><input type=\"text\" name=\"ar1\" size=\"15\" value=\"$game->ar1\"></td>";

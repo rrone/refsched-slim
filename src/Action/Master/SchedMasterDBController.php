@@ -105,6 +105,7 @@ class SchedMasterDBController extends AbstractController
 				$html .=  "<th>Time</th>";
 				$html .=  "<th>Field</th>";
 				$html .=  "<th>Division</th>";
+                $html .=  "<th>Pool</th>";
 				$html .=  "<th>Home</th>";
 				$html .=  "<th>Away</th>";
 				$html .=  "<th>Referee Team</th>";
@@ -126,6 +127,7 @@ class SchedMasterDBController extends AbstractController
 						$html .=  "<td>$time</td>";
 						$html .=  "<td>$game->field</td>";
 						$html .=  "<td>$game->division</td>";
+                        $html .=  "<td>$game->pool</td>";
 						$html .=  "<td>$game->home</td>";
 						$html .=  "<td>$game->away</td>";
 						
