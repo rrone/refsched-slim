@@ -36,6 +36,10 @@
 
 </body>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.7.2/jquery.serializejson.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
 <script type="text/javascript">
 	 var _gaq = _gaq || [];
 	 _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
@@ -47,6 +51,86 @@
 		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	 })();
 
-	 {% block script %}{% endblock %}        
+	 function api_call(url,method,data,onready)
+	 {
+         if (typeof(url) == 'undefined')  url = "/";
+         if (typeof(method) == 'undefined')  method = "GET";
+		 if (typeof(data) == 'undefined')    data = {};
+
+		 $.ajax({
+			 url: url,
+			 data: data,
+			 type: method,
+			 dataType: 'jsonp',
+			 beforeSend : function(xhr) {
+				 var cookie = 'Area 1B';
+				 console.info( "adding sessionKey: "+ cookie );
+				 xhr.setRequestHeader('sessionKey', cookie);
+			 },
+		 }).done(function( response ) {
+			 // done
+			 response = { isSuccess: (response.status == "OK"), connectionFailure: false, authorisationFailure: (response.status == "NOT_AUTHORIZED"), data: response.data};
+			 if ((typeof(onready) != 'undefined') && (onready != null)) onready( response );
+		 }).fail(function( status ) {
+			 // failed
+			 response = { isSuccess: false, connectionFailure: true,authorisationFailure: false, data: status};
+			 if ((typeof(onready) != 'undefined') && (onready != null)) onready( response );
+		 });
+	 };
+
+     $(document).ready( function() {
+         fetchSimilarHeaders()
+     });
+
+     function fetchSimilarHeaders () {
+         var request = new XMLHttpRequest();
+         request.onreadystatechange = function () {
+             if (request.readyState === 4) {
+                 //
+                 // The following headers may often be similar
+                 // to those of the original page request...
+                 //
+                 headers = request.getResponseHeader('sessionKey');
+                 storeHeaders(headers);
+             }
+         };
+
+         //
+         // Re-request the same page (document.location)
+         // We hope to get the same or similar response headers to those which
+         // came with the current page, but we have no guarantee.
+         // Since we are only after the headers, a HEAD request may be sufficient.
+         //
+         request.open('HEAD', document.location, true);
+         request.send(null);
+     }
+
+     function storeHeaders(data) {
+         if (typeof data !== 'undefined') {
+             sessionStorage.setItem('sessionKey', data);
+             $.cookie('sessionKey', data);
+         }
+     }
+
+     $("a").on("click", function() {
+         var linkAddress = $(this).attr('href');
+         var key = sessionStorage.getItem('sessionKey');
+
+//         $.ajaxSetup({
+//         });
+//
+//         if(linkAddress.indexOf('?') == -1 ) {
+//             var newurl = linkAddress + "?info=" + key;
+//         } else {
+//             var newurl = linkAddress + "&info=" + key;
+//         }
+//
+//         console.info (newurl);
+
+         // Sends your custom header
+//         window.location.href = newurl;
+     });
+
+     {% block script %}{% endblock %}
 </script>
 </html>

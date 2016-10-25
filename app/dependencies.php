@@ -83,6 +83,13 @@ $container['db'] = function ($c) {
     return $capsule;
 };
 
+$container['tm'] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new App\Action\SessionManager($repo);
+};
+
 // -----------------------------------------------------------------------------
 // Action dependency Injection
 // -----------------------------------------------------------------------------
@@ -97,14 +104,18 @@ $container[App\Action\Logon\LogonDBController::class] = function ($c) {
     $db = $c->get('db');
     $repo = new \App\Action\SchedulerRepository($db);
 
-    return new \App\Action\Logon\LogonDBController($c, $repo);
+    $tm = $c->get('tm');
+
+    return new \App\Action\Logon\LogonDBController($c, $repo, $tm);
 };
 
 $container[App\Action\Greet\SchedGreetDBController::class] = function ($c) {
     $db = $c->get('db');
     $repo = new \App\Action\SchedulerRepository($db);
 
-    return new \App\Action\Greet\SchedGreetDBController($c, $repo);
+    $tm = $c->get('tm');
+
+    return new \App\Action\Greet\SchedGreetDBController($c, $repo, $tm);
 };
 
 $container[App\Action\Sched\SchedSchedDBController::class] = function ($c) {
@@ -202,3 +213,16 @@ $container[App\Action\Admin\SchedImportController::class] = function ($c) {
     return new \App\Action\Admin\SchedImportController($c, $repo, $importer, $uploadPath);
 };
 
+$container[App\Action\End\SchedEndController::class] = function ($c) {
+
+    $tm = $c->get('tm');
+
+    return new \App\Action\End\SchedEndController($c, $tm);
+};
+
+$container[App\Action\SessionManager::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\SessionManager($repo);
+};

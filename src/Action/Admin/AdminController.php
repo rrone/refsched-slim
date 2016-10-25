@@ -20,8 +20,8 @@ class AdminController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
-        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+        $this->authed = isset($GLOBALS['authed']) ? $GLOBALS['authed'] : null;
+        $this->user = isset($GLOBALS['user']) ? $GLOBALS['user'] : null;
 
         if (!$this->authed || $this->user != 'Section 1') {
             return $response->withRedirect($this->greetPath);

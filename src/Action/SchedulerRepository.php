@@ -143,6 +143,14 @@ class SchedulerRepository
 
 		return $this->getZero($event);
     }
+    public function getEventById($id)
+    {
+        $event = $this->db->table('events')
+            ->where('id', '=', $id)
+            ->get();
+
+        return $this->getZero($event);
+    }
 	public function getEventLabel($projectKey)
 	{
 		$event = $this->getEvent($projectKey);

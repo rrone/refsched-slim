@@ -6,6 +6,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\AbstractController;
 use App\Action\SchedulerRepository;
+use App\Action\SessionManager;
 
 class LogonDBController extends AbstractController
 {
@@ -13,16 +14,15 @@ class LogonDBController extends AbstractController
 	private $events;
 	private $enabled;
 
-	public function __construct(Container $container, SchedulerRepository $repository) {
+    public function __construct(Container $container, SchedulerRepository $repository, SessionManager $sessionManager) {
 		
-		parent::__construct($container);
+		parent::__construct($container, $sessionManager);
 		
 		$this->sr = $repository;
-		
+
 		$this->users = $repository->getUsers();
 		$this->events = $repository->getCurrentEvents();
 		$this->enabled = $repository->getEnabledEvents();
-		
     }
     public function __invoke(Request $request, Response $response, $args)
     {
@@ -30,10 +30,10 @@ class LogonDBController extends AbstractController
        
         $this->handleRequest($request);
 
-		$this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+		$this->authed = isset($GLOBALS['authed']) ? $GLOBALS['authed'] : null;
 
 		if ($this->authed) {
-			return $response->withRedirect($this->greetPath);
+            return $response->withRedirect($this->greetPath);
         }
 		else {
 			$content = array(
@@ -49,6 +49,8 @@ class LogonDBController extends AbstractController
     }
 	private function handleRequest($request)
 	{
+        $GLOBALS['user'] = null;
+
         if ( $request->isPost() ) {
 
             $userName = isset($_POST['user']) ? $_POST['user'] : null;
@@ -60,15 +62,13 @@ class LogonDBController extends AbstractController
             $this->authed = password_verify($pass, $hash);
 
             if ($this->authed) {
-                $_SESSION['authed'] = true;
-                $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
-                $_SESSION['user'] = $_POST['user'];
+                $event = $this->sr->getEventByLabel($_POST['event']);
+
+                $this->tm->setSessionGlobals($user, $event);
                 $this->msg = null;
             }
             else {
-                $_SESSION['authed'] = false;
-                $_SESSION['event'] = null;
-                $_SESSION['user'] = null;
+                $this->tm->clearSessionGlobals($user);
                 $this->msg = 'Unrecognized password for ' . $_POST['user'];
             }
         }
@@ -85,12 +85,12 @@ class LogonDBController extends AbstractController
         if (count($enabled) > 0) {
 
             $html = <<<EOD
-                      <form name="form1" method="post" action="$this->logonPath">
+                      <form id="form1" name="form1" method="post" action="$this->logonPath">
         <div align="center">
 			<table>
 				<tr><td width="50%"><div align="right">Event: </div></td>
 					<td width="50%">
-						<select class="form-control left-margin" name="event">
+						<select id="event" class="form-control left-margin" name="event">
 EOD;
             foreach ($enabled as $option) {
                 $html .= "<option>$option->label</option>";
@@ -103,7 +103,7 @@ EOD;
 		
 				<tr>
 					<td width="50%"><div align="right">ARA or representative from: </div></td>
-					<td width="50%"><select class="form-control left-margin" name="user">
+					<td width="50%"><select id="user" class="form-control left-margin" name="user">
 EOD;
             foreach ($users as $user) {
                 $html .= "<option>$user->name</option>";
@@ -115,11 +115,11 @@ EOD;
 
 				<tr>
 					<td width="50%"><div align="right">Password: </div></td>
-					<td><input class="form-control" type="password" name="passwd"></td>
+					<td><input id="passwd" class="form-control" type="password" name="passwd"></td>
 				</tr>
 			</table>
 			<p>
-            <input type="submit" type="button" class="btn btn-primary btn-xs active" name="Submit" value="Logon">      
+            <input id="logon_btn" type="submit" type="button" class="btn btn-primary btn-xs active" name="Submit" value="Logon">      
 			</p>
         </div>
       </form>

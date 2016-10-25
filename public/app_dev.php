@@ -23,7 +23,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 Debug::enable();
 
-session_start();
+//session_start();
 
 // Instantiate the app
 $settings = require __DIR__ . '/../app/settings.php';

@@ -11,25 +11,25 @@ abstract class AbstractController
 
     //schedule repository
     protected $sr;
-	
+
     //shared variables
     protected $view;
     protected $logger;
     protected $container;
     protected $root;
 
-	//view variables
+    //view variables
     protected $page_title;
-	protected $dates;
-	protected $location;
-	protected $msg;
+    protected $dates;
+    protected $location;
+    protected $msg;
     protected $msgStyle;
 
-	//session variables	
-	protected $event;
+    //session variables
+    protected $event;
     protected $user;
     protected $authed;
-    
+
     //default layout colors
     protected $colorTitle = '#80ccff';
     protected $colorOpen = '#FFF484';
@@ -39,7 +39,7 @@ abstract class AbstractController
     protected $colorAlert = '#CC0000';
     protected $colorWarning = '#CC00CC';
     protected $colorSuccess = '#02C902';
-    
+
     //named routes
     protected $assignPath;
     protected $controlPath;
@@ -53,13 +53,14 @@ abstract class AbstractController
     protected $refsPath;
     protected $schedPath;
     protected $unlockPath;
-	protected $fullXlsPath;
-	protected $adminUpdatePath;
+    protected $fullXlsPath;
+    protected $adminUpdatePath;
     protected $schedTemplatePath;
 
-    public function __construct(Container $container)
+    public function __construct(Container $container, SessionManager $sessionManager)
     {
         $this->container = $container;
+        $this->tm = $sessionManager;
 
         $this->view = $container->get('view');
         $this->logger = $container->get('logger');
@@ -85,21 +86,22 @@ abstract class AbstractController
         $this->schedImportPath = $this->container->get('router')->pathFor('sched_import');
 
     }
+
     protected function errorCheck()
     {
         $html = null;
-        
-        if ( !$this->authed ) {
+
+        if (!$this->authed) {
             $html .= "<h2 class=\"center\">You need to <a href=\"$this->logonPath\">logon</a> first.</h2>";
-        }
-        else {
+        } else {
             $html .= "<h1 class=\"center\">Something is not right</h1>";
         }
-        
+
         return $html;
     }
-	protected function divisionAge($div)
-	{
-		return substr($div,0,3);
-	}
+
+    protected function divisionAge($div)
+    {
+        return substr($div, 0, 3);
+    }
 }

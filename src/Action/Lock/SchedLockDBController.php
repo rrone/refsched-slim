@@ -20,15 +20,15 @@ class SchedLockDBController extends AbstractController
 
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+        $this->authed = isset($GLOBALS['authed']) ? $GLOBALS['authed'] : null;
         if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
         }
 
         $this->logger->info("Schedule lock action dispatched");
 
-        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+        $this->event = isset($GLOBALS['event']) ?  $GLOBALS['event'] : false;
+        $this->user = isset($GLOBALS['user']) ? $GLOBALS['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
