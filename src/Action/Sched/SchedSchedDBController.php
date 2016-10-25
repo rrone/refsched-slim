@@ -311,10 +311,15 @@ class SchedSchedDBController extends AbstractController
 				$html .= "<h3 class=\"center\">\n";
 				foreach ( $limit_list as $k => $v ) {
 					$tempassign = $assigned_list[$k];
-					if ( $assigned_list[ $k ] ) {
-						$html .= "For $k you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> with a limit of <span style=\"color:$this->colorAlert\">$v</span> games<br>\n";
-						if ( $assigned_list[$k] >= $limit_list[$k] ) { $oneatlimit = true;}
-					}
+                    if ( $tempassign ) {
+                        if ( $assigned_list[ $k ] && $limit_list[$k] != 'none' ) {
+                                $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$v</span> games<br>\n";
+                            }
+                            else {
+                                $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
+                            }
+                        $oneatlimit = ($assigned_list[$k] >= $limit_list[$k]);
+                    }
 				}
 				if ( $oneatlimit ) {
 				   $html .= "<br><span style=\"color:$this->colorAlert\">One or more of your divisions are at or above their limits<br>You will need to unassign games in that division before you can select additional games</span>\n";
