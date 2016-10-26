@@ -80,6 +80,8 @@ class SchedFullDBController extends AbstractController
 
             $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
+            $html .= "<h3 class=\"center\"> Green shading change indicates different start times</h3>\n";
+
             $html .= "<table class=\"sched_table\" width=\"100%\">\n";
             $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
             $html .= "<th>Game No.</th>";
@@ -98,17 +100,31 @@ class SchedFullDBController extends AbstractController
                 $html .= "<th>4th</th>";
             }
             $html .= "</tr>\n";
+
+            $color1 = $this->colorGroup1;
+            $color2 = $this->colorGroup2;
+            $testtime = null;
+
             foreach ($games as $game) {
                 if (!$this->justOpen || ($this->justOpen && empty($game->cr))) {
                     $date = date('D, d M', strtotime($game->date));
                     $time = date('H:i', strtotime($game->time));
 
                     if ($game->assignor == $this->user) {
-                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+                        $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
                     } elseif (!empty($game->assignor)) {
+
+                        if ( !$testtime ) { $testtime = $time; }
+                        elseif ( $testtime != $time ) {
+                            $testtime = $time;
+                            $tempcolor = $color1;
+                            $color1 = $color2;
+                            $color2 = $tempcolor;
+                        }
+
                         if ($this->user == 'Section 1') {
                             if (empty($game->cr)) {
-                                $html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+                                $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
                             } else {
                                 $html .= "<tr align=\"center\" bgcolor=\"$this->colorSuccess\">";
                             }

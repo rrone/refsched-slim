@@ -93,7 +93,7 @@ class SchedControlDBController extends AbstractController
                     $date = date('D, d M',strtotime($game->date));
 					$time = date('H:i', strtotime($game->time));
                     if ( !empty($game->assignor) ) {
-                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup1\">";
                     } 
                     else {
                         $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";

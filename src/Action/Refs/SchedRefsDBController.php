@@ -88,6 +88,7 @@ class SchedRefsDBController extends AbstractController
                 if ($this->user != 'Section 1') {
                     $html .= "<h2  class=\"center\">You are currently scheduled for the following games</h2></div>\n";
                 }
+                $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
                 $html .= "<form name=\"addref\" method=\"post\" action=\"$this->refsPath\">\n";
                 $html .= "<table class=\"sched_table\" width=\"100%\">\n";
                 $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
@@ -108,6 +109,10 @@ class SchedRefsDBController extends AbstractController
                 $html .= "<th>Edit</th>";
                 $html .= "</tr>\n";
 
+                $color1 = $this->colorGroup1;
+                $color2 = $this->colorGroup2;
+                $testtime = null;
+
                 foreach ($games as $game) {
                     $date = date('D, d M', strtotime($game->date));
                     $time = date('H:i', strtotime($game->time));
@@ -115,7 +120,14 @@ class SchedRefsDBController extends AbstractController
                         if (!$game->assignor && $this->user == 'Section 1') {
                             $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";
                         } else {
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+                            if ( !$testtime ) { $testtime = $time; }
+                            elseif ( $testtime != $time ) {
+                                $testtime = $time;
+                                $tempcolor = $color1;
+                                $color1 = $color2;
+                                $color2 = $tempcolor;
+                            }
+                            $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
                         }
                         $html .= "<td>$game->game_number</td>";
                         $html .= "<td>$date</td>";

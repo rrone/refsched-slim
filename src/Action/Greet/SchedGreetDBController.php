@@ -72,6 +72,7 @@ class SchedGreetDBController extends AbstractController
             foreach ($groups as $group) {
                 $used_list[$group] = 0;
                 $assigned_list[$group] = 0;
+                $limit_list[$group] = 'none';
             }
 
             $limits = $this->sr->getLimits($projectKey);
@@ -176,7 +177,11 @@ class SchedGreetDBController extends AbstractController
                         foreach ($limit_list as $k => $v) {
                             $tmpassigned = $assigned_list[$k];
                             if ($used_list[$k]) {
-                                $html .= "You have assigned <span style=\"color:$this->colorWarning\">$tmpassigned</span> of your <span style=\"color:$this->colorWarning\">$v</span> game limit for $k<br>\n";
+                                if($limit_list[$k] == 'none') {
+                                    $html .= "You have assigned <span style=\"color:$this->colorWarning\">$tmpassigned</span> $k matches.  There is <span style=\"color:$this->colorWarning\">no</span> game limit for $k.<br>\n";
+                                } else {
+                                    $html .= "You have assigned <span style=\"color:$this->colorWarning\">$tmpassigned</span> of your <span style=\"color:$this->colorWarning\">$v</span> game limit for $k<br>\n";
+                                }
                                 if ($tmpassigned >= $v) {
                                     $oneatlimit = true;
                                 }

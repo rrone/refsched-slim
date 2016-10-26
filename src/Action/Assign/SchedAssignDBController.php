@@ -85,7 +85,7 @@ class SchedAssignDBController extends AbstractController
 				foreach($games as $game) {
 					$date = date('D, d M',strtotime($game->date));
 					$time = date('H:i', strtotime($game->time));
-					$html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+					$html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup1\">";
 					$html .= "<td>$game->game_number</td>";
 					$html .= "<td>$date</td>";
 					$html .= "<td>$time</td>";

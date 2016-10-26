@@ -313,12 +313,13 @@ class SchedSchedDBController extends AbstractController
 					$tempassign = $assigned_list[$k];
                     if ( $tempassign ) {
                         if ( $assigned_list[ $k ] && $limit_list[$k] != 'none' ) {
-                                $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$v</span> games<br>\n";
-                            }
-                            else {
-                                $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
-                            }
-                        $oneatlimit = ($assigned_list[$k] >= $limit_list[$k]);
+                            $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$v</span> games<br>\n";
+                            $oneatlimit = ($assigned_list[$k] >= $limit_list[$k]);
+                        }
+                        else {
+                            $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
+                            $oneatlimit = false;
+                        }
                     }
 				}
 				if ( $oneatlimit ) {
@@ -327,11 +328,12 @@ class SchedSchedDBController extends AbstractController
 				$html .= "</h3>\n";
 			}
 
+			$html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
 			$html .= "<form name=\"form1\" method=\"post\" action=\"$this->schedPath\">\n";
 
 			$html .= "<div align=\"left\">";
 
-			$html .= "<h3 class=\"h3-btn\" >Available games<span style=\"font-weight: normal\"> : Shading change indicates different start times</span>";
+			$html .= "<h3 class=\"h3-btn\" >Available games :";
 
 			$submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled' ;
 
@@ -388,7 +390,7 @@ class SchedSchedDBController extends AbstractController
 			}
 			$html .= "</table>";
 
-			$html .= "<h3>Games assigned to $this->user</h3>\n";
+			$html .= "<h3>Games assigned to $this->user :</h3>\n";
 			if ( empty($kount) ) {
 				$html .= "<table class=\"sched_table\" >\n";
 				$html .= "<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";
@@ -409,9 +411,22 @@ class SchedSchedDBController extends AbstractController
 				$html .= "<th>Referee Team</th>\n";
 				$html .= "</tr>\n";
 
+
+                $color1 = $this->colorGroup1;
+                $color2 = $this->colorGroup2;
+
 				for ( $kant=0; $kant < $kount; $kant++ ) {
 				   if ( $this->user == $ref_team[$kant]) {
-						$html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup\">";
+
+                       if ( !$testtime ) { $testtime = $time[$kant]; }
+                       elseif ( $testtime != $time[$kant] ) {
+                           $testtime = $time[$kant];
+                           $tempcolor = $color1;
+                           $color1 = $color2;
+                           $color2 = $tempcolor;
+                       }
+
+                       $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
 						$html .= "<td>$game_no[$kant]</td>";
 						if ( $locked ) {
 						   $html .= "<td>Locked</td>";

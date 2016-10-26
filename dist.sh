@@ -32,8 +32,8 @@ find dist -type f -name '.DS_Store' -delete
 find dist -type f -name 'app_*' -delete
 
 echo "  Copying distribution to local Filezilla root..."
-rm -f -r ~/Dropbox/_open/_ayso/s1/web/referee_site/rs
-mkdir ~/Dropbox/_open/_ayso/s1/web/referee_site/rs
-cp -f -r dist/* ~/Dropbox/_open/_ayso/s1/web/referee_site/rs
+rm -f -r ~/Dropbox/_open/_ayso/s1/web/referee_site/refsched
+mkdir ~/Dropbox/_open/_ayso/s1/web/referee_site/refsched
+cp -f -r dist/* ~/Dropbox/_open/_ayso/s1/web/referee_site/refsched
 
 echo "...complete"
