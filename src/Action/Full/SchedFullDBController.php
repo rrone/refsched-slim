@@ -38,9 +38,7 @@ class SchedFullDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        if (count($_GET)) {
-            $this->justOpen = array_key_exists('open', $_GET);
-        }
+        $this->handleRequest($request);
 
         $content = array(
             'view' => array(
@@ -59,7 +57,14 @@ class SchedFullDBController extends AbstractController
 
         return $response;
     }
+    private function handleRequest($request)
+    {
+        if (count($_GET)) {
+            $this->justOpen = array_key_exists('open', $_GET);
+        }
 
+        return null;
+    }
     private function renderFull()
     {
         $html = null;
