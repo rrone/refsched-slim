@@ -9,6 +9,9 @@ use App\Action\SchedulerRepository;
 
 class SchedRefsDBController extends AbstractController
 {
+    private $num_assigned;
+    private $bottommenu;
+
     public function __construct(Container $container, SchedulerRepository $repository)
     {
 
@@ -45,7 +48,7 @@ class SchedRefsDBController extends AbstractController
                 'rep' => $this->user,
                 'content' => $this->renderRefs(),
                 'topmenu' => $this->menu(),
-                'menu' => $this->menu(),
+                'menu' => $this->bottommenu,
                 'title' => $this->page_title,
                 'dates' => $this->dates,
                 'location' => $this->location,
@@ -82,9 +85,15 @@ class SchedRefsDBController extends AbstractController
                 $games = $this->sr->getGames($projectKey);
             }
 
+            foreach ($games as $game) {
+                if ($game->assignor == $this->user || $this->user == 'Section 1') {
+                    $this->num_assigned++;
+                }
+            }
+
             $numRefs = $this->sr->numberOfReferees($projectKey);
 
-            if (count($games)) {
+            if ($this->num_assigned) {
                 if ($this->user != 'Section 1') {
                     $html .= "<h2  class=\"center\">You are currently scheduled for the following games</h2></div>\n";
                 }
@@ -153,9 +162,11 @@ class SchedRefsDBController extends AbstractController
                 }
                 $html .= "</table>\n";
                 $html .= "</form>\n";
+
+                $this->bottommenu = $this->menu();
             } else {
-                $html .= "<h2 class=\"center\">You do not currently have any games scheduled.</h2>\n";
-                $html .= "  You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2>";
+                $html .= "<h2 class=\"center\">You do not currently have any games scheduled.<h2>\n";
+                $this->bottommenu = "<h3 class=\"center\">You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h3>";
             }
         } else {
             $html .= $this->errorCheck();

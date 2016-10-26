@@ -10,8 +10,9 @@ use App\Action\SchedulerRepository;
 class SchedSchedDBController extends AbstractController
 {
     private $showgroup;
+    private $num_assigned;
 
-	public function __construct(Container $container, SchedulerRepository $repository) {
+    public function __construct(Container $container, SchedulerRepository $repository) {
 		
 		parent::__construct($container);
         
@@ -228,7 +229,7 @@ class SchedSchedDBController extends AbstractController
 			$this->dates = $event->dates;
 			$this->location = $event->location;
 	
-			$num_assigned = 0;		
+			$this->num_assigned = 0;		
 			$kount = 0;
 			$testtime = null;
 	
@@ -249,7 +250,7 @@ class SchedSchedDBController extends AbstractController
 				$away[] = $game->away;
 				$ref_team[] = $game->assignor;
 				if ( $game->assignor == $this->user ) {
-					$num_assigned++;
+					$this->num_assigned++;
 					if (isset($assigned_list[ $this->divisionAge( $game->division ) ])) {
 						$assigned_list[ $this->divisionAge( $game->division ) ]++;
 					}
@@ -270,27 +271,27 @@ class SchedSchedDBController extends AbstractController
 				$allatlimit = false;
                 $showavailable = true;
 			}
-			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $num_assigned < $limit_list[ 'all' ] ) {
+			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned < $limit_list[ 'all' ] ) {
 				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule has been locked<br>You may sign up for games but not unassign yourself</span></h3>\n";
 				$allatlimit = false;
                 $showavailable = true;
 			}
-			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $num_assigned == $limit_list[ 'all' ] ) {
+			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned == $limit_list[ 'all' ] ) {
 				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule has been locked and you are at your game limit<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe submit button on this page has been disabled and available games are not shown<br>\nYou probably want to <a href=\"$this->greetPath\">Go to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></span></h3>\n";
 			}
-			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $num_assigned > $limit_list[ 'all' ] ) {
+			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned > $limit_list[ 'all' ] ) {
 				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule has been locked and you are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe Submit button has been disabled and available games are not shown<br>\nYou probably want to <a href=\"$this->greetPath\">Go to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></span></h3>\n";
 			}
-			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $num_assigned < $limit_list['all'] ) {
+			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned < $limit_list['all'] ) {
 				$tmplimit = $limit_list['all'];
-				$html .= "<h3 class=\"center\">You are currently assigned to <span style=\"color:$this->colorAlert\">$num_assigned</span> of your <span style=\"color:$this->colorAlert\">$tmplimit</span> games</h3>\n";
+				$html .= "<h3 class=\"center\">You are currently assigned to <span style=\"color:$this->colorAlert\">$this->num_assigned</span> of your <span style=\"color:$this->colorAlert\">$tmplimit</span> games</h3>\n";
                 $showavailable = true;
 			}
-			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $num_assigned == $limit_list['all'] ) {
+			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned == $limit_list['all'] ) {
 			    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at your game limit<br>You will have to unassign yourself from games to sign up for others</span></h3>\n";
                 $showavailable = true;
 			}
-			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $num_assigned > $limit_list['all'] ) {
+			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned > $limit_list['all'] ) {
 			    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nIf you continue from here you will not be able to keep all the games you are signed up for and may lose some of the games you already have<br>\nIf you want to keep these games and remain over the game limit it is recommended that you do not hit submit but do something else instead<br>\n<a href=\"$this->greetPath\">Go to the Main Page</a></span></h3>\n";
                 $showavailable = true;
 			}
@@ -340,7 +341,7 @@ class SchedSchedDBController extends AbstractController
                 $showavailable = true;
 			}
 
-            if($num_assigned || $showavailable) {
+            if($this->num_assigned || $showavailable) {
                 $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
                 $submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled' ;
 
@@ -409,7 +410,7 @@ class SchedSchedDBController extends AbstractController
                 }
                 $html .= "</table>";
 
-                if($num_assigned){
+                if($this->num_assigned){
                     $html .= "<h3>Games assigned to $this->user :</h3>\n";
                     if (empty($kount)) {
                         $html .= "<table class=\"sched_table\" >\n";
@@ -469,8 +470,8 @@ class SchedSchedDBController extends AbstractController
                     }
                 }
 
-                if(($showavailable && $kount) || $num_assigned) {
-                    $html .= "<h3 class=\"center h3-btn\">" . $this->menuLinks() . "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
+                if(($showavailable && $kount) || $this->num_assigned) {
+                    $html .= "<h3 class=\"center h3-btn\">" . $this->menuLinks($this->num_assigned) . "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
                     $html .= "<div class='clear-fix'></div>";
                 }
                 $html .= "</form>\n";
@@ -507,10 +508,19 @@ EOD;
     private function menuLinks()
     {
         $html =
-            <<<EOD
-                <a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
+<<<EOD
+    <a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
     <a href="$this->fullPath">View the full schedule</a>&nbsp;-&nbsp;
+EOD;
+        if ($this->num_assigned) {
+            $html .=
+<<<EOD
     <a href="$this->refsPath">Edit $this->user referee assignments</a>&nbsp;-&nbsp;
+EOD;
+        }
+
+        $html .=
+<<<EOD
     <a href="$this->endPath">Log off</a>
 EOD;
 
