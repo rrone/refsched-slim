@@ -111,7 +111,12 @@ class SchedMasterDBController extends AbstractController
 				$html .=  "<th>Referee Team</th>";
 				$html .=  "</tr>\n";
 				
-				$games = $this->sr->getGames($projectKey);
+				if($user->name == 'Section 1') {
+                    $games = $this->sr->getGames($projectKey, '%', true);
+                } else {
+                    $games = $this->sr->getGames($projectKey);
+                }
+
 				foreach($games as $game){
 					if ( !$this->justOpen || ($this->justOpen && empty($game->assignor)) ) {
 						$date = date('D, d M',strtotime($game->date));
