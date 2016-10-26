@@ -36,13 +36,17 @@ class SchedSchedDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
+        if ($this->user == 'Section 1') {
+            return $response->withRedirect($this->masterPath);
+        }
+
         $this->handleRequest($request);
 
         $content = array(
             'view' => array (
                 'content' => $this->renderSched(),
                 'topmenu' => $this->menu(),
-                'menu' => $this->menu(),
+                'menu' => null,
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
@@ -329,24 +333,29 @@ class SchedSchedDBController extends AbstractController
 			}
 
 			$html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
+            $submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled' ;
+
 			$html .= "<form name=\"form1\" method=\"post\" action=\"$this->schedPath\">\n";
 
 			$html .= "<div align=\"left\">";
 
-			$html .= "<h3 class=\"h3-btn\" >Available games :";
-
-			$submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled' ;
-
-            $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
-			$html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-			$html .= "<div class='clear-fix'></div>";
-
-			$html .= "</h3>\n";
 			if ( !$showavailable ) {
-				$html .= "<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";
-				$html .= "<td>No other games available</td>";
-				$html .= "</tr>\n";
+
+                $html .= "<h3 class=\"h3-btn\" >";
+
+                $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
+                $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+                $html .= "<div class='clear-fix'></div>";
+
+                $html .= "</h3>\n";
 			} else {
+                $html .= "<h3 class=\"h3-btn\" >Available games :";
+
+                $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
+                $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+                $html .= "<div class='clear-fix'></div>";
+
+                $html .= "</h3>\n";
 				$html .= "<table class=\"sched_table\" >\n";
 				$html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
 				$html .= "<th>Game No</th>";
@@ -448,16 +457,12 @@ class SchedSchedDBController extends AbstractController
 				}
 			$html .= "</table>";
 
-			$html .=  "<h3 class=\"h3-btn\">&nbsp;<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
+			$html .=  "<h3 class=\"center h3-btn\">" . $this->menuLinks() . "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
 			$html .=  "<div class='clear-fix'></div>";
 
 			$html .= "</form>\n";      
 			$_SESSION['locked'] = $locked;
 	
-			if ( $this->user == 'Section 1' ) {
-				$html .=  "<h1 class=\"center\">You should be on this<br>";
-				$html .= "<a href=\"$this->masterPath\">Schedule Page</a></h1>";
-			}
 		}
 		else {
 			$html .=  $this->errorCheck();
@@ -470,12 +475,27 @@ class SchedSchedDBController extends AbstractController
     {
         $html =
 <<<EOD
-    <h3 align="center"><a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
-    <a href="$this->fullPath">View the full schedule</a>&nbsp;-&nbsp;
-    <a href="$this->refsPath">Edit $this->user referee assignments</a>&nbsp;-&nbsp;
-    <a href="$this->endPath">Log off</a></h3>
+    <h3 align="center">
+EOD;
+        $html .= $this->menuLinks();
+
+        $html .=
+<<<EOD
+    </h3>
 EOD;
         
+        return $html;
+    }
+    private function menuLinks()
+    {
+        $html =
+            <<<EOD
+                <a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
+    <a href="$this->fullPath">View the full schedule</a>&nbsp;-&nbsp;
+    <a href="$this->refsPath">Edit $this->user referee assignments</a>&nbsp;-&nbsp;
+    <a href="$this->endPath">Log off</a>
+EOD;
+
         return $html;
     }
 }
