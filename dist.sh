@@ -34,6 +34,6 @@ find dist -type f -name 'app_*' -delete
 echo "  Copying distribution to local Filezilla root..."
 rm -f -r ~/Dropbox/_open/_ayso/s1/web/referee_site/rs
 mkdir ~/Dropbox/_open/_ayso/s1/web/referee_site/rs
-cp -f -r dist ~/Dropbox/_open/_ayso/s1/web/referee_site
+cp -f -r dist/* ~/Dropbox/_open/_ayso/s1/web/referee_site/rs
 
 echo "...complete"
