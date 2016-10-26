@@ -34,10 +34,8 @@ class SchedAssignDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-		if ( $request->isPost() ) {
-			$this->handleRequest($request);
-		}
-		        
+        $this->handleRequest($request);
+
         $content = array(
             'view' => array (
                 'rep' => $this->user,
@@ -58,6 +56,10 @@ class SchedAssignDBController extends AbstractController
     }
 	private function handleRequest($request)
 	{
+        if ( $request->isPost() && !$this->isRepost($request)) {
+        }
+
+        return null;
 	}
     private function renderAssign()
     {

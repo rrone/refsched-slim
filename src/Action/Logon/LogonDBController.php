@@ -49,7 +49,7 @@ class LogonDBController extends AbstractController
     }
 	private function handleRequest($request)
 	{
-        if ( $request->isPost() ) {
+        if ($request->isPost()) {
 
             $userName = isset($_POST['user']) ? $_POST['user'] : null;
             $user = $this->sr->getUserByName($userName);

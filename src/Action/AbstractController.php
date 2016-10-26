@@ -103,4 +103,20 @@ abstract class AbstractController
 	{
 		return substr($div,0,3);
 	}
+	protected function isRepost($request){
+
+        if ($request->isPost()) {
+            if (isset($_SESSION['postdata'])) {
+                if ($_POST == $_SESSION['postdata']) {
+                    return true;
+                } else {
+                    $_SESSION['postdata'] = $_POST;
+                }
+            } else {
+                $_SESSION['postdata'] = $_POST;
+            }
+        }
+
+        return false;
+    }
 }

@@ -62,7 +62,7 @@ class AdminController extends AbstractController
     }
 	private function handleRequest($request)
 	{
-        if ( $request->isPost() ) {
+        if ( $request->isPost() && !$this->isRepost($request)) {
             if (in_array('btnUpdate', array_keys($_POST))) {
                 $this->userName = $_POST['selectUser'];
                 $userName = $this->userName;
