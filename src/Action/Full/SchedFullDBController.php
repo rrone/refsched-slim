@@ -152,7 +152,7 @@ class SchedFullDBController extends AbstractController
         }
         if ($this->user == 'Section 1') {
             $html .= "<a href=\"$this->masterPath\">Schedule referee teams</a>&nbsp;-&nbsp;\n";
-            $html .= "<a href=\"$this->refsPath\">Edit referees</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->refsPath\">Edit referee assignments</a>&nbsp;-&nbsp;\n";
         } else {
             $html .= "<a href=\"$this->schedPath\">Go to $this->user schedule</a>&nbsp;-&nbsp;\n";
             $html .= "<a href=\"$this->refsPath\">Edit $this->user referees</a>&nbsp;-&nbsp;\n";
