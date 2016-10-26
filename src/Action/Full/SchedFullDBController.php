@@ -72,7 +72,12 @@ class SchedFullDBController extends AbstractController
             $this->dates = $event->dates;
             $this->location = $event->location;
 
-            $games = $this->sr->getGames($projectKey);
+            if($this->user == 'Section 1') {
+                $games = $this->sr->getGames($projectKey, '%', true);
+            } else {
+                $games = $this->sr->getGames($projectKey);
+            }
+
             $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
             $html .= "<table class=\"sched_table\" width=\"100%\">\n";

@@ -107,7 +107,12 @@ class SchedEditRefDBController extends AbstractController
                 $html .= "<h2 class=\"center\">Enter Referee's First and Last name.<br>" .
                     "<span style=\"color:#FF0000\"><i>NOTE: Adding \"??\" or \"Area name\" is NOT helpful.</i></span></h2><br>";
 
-                $games = $this->sr->getGames($projectKey);
+                if($this->user == 'Section 1') {
+                    $games = $this->sr->getGames($projectKey, '%', true);
+                } else {
+                    $games = $this->sr->getGames($projectKey);
+                }
+
                 $numRefs = $this->sr->numberOfReferees($projectKey);
 
                 if (count($games)) {

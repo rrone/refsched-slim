@@ -72,7 +72,12 @@ class SchedRefsDBController extends AbstractController
             $this->location = $event->location;
             $projectKey = $event->projectKey;
 
-            $games = $this->sr->getGames($projectKey);
+            if($this->user == 'Section 1') {
+                $games = $this->sr->getGames($projectKey, '%', true);
+            } else {
+                $games = $this->sr->getGames($projectKey);
+            }
+
 			$numRefs = $this->sr->numberOfReferees($projectKey);
 			
             if (count($games)){
