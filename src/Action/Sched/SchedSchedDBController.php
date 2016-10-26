@@ -303,18 +303,13 @@ class SchedSchedDBController extends AbstractController
                 $html .= "</span><br>\n";
                 foreach ( $assigned_list as $k => $v ) {
                     $tempassign = $assigned_list[$k];
-                    if ( $tempassign ) {
-                        if (isset($limit_list[$k]) && $limit_list[$k] != 'none') {
-                            $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$limit_list[$k]</span> games<br>\n";
-                        }
-                        else {
-                            $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
-                            $showavailable = true;
-                        }
-                        if ( ($assigned_list[$k] < $limit_list[$k]) || (!isset($limit_list[$k]))) {
-                            $showavailable = false;
-                        }
+                    if (isset($limit_list[$k]) && $limit_list[$k] != 'none') {
+                        $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$limit_list[$k]</span> games<br>\n";
                     }
+                    else {
+                        $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
+                    }
+                    $showavailable =  ($assigned_list[$k] < $limit_list[$k]) || (!isset($limit_list[$k]));
                 }
 
 				$html .= "</h3>\n";
@@ -323,15 +318,13 @@ class SchedSchedDBController extends AbstractController
 				$html .= "<h3 class=\"center\">\n";
 				foreach ( $limit_list as $k => $v ) {
 					$tempassign = $assigned_list[$k];
-                    if ( $tempassign ) {
-                        if ( $assigned_list[ $k ] && $limit_list[$k] != 'none' ) {
-                            $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$v</span> games<br>\n";
-                            $oneatlimit = ($assigned_list[$k] >= $limit_list[$k]);
-                        }
-                        else {
-                            $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
-                            $oneatlimit = false;
-                        }
+                    if ( $limit_list[$k] != 'none' ) {
+                        $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$v</span> games<br>\n";
+                        $oneatlimit = ($assigned_list[$k] >= $limit_list[$k]);
+                    }
+                    elseif ($limit_list[$k] = 'none') {
+                        $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
+                        $oneatlimit = false;
                     }
 				}
 				if ( $oneatlimit ) {

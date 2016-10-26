@@ -92,7 +92,7 @@ class SchedGreetDBController extends AbstractController
             $delim = ' - ';
             $num_assigned = 0;
             $num_area = 0;
-            $oneatlimit = 0;
+            $allatlimit = true;
 
             foreach ($games as $game) {
                 if ($this->user == "Section 1" && !empty($game->assignor)) {
@@ -179,11 +179,10 @@ class SchedGreetDBController extends AbstractController
                             if ($used_list[$k]) {
                                 if($limit_list[$k] == 'none') {
                                     $html .= "You have assigned <span style=\"color:$this->colorWarning\">$tmpassigned</span> $k matches.  There is <span style=\"color:$this->colorWarning\">no</span> game limit for $k.<br>\n";
+                                    $allatlimit = false;
                                 } else {
                                     $html .= "You have assigned <span style=\"color:$this->colorWarning\">$tmpassigned</span> of your <span style=\"color:$this->colorWarning\">$v</span> game limit for $k<br>\n";
-                                }
-                                if ($tmpassigned >= $v) {
-                                    $oneatlimit = true;
+                                    $allatlimit &= $tmpassigned >= $v;
                                 }
                             }
                         }
@@ -193,9 +192,10 @@ class SchedGreetDBController extends AbstractController
                         $html .= "</h3>\n";
                     }
                 }
+
                 if ($locked && !array_key_exists('none', $limit_list)) {
                     $html .= "<h3 class=\"center\" style=\"style=\"color:$this->colorAlert\">The schedule is presently locked<br>\n";
-                    if (!$oneatlimit) {
+                    if (!$allatlimit) {
                         $html .= "You may sign $this->user teams up for games but you may not remove them</h3>\n";
                     } else {
                         $html .= "Since $this->user is at or above your limit, you will not be able to sign teams up for games</h3>\n";
