@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.4
+-- version 4.6.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Oct 28, 2016 at 07:21 PM
--- Server version: 5.6.33-0ubuntu0.14.04.1
--- PHP Version: 5.5.9-1ubuntu4.19
+-- Host: pod-100136.wpengine.com
+-- Generation Time: Oct 28, 2016 at 07:29 PM
+-- Server version: 5.6.32-78.1-log
+-- PHP Version: 5.5.9-1ubuntu4.20
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `wp_ayso1ref`
 --
-CREATE DATABASE IF NOT EXISTS `wp_ayso1ref` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS `wp_ayso1ref` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `wp_ayso1ref`;
 
 -- --------------------------------------------------------
@@ -75,9 +75,9 @@ CREATE TABLE `rs_games` (
   `division` varchar(45) DEFAULT NULL,
   `pool` varchar(3) DEFAULT NULL,
   `home` varchar(45) DEFAULT NULL,
-  `home_team_name` varchar(45) NOT NULL,
+  `home_team` varchar(45) NOT NULL,
   `away` varchar(45) DEFAULT NULL,
-  `away_team_name` varchar(45) NOT NULL,
+  `away_team` varchar(45) NOT NULL,
   `assignor` varchar(45) DEFAULT NULL,
   `cr` varchar(45) DEFAULT NULL,
   `ar1` varchar(45) DEFAULT NULL,
@@ -111,10 +111,7 @@ CREATE TABLE `rs_users` (
   `id` int(11) NOT NULL,
   `name` char(255) NOT NULL,
   `enabled` tinyint(1) DEFAULT '1',
-  `hash` varchar(255) DEFAULT NULL,
-  `active` tinyint(1) DEFAULT NULL,
-  `active_event_id` int(11) DEFAULT NULL,
-  `target_id` int(3) NOT NULL
+  `hash` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
