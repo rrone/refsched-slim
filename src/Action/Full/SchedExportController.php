@@ -45,16 +45,20 @@ class SchedExportController extends AbstractController
         $response = $response->withHeader('Content-Type', $this->exporter->contentType);
         $response = $response->withHeader('Content-Disposition', 'attachment; filename='. $this->outFileName);
 
-		$content = $this->generateFile();		
+        $content = null;
+
+        $this->generateScheduleData($content);
+        $this->generateSummaryCountData($content);
+
+
         $body = $response->getBody();
         $body->write($this->exporter->export($content));
 
         return $response;		
 		
     }
-    public function generateFile()
+    public function generateScheduleData(&$content)
     {
-        $content = null;
         $event = $this->event;
 
 		if (!empty($event)) {
@@ -102,4 +106,38 @@ class SchedExportController extends AbstractController
         return $content;
 
 	}
+    public function generateSummaryCountData(&$content)
+    {
+        $event = $this->event;
+
+        if (!empty($event)) {
+            $projectKey = $event->projectKey;
+
+            $counts = $this->sr->getGameCounts($projectKey);
+
+            //set the header labels
+            $labels = array ('Assignor','Date','Division','Game Count');
+
+            $data =  array($labels);
+
+            //set the data : game in each row
+            foreach ( $counts as $count ) {
+                $date = date('D, d M Y',strtotime($count->date));
+                $row = array(
+                    $count->assignor,
+                    $date,
+                    $count->division,
+                    $count->game_count,
+                );
+                $data[] = $row;
+            }
+
+            $content['Summary']['data'] = $data;
+            $content['Summary']['options']['freezePane'] = 'A2';
+
+        }
+
+        return $content;
+
+    }
 }

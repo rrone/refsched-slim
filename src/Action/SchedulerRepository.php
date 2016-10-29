@@ -378,6 +378,14 @@ class SchedulerRepository
 
         return $changes;
     }
+    public function getGameCounts($projectKey)
+    {
+        return $this->db->table('games')
+            ->selectRaw('assignor, date, division, COUNT(division) as game_count')
+            ->where('projectKey', 'like', $projectKey)
+            ->groupBy(['assignor', 'division'])
+            ->get();
+    }
 	//Limits table functions
 	public function getLimits($projectKey)
 	{
