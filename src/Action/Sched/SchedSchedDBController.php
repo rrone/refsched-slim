@@ -536,9 +536,9 @@ EOD;
             $html .= "<th>Pool</th>\n";
             $html .= "<th>Home</th>\n";
             $html .= "<th>Away</th>\n";
-            if($this->user != 'Section 1'){
+//            if($this->user != 'Section 1'){
                 $html .= "<th>Referee Team</th>\n";
-            }
+//            }
             $html .= "</tr>\n";
 
 
@@ -573,9 +573,9 @@ EOD;
                     $html .= "<td>".$this->pool[$kant]."</td>";
                     $html .= "<td>".$this->home[$kant]."</td>";
                     $html .= "<td>".$this->away[$kant]."</td>";
-                    if($this->user != 'Section 1') {
+//                    if($this->user != 'Section 1') {
                         $html .= "<td>" . $this->ref_team[$kant] . "</td>";
-                    }
+//                    }
                     $html .= "</tr>\n";
                 }
             }
