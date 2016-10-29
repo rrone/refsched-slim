@@ -129,8 +129,10 @@ class SchedRefsDBController extends AbstractController
                         if (!$game->assignor && $this->user == 'Section 1') {
                             $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";
                         } else {
-                            if ( !$testtime ) { $testtime = $time; }
-                            elseif ( $testtime != $time ) {
+                            if ( !$testtime ) {
+                                $testtime = $time;
+                            }
+                            elseif ( $testtime != $time && !empty($game->assignor)) {
                                 $testtime = $time;
                                 $tempcolor = $color1;
                                 $color1 = $color2;

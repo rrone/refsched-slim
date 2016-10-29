@@ -115,17 +115,18 @@ class SchedFullDBController extends AbstractController
                     $date = date('D, d M', strtotime($game->date));
                     $time = date('H:i', strtotime($game->time));
 
+                    if ( !$testtime ) {
+                        $testtime = $time;
+                    } elseif ( $testtime != $time && !empty($game->assignor)) {
+                        $testtime = $time;
+                        $tempcolor = $color1;
+                        $color1 = $color2;
+                        $color2 = $tempcolor;
+                    }
+
                     if ($game->assignor == $this->user) {
                         $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
                     } elseif (!empty($game->assignor)) {
-
-                        if ( !$testtime ) { $testtime = $time; }
-                        elseif ( $testtime != $time ) {
-                            $testtime = $time;
-                            $tempcolor = $color1;
-                            $color1 = $color2;
-                            $color2 = $tempcolor;
-                        }
 
                         if ($this->user == 'Section 1') {
                             if (empty($game->cr)) {

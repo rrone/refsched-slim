@@ -11,6 +11,7 @@ class SchedSchedDBController extends AbstractController
 {
     private $showgroup;
     private $num_assigned;
+    private $num_unassigned;
 
     public function __construct(Container $container, SchedulerRepository $repository) {
 		
@@ -229,7 +230,6 @@ class SchedSchedDBController extends AbstractController
 			$this->dates = $event->dates;
 			$this->location = $event->location;
 	
-			$this->num_assigned = 0;		
 			$kount = 0;
 			$testtime = null;
 	
@@ -237,6 +237,8 @@ class SchedSchedDBController extends AbstractController
 			$_SESSION['locked'] = $locked;
 	
 			$games = $this->sr->getGames($projectKey, $this->showgroup);
+            $this->num_assigned = 0;
+            $this->num_unassigned = count($games);
 
 			foreach( $games as $game ) {
 				$game_id[] = $game->id;
@@ -249,7 +251,10 @@ class SchedSchedDBController extends AbstractController
 				$home[] = $game->home;
 				$away[] = $game->away;
 				$ref_team[] = $game->assignor;
-				if ( $game->assignor == $this->user ) {
+                if(!empty($game->assignor)){
+                    $this->num_unassigned--;
+                }
+                if ($game->assignor == $this->user) {
 					$this->num_assigned++;
 					if (isset($assigned_list[ $this->divisionAge( $game->division ) ])) {
 						$assigned_list[ $this->divisionAge( $game->division ) ]++;
@@ -342,66 +347,68 @@ class SchedSchedDBController extends AbstractController
 
                 $html .= "<div align=\"left\">";
 
-                if (!$showavailable) {
+                if($this->num_unassigned) {
+                    if (!$showavailable) {
 
-                    $html .= "<h3 class=\"h3-btn\" >";
+                        $html .= "<h3 class=\"h3-btn\" >";
 
-                    $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
-                    $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-                    $html .= "<div class='clear-fix'></div>";
+                        $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
+                        $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+                        $html .= "<div class='clear-fix'></div>";
 
-                    $html .= "</h3>\n";
-                } else {
-                    $html .= "<h3 class=\"h3-btn\" >Available games :";
+                        $html .= "</h3>\n";
+                    } else {
+                        $html .= "<h3 class=\"h3-btn\" >Available games :";
 
-                    $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
-                    $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-                    $html .= "<div class='clear-fix'></div>";
+                        $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
+                        $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+                        $html .= "<div class='clear-fix'></div>";
 
-                    $html .= "</h3>\n";
-                    $html .= "<table class=\"sched_table\" >\n";
-                    $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
-                    $html .= "<th>Game No</th>";
-                    $html .= "<th>Assign to $this->user</th>";
-                    $html .= "<th>Date</th>";
-                    $html .= "<th>Time</th>";
-                    $html .= "<th>Field</th>";
-                    $html .= "<th>Division</th>";
-                    $html .= "<th>Pool</th>";
-                    $html .= "<th>Home</th>";
-                    $html .= "<th>Away</th>";
-                    $html .= "<th>Referee Team</th>";
-                    $html .= "</tr>";
+                        $html .= "</h3>\n";
+                        $html .= "<table class=\"sched_table\" >\n";
+                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+                        $html .= "<th>Game No</th>";
+                        $html .= "<th>Assign to $this->user</th>";
+                        $html .= "<th>Date</th>";
+                        $html .= "<th>Time</th>";
+                        $html .= "<th>Field</th>";
+                        $html .= "<th>Division</th>";
+                        $html .= "<th>Pool</th>";
+                        $html .= "<th>Home</th>";
+                        $html .= "<th>Away</th>";
+                        $html .= "<th>Referee Team</th>";
+                        $html .= "</tr>";
 
-                    for ($kant = 0; $kant < $kount; $kant++) {
-                        if (($this->showgroup && $this->showgroup == $this->divisionAge($div[$kant])) || !$this->showgroup) {
-                            if ($a_init != substr($home[$kant], 0, 1) && $a_init != substr($away[$kant], 0, 1) && !$ref_team[$kant] && $showavailable) {
+                        for ($kant = 0; $kant < $kount; $kant++) {
+                            if (($this->showgroup && $this->showgroup == $this->divisionAge($div[$kant])) || !$this->showgroup) {
+                                if ($a_init != substr($home[$kant], 0, 1) && $a_init != substr($away[$kant], 0, 1) && !$ref_team[$kant] && $showavailable) {
 
-                                if (!$testtime) {
-                                    $testtime = $time[$kant];
-                                } elseif ($testtime != $time[$kant]) {
-                                    $testtime = $time[$kant];
-                                    $tempcolor = $color1;
-                                    $color1 = $color2;
-                                    $color2 = $tempcolor;
+                                    if (!$testtime) {
+                                        $testtime = $time[$kant];
+                                    } elseif ($testtime != $time[$kant]) {
+                                        $testtime = $time[$kant];
+                                        $tempcolor = $color1;
+                                        $color1 = $color2;
+                                        $color2 = $tempcolor;
+                                    }
+                                    $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
+                                    $html .= "<td>$game_no[$kant]</td>";
+                                    $html .= "<td><input type=\"checkbox\" name=\"assign:$game_id[$kant]\" value=\"$game_id[$kant]\"></td>";
+                                    $html .= "<td>$date[$kant]</td>";
+                                    $html .= "<td>$time[$kant]</td>";
+                                    $html .= "<td>$field[$kant]</td>";
+                                    $html .= "<td>$div[$kant]</td>";
+                                    $html .= "<td>$pool[$kant]</td>";
+                                    $html .= "<td>$home[$kant]</td>";
+                                    $html .= "<td>$away[$kant]</td>";
+                                    $html .= "<td>&nbsp;</td>";
+                                    $html .= "</tr>\n";
                                 }
-                                $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
-                                $html .= "<td>$game_no[$kant]</td>";
-                                $html .= "<td><input type=\"checkbox\" name=\"assign:$game_id[$kant]\" value=\"$game_id[$kant]\"></td>";
-                                $html .= "<td>$date[$kant]</td>";
-                                $html .= "<td>$time[$kant]</td>";
-                                $html .= "<td>$field[$kant]</td>";
-                                $html .= "<td>$div[$kant]</td>";
-                                $html .= "<td>$pool[$kant]</td>";
-                                $html .= "<td>$home[$kant]</td>";
-                                $html .= "<td>$away[$kant]</td>";
-                                $html .= "<td>&nbsp;</td>";
-                                $html .= "</tr>\n";
                             }
                         }
                     }
+                    $html .= "</table>";
                 }
-                $html .= "</table>";
 
                 if($this->num_assigned){
                     $html .= "<h3>Games assigned to $this->user :</h3>\n";

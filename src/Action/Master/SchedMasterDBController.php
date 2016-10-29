@@ -126,18 +126,21 @@ class SchedMasterDBController extends AbstractController
 					if ( !$this->justOpen || ($this->justOpen && empty($game->assignor)) ) {
 						$date = date('D, d M',strtotime($game->date));
 						$time = date('H:i', strtotime($game->time));
+
+                        if ( !$testtime ) {
+                            $testtime = $time;
+                        }
+                        elseif ( $testtime != $time && !empty($game->assignor)) {
+                            $testtime = $time;
+                            $tempcolor = $color1;
+                            $color1 = $color2;
+                            $color2 = $tempcolor;
+                        }
+
                         if ( empty($game->assignor) ) {
 							$html .=  "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";
 						}
 						else {
-                            if ( !$testtime ) { $testtime = $time; }
-                            elseif ( $testtime != $time ) {
-                                $testtime = $time;
-                                $tempcolor = $color1;
-                                $color1 = $color2;
-                                $color2 = $tempcolor;
-                            }
-
 							$html .=  "<tr align=\"center\" bgcolor=\"$color1\">";
 						}
 						$html .=  "<td>$game->game_number</td>";
@@ -186,14 +189,19 @@ class SchedMasterDBController extends AbstractController
     }
     private function menu()
     {
+        $unassigned = $this->sr->getUnassignedGames($this->event->projectKey);
+
         $html =  "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\"><a href=\"$this->greetPath\">Home</a>&nbsp;-&nbsp;\n";
-        $html .=  "<a href=\"$this->fullPath\">View the full schedule</a> - \n";
-		if ($this->justOpen) {
-			$html .=  "<a href=\"$this->masterPath\">View all referee teams</a> - \n";
-		}
-		else {
-			$html .=  "<a href=\"$this->masterPath?open\">View open referee teams</a> - \n";
-		}
+
+        $html .= "<a href=\"$this->fullPath\">View the full schedule</a> - \n";
+
+        if (count($unassigned)) {
+            if ($this->justOpen) {
+                $html .= "<a href=\"$this->masterPath\">View all referee teams</a> - \n";
+            } else {
+                $html .= "<a href=\"$this->masterPath?open\">View open referee teams</a> - \n";
+            }
+        }
 		$html .= "<a href=\"$this->refsPath\">Edit referee assignments</a> - \n";
         $html .=  "<a href=\"$this->endPath\">Log off</a>";
         $html .=  "<input  class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";

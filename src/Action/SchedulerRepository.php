@@ -178,6 +178,20 @@ class SchedulerRepository
 			])
 			->get();
 	}
+    public function getUnassignedGames($projectKey='%', $group='%', $medalRound = false)
+    {
+        $group .= '%';
+        $medalRound = $medalRound ? '%' : false;
+
+        return $this->db->table('games')
+            ->where([
+                ['projectKey', 'like', $projectKey],
+                ['division', 'like', $group],
+                ['medalRound', 'like', $medalRound],
+                ['assignor', 'like', '']
+            ])
+            ->get();
+    }
 	public function getGamesByRep($projectKey, $rep)
 	{
 		return $this->db->table('games')
