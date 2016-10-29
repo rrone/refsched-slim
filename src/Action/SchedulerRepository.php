@@ -386,6 +386,17 @@ class SchedulerRepository
             ->groupBy(['assignor', 'division'])
             ->get();
     }
+    public function getDatesDivisions($projectKey)
+    {
+        return $this->db->table('games')
+            ->selectRaw('DISTINCT assignor, date, division')
+            ->where('projectKey', 'like', $projectKey)
+            ->orderBy('assignor', 'asc')
+            ->orderBy('date', 'asc')
+            ->orderBy('division', 'asc')
+            ->get();
+    }
+
 	//Limits table functions
 	public function getLimits($projectKey)
 	{
