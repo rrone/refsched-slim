@@ -202,6 +202,7 @@ class SchedMasterDBController extends AbstractController
                 $html .= "<a href=\"$this->masterPath?open\">View open referee teams</a> - \n";
             }
         }
+        $html .= "<a href=\"$this->schedPath\">View Assignors</a>&nbsp;-&nbsp;\n";
 		$html .= "<a href=\"$this->refsPath\">Edit referee assignments</a> - \n";
         $html .=  "<a href=\"$this->endPath\">Log off</a>";
         $html .=  "<input  class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";

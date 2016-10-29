@@ -208,6 +208,7 @@ class SchedGreetDBController extends AbstractController
             $html .= "<h3 class=\"center\"><a href=\"$this->fullPath\">View the full game schedule</a></h3>";
 
             if ($this->user == 'Section 1') {
+                $html .= "<h3 class=\"center\"><a href=\"$this->schedPath\">View Assignors</a></h3>";
                 $html .= "<h3 class=\"center\"><a href=\"$this->masterPath\">Select Assignors for games</a></h3>";
             } else {
                 $html .= "<h3 class=\"center\">Goto $this->user Schedule: <a href=\"$this->schedPath\">All games</a> - ";

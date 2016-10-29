@@ -185,6 +185,7 @@ class SchedRefsDBController extends AbstractController
         $html .= "<a href=\"$this->fullPath\">View the full schedule</a>&nbsp;-&nbsp\n";
 
         if ($this->user == 'Section 1') {
+            $html .= "<a href=\"$this->schedPath\">View Assignors</a>&nbsp;-&nbsp;\n";
             $html .= "<a href=\"$this->masterPath\">Schedule referee teams</a>&nbsp;-&nbsp;\n";
         } else {
             $html .= "<a href=\"$this->schedPath\">Go to $this->user schedule</a>&nbsp;-&nbsp;\n";
