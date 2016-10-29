@@ -55,8 +55,8 @@ class LogonDBController extends AbstractController
             $user = $this->sr->getUserByName($userName);
             $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
 
+            // try user pass
             $hash = isset($user) ? $user->hash : null;
-
             $this->authed = password_verify($pass, $hash);
 
             if ($this->authed) {
@@ -66,10 +66,24 @@ class LogonDBController extends AbstractController
                 $this->msg = null;
             }
             else {
-                $_SESSION['authed'] = false;
-                $_SESSION['event'] = null;
-                $_SESSION['user'] = null;
-                $this->msg = 'Unrecognized password for ' . $_POST['user'];
+                //try master password
+                $user = $this->sr->getUserByName('Admin');
+                $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
+                $hash = isset($user) ? $user->hash : null;
+                $this->authed = password_verify($pass, $hash);
+
+                if ($this->authed) {
+                    $_SESSION['authed'] = true;
+                    $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
+                    $_SESSION['user'] = $_POST['user'];
+                    $this->msg = null;
+                }
+                else {
+                    $_SESSION['authed'] = false;
+                    $_SESSION['event'] = null;
+                    $_SESSION['user'] = null;
+                    $this->msg = 'Unrecognized password for ' . $_POST['user'];
+                }
             }
         }
 	}
