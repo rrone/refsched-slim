@@ -398,27 +398,27 @@ class SchedSchedDBController extends AbstractController
                         $html .= "</tr>";
 
                         for ($kant = 0; $kant < $kount; $kant++) {
-                            if (($this->showgroup && $this->showgroup == $this->divisionAge($div[$kant])) || !$this->showgroup) {
-                                if ($a_init != substr($home[$kant], 0, 1) && $a_init != substr($away[$kant], 0, 1) && !$ref_team[$kant] && $showavailable) {
+                            if (($this->showgroup && $this->showgroup == $this->divisionAge($this->div[$kant])) || !$this->showgroup) {
+                                if ($a_init != substr($this->home[$kant], 0, 1) && $a_init != substr($this->away[$kant], 0, 1) && !$this->ref_team[$kant] && $showavailable) {
 
                                     if (!$testtime) {
-                                        $testtime = $time[$kant];
-                                    } elseif ($testtime != $time[$kant]) {
-                                        $testtime = $time[$kant];
+                                        $testtime = $this->time[$kant];
+                                    } elseif ($testtime != $this->time[$kant]) {
+                                        $testtime = $this->time[$kant];
                                         $tempcolor = $color1;
                                         $color1 = $color2;
                                         $color2 = $tempcolor;
                                     }
                                     $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
-                                    $html .= "<td>$this->game_no[$kant]</td>";
-                                    $html .= "<td><input type=\"checkbox\" name=\"assign:$this->game_id[$kant]\" value=\"$this->game_id[$kant]\"></td>";
-                                    $html .= "<td>$this->date[$kant]</td>";
-                                    $html .= "<td>$this->time[$kant]</td>";
-                                    $html .= "<td>$this->field[$kant]</td>";
-                                    $html .= "<td>$this->div[$kant]</td>";
-                                    $html .= "<td>$this->pool[$kant]</td>";
-                                    $html .= "<td>$this->home[$kant]</td>";
-                                    $html .= "<td>$this->away[$kant]</td>";
+                                    $html .= "<td>".$this->game_no[$kant]."</td>";
+                                    $html .= "<td><input type=\"checkbox\" name=\"assign:".$this->game_id[$kant]."\" value=\"".$this->game_id[$kant]."\"></td>";
+                                    $html .= "<td>".$this->date[$kant]."</td>";
+                                    $html .= "<td>".$this->time[$kant]."</td>";
+                                    $html .= "<td>".$this->field[$kant]."</td>";
+                                    $html .= "<td>".$this->div[$kant]."</td>";
+                                    $html .= "<td>".$this->pool[$kant]."</td>";
+                                    $html .= "<td>".$this->home[$kant]."</td>";
+                                    $html .= "<td>".$this->away[$kant]."</td>";
                                     $html .= "<td>&nbsp;</td>";
                                     $html .= "</tr>\n";
                                 }
@@ -441,7 +441,7 @@ class SchedSchedDBController extends AbstractController
                     }
                 }
 
-                if($this->user != 'Section 1' && (($showavailable && $kount) || $this->num_assigned)) {
+                if($showavailable && $this->num_unassigned) {
                     $html .= "<h3 class=\"center h3-btn\">" . $this->menuLinks($this->num_assigned) . "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
                     $html .= "<div class='clear-fix'></div>";
                 }
@@ -486,6 +486,7 @@ EOD;
         if($this->user == 'Section 1'){
             $html .=
 <<<EOD
+        <a href="$this->masterPath">Schedule referee teams</a>&nbsp;-&nbsp;
         <a href="$this->refsPath">Edit referee assignments</a>&nbsp;-&nbsp;
 EOD;
         } else {
@@ -516,7 +517,11 @@ EOD;
             return $html;
         }
 
-        $html .= "<h3>Games assigned to $user :</h3>\n";
+        if(empty($user)) {
+            $html .= "<h3>Unassigned :</h3>\n";
+        } else {
+            $html .= "<h3>Games assigned to $user :</h3>\n";
+        }
         if (empty($kount)) {
             $html .= "<table class=\"sched_table\" >\n";
             $html .= "<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";
