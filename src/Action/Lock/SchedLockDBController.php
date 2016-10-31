@@ -25,14 +25,14 @@ class SchedLockDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info("Schedule lock action dispatched");
-
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
+
+        $this->logger->info($this->logStamp() . ": Scheduler lock action dispatched");
 
         $this->renderLock();
 

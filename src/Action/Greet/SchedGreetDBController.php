@@ -24,7 +24,6 @@ class SchedGreetDBController extends AbstractController
         if (!$this->authed) {
             return $response->withRedirect($this->logonPath);
         }
-        $this->logger->info("Schedule greet page action dispatched");
 
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
@@ -32,6 +31,8 @@ class SchedGreetDBController extends AbstractController
         if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
+
+        $this->logger->info($this->logStamp() . ": Scheduler greet page dispatched");
 
         $this->handleRequest($request);
 

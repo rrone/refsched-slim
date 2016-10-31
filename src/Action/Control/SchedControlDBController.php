@@ -25,8 +25,6 @@ class SchedControlDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
          }
             
-		$this->logger->info("Schedule control page action dispatched");
-
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
@@ -34,7 +32,9 @@ class SchedControlDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-		if ( $request->isPost()) {
+        $this->logger->info($this->logStamp() . ": Schedule control page action dispatched");
+
+        if ( $request->isPost()) {
 			$this->handleRequest($request);
 		}
         

@@ -34,9 +34,15 @@ class SchedExportController extends AbstractController
             return $response->withRedirect($this->logonPath);
          }
 
-        $this->logger->info("Schedule export action dispatched");
+        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
+        if (is_null($this->event) || is_null($this->user)) {
+            return $response->withRedirect($this->logonPath);
+        }
+
+        $this->logger->info($this->logStamp() . ": Scheduler export action dispatched");
+
 
         if (is_null($this->event)) {
             return $response->withRedirect($this->fullPath);

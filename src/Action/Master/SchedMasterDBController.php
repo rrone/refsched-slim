@@ -29,8 +29,6 @@ class SchedMasterDBController extends AbstractController
             return $response->withRedirect($this->greetPath);
          }
 
-        $this->logger->info("Schedule master page action dispatched");
-
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
@@ -38,7 +36,9 @@ class SchedMasterDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-		if ( count( $_GET ) ) {
+        $this->logger->info($this->logStamp() . ": Schedule master page action dispatched");
+
+        if ( count( $_GET ) ) {
 		   $this->justOpen = array_key_exists( 'open', $_GET );
 		}
 		if ( $request->isPost()) {

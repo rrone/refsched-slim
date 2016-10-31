@@ -26,14 +26,15 @@ class LogonDBController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->logger->info("Logon page action dispatched");
-       
         $this->handleRequest($request);
 
 		$this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
 
-		if ($this->authed) {
-			return $response->withRedirect($this->greetPath);
+        if ($this->authed) {
+            $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+            $this->logger->info($this->logStamp() . ": Scheduler logon");
+
+            return $response->withRedirect($this->greetPath);
         }
 		else {
 			$content = array(

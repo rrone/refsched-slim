@@ -124,4 +124,13 @@ abstract class AbstractController
 
         return false;
     }
+    protected function logStamp()
+    {
+        $timestamp = date('yyyy-mm-dd H:i:s');
+
+        $user = isset($this->user) ? $this->user->name : 'Anonymous';
+
+        return $user;
+
+    }
 }

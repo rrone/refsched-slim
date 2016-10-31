@@ -27,8 +27,6 @@ class SchedEditRefDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info("Schedule edit refs page action dispatched");
-
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : false;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
         $this->target_id = isset($_SESSION['target_id']) ? $_SESSION['target_id'] : null;
@@ -36,6 +34,8 @@ class SchedEditRefDBController extends AbstractController
         if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
+
+        $this->logger->info($this->logStamp() . ": Schedule edit refs page dispatched");
 
         if ($request->isPost()) {
             if ($this->handleRequest($request)) {

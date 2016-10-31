@@ -34,8 +34,6 @@ class SchedTemplateExportController extends AbstractController
             return $response->withRedirect($this->logonPath);
          }
 
-        $this->logger->info("Schedule template export dispatched");
-
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
@@ -43,7 +41,9 @@ class SchedTemplateExportController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-		$file = $this->generateFile();
+        $this->logger->info($this->logStamp() . ": Scheduler template export dispatched");
+
+        $file = $this->generateFile();
         if ($file['valid']) {
             // generate the response
             $response = $response->withHeader('Content-Type', $this->exporter->contentType);
