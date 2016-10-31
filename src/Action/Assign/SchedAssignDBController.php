@@ -56,7 +56,7 @@ class SchedAssignDBController extends AbstractController
     }
 	private function handleRequest($request)
 	{
-        if ( $request->isPost() && !$this->isRepost($request)) {
+        if ($request->isPost()) {
         }
 
         return null;

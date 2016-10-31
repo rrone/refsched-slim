@@ -62,7 +62,7 @@ class AdminController extends AbstractController
     }
 	private function handleRequest($request)
 	{
-        if ( $request->isPost() && !$this->isRepost($request)) {
+        if ( $request->isPost() ) {
             if (in_array('btnUpdate', array_keys($_POST))) {
                 $this->userName = $_POST['selectUser'];
                 $userName = $this->userName;
@@ -70,17 +70,17 @@ class AdminController extends AbstractController
 
                 if (!empty($pw)) {
 
-                    $userDb = $this->sr->getUserByName($userName);
+                    $user = $this->sr->getUserByName($userName);
 
-                    if (empty($userDb)) {
+                    if (is_null($user)) {
                         $userData = array(
                             'name' => $userName,
                             'enabled' => false,
                         );
                     } else {
                         $userData = array(
-                            'name' => $userDb->name,
-                            'enabled' => $userDb->enabled,
+                            'name' => $user->name,
+                            'enabled' => $user->enabled,
                         );
                     }
 

@@ -3,6 +3,7 @@
 namespace App\Action;
 
 use Slim\Container;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 abstract class AbstractController
 {
@@ -32,15 +33,19 @@ abstract class AbstractController
     
     //default layout colors
     protected $colorTitle = '#80ccff';
-    protected $colorOpen = '#FFF484';
+    protected $colorOpenSlots = '#FFF484';
+    protected $colorUnassigned = '#ffb3b3';
     protected $colorGroup1= '#00e67a';
     protected $colorGroup2 = '#4dffac';
-    protected $colorNotGroup = '#ffcccc';
+    protected $colorOpenOpen = '#ffcccc';
     protected $colorHighlight = '#FFBC00';
     protected $colorAlert = '#CC0000';
     protected $colorWarning = '#CC00CC';
     protected $colorSuccess = '#02C902';
-    
+    protected $colorLtGray = '#D3D3D3';
+    protected $colorDarkGray = '#B7B7B7';
+
+
     //named routes
     protected $assignPath;
     protected $controlPath;
@@ -103,7 +108,7 @@ abstract class AbstractController
 	{
 		return substr($div,0,3);
 	}
-	protected function isRepost($request){
+	protected function isRepost(Request $request){
 
         if ($request->isPost()) {
             if (isset($_SESSION['postdata'])) {

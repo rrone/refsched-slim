@@ -31,7 +31,7 @@ class SchedSchedDBController extends AbstractController
         
         $this->sr = $repository;
 
-        $this->showgroup = null;
+        $this->showgroup = false;
 		
     }
     public function __invoke(Request $request, Response $response, $args)
@@ -164,11 +164,13 @@ class SchedSchedDBController extends AbstractController
                     $games_now[$div] = isset($games_now[$div]) ? $games_now[$div] : 0;
                     $atLimit[$div] = isset($atLimit[$div]) ? $atLimit[$div] : 0;
                     //if requested
+
                     if (in_array($game->id, array_keys($adds))) {
                         //and available
                         if (empty($game->assignor)) {
                             //and below the limit if there is one
-                            if (is_null($limit_list[$div]) || $games_now[$div] < $limit_list[$div] || $no_limit) {
+
+                            if (!isset($limit_list[$div]) || $games_now[$div] < $limit_list[$div] || $no_limit) {
                                 //make the assignment
                                 $data = [$game->id => $this->user->name];
                                 $this->sr->updateAssignor($data);
@@ -195,7 +197,6 @@ class SchedSchedDBController extends AbstractController
         $html = null;
         
 		$event = $this->event;
-        $uname = $this->user->name;
         
 		if (!empty($event)) {
 			$projectKey = $event->projectKey;
@@ -204,13 +205,11 @@ class SchedSchedDBController extends AbstractController
 			   $this->showgroup = $_GET[ 'group' ];
 			}
 
-			$color1 = '#D3D3D3';
-			$color2 = '#B7B7B7';
 			$allatlimit = true;
 			$oneatlimit = false;
 			$showavailable = false;
 			$a_init = substr( $this->user->name, -1 );
-			$assigned_list = null;
+			$assigned_list = [];
             $limit_list = [];
 			
 			if ( !$this->user->admin) {
@@ -337,13 +336,13 @@ class SchedSchedDBController extends AbstractController
 			}
 			elseif ( !$locked && count( $limit_list ) ) {
 				$html .= "<h3 class=\"center\">\n";
-				foreach ( $limit_list as $k => $v ) {
+				foreach ( $assigned_list as $k => $v ) {
 					$tempassign = $assigned_list[$k];
-                    if ( $limit_list[$k] != 'none' ) {
-                        $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$v</span> games<br>\n";
+                    if (isset($limit_list[$k]) && $limit_list[$k] != 'none') {
+                        $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$limit_list[$k]</span> games<br>\n";
                         $oneatlimit = ($assigned_list[$k] >= $limit_list[$k]);
                     }
-                    elseif ($limit_list[$k] = 'none') {
+                    else {
                         $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
                         $oneatlimit = false;
                     }
@@ -355,6 +354,8 @@ class SchedSchedDBController extends AbstractController
                 $showavailable = true;
 			}
 
+            $rowColor = $this->colorDarkGray;
+
             if($this->num_assigned || $showavailable) {
                 $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
                 $submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled' ;
@@ -363,67 +364,70 @@ class SchedSchedDBController extends AbstractController
 
                 $html .= "<div align=\"left\">";
 
+                if (!$showavailable || !$this->num_unassigned) {
+                    $html .= "<h3 class=\"h3-btn\" >";
+                } else {
+                    $html .= "<h3 class=\"h3-btn\" >Available games :";
+                }
+
+                $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
+                $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+                $html .= "<div class='clear-fix'></div>";
+
+                $html .= "</h3>\n";
+
                 if($this->num_unassigned) {
-                    if (!$showavailable) {
-
-                        $html .= "<h3 class=\"h3-btn\" >";
-
-                        $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
-                        $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-                        $html .= "<div class='clear-fix'></div>";
-
-                        $html .= "</h3>\n";
-                    } else {
-                        $html .= "<h3 class=\"h3-btn\" >Available games :";
-
-                        $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
-                        $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-                        $html .= "<div class='clear-fix'></div>";
-
-                        $html .= "</h3>\n";
-                        $html .= "<table class=\"sched_table\" >\n";
-                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
-                        $html .= "<th>Game No</th>";
-                        $html .= "<th>Date</th>";
-                        $html .= "<th>Time</th>";
-                        $html .= "<th>Field</th>";
-                        $html .= "<th>Division</th>";
-                        $html .= "<th>Pool</th>";
-                        $html .= "<th>Home</th>";
-                        $html .= "<th>Away</th>";
-                        $html .= "<th>Referee Team</th>";
-                        $html .= "<th>Assign to ". $this->user->name ."</th>";
-                        $html .= "</tr>";
-
-                        for ($kant = 0; $kant < $kount; $kant++) {
-                            if (($this->showgroup && $this->showgroup == $this->divisionAge($div[$kant])) || !$this->showgroup) {
-                                if ($a_init != substr($home[$kant], 0, 1) && $a_init != substr($away[$kant], 0, 1) && !$ref_team[$kant] && $showavailable) {
-
-                                    if (!$testtime) {
-                                        $testtime = $time[$kant];
-                                    } elseif ($testtime != $time[$kant]) {
-                                        $testtime = $time[$kant];
-                                        $tempcolor = $color1;
-                                        $color1 = $color2;
-                                        $color2 = $tempcolor;
+                    $html .= "<table class=\"sched_table\" >\n";
+                    $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+                    $html .= "<th>Game No</th>";
+                    $html .= "<th>Date</th>";
+                    $html .= "<th>Time</th>";
+                    $html .= "<th>Field</th>";
+                    $html .= "<th>Division</th>";
+                    $html .= "<th>Pool</th>";
+                    $html .= "<th>Home</th>";
+                    $html .= "<th>Away</th>";
+                    $html .= "<th>Referee Team</th>";
+                    $html .= "<th>Assign to ". $this->user->name ."</th>";
+                    $html .= "</tr>";
+                    $wasHTML = $html;
+                    for ($kant = 0; $kant < $kount; $kant++) {
+                        if (($this->showgroup && $this->showgroup == $this->divisionAge($this->div[$kant])) || !$this->showgroup) {
+                            if ($a_init != substr($this->home[$kant], 0, 1) && $a_init != substr($this->away[$kant], 0, 1) && !$this->ref_team[$kant] && $showavailable) {
+                                if (!$testtime) {
+                                    $testtime = $this->time[$kant];
+                                } elseif ($testtime != $this->time[$kant]) {
+                                    $testtime = $this->time[$kant];
+                                    switch ($rowColor) {
+                                        case $this->colorDarkGray:
+                                            $rowColor = $this->colorLtGray;
+                                            break;
+                                        default:
+                                            $rowColor = $this->colorDarkGray;
                                     }
-                                    $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
-                                    $html .= "<td>$this->game_no[$kant]</td>";
-                                    $html .= "<td><input type=\"checkbox\" name=\"assign:$this->game_id[$kant]\" value=\"$this->game_id[$kant]\"></td>";
-                                    $html .= "<td>$this->date[$kant]</td>";
-                                    $html .= "<td>$this->time[$kant]</td>";
-                                    $html .= "<td>$this->field[$kant]</td>";
-                                    $html .= "<td>$this->div[$kant]</td>";
-                                    $html .= "<td>$this->pool[$kant]</td>";
-                                    $html .= "<td>$this->home[$kant]</td>";
-                                    $html .= "<td>$this->away[$kant]</td>";
-                                    $html .= "<td>&nbsp;</td>";
-                                    $html .= "<td><input type=\"checkbox\" name=\"assign:".$this->game_id[$kant]."\" value=\"".$this->game_id[$kant]."\"></td>";
-                                    $html .= "</tr>\n";
                                 }
+
+                                $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
+                                $html .= "<td>".$this->game_no[$kant]."</td>";
+                                $html .= "<td>".$this->date[$kant]."</td>";
+                                $html .= "<td>".$this->time[$kant]."</td>";
+                                $html .= "<td>".$this->field[$kant]."</td>";
+                                $html .= "<td>".$this->div[$kant]."</td>";
+                                $html .= "<td>".$this->pool[$kant]."</td>";
+                                $html .= "<td>".$this->home[$kant]."</td>";
+                                $html .= "<td>".$this->away[$kant]."</td>";
+                                $html .= "<td>&nbsp;</td>";
+                                $html .= "<td><input type=\"checkbox\" name=\"assign:".$this->game_id[$kant]."\" value=\"".$this->game_id[$kant]."\"></td>";
+                                $html .= "</tr>\n";
                             }
                         }
                     }
+                    if($html == $wasHTML){
+                        $html .= "<tr align=\"center\">";
+                        $html .= "<td colspan=\"10\" > No neutral assignments available. </td>";
+                        $html .= "</tr>\n";
+                    }
+
                     $html .= "</table>";
                 }
 
@@ -440,8 +444,8 @@ class SchedSchedDBController extends AbstractController
                     }
                 }
 
-                if($this->user != 'Section 1' && (($showavailable && $kount) || $this->num_assigned)) {
-                    $html .= "<h3 class=\"center h3-btn\">" . $this->menuLinks($this->num_assigned) . "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
+                if(!$this->user->admin && (($showavailable && $kount) || $this->num_assigned)) {
+                    $html .= "<h3 class=\"center h3-btn\">" . $this->menuLinks() . "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
                     $html .= "<div class='clear-fix'></div>";
                 }
                 $html .= "</form>\n";
@@ -485,13 +489,16 @@ EOD;
         if($this->user->admin){
             $html .=
 <<<EOD
+        <a href="$this->masterPath">Select Assignors</a>&nbsp;-&nbsp;
         <a href="$this->refsPath">Edit referee assignments</a>&nbsp;-&nbsp;
 EOD;
         } else {
             if ($this->num_assigned) {
                 $uname = $this->user->name;
+                $showAll = !empty($this->showgroup) ? "<a href=\"$this->schedPath\">View all $uname games</a>&nbsp;-&nbsp;" : '';
                 $html .=
 <<<EOD
+        $showAll
         <a href="$this->refsPath">Edit $uname referee assignments</a>&nbsp;-&nbsp;
 EOD;
             }
@@ -512,11 +519,11 @@ EOD;
         $assigned = in_array($user->name, $this->ref_team);
 
         if(!$assigned){
-            $html .= "<h3>Games assigned to $user->name: NONE</h3><br>\n";
+            $html .= "<h3>$this->showgroup Games assigned to $user->name: <span style=\"color:$this->colorAlert\">NONE</span></h3><br>\n";
             return $html;
         }
 
-        $html .= "<h3>Games assigned to $user :</h3>\n";
+        $html .= "<h3>$this->showgroup Games assigned to $user->name :</h3>\n";
 
         if (empty($kount)) {
             $html .= "<table class=\"sched_table\" >\n";
@@ -541,8 +548,7 @@ EOD;
             $html .= "</tr>\n";
 
 
-            $color1 = $this->colorGroup1;
-            $color2 = $this->colorGroup2;
+            $rowColor = $this->colorGroup1;
 
             for ($kant = 0; $kant < $kount; $kant++) {
                 if ($user->name == $this->ref_team[$kant]) {
@@ -551,12 +557,16 @@ EOD;
                         $testtime = $this->time[$kant];
                     } elseif ($testtime != $this->time[$kant]) {
                         $testtime = $this->time[$kant];
-                        $tempcolor = $color1;
-                        $color1 = $color2;
-                        $color2 = $tempcolor;
+                        switch ($rowColor) {
+                            case $this->colorGroup1:
+                                $rowColor = $this->colorGroup2;
+                                break;
+                            default:
+                                $rowColor = $this->colorGroup1;
+                        }
                     }
 
-                    $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
+                    $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
                     $html .= "<td>".$this->game_no[$kant]."</td>";
                     $html .= "<td>".$this->date[$kant]."</td>";
                     $html .= "<td>".$this->time[$kant]."</td>";

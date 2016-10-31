@@ -179,7 +179,7 @@ class SchedEditRefDBController extends AbstractController
 EOD;
 
         if ($this->user->admin) {
-            $html .= "<a href=\"$this->masterPath\">Go to Section 1 schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->masterPath\">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         } else {
             $html .= "<a href=\"$this->refsPath\">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         }

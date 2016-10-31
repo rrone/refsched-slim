@@ -112,14 +112,13 @@ class SchedMasterDBController extends AbstractController
 				$html .=  "<th>Referee Team</th>";
 				$html .=  "</tr>\n";
 				
-				if($user->admin) {
+				if($this->user->admin) {
                     $games = $this->sr->getGames($projectKey, '%', true);
                 } else {
                     $games = $this->sr->getGames($projectKey);
                 }
 
-                $color1 = $this->colorGroup1;
-                $color2 = $this->colorGroup2;
+                $rowColor = $this->colorGroup1;
                 $testtime = null;
 
 				foreach($games as $game){
@@ -132,17 +131,21 @@ class SchedMasterDBController extends AbstractController
                         }
                         elseif ( $testtime != $time && !empty($game->assignor)) {
                             $testtime = $time;
-                            $tempcolor = $color1;
-                            $color1 = $color2;
-                            $color2 = $tempcolor;
+                            switch ($rowColor) {
+                                case $this->colorGroup1:
+                                    $rowColor = $this->colorGroup2;
+                                    break;
+                                default:
+                                    $rowColor = $this->colorGroup1;
+                            }
                         }
 
                         if ( empty($game->assignor) ) {
-							$html .=  "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";
+							$html .=  "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
 						}
-						else {
-							$html .=  "<tr align=\"center\" bgcolor=\"$color1\">";
-						}
+                        else {
+                            $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
+                        }
 						$html .=  "<td>$game->game_number</td>";
 						$html .=  "<td>$date</td>";
 						$html .=  "<td>$time</td>";

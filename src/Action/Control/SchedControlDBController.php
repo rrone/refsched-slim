@@ -68,8 +68,6 @@ class SchedControlDBController extends AbstractController
         
 		if (!empty($event)){
 
-    //         print_r($_POST);
-            
             $this->page_title = $event->name;
             $this->dates = $event->dates;
             $this->location = $event->location;
@@ -96,7 +94,7 @@ class SchedControlDBController extends AbstractController
                         $html .= "<tr align=\"center\" bgcolor=\"$this->colorGroup1\">";
                     } 
                     else {
-                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";
+                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
                     } 
                     $html .=  "<td>$game->game_number</td>";
                     $html .=  "<td>$date</td>";
@@ -133,7 +131,7 @@ class SchedControlDBController extends AbstractController
 <<<EOT
       <h3 align="center"><a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
       <a href="$this->fullPath">View the full schedule</a>&nbsp;-&nbsp;
-      <a href="$this->masterPath">Schedule referee teams</a>&nbsp;-&nbsp;
+      <a href="$this->masterPath">Select Assignors</a>&nbsp;-&nbsp;
       <a href="$this->endPath">Log off</a></h3>
 EOT;
         

@@ -91,7 +91,7 @@ class SchedRefsDBController extends AbstractController
                 }
             }
 
-            $numRefs = $this->sr->numberOfReferees($projectKey);
+            $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
             if ($this->num_assigned) {
                 if (!$this->user->admin) {
@@ -112,14 +112,13 @@ class SchedRefsDBController extends AbstractController
                 $html .= "<th>CR</th>";
                 $html .= "<th>AR1</th>";
                 $html .= "<th>AR2</th>";
-                if ($numRefs > 3) {
+                if ($has4th) {
                     $html .= "<th>4th</th>";
                 }
                 $html .= "<th>Edit</th>";
                 $html .= "</tr>\n";
 
-                $color1 = $this->colorGroup1;
-                $color2 = $this->colorGroup2;
+                $rowColor = $this->colorGroup1;
                 $testtime = null;
 
                 foreach ($games as $game) {
@@ -127,18 +126,31 @@ class SchedRefsDBController extends AbstractController
                     $time = date('H:i', strtotime($game->time));
                     if ($game->assignor == $this->user->name || $this->user->admin) {
                         if (!$game->assignor && $this->user->admin) {
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";
+                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
                         } else {
                             if ( !$testtime ) {
                                 $testtime = $time;
                             }
                             elseif ( $testtime != $time && !empty($game->assignor)) {
                                 $testtime = $time;
-                                $tempcolor = $color1;
-                                $color1 = $color2;
-                                $color2 = $tempcolor;
+                                switch ($rowColor) {
+                                    case $this->colorGroup1:
+                                        $rowColor = $this->colorGroup2;
+                                        break;
+                                    default:
+                                        $rowColor = $this->colorGroup1;
+                                }
                             }
-                            $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
+                            //no refs
+                            if (empty($game->cr) && empty($game->ar1) && empty($game->ar2) ) {
+                                $html .= "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                                //open AR  or 4th slots
+                            }elseif (empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
+                                $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                                //match covered
+                            } else {
+                                $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
+                            }
                         }
                         $html .= "<td>$game->game_number</td>";
                         $html .= "<td>$date</td>";
@@ -151,7 +163,7 @@ class SchedRefsDBController extends AbstractController
                         $html .= "<td>$game->cr</td>";
                         $html .= "<td>$game->ar1</td>";
                         $html .= "<td>$game->ar2</td>";
-                        if ($numRefs > 3) {
+                        if ($has4th) {
                             $html .= "<td>$game->r4th</td>";
                         }
                         if ($game->assignor || $this->user->admin) {
@@ -167,7 +179,7 @@ class SchedRefsDBController extends AbstractController
 
                 $this->bottommenu = $this->menu();
             } else {
-                $html .= "<h2 class=\"center\">You do not currently have any games scheduled.<h2>\n";
+                $html .= "<h2 class=\"center\">You do not currently have any games scheduled.</h2>\n";
                 $this->bottommenu = "<h3 class=\"center\">You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h3>";
             }
         } else {
@@ -186,7 +198,7 @@ class SchedRefsDBController extends AbstractController
 
         if ($this->user->admin) {
             $html .= "<a href=\"$this->schedPath\">View Assignors</a>&nbsp;-&nbsp;\n";
-            $html .= "<a href=\"$this->masterPath\">Schedule referee teams</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->masterPath\">Select Assignors</a>&nbsp;-&nbsp;\n";
         } else {
             $html .= "<a href=\"$this->schedPath\">Go to ". $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         }

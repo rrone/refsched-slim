@@ -106,8 +106,7 @@ class SchedFullDBController extends AbstractController
             }
             $html .= "</tr>\n";
 
-            $color1 = $this->colorGroup1;
-            $color2 = $this->colorGroup2;
+            $rowColor = $this->colorGroup1;
             $testtime = null;
 
             foreach ($games as $game) {
@@ -117,29 +116,50 @@ class SchedFullDBController extends AbstractController
 
                     if ( !$testtime ) {
                         $testtime = $time;
-                    } elseif ( $testtime != $time && !empty($game->assignor)) {
+                    }
+                    elseif ( $testtime != $time && !empty($game->assignor)) {
                         $testtime = $time;
-                        $tempcolor = $color1;
-                        $color1 = $color2;
-                        $color2 = $tempcolor;
+                        switch ($rowColor) {
+                            case $this->colorGroup1:
+                                $rowColor = $this->colorGroup2;
+                                break;
+                            default:
+                                $rowColor = $this->colorGroup1;
+                        }
                     }
 
-                    if ($game->assignor == $this->user) {
-                        $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
-                    } elseif (!empty($game->assignor)) {
-
-                        if ($this->user->admin) {
-                            if (empty($game->cr)) {
-                                $html .= "<tr align=\"center\" bgcolor=\"$color1\">";
-                            } else {
-                                $html .= "<tr align=\"center\" bgcolor=\"$this->colorSuccess\">";
-                            }
-                        } else {
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorNotGroup\">";
+                    if ($game->assignor == $this->user->name) {
+                        //no refs
+                        if (empty($game->cr) && empty($game->ar1) && empty($game->ar2)) {
+                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                            //open AR  or 4th slots
+                        }
+                        elseif (empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
+                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                            //match covered
+                        }
+                        else {
+                            $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
                         }
                     } else {
-                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";
+                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorLtGray\">";
                     }
+                    if($this->user->admin){
+                        //no assignor
+                        if (empty($game->assignor)) {
+                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                        //my open slots
+                        } elseif ($game->assignor == $this->user->name && empty($game->cr) && empty($game->ar1) && empty($game->ar2)) {
+                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                        //assigned open slots
+                        } elseif (empty($game->cr) || empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
+                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                        //match covered
+                        } else {
+                            $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
+                        }
+                    }
+
 
                     $html .= "<td>$game->game_number</td>";
                     $html .= "<td>$date</td>";
@@ -160,7 +180,7 @@ class SchedFullDBController extends AbstractController
                 }
             }
 
-            $html .= "      </table>\n";
+            $html .= "</table>\n";
 
             $this->menu = $this->menu();
         }
@@ -179,7 +199,7 @@ class SchedFullDBController extends AbstractController
         }
         if ($this->user->admin) {
             $html .= "<a href=\"$this->schedPath\">View Assignors</a>&nbsp;-&nbsp;\n";
-            $html .= "<a href=\"$this->masterPath\">Schedule referee teams</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->masterPath\">Select Assignors</a>&nbsp;-&nbsp;\n";
             $html .= "<a href=\"$this->refsPath\">Edit referee assignments</a>&nbsp;-&nbsp;\n";
         } else {
             $html .= "<a href=\"$this->schedPath\">Go to ". $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";

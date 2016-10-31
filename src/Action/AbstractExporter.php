@@ -63,7 +63,7 @@ class AbstractExporter
         switch ($this->format) {
             case 'csv': return $this->exportCSV ($content);
             case 'xls': return $this->exportXLSX($content);
-            case 'pdf': return $this->exportPdf($content);
+//            case 'pdf': return $this->exportPdf($content);
         }
 
         return null;

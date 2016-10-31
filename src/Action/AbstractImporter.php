@@ -81,7 +81,7 @@ class AbstractImporter
 
         return $data;
     }
-    private function readWorksheet($objPHPExcel)
+    private function readWorksheet(PHPExcel $objPHPExcel)
     {
         $data = null;
 //      read through the rows and cells

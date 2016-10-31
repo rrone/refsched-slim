@@ -97,7 +97,7 @@ class SchedGreetDBController extends AbstractController
             foreach ($games as $game) {
                 if ($this->user->admin && !empty($game->assignor)) {
                     $num_assigned++;
-                } elseif ($this->user == $game->assignor) {
+                } elseif ($this->user->name == $game->assignor) {
                     $num_area++;
                     $assigned_list[$this->divisionAge($game->division)]++;
                 }
@@ -107,8 +107,10 @@ class SchedGreetDBController extends AbstractController
 
             $html = null;
             $uname = $this->user->name;
+
             $html .= "<h3 class=\"center\">Welcome ". $uname ." Assignor</h3>\n";
             $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">CURRENT STATUS</h3>\n<h3 align=\"center\">";
+            $html .= "<h3 class=\"center\">";
 
             if ($this->user->admin) {
                 if ($locked) {
@@ -116,6 +118,15 @@ class SchedGreetDBController extends AbstractController
                 } else {
                     $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;-&nbsp;(<a href=\"$this->lockPath\">Lock</a> the schedule now)<br>\n";
                 }
+            } else {
+                if ($locked) {
+                    $html .= "The schedule is presently <span style=\"color:$this->colorAlert\">locked</span><br>\n";
+                } else {
+                    $html .= "The schedule is presently <span style=\"color:$this->colorSuccess\">unlocked</span><br>\n";
+                }
+            }
+
+            if ($this->user->admin) {
 
                 //get the grammar right
                 if ($num_assigned == 1 && $num_unassigned == 1) {
@@ -129,14 +140,14 @@ class SchedGreetDBController extends AbstractController
                 }
 
                 if (count($limit_list) == 0){
-                    $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time</h3>\n";
+                    $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time<br>\n";
                 } else {
                     if (array_key_exists('all', $limit_list)) {
                         $tmplimit = $limit_list['all'];
                         if ($tmplimit != 'none') {
-                            $html .= "There is a <span style=\"color:$this->colorWarning\">$tmplimit</span> game limit in all divisions</h3>\n";
+                            $html .= "There is a <span style=\"color:$this->colorWarning\">$tmplimit</span> game limit in all divisions<br>\n";
                         } else {
-                            $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time</h3>\n";
+                            $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time<br>\n";
                         }
                     } else {
                         foreach ($limit_list as $k => $v) {
@@ -151,7 +162,6 @@ class SchedGreetDBController extends AbstractController
                         if (count($assigned_list) < count($used_list)){
                             $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit for all other divisions<br>\n";
                         }
-                        $html .= "</h3>\n";
                     }
                 }
 
@@ -165,14 +175,14 @@ class SchedGreetDBController extends AbstractController
                 }
 
                 if (count($limit_list) == 0){
-                    $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time</h3>\n";
+                    $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time<br>\n";
                 } else {
                     if (array_key_exists('all', $limit_list)) {
                         $tmplimit = $limit_list['all'];
                         if ($tmplimit != 'none') {
-                            $html .= "There is a limit of <span style=\"color:$this->colorWarning\">$tmplimit</span> Area assigned games in all divisions at this time</h3>\n";
+                            $html .= "There is a limit of <span style=\"color:$this->colorWarning\">$tmplimit</span> Area assigned games in all divisions at this time<br>\n";
                         } else {
-                            $html .= "There is <span style=\"color:$this->colorWarning\">no</span> limit of Area assigned games at this time</h3>\n";
+                            $html .= "There is <span style=\"color:$this->colorWarning\">no</span> limit of Area assigned games at this time<br>\n";
                         }
                     } else {
                         foreach ($limit_list as $k => $v) {
@@ -190,12 +200,10 @@ class SchedGreetDBController extends AbstractController
                         if (count($assigned_list) < count($used_list)){
                             $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit for all other divisions<br>\n";
                         }
-                        $html .= "</h3>\n";
                     }
                 }
 
                 if ($locked && !array_key_exists('none', $limit_list)) {
-                    $html .= "<h3 class=\"center\" style=\"style=\"color:$this->colorAlert\">The schedule is presently locked<br>\n";
                     if (!$allatlimit) {
                         $html .= "You may sign ". $this->user->name . " teams up for games but you may not remove them</h3>\n";
                     } else {
@@ -203,6 +211,8 @@ class SchedGreetDBController extends AbstractController
                     }
                 }
             }
+            $html .= "</h3>";
+
 
             $html .= "<hr class=\"center\" width=\"25%\">";
             $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">ACTIONS</h3>\n";

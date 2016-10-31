@@ -192,11 +192,12 @@ class SchedulerRepository
             ])
             ->get();
     }
-	public function getGamesByRep($projectKey, $rep)
+	public function getGamesByRep($projectKey, $rep, $medalRound = false)
 	{
 		return $this->db->table('games')
 			->where([
 				['projectKey', '=', $projectKey],
+                ['medalRound', 'like', $medalRound],
 				['assignor', '=', $rep],
 			])
 			->get();
