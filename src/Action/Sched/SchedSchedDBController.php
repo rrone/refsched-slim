@@ -241,7 +241,7 @@ class SchedSchedDBController extends AbstractController
 			$locked = $this->sr->getLocked($projectKey);
 			$_SESSION['locked'] = $locked;
 	
-			$games = $this->sr->getGames($projectKey, $this->showgroup);
+			$games = $this->sr->getGames($projectKey, $this->showgroup, $this->user->admin);
             $this->num_assigned = 0;
             $this->num_unassigned = count($games);
 
@@ -517,7 +517,6 @@ EOD;
         $testtime = null;
 
         $assigned = in_array($user->name, $this->ref_team);
-
         if(!$assigned){
             $html .= "<h3>$this->showgroup Games assigned to $user->name: <span style=\"color:$this->colorAlert\">NONE</span></h3><br>\n";
             return $html;
@@ -546,7 +545,6 @@ EOD;
                 $html .= "<th>Assigned</th>\n";
             }
             $html .= "</tr>\n";
-
 
             $rowColor = $this->colorGroup1;
 
