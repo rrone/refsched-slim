@@ -50,7 +50,7 @@ class SchedImportController extends AbstractController
 
         $content = array(
             'view' => array(
-                'rep' => $this->user,
+                'admin' => $this->user->admin,
                 'action' => $this->schedImportPath,
                 'message' => $this->msg,
                 'messageStyle' => $this->msgStyle,
@@ -70,6 +70,10 @@ class SchedImportController extends AbstractController
             $key = strtolower(array_keys($parsedBody)[0]);
 
             $files = $request->getUploadedFiles();
+
+            if(empty($files)){
+                return $this->adminPath;
+            }
 
             $upload = $files['uploadfile'];
 

@@ -23,7 +23,7 @@ class AdminController extends AbstractController
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        if (!$this->authed || $this->user != 'Section 1') {
+        if (!$this->authed || !$this->user->admin) {
             return $response->withRedirect($this->greetPath);
          }
 
@@ -47,7 +47,7 @@ class AdminController extends AbstractController
 
         $content = array(
             'view' => array (
-                'rep' => $this->user,
+                'admin' => $this->user->admin,
                 'users' => $this->renderUsers(),
                 'action' => $this->adminPath,
 				'message' => $this->msg,

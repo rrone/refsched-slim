@@ -64,12 +64,12 @@ class SchedUnlockDBController extends AbstractController
             if ( !$locked ) {
                $html .= "<h3 align=\"center\">The schedule is already unlocked!</h3>\n";
             }
-			elseif ( $this->user == 'Section 1') {
+			elseif ( $this->user->admin ) {
                $this->sr->unlockProject($projectKey);
                $html .= "<h3 align=\"center\">The schedule has been unlocked!</h3>\n";
             }
         }
-        elseif ( $rep == 'Section 1') {
+        elseif ( $this->user->admin ) {
            $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
            $html .= "You should go to the <a href=\"$this->masterPath\">Schedule Page</a></h2>";
         }

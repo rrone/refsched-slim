@@ -40,14 +40,14 @@ class SchedControlDBController extends AbstractController
         
         $content = array(
             'view' => array (
-                'rep' => $this->user,
+                'admin' => $this->user->admin,
                 'content' => $this->renderControl(),
                 'topmenu' => $this->topmenu,
                 'menu' => $this->menu(),
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
-				'description' => $this->user . ': Referee Team Schedule',
+				'description' => !$this->user->name. ': Referee Team Schedule',
             )
         );        
      

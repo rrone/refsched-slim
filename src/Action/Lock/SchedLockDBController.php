@@ -65,16 +65,16 @@ class SchedLockDBController extends AbstractController
             if ( $locked ) {
                $html .= "<h3 align=\"center\">The schedule is already locked!</h3>\n";
             }
-			elseif ( $this->user == 'Section 1') {
+			elseif ( $this->user->admin) {
                $this->sr->lockProject($projectKey);
                $html .= "<h3 align=\"center\">The schedule has been locked!</h3>\n";
             }
         }
-        elseif ( $this->user == 'Section 1') {
+        elseif ( $this->user->admin) {
            $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
            $html .= "You should go to the <a href=\"$this->masterPath\">Schedule Page</a></h2>";
         }
-        elseif ( $this->user != 'Section 1' ) {
+        elseif ( !$this->user->admin ) {
            $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
            $html .= "You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2>";
         }

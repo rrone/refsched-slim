@@ -45,14 +45,14 @@ class SchedRefsDBController extends AbstractController
 
         $content = array(
             'view' => array(
-                'rep' => $this->user,
+                'admin' => $this->user->admin,
                 'content' => $this->renderRefs(),
                 'topmenu' => $this->menu(),
                 'menu' => $this->bottommenu,
                 'title' => $this->page_title,
                 'dates' => $this->dates,
                 'location' => $this->location,
-                'description' => $this->user . ' Referee Assignments',
+                'description' => $this->user->name . ' Referee Assignments',
             )
         );
 
@@ -79,14 +79,14 @@ class SchedRefsDBController extends AbstractController
             $this->location = $event->location;
             $projectKey = $event->projectKey;
 
-            if ($this->user == 'Section 1') {
+            if ($this->user->admin) {
                 $games = $this->sr->getGames($projectKey, '%', true);
             } else {
                 $games = $this->sr->getGames($projectKey);
             }
 
             foreach ($games as $game) {
-                if ($game->assignor == $this->user || $this->user == 'Section 1') {
+                if ($game->assignor == $this->user->name || $this->user->admin) {
                     $this->num_assigned++;
                 }
             }
@@ -94,7 +94,7 @@ class SchedRefsDBController extends AbstractController
             $numRefs = $this->sr->numberOfReferees($projectKey);
 
             if ($this->num_assigned) {
-                if ($this->user != 'Section 1') {
+                if (!$this->user->admin) {
                     $html .= "<h2  class=\"center\">You are currently scheduled for the following games</h2></div>\n";
                 }
                 $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
@@ -125,8 +125,8 @@ class SchedRefsDBController extends AbstractController
                 foreach ($games as $game) {
                     $date = date('D, d M', strtotime($game->date));
                     $time = date('H:i', strtotime($game->time));
-                    if ($game->assignor == $this->user || $this->user == 'Section 1') {
-                        if (!$game->assignor && $this->user == 'Section 1') {
+                    if ($game->assignor == $this->user->name || $this->user->admin) {
+                        if (!$game->assignor && $this->user->admin) {
                             $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpen\">";
                         } else {
                             if ( !$testtime ) {
@@ -154,7 +154,7 @@ class SchedRefsDBController extends AbstractController
                         if ($numRefs > 3) {
                             $html .= "<td>$game->r4th</td>";
                         }
-                        if ($game->assignor || $this->user == 'Section 1') {
+                        if ($game->assignor || $this->user->admin) {
                             $html .= "<td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\"></td>";
                         } else {
                             $html .= "<td>&nbsp;</td>\n";
@@ -184,11 +184,11 @@ class SchedRefsDBController extends AbstractController
 
         $html .= "<a href=\"$this->fullPath\">View the full schedule</a>&nbsp;-&nbsp\n";
 
-        if ($this->user == 'Section 1') {
+        if ($this->user->admin) {
             $html .= "<a href=\"$this->schedPath\">View Assignors</a>&nbsp;-&nbsp;\n";
             $html .= "<a href=\"$this->masterPath\">Schedule referee teams</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a href=\"$this->schedPath\">Go to $this->user schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->schedPath\">Go to ". $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         }
 
         $html .= "<a href=\"$this->endPath\">Log off</a></h3>\n";

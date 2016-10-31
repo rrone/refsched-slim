@@ -47,14 +47,14 @@ class SchedMasterDBController extends AbstractController
 
         $content = array(
             'view' => array (
-                'rep' => $this->user,
+                'admin' => $this->user->admin,
                 'content' => $this->renderMaster(),
                 'topmenu' => $this->topmenu,
                 'menu' => $this->bottommenu,
                 'title' => $this->page_title,
 				'dates' => $this->dates,
 				'location' => $this->location,
-				'description' => $this->user . ': Schedule Referee Teams'
+				'description' => $this->user->name . ': Schedule Referee Teams'
             )
         );        
         
@@ -65,7 +65,7 @@ class SchedMasterDBController extends AbstractController
     }
     private function handleRequest($request)
     {
-		if( $this->user == 'Section 1') {
+		if( $this->user->admin) {
 			//only Section 1 may update
 
 			$data = $request->getParsedBody();
@@ -80,7 +80,7 @@ class SchedMasterDBController extends AbstractController
 		
 		if (!empty($event)){
 		
-			if ( $this->authed && $this->user == 'Section 1' ) {
+			if ( $this->authed && $this->user->admin ) {
 				$select_list = array( '' );
 				$users = $this->sr->getUsers();
 					
@@ -112,7 +112,7 @@ class SchedMasterDBController extends AbstractController
 				$html .=  "<th>Referee Team</th>";
 				$html .=  "</tr>\n";
 				
-				if($user->name == 'Section 1') {
+				if($user->admin) {
                     $games = $this->sr->getGames($projectKey, '%', true);
                 } else {
                     $games = $this->sr->getGames($projectKey);

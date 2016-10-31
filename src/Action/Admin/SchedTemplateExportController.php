@@ -60,7 +60,7 @@ class SchedTemplateExportController extends AbstractController
                 $msg = $this->event->name . ' at ' . $this->event->location . ' on ' . $this->event->dates;
                 $content = array(
                     'view' => array(
-                        'rep' => $this->user,
+                        'admin' => $this->user->admin,
                         'action' => $this->userUpdatePath,
                         'message' => "There are no games in the database for the event: \"$msg\"",
                     )

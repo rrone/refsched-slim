@@ -46,14 +46,14 @@ class SchedEditRefDBController extends AbstractController
 
         $content = array(
             'view' => array(
-                'rep' => $this->user,
+                'admin' => $this->user->admin,
                 'content' => $this->renderEditRef(),
                 'topmenu' => $this->menu(),
                 'menu' => $this->menu(),
                 'title' => $this->page_title,
                 'dates' => $this->dates,
                 'location' => $this->location,
-                'description' => "Assign " . $this->user . " Referees",
+                'description' => "Assign " . $this->user->name. " Referees",
             )
         );
 
@@ -107,7 +107,7 @@ class SchedEditRefDBController extends AbstractController
                 $html .= "<h2 class=\"center\">Enter Referee's First and Last name.<br>" .
                     "<span style=\"color:#FF0000\"><i>NOTE: Adding \"??\" or \"Area name\" is NOT helpful.</i></span></h2><br>";
 
-                if($this->user == 'Section 1') {
+                if($this->user->admin) {
                     $games = $this->sr->getGames($projectKey, '%', true);
                 } else {
                     $games = $this->sr->getGames($projectKey);
@@ -119,7 +119,7 @@ class SchedEditRefDBController extends AbstractController
                     foreach ($games as $game) {
                         $date = date('D, d M', strtotime($game->date));
                         $time = date('H:i', strtotime($game->time));
-                        if ($game->game_number == $target_game && ($game->assignor == $this->user || $this->user == 'Section 1')) {
+                        if ($game->game_number == $target_game && ($game->assignor == $this->user->name|| $this->user->admin)) {
                             $html .= "<form name=\"editref\" method=\"post\" action=\"$this->editrefPath\">\n";
                             $html .= "<table class=\"sched_table\" width=\"100%\">\n";
                             $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
@@ -178,10 +178,10 @@ class SchedEditRefDBController extends AbstractController
             		<h3 align="center"><a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
 EOD;
 
-        if ($this->user == 'Section 1') {
+        if ($this->user->admin) {
             $html .= "<a href=\"$this->masterPath\">Go to Section 1 schedule</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a href=\"$this->refsPath\">Go to $this->user schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->refsPath\">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         }
 
         $html .=

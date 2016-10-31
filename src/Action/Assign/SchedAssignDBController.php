@@ -38,7 +38,7 @@ class SchedAssignDBController extends AbstractController
 
         $content = array(
             'view' => array (
-                'rep' => $this->user,
+                'admin' => $this->user->admin,
                 'content' => $this->renderAssign(),
                 'topmenu' => $this->topmenu,
                 'title' => $this->page_title,
@@ -121,8 +121,8 @@ class SchedAssignDBController extends AbstractController
 <<<EOD
       <h3 align="center"><a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
       <a href="$this->fullPath">View the full schedule</a>&nbsp;-&nbsp;
-      <a href="$this->schedPath">Go to $this->user schedule</a>&nbsp;-&nbsp;
-      <a href="$this->refsPath">Edit $this->user referees</a>&nbsp;-&nbsp;
+      <a href="$this->schedPath">Go to !$this->user->nameschedule</a>&nbsp;-&nbsp;
+      <a href="$this->refsPath">Edit !$this->user->namereferees</a>&nbsp;-&nbsp;
       <a href="$this->endPath">Log off</a></h3>
 EOD;
         return $html;   

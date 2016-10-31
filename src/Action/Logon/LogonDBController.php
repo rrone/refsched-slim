@@ -53,29 +53,26 @@ class LogonDBController extends AbstractController
 
             $userName = isset($_POST['user']) ? $_POST['user'] : null;
             $user = $this->sr->getUserByName($userName);
-            $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
+            $_SESSION['user'] = $user;
+            $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
 
             // try user pass
+            $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
             $hash = isset($user) ? $user->hash : null;
             $this->authed = password_verify($pass, $hash);
 
             if ($this->authed) {
                 $_SESSION['authed'] = true;
-                $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
-                $_SESSION['user'] = $_POST['user'];
                 $this->msg = null;
             }
             else {
                 //try master password
                 $user = $this->sr->getUserByName('Admin');
-                $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
                 $hash = isset($user) ? $user->hash : null;
                 $this->authed = password_verify($pass, $hash);
 
                 if ($this->authed) {
                     $_SESSION['authed'] = true;
-                    $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
-                    $_SESSION['user'] = $_POST['user'];
                     $this->msg = null;
                 }
                 else {
