@@ -175,9 +175,12 @@ class SchedEditRefDBController extends AbstractController
     {
         $html =
             <<<EOD
-            		<h3 align="center"><a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
+<h3 align="center"><a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
+<a href="$this->fullPath">View the full game schedule</a>&nbsp;-&nbsp
+
 EOD;
 
+"<h3 class=\"center\"><a href=\"$this->fullPath\">View the full game schedule</a>";
         if ($this->user->admin) {
             $html .= "<a href=\"$this->masterPath\">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         } else {
@@ -186,7 +189,7 @@ EOD;
 
         $html .=
             <<<EOD
-            		<a href="$this->endPath">Log off</a></h3>
+<a href="$this->endPath">Log off</a></h3>
 EOD;
 
         return $html;
