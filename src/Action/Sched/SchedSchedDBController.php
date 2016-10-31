@@ -10,6 +10,8 @@ use App\Action\SchedulerRepository;
 class SchedSchedDBController extends AbstractController
 {
     private $showgroup;
+    private $msgGroup;
+
     private $num_assigned;
     private $num_unassigned;
 
@@ -23,7 +25,6 @@ class SchedSchedDBController extends AbstractController
     private $home = [];
     private $away = [];
     private $ref_team = [];
-
 
     public function __construct(Container $container, SchedulerRepository $repository) {
 		
@@ -47,9 +48,12 @@ class SchedSchedDBController extends AbstractController
         if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);
         }
-        $this->logger->info($this->logStamp() . ": Scheduler schedule page dispatched");
 
         $this->handleRequest($request);
+
+        $msg = empty($this->showgroup) ? '' : " for $this->showgroup";
+
+        $this->logger->info($this->logStamp() . ": Scheduler schedule page dispatched$msg");
 
         $content = array(
             'view' => array (
@@ -189,6 +193,10 @@ class SchedSchedDBController extends AbstractController
             }
         }
 
+        if ( count( $_GET ) && array_key_exists( 'group', $_GET ) ) {
+            $this->showgroup = $_GET[ 'group' ];
+        }
+
         return null;
     }
     private function renderSched()
@@ -200,10 +208,6 @@ class SchedSchedDBController extends AbstractController
 		if (!empty($event)) {
 			$projectKey = $event->projectKey;
 	
-			if ( count( $_GET ) && array_key_exists( 'group', $_GET ) ) {
-			   $this->showgroup = $_GET[ 'group' ];
-			}
-
 			$allatlimit = true;
 			$oneatlimit = false;
 			$showavailable = false;

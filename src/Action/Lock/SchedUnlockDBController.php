@@ -30,7 +30,7 @@ class SchedUnlockDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info($this->logStamp() . ": Schedule lock action dispatched");
+        $this->logger->info($this->logStamp() . ": Scheduler unlock dispatched");
 
         $this->renderUnlock();
 

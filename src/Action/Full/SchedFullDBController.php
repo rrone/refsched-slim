@@ -29,8 +29,6 @@ class SchedFullDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info($this->logStamp().": Scheduler full page dispatched");
-
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : false;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
@@ -38,10 +36,9 @@ class SchedFullDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $msg = empty($this->justOpen) ? '' : " for $this->justOpen";
-        $this->logger->info($this->logStamp().": Scheduler full page dispatched$msg");
-
         $this->handleRequest($request);
+        $msg = empty($this->justOpen) ? '' : ' for no referees view';
+        $this->logger->info($this->logStamp().": Scheduler full page dispatched$msg");
 
         $content = array(
             'view' => array(
