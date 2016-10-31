@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 31, 2016 at 04:00 AM
+-- Generation Time: Oct 31, 2016 at 07:41 PM
 -- Server version: 5.6.33-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.19
 
@@ -28,6 +28,7 @@ USE `wp_ayso1ref`;
 -- Table structure for table `rs_ajax_example`
 --
 
+DROP TABLE IF EXISTS `rs_ajax_example`;
 CREATE TABLE `rs_ajax_example` (
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `age` int(11) NOT NULL,
@@ -41,6 +42,7 @@ CREATE TABLE `rs_ajax_example` (
 -- Table structure for table `rs_events`
 --
 
+DROP TABLE IF EXISTS `rs_events`;
 CREATE TABLE `rs_events` (
   `id` int(11) NOT NULL,
   `projectKey` varchar(45) NOT NULL,
@@ -62,6 +64,7 @@ CREATE TABLE `rs_events` (
 -- Table structure for table `rs_games`
 --
 
+DROP TABLE IF EXISTS `rs_games`;
 CREATE TABLE `rs_games` (
   `id` int(11) NOT NULL,
   `projectKey` varchar(45) NOT NULL,
@@ -89,6 +92,7 @@ CREATE TABLE `rs_games` (
 -- Table structure for table `rs_limits`
 --
 
+DROP TABLE IF EXISTS `rs_limits`;
 CREATE TABLE `rs_limits` (
   `id` int(11) NOT NULL,
   `projectKey` varchar(45) NOT NULL,
@@ -102,6 +106,7 @@ CREATE TABLE `rs_limits` (
 -- Table structure for table `rs_users`
 --
 
+DROP TABLE IF EXISTS `rs_users`;
 CREATE TABLE `rs_users` (
   `id` int(11) NOT NULL,
   `name` char(255) NOT NULL,
