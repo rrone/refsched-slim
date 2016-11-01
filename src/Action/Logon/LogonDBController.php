@@ -32,7 +32,7 @@ class LogonDBController extends AbstractController
 
         if ($this->authed) {
             $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
-            $this->logger->info($this->logStamp() . ": Scheduler logon");
+            $this->logStamp($request);
 
             return $response->withRedirect($this->greetPath);
         }
@@ -74,12 +74,11 @@ class LogonDBController extends AbstractController
 
                 if ($this->authed) {
                     $_SESSION['authed'] = true;
+                    $_SESSION['admin'] = true;
                     $this->msg = null;
                 }
                 else {
-                    $_SESSION['authed'] = false;
-                    $_SESSION['event'] = null;
-                    $_SESSION['user'] = null;
+                    session_unset();
                     $this->msg = 'Unrecognized password for ' . $_POST['user'];
                 }
             }

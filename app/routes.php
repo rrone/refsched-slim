@@ -14,12 +14,6 @@ $app->map(['GET', 'POST'], '/', App\Action\Logon\LogonDBController::class)
 
 $app->map(['GET', 'POST'], '/logon', App\Action\Logon\LogonDBController::class);
 
-$app->map(['GET', 'POST'], '/assign', App\Action\Assign\SchedAssignDBController::class)
-    ->setName('assign');
-
-$app->map(['GET', 'POST'], '/control', App\Action\Control\SchedControlDBController::class)
-    ->setName('control');
-
 $app->map(['GET', 'POST'], '/editref', App\Action\EditRef\SchedEditRefDBController::class)
     ->setName('editref');
 

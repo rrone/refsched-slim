@@ -41,7 +41,7 @@ class SchedTemplateExportController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info($this->logStamp() . ": Scheduler template export dispatched");
+        $this->logStamp($request);
 
         $file = $this->generateFile();
         if ($file['valid']) {

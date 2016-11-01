@@ -41,7 +41,7 @@ class SchedExportController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info($this->logStamp() . ": Scheduler export action dispatched");
+        $this->logStamp($request);
 
 
         if (is_null($this->event)) {

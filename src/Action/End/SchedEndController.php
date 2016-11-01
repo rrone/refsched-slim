@@ -10,7 +10,7 @@ class SchedEndController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
-        $this->logger->info($this->logStamp() . ": Scheduler logout");
+        $this->logStamp($request);
 
         session_unset();
 

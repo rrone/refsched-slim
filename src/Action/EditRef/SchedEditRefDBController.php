@@ -35,7 +35,7 @@ class SchedEditRefDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info($this->logStamp() . ": Schedule edit refs page dispatched");
+        $this->logStamp($request);
 
         if ($request->isPost()) {
             if ($this->handleRequest($request)) {

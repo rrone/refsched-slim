@@ -27,7 +27,7 @@ class AdminController extends AbstractController
             return $response->withRedirect($this->greetPath);
          }
 
-        $this->logger->info($this->logStamp() . ": Scheduler admin page dispatched");
+        $this->logStamp($request);
 
         $result = $this->handleRequest($request);
 

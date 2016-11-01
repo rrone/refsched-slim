@@ -36,7 +36,7 @@ class SchedMasterDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info($this->logStamp() . ": Schedule master page action dispatched");
+        $this->logStamp($request);
 
         if ( count( $_GET ) ) {
 		   $this->justOpen = array_key_exists( 'open', $_GET );

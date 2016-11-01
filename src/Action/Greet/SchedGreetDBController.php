@@ -32,7 +32,7 @@ class SchedGreetDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info($this->logStamp() . ": Scheduler greet page dispatched");
+        $this->logStamp($request);
 
         $this->handleRequest($request);
 

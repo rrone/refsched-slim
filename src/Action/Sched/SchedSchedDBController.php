@@ -51,9 +51,7 @@ class SchedSchedDBController extends AbstractController
 
         $this->handleRequest($request);
 
-        $msg = empty($this->showgroup) ? '' : " for $this->showgroup";
-
-        $this->logger->info($this->logStamp() . ": Scheduler schedule page dispatched$msg");
+        $this->logStamp($request);
 
         $content = array(
             'view' => array (

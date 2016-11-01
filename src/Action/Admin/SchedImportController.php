@@ -40,7 +40,7 @@ class SchedImportController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info($this->logStamp() . ": Scheduler schedule import dispatched");
+        $this->logStamp($request);
 
         $path = $this->handleRequest($request);
 

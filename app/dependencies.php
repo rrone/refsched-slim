@@ -128,13 +128,6 @@ $container[App\Action\Master\SchedMasterDBController::class] = function ($c) {
     return new \App\Action\Master\SchedMasterDBController($c, $repo);
 };
 
-$container[App\Action\Control\SchedControlDBController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
-
-    return new \App\Action\Control\SchedControlDBController($c, $repo);
-};
-
 $container[App\Action\Lock\SchedLockDBController::class] = function ($c) {
     $db = $c->get('db');
     $repo = new \App\Action\SchedulerRepository($db);
@@ -161,13 +154,6 @@ $container[App\Action\EditRef\SchedEditRefDBController::class] = function ($c) {
     $repo = new \App\Action\SchedulerRepository($db);
 
     return new \App\Action\EditRef\SchedEditRefDBController($c, $repo);
-};
-
-$container[App\Action\Assign\SchedAssignDBController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
-
-    return new \App\Action\Assign\SchedAssignDBController($c, $repo);
 };
 
 $container[App\Action\Full\SchedExportController::class] = function ($c) {

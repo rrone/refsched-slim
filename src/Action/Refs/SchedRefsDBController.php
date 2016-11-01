@@ -35,7 +35,7 @@ class SchedRefsDBController extends AbstractController
             return $response->withRedirect($this->logonPath);
         }
 
-        $this->logger->info($this->logStamp() . ": Scheduler edit ref assignments page dispatched");
+        $this->logStamp($request);
 
         if ($this->handleRequest($request)) {
             $_SESSION['target_id'] = array_keys($_POST);

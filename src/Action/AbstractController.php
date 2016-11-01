@@ -47,8 +47,6 @@ abstract class AbstractController
 
 
     //named routes
-    protected $assignPath;
-    protected $controlPath;
     protected $editrefPath;
     protected $endPath;
     protected $fullPath;
@@ -73,8 +71,6 @@ abstract class AbstractController
 
         $this->page_title = "Section 1 Referee Scheduler";
 
-        $this->assignPath = $this->container->get('router')->pathFor('assign');
-        $this->controlPath = $this->container->get('router')->pathFor('control');
         $this->editrefPath = $this->container->get('router')->pathFor('editref');
         $this->endPath = $this->container->get('router')->pathFor('end');
         $this->fullPath = $this->container->get('router')->pathFor('full');
@@ -124,13 +120,48 @@ abstract class AbstractController
 
         return false;
     }
-    protected function logStamp()
+    protected function logStamp($request)
     {
-        $timestamp = date('yyyy-mm-dd H:i:s');
+        if(isset($_SESSION['admin'])){
+            return null;
+        }
 
+        $uri = $request->getURI()->getPath();
         $user = isset($this->user) ? $this->user->name : 'Anonymous';
+        $post = $request->isPost() ? 'with updated ref assignments' : '';
 
-        return $user;
+        switch ($uri) {
+            case $this->logonPath:
+                $logMsg = "$user: Scheduler logon";
+                break;
+            case $this->endPath:
+                $logMsg = "$user: Scheduler log off";
+                break;
+            case $this->editrefPath:
+
+                if(!empty($post)) {
+                    $logMsg = "$user: Scheduler $uri dispatched $post";
+                } else {
+                    return null;
+                }
+                break;
+            case $this->fullPath:
+                $msg = isset($_GET['open']) ? 'no referees view' : '';
+                $logMsg = "$user: : Scheduler $uri page $msg dispatched";
+                break;
+            case $this->schedPath:
+                $showgroup = isset($_GET[ 'group' ]) ? $_GET[ 'group' ] : null;
+                $msg = empty($showgroup) ? '' : "for $showgroup";
+                $logMsg = "$user: Scheduler $uri $msg dispatched";
+                break;
+            default:
+                $logMsg = "$user: Scheduler $uri dispatched";
+                break;
+        }
+
+        $this->logger->info($logMsg);
+
+        return null;
 
     }
 }

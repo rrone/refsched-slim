@@ -37,8 +37,7 @@ class SchedFullDBController extends AbstractController
         }
 
         $this->handleRequest($request);
-        $msg = empty($this->justOpen) ? '' : ' for no referees view';
-        $this->logger->info($this->logStamp().": Scheduler full page dispatched$msg");
+        $this->logStamp($request);
 
         $content = array(
             'view' => array(
