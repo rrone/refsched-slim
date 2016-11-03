@@ -17,12 +17,15 @@ class AppActionTest extends LocalWebTestCase
             'Submit' => 'Logon',
         );
         $this->client->post('/', $parameters);
-        $this->assertRedirectTo('/greet');
+
         $this->assertEquals(200, $this->client->response->getStatusCode());
-        $this->testAllRoutes();
+//        $this->testAllRoutes();
     }
     public function testLogonSection1()
     {
+        $this->client->get('/greet');
+        $this->assertEquals(302, $this->client->response->getStatusCode());
+
         $parameters = array(
             'event' =>  'November 19-20, 2016:U16/U19 Playoffs',
             'user' => 'Section 1',
@@ -30,20 +33,16 @@ class AppActionTest extends LocalWebTestCase
             'Submit' => 'Logon',
         );
         $this->client->post('/', $parameters);
-        $this->assertRedirectTo('/greet');
 
         $this->assertEquals(200, $this->client->response->getStatusCode());
 
-        $this->testAllRoutes();
+        $this->client->get('/greet');
+        $this->assertEquals(200, $this->client->response->getStatusCode());
+
+//        $this->AllRoutes();
     }
-    public function testAllRoutes()
+    protected function AllRoutes()
     {
-        $this->client->get('/');
-        $this->assertEquals(200, $this->client->response->getStatusCode());
-
-        $this->client->get('/logon');
-        $this->assertEquals(200, $this->client->response->getStatusCode());
-
         $this->client->get('/editref');
         $this->assertEquals(302, $this->client->response->getStatusCode());
 
