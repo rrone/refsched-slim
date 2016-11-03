@@ -30,6 +30,7 @@ mv -f dist/public/app_prod.php dist/public/app.php
 echo "  Removing OSX jetsam..."
 find dist -type f -name '.DS_Store' -delete
 find dist -type f -name 'app_*' -delete
+find dist -type f -name '*Test.php' -delete
 
 echo "  Copying distribution to local Filezilla root..."
 rm -f -r ~/Dropbox/_open/_ayso/s1/web/referee_site/refsched

@@ -6,7 +6,8 @@
   "scripts": {
     "gulp-build": "./node_modules/.bin/gulp build",
     "gulp-watch": "./node_modules/.bin/gulp watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "phpunit --coverage-html ./var/coverage src/",
+    "coverage": "open var/coverage/index.html"
   },
   "author": "",
   "license": "ISC",

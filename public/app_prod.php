@@ -6,12 +6,14 @@ if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
     return false;
 }
 
-require __DIR__ . '/../vendor/autoload.php';
+define('PROJECT_ROOT', realpath(__DIR__ . '/..'));
+
+require PROJECT_ROOT . '/vendor/autoload.php';
 
 session_start();
 
 // Instantiate the app
-$settings = require __DIR__ . '/../app/settings.php';
+$settings = require PROJECT_ROOT . '/app/settings.php';
 
 $settings['debug'] = false;
 ini_set("display_errors", 0);
@@ -23,13 +25,13 @@ ini_set("error_log", "syslog");
 $app = new \Slim\App($settings);
 
 // Set up dependencies
-require __DIR__ . '/../app/dependencies.php';
+require PROJECT_ROOT . '/app/dependencies.php';
 
 // Register middleware
-require __DIR__ . '/../app/middleware.php';
+require PROJECT_ROOT . '/app/middleware.php';
 
 // Register routes
-require __DIR__ . '/../app/routes.php';
+require PROJECT_ROOT . '/app/routes.php';
 
 // Run!
 $app->run();

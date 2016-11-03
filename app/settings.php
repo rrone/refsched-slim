@@ -33,12 +33,10 @@ $settings = [
             'name' => 'app',
             'path' => __DIR__ . '/../var/logs/app.log',
         ],
-        
-
     ],
 ];
 
-$local = include(__DIR__ . '/../config/local.php');
+$local = include(PROJECT_ROOT . '/config/local.php');
 $settings['settings']['db'] = $local['db'];
 
 return $settings;
