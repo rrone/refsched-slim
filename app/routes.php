@@ -53,5 +53,5 @@ $app->map(['GET', 'POST'], '/adm/template', App\Action\Admin\SchedTemplateExport
 $app->map(['GET', 'POST'], '/adm/import', App\Action\Admin\SchedImportController::class)
     ->setName('sched_import');
 
-$app->get('/adm/log', App\Action\Admin\LogDumpController::class)
-    ->setName('access_log');
+$app->get('/adm/log', App\Action\Admin\LogExportController::class)
+    ->setName('log_export');

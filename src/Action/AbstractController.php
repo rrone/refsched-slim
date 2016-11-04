@@ -86,7 +86,7 @@ abstract class AbstractController
         $this->adminPath = $this->container->get('router')->pathFor('admin');
         $this->schedTemplatePath = $this->container->get('router')->pathFor('sched_template');
         $this->schedImportPath = $this->container->get('router')->pathFor('sched_import');
-        $this->logExportPath = $this->container->get('router')->pathFor('access_log');
+        $this->logExportPath = $this->container->get('router')->pathFor('log_export');
 
     }
     protected function errorCheck()
@@ -130,17 +130,20 @@ abstract class AbstractController
 
         $uri = $request->getURI()->getPath();
         $user = isset($this->user) ? $this->user->name : 'Anonymous';
+        $projectKey = isset($this->event) ? $this->event->projectKey : '';
         $post = $request->isPost() ? 'with updated ref assignments' : '';
 
         switch ($uri) {
-            case $this->logonPath:
-                $logMsg = "$user: Scheduler logon";
+            case $post && $this->logonPath:
+//            case $post && '/':
+            case $post && '/logon':
+                //TODO: Why is $uri == '/adm' passing this case?
+                $logMsg = $uri != $this->adminPath ? "$user: Scheduler logon" : null;
                 break;
             case $this->endPath:
                 $logMsg = "$user: Scheduler log off";
                 break;
             case $this->editrefPath:
-
                 if(!empty($post)) {
                     $logMsg = "$user: Scheduler $uri dispatched $post";
                 } else {
@@ -153,15 +156,17 @@ abstract class AbstractController
                 break;
             case $this->schedPath:
                 $showgroup = isset($_GET[ 'group' ]) ? $_GET[ 'group' ] : null;
-                $msg = empty($showgroup) ? '' : "for $showgroup";
-                $logMsg = "$user: Scheduler $uri $msg dispatched";
+                $msg = empty($showgroup) ? '' : " for $showgroup";
+                $logMsg = "$user: Scheduler $uri$msg dispatched";
                 break;
             default:
                 $logMsg = "$user: Scheduler $uri dispatched";
                 break;
         }
 
-        $this->sr->logInfo($logMsg);
+        if(!is_null($logMsg)){
+            $this->sr->logInfo($projectKey, $logMsg);
+        }
 
         return null;
 

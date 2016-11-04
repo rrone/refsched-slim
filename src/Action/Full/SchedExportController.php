@@ -13,7 +13,7 @@ class SchedExportController extends AbstractController
 {
 	private $exporter;
 	private $outFileName;
-	
+
 	public function __construct(
 			Container $container,
 			SchedulerRepository $repository,
@@ -22,7 +22,7 @@ class SchedExportController extends AbstractController
 		parent::__construct($container);
         
         $this->sr = $repository;
-		//$exporter->setFormat('xls');
+		$exporter->setFormat('xls');
 		$this->exporter = $exporter;
 		$this->outFileName = 'GameSchedule_' . date('Ymd_His') . '.' . $exporter->getFileExtension();
 		
@@ -42,7 +42,6 @@ class SchedExportController extends AbstractController
         }
 
         $this->logStamp($request);
-
 
         if (is_null($this->event)) {
             return $response->withRedirect($this->fullPath);

@@ -420,10 +420,11 @@ class SchedulerRepository
 			->get();
 	}
 	//Log writer
-    public function logInfo($msg)
+    public function logInfo($projectKey, $msg)
     {
         $data = [
             'timestamp' => date('Y-m-d H:i:s'),
+            'projectKey' => $projectKey,
             'note' => $msg
         ];
 
@@ -431,5 +432,10 @@ class SchedulerRepository
             ->insert($data);
 
         return null;
+    }
+    public function getAccessLog()
+    {
+        return $this->db->table('log')
+            ->get();
     }
 }

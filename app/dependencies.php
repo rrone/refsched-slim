@@ -202,3 +202,12 @@ $container[App\Action\End\SchedEndController::class] = function ($c) {
 
     return new \App\Action\End\SchedEndController($c, $repo);
 };
+
+$container[App\Action\Admin\LogExportController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+    $exporter = new \App\Action\AbstractExporter('xls');
+
+    return new \App\Action\Admin\LogExportController($c, $repo, $exporter);
+};
+

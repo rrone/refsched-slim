@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 04, 2016 at 05:15 AM
+-- Generation Time: Nov 04, 2016 at 05:55 PM
 -- Server version: 5.6.33-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.20
 
@@ -28,11 +28,12 @@ USE `wp_ayso1ref`;
 -- Table structure for table `rs_ajax_example`
 --
 
-CREATE TABLE `rs_ajax_example` (
+CREATE TABLE IF NOT EXISTS `rs_ajax_example` (
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `age` int(11) NOT NULL,
   `gender` varchar(1) COLLATE utf8_unicode_ci NOT NULL,
-  `wpm` int(11) NOT NULL
+  `wpm` int(11) NOT NULL,
+  PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -41,8 +42,8 @@ CREATE TABLE `rs_ajax_example` (
 -- Table structure for table `rs_events`
 --
 
-CREATE TABLE `rs_events` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `rs_events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `projectKey` varchar(45) NOT NULL,
   `name` varchar(255) NOT NULL,
   `dates` varchar(255) DEFAULT NULL,
@@ -53,8 +54,12 @@ CREATE TABLE `rs_events` (
   `label` varchar(255) DEFAULT NULL,
   `num_refs` int(11) DEFAULT '3',
   `start_date` date DEFAULT NULL,
-  `end_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `end_date` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `id` (`id`),
+  UNIQUE KEY `id_2` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -62,8 +67,8 @@ CREATE TABLE `rs_events` (
 -- Table structure for table `rs_games`
 --
 
-CREATE TABLE `rs_games` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `rs_games` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `projectKey` varchar(45) NOT NULL,
   `game_number` int(11) NOT NULL,
   `date` date NOT NULL,
@@ -80,8 +85,10 @@ CREATE TABLE `rs_games` (
   `ar1` varchar(45) DEFAULT NULL,
   `ar2` varchar(45) DEFAULT NULL,
   `r4th` varchar(45) DEFAULT NULL,
-  `medalRound` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `medalRound` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=521 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -89,12 +96,14 @@ CREATE TABLE `rs_games` (
 -- Table structure for table `rs_limits`
 --
 
-CREATE TABLE `rs_limits` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `rs_limits` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `projectKey` varchar(45) NOT NULL,
   `division` varchar(10) NOT NULL,
-  `limit` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `limit` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -102,11 +111,15 @@ CREATE TABLE `rs_limits` (
 -- Table structure for table `rs_log`
 --
 
-CREATE TABLE `rs_log` (
-  `id` int(11) NOT NULL,
-  `timestamp` date NOT NULL,
-  `note` varchar(4096) CHARACTER SET utf8mb4 NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE IF NOT EXISTS `rs_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `timestamp` datetime NOT NULL,
+  `projectKey` varchar(45) CHARACTER SET utf8mb4 NOT NULL,
+  `note` varchar(4096) CHARACTER SET utf8mb4 NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_2` (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -114,87 +127,16 @@ CREATE TABLE `rs_log` (
 -- Table structure for table `rs_users`
 --
 
-CREATE TABLE `rs_users` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `rs_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` char(255) NOT NULL,
   `enabled` tinyint(1) DEFAULT '1',
   `hash` varchar(255) DEFAULT NULL,
-  `admin` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `admin` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `rs_ajax_example`
---
-ALTER TABLE `rs_ajax_example`
-  ADD PRIMARY KEY (`name`);
-
---
--- Indexes for table `rs_events`
---
-ALTER TABLE `rs_events`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_UNIQUE` (`id`);
-
---
--- Indexes for table `rs_games`
---
-ALTER TABLE `rs_games`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_UNIQUE` (`id`);
-
---
--- Indexes for table `rs_limits`
---
-ALTER TABLE `rs_limits`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_UNIQUE` (`id`);
-
---
--- Indexes for table `rs_log`
---
-ALTER TABLE `rs_log`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `rs_users`
---
-ALTER TABLE `rs_users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_UNIQUE` (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `rs_events`
---
-ALTER TABLE `rs_events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
---
--- AUTO_INCREMENT for table `rs_games`
---
-ALTER TABLE `rs_games`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=521;
---
--- AUTO_INCREMENT for table `rs_limits`
---
-ALTER TABLE `rs_limits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
---
--- AUTO_INCREMENT for table `rs_log`
---
-ALTER TABLE `rs_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `rs_users`
---
-ALTER TABLE `rs_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

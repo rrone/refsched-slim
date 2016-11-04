@@ -18,6 +18,7 @@ class SchedEndController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+        $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
 
         $this->logStamp($request);
 

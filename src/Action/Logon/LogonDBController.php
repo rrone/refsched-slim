@@ -32,6 +32,7 @@ class LogonDBController extends AbstractController
 
         if ($this->authed) {
             $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+            $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
             $this->logStamp($request);
 
             return $response->withRedirect($this->greetPath);

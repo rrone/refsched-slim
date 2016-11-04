@@ -26,6 +26,8 @@ class AdminController extends AbstractController
             return $response->withRedirect($this->greetPath);
         }
 
+        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
+
         $this->logStamp($request);
 
         $result = $this->handleRequest($request);
