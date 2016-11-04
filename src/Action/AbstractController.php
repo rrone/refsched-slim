@@ -155,8 +155,8 @@ abstract class AbstractController
                 break;
             case $this->fullPath:
             case 'full':
-                $msg = isset($_GET['open']) ? 'no referees view' : '';
-                $logMsg = "$user: Scheduler $uri page $msg dispatched";
+                $msg = isset($_GET['open']) ? ' no referees view' : '';
+                $logMsg = "$user: Scheduler $uri$msg dispatched";
                 break;
             case $this->schedPath:
             case 'sched':
