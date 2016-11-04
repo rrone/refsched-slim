@@ -15,7 +15,15 @@ $container['view'] = function ($c) {
     // Add extensions
     $view->addExtension(new Slim\Views\TwigExtension($c->get('router'), $c->get('request')->getUri()));
     $view->addExtension(new Twig_Extension_Debug());
-    
+
+    $Version = new Twig_SimpleFunction('version', function () use ($settings) {
+        $ver = 'Version '. $settings['version']['version'];
+
+        return $ver;
+    });
+
+    $view->getEnvironment()->addFunction($Version);
+
     return $view;
 };
 

@@ -60,6 +60,7 @@ abstract class AbstractController
 	protected $fullXlsPath;
 	protected $adminUpdatePath;
     protected $schedTemplatePath;
+    protected $logExportPath;
 
     public function __construct(Container $container)
     {
@@ -85,6 +86,7 @@ abstract class AbstractController
         $this->adminPath = $this->container->get('router')->pathFor('admin');
         $this->schedTemplatePath = $this->container->get('router')->pathFor('sched_template');
         $this->schedImportPath = $this->container->get('router')->pathFor('sched_import');
+        $this->logExportPath = $this->container->get('router')->pathFor('access_log');
 
     }
     protected function errorCheck()

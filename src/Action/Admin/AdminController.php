@@ -20,12 +20,11 @@ class AdminController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-        if (!$this->authed || !$this->user->admin) {
+        if (is_null($this->user) || !$this->user->admin) {
             return $response->withRedirect($this->greetPath);
-         }
+        }
 
         $this->logStamp($request);
 
@@ -43,6 +42,10 @@ class AdminController extends AbstractController
             case 'SchedImport':
 
                 return $response->withRedirect($this->schedImportPath);
+
+            case 'ExportLog':
+
+                return $response->withRedirect($this->logExportPath);
         }
 
         $content = array(
@@ -112,6 +115,12 @@ class AdminController extends AbstractController
                 $this->msg = null;
 
                 return 'SchedImport';
+
+            } elseif (in_array('btnExportLog', array_keys($_POST))) {
+
+                $this->msg = null;
+
+                return 'ExportLog';
 
             } else {
                 $this->msg = null;
