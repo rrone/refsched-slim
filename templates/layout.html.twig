@@ -1,18 +1,15 @@
 {% extends "base.html.twig" %}
 
+{% block head %}{% endblock %}
+
 {% block layout %}
-<!--
-	<div align="center">
-		<h2>{{ event.name }}<br>
-			{{ event.date }}</h2>
-	</div>
-	<hr>
--->
-	<div class="col-md-12">
 
-	{% block content%}{% endblock %}
-</div>
+    <div class="col-md-12">
 
-	{% block script%}{% endblock %}
+        {% block content %}{% endblock %}
+
+    </div>
+
+    {% block script %}{% endblock %}
 
 {% endblock %}
