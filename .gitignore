@@ -10,3 +10,4 @@ public/js
 dist
 config
 .idea
+*.zip

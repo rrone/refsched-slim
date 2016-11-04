@@ -28,13 +28,12 @@ class SchedImportController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
-        if (!$this->authed) {
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+        if (is_null($this->user) || !$this->user->admin) {
             return $response->withRedirect($this->logonPath);
         }
 
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
             return $response->withRedirect($this->logonPath);

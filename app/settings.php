@@ -33,6 +33,10 @@ $settings = [
             'name' => 'app',
             'path' => __DIR__ . '/../var/logs/app.log',
         ],
+
+        'version' => [
+            'version' => '2016.11.03.0'
+        ]
         
 
     ],
