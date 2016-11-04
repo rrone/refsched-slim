@@ -124,6 +124,11 @@ class AdminController extends AbstractController
 
                 return 'ExportLog';
 
+            } elseif (in_array('btnLogItem', array_keys($_POST))) {
+
+                $projectKey = !is_null($this->event) ? $this->event->projectKey : '' ;
+                $msg = $this->user->name . ': ' . $_POST['logNote'];
+                $this->sr->logInfo($projectKey, $msg);
             } else {
                 $this->msg = null;
             }
