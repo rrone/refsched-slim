@@ -134,16 +134,18 @@ abstract class AbstractController
         $post = $request->isPost() ? 'with updated ref assignments' : '';
 
         switch ($uri) {
-            case $post && $this->logonPath:
-//            case $post && '/':
-            case $post && '/logon':
+            case $this->logonPath:
+            case 'logon':
+            case '/logon':
                 //TODO: Why is $uri == '/adm' passing this case?
                 $logMsg = $uri != $this->adminPath ? "$user: Scheduler logon" : null;
                 break;
             case $this->endPath:
+            case 'end':
                 $logMsg = "$user: Scheduler log off";
                 break;
             case $this->editrefPath:
+            case 'editref':
                 if(!empty($post)) {
                     $logMsg = "$user: Scheduler $uri dispatched $post";
                 } else {
@@ -151,10 +153,12 @@ abstract class AbstractController
                 }
                 break;
             case $this->fullPath:
+            case 'full':
                 $msg = isset($_GET['open']) ? 'no referees view' : '';
                 $logMsg = "$user: : Scheduler $uri page $msg dispatched";
                 break;
             case $this->schedPath:
+            case 'sched':
                 $showgroup = isset($_GET[ 'group' ]) ? $_GET[ 'group' ] : null;
                 $msg = empty($showgroup) ? '' : " for $showgroup";
                 $logMsg = "$user: Scheduler $uri$msg dispatched";
