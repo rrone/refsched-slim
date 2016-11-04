@@ -135,6 +135,7 @@ abstract class AbstractController
 
         switch ($uri) {
             case $this->logonPath:
+            case '/':
             case 'logon':
             case '/logon':
                 //TODO: Why is $uri == '/adm' passing this case?
@@ -155,7 +156,7 @@ abstract class AbstractController
             case $this->fullPath:
             case 'full':
                 $msg = isset($_GET['open']) ? 'no referees view' : '';
-                $logMsg = "$user: : Scheduler $uri page $msg dispatched";
+                $logMsg = "$user: Scheduler $uri page $msg dispatched";
                 break;
             case $this->schedPath:
             case 'sched':
