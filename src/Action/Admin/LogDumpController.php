@@ -25,22 +25,18 @@ class LogDumpController extends AbstractController
     }
     protected function handleRequest($request, $response)
     {
-        if(isset( $_SESSION['admin'])) {
-            $file = __DIR__ . '/../../../var/logs/app.log';
+        $file = __DIR__ . '/../../../var/logs/app.log';
 
-            $response = $response->withHeader('Content-Description', 'File Transfer')
-                ->withHeader('Content-Type', 'application/octet-stream')
-                ->withHeader('Content-Disposition', 'attachment;filename="' . basename($file) . '"')
-                ->withHeader('Expires', '0')
-                ->withHeader('Cache-Control', 'must-revalidate')
-                ->withHeader('Pragma', 'public');
+        $response = $response->withHeader('Content-Description', 'File Transfer')
+            ->withHeader('Content-Type', 'application/octet-stream')
+            ->withHeader('Content-Disposition', 'attachment;filename="' . basename($file) . '"')
+            ->withHeader('Expires', '0')
+            ->withHeader('Cache-Control', 'must-revalidate')
+            ->withHeader('Pragma', 'public');
 //            ->withHeader('Content-Length', filesize($file));
 
-            $log = readfile($file);
-            $response->write($log);
-
-            return $response;
-        }
+        $log = readfile($file);
+        $response->write($log);
 
         return $response;
     }
