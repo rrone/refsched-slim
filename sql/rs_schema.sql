@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 31, 2016 at 07:41 PM
+-- Generation Time: Nov 04, 2016 at 05:15 AM
 -- Server version: 5.6.33-0ubuntu0.14.04.1
--- PHP Version: 5.5.9-1ubuntu4.19
+-- PHP Version: 5.5.9-1ubuntu4.20
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `wp_ayso1ref`
 --
-CREATE DATABASE IF NOT EXISTS `wp_ayso1ref` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS `wp_ayso1ref` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `wp_ayso1ref`;
 
 -- --------------------------------------------------------
@@ -28,7 +28,6 @@ USE `wp_ayso1ref`;
 -- Table structure for table `rs_ajax_example`
 --
 
-DROP TABLE IF EXISTS `rs_ajax_example`;
 CREATE TABLE `rs_ajax_example` (
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `age` int(11) NOT NULL,
@@ -42,7 +41,6 @@ CREATE TABLE `rs_ajax_example` (
 -- Table structure for table `rs_events`
 --
 
-DROP TABLE IF EXISTS `rs_events`;
 CREATE TABLE `rs_events` (
   `id` int(11) NOT NULL,
   `projectKey` varchar(45) NOT NULL,
@@ -64,7 +62,6 @@ CREATE TABLE `rs_events` (
 -- Table structure for table `rs_games`
 --
 
-DROP TABLE IF EXISTS `rs_games`;
 CREATE TABLE `rs_games` (
   `id` int(11) NOT NULL,
   `projectKey` varchar(45) NOT NULL,
@@ -92,7 +89,6 @@ CREATE TABLE `rs_games` (
 -- Table structure for table `rs_limits`
 --
 
-DROP TABLE IF EXISTS `rs_limits`;
 CREATE TABLE `rs_limits` (
   `id` int(11) NOT NULL,
   `projectKey` varchar(45) NOT NULL,
@@ -103,16 +99,27 @@ CREATE TABLE `rs_limits` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rs_log`
+--
+
+CREATE TABLE `rs_log` (
+  `id` int(11) NOT NULL,
+  `timestamp` date NOT NULL,
+  `note` varchar(4096) CHARACTER SET utf8mb4 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `rs_users`
 --
 
-DROP TABLE IF EXISTS `rs_users`;
 CREATE TABLE `rs_users` (
   `id` int(11) NOT NULL,
   `name` char(255) NOT NULL,
   `enabled` tinyint(1) DEFAULT '1',
   `hash` varchar(255) DEFAULT NULL,
-  `admin` tinyint(1) DEFAULT NULL
+  `admin` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -147,6 +154,12 @@ ALTER TABLE `rs_limits`
   ADD UNIQUE KEY `id_UNIQUE` (`id`);
 
 --
+-- Indexes for table `rs_log`
+--
+ALTER TABLE `rs_log`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `rs_users`
 --
 ALTER TABLE `rs_users`
@@ -172,6 +185,11 @@ ALTER TABLE `rs_games`
 --
 ALTER TABLE `rs_limits`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+--
+-- AUTO_INCREMENT for table `rs_log`
+--
+ALTER TABLE `rs_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `rs_users`
 --

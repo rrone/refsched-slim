@@ -1,12 +1,20 @@
 <?php
 namespace App\Action\End;
 
+use Slim\Container;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\AbstractController;
+use App\Action\SchedulerRepository;
 
 class SchedEndController extends AbstractController
 {
+    public function __construct(Container $container, SchedulerRepository $repository) {
+
+        parent::__construct($container);
+
+        $this->sr = $repository;
+    }
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;

@@ -196,3 +196,9 @@ $container[App\Action\Admin\SchedImportController::class] = function ($c) {
     return new \App\Action\Admin\SchedImportController($c, $repo, $importer, $uploadPath);
 };
 
+$container[App\Action\End\SchedEndController::class] = function ($c) {
+    $db = $c->get('db');
+    $repo = new \App\Action\SchedulerRepository($db);
+
+    return new \App\Action\End\SchedEndController($c, $repo);
+};

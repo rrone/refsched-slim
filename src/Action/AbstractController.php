@@ -4,6 +4,7 @@ namespace App\Action;
 
 use Slim\Container;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use App\Action\SchedulerRepository;
 
 abstract class AbstractController
 {
@@ -67,7 +68,6 @@ abstract class AbstractController
         $this->container = $container;
 
         $this->view = $container->get('view');
-        $this->logger = $container->get('logger');
         $this->root = __DIR__ . '/../../var';
 
         $this->page_title = "Section 1 Referee Scheduler";
@@ -161,7 +161,7 @@ abstract class AbstractController
                 break;
         }
 
-        $this->logger->info($logMsg);
+        $this->sr->logInfo($logMsg);
 
         return null;
 

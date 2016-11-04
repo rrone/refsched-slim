@@ -419,4 +419,17 @@ class SchedulerRepository
 			->where('projectKey', '=', $projectKey)
 			->get();
 	}
+	//Log writer
+    public function logInfo($msg)
+    {
+        $data = [
+            'timestamp' => date('Y-m-d H:i:s'),
+            'note' => $msg
+        ];
+
+        $this->db->table('log')
+            ->insert($data);
+
+        return null;
+    }
 }
