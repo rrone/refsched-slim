@@ -4,7 +4,6 @@ namespace App\Action;
 
 use Slim\Container;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use App\Action\SchedulerRepository;
 
 abstract class AbstractController
 {

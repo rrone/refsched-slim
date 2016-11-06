@@ -94,120 +94,96 @@ $container['db'] = function ($c) {
 // -----------------------------------------------------------------------------
 // Action dependency Injection
 // -----------------------------------------------------------------------------
+$db = $container->get('db');
+$sr = new \App\Action\SchedulerRepository($db);
+$exporter = new \App\Action\AbstractExporter('xls');
+$importer = new \App\Action\AbstractImporter('csv');
+$view = $container['view'];
 
-$container[App\Action\SchedulerRepository::class] = function ($c) {
-    $db = $c->get('db');
+$container[App\Action\SchedulerRepository::class] = function ($db) {
 
     return new \App\Action\SchedulerRepository($db);
 };
 
-$container[App\Action\Logon\LogonDBController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
+$container[App\Action\Logon\LogonDBController::class] = function ($c) use ($sr) {
 
-    return new \App\Action\Logon\LogonDBController($c, $repo);
+    return new \App\Action\Logon\LogonDBController($c, $sr);
 };
 
-$container[App\Action\Greet\SchedGreetDBController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
+$container[App\Action\Greet\SchedGreetDBController::class] = function ($c) use($sr) {
 
-    return new \App\Action\Greet\SchedGreetDBController($c, $repo);
+    return new \App\Action\Greet\SchedGreetDBController($c, $sr);
 };
 
-$container[App\Action\Sched\SchedSchedDBController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
+$container[App\Action\Sched\SchedSchedDBController::class] = function ($c) use($sr) {
 
-    return new \App\Action\Sched\SchedSchedDBController($c, $repo);
+    return new \App\Action\Sched\SchedSchedDBController($c, $sr);
 };
 
-$container[App\Action\Full\SchedFullDBController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
+$container[App\Action\Full\SchedFullDBController::class] = function ($c) use($sr) {
 
-    return new \App\Action\Full\SchedFullDBController($c, $repo);
+    return new \App\Action\Full\SchedFullDBController($c, $sr);
 };
 
-$container[App\Action\Master\SchedMasterDBController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
+$container[App\Action\Master\SchedMasterDBController::class] = function ($c) use($sr) {
 
-    return new \App\Action\Master\SchedMasterDBController($c, $repo);
+    return new \App\Action\Master\SchedMasterDBController($c, $sr);
 };
 
-$container[App\Action\Lock\SchedLockDBController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
+$container[App\Action\Lock\SchedLockDBController::class] = function ($c) use($sr) {
 
-    return new \App\Action\Lock\SchedLockDBController($c, $repo);
+    return new \App\Action\Lock\SchedLockDBController($c, $sr);
 };
 
-$container[App\Action\Lock\SchedUnlockDBController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
+$container[App\Action\Lock\SchedUnlockDBController::class] = function ($c) use($sr) {
 
-    return new \App\Action\Lock\SchedUnlockDBController($c, $repo);
+    return new \App\Action\Lock\SchedUnlockDBController($c, $sr);
 };
 
-$container[App\Action\Refs\SchedRefsDBController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
+$container[App\Action\Refs\SchedRefsDBController::class] = function ($c) use($sr) {
 
-    return new \App\Action\Refs\SchedRefsDBController($c, $repo);
+    return new \App\Action\Refs\SchedRefsDBController($c, $sr);
 };
 
-$container[App\Action\EditRef\SchedEditRefDBController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
+$container[App\Action\EditRef\SchedEditRefDBController::class] = function ($c) use($sr) {
 
-    return new \App\Action\EditRef\SchedEditRefDBController($c, $repo);
+    return new \App\Action\EditRef\SchedEditRefDBController($c, $sr);
 };
 
-$container[App\Action\Full\SchedExportController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
-    $exporter = new \App\Action\AbstractExporter('xls');
+$container[App\Action\Full\SchedExportController::class] = function ($c) use($sr, $exporter) {
 
-    return new \App\Action\Full\SchedExportController($c, $repo, $exporter);
+    return new \App\Action\Full\SchedExportController($c, $sr, $exporter);
 };
 
-$container[App\Action\Admin\AdminController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
+$container[App\Action\Admin\AdminView::class] = function ($c) use($sr) {
 
-    return new \App\Action\Admin\AdminController($c, $repo);
+    return new \App\Action\Admin\AdminView($c->get('view'), $sr);
 };
 
-$container[App\Action\Admin\SchedTemplateExportController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
-    $exporter = new \App\Action\AbstractExporter('xls');
+$container[App\Action\Admin\AdminController::class] = function ($c) use($sr) {
+    $av = new \App\Action\Admin\AdminView($c->get('view'), $sr);
 
-    return new \App\Action\Admin\SchedTemplateExportController($c, $repo, $exporter);
+    return new \App\Action\Admin\AdminController($c, $av);
 };
 
-$container[App\Action\Admin\SchedImportController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
-    $importer = new \App\Action\AbstractImporter('csv');
+$container[App\Action\Admin\SchedTemplateExportController::class] = function ($c) use($sr, $exporter) {
+
+    return new \App\Action\Admin\SchedTemplateExportController($c, $sr, $exporter);
+};
+
+$container[App\Action\Admin\SchedImportController::class] = function ($c) use($sr, $importer) {
     $uploadPath = $c->get('settings')['upload_path'];
 
-    return new \App\Action\Admin\SchedImportController($c, $repo, $importer, $uploadPath);
+    return new \App\Action\Admin\SchedImportController($c, $sr, $importer, $uploadPath);
 };
 
-$container[App\Action\End\SchedEndController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
+$container[App\Action\End\SchedEndController::class] = function ($c) use($sr) {
 
-    return new \App\Action\End\SchedEndController($c, $repo);
+    return new \App\Action\End\SchedEndController($c, $sr);
 };
 
-$container[App\Action\Admin\LogExportController::class] = function ($c) {
-    $db = $c->get('db');
-    $repo = new \App\Action\SchedulerRepository($db);
-    $exporter = new \App\Action\AbstractExporter('xls');
+$container[App\Action\Admin\LogExportController::class] = function ($c) use($sr, $exporter) {
 
-    return new \App\Action\Admin\LogExportController($c, $repo, $exporter);
+    return new \App\Action\Admin\LogExportController($c, $sr, $exporter);
 };
 

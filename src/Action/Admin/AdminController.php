@@ -5,18 +5,19 @@ use Slim\Container;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\AbstractController;
-use App\Action\SchedulerRepository;
+use App\Action\Admin\AdminView;
 
 class AdminController extends AbstractController
 {
-	private $userName;
-	
-	public function __construct(Container $container, SchedulerRepository $repository) {
+    /* @var AdminView */
+    private $adminView;
+
+	public function __construct(Container $container, AdminView $adminView) {
 		
 		parent::__construct($container);
-		
-		$this->sr = $repository;
-		
+
+        $this->adminView = $adminView;
+
     }
     public function __invoke(Request $request, Response $response, $args)
     {
@@ -30,7 +31,10 @@ class AdminController extends AbstractController
 
         $this->logStamp($request);
 
-        $result = $this->handleRequest($request);
+        $request = $request->withHeader('user', $this->user);
+        $request = $request->withHeader('event', $this->event);
+        $response = $response->withHeader('adminPath', $this->adminPath);
+        $result = $this->adminView->handler($request, $response);
 
         switch ($result) {
              case 'Cancel':
@@ -50,106 +54,9 @@ class AdminController extends AbstractController
                 return $response->withRedirect($this->logExportPath);
         }
 
-        $content = array(
-            'view' => array (
-                'admin' => $this->user->admin,
-                'users' => $this->renderUsers(),
-                'action' => $this->adminPath,
-				'message' => $this->msg,
-                'messageStyle' => $this->msgStyle,
-            )
-        );        
-
-        $this->view->render($response, 'admin.html.twig', $content);
+        $this->adminView->render($response);
 
         return $response;
 
-    }
-	private function handleRequest($request)
-	{
-        if ( $request->isPost() ) {
-            if (in_array('btnUpdate', array_keys($_POST))) {
-                $this->userName = $_POST['selectUser'];
-                $userName = $this->userName;
-                $pw = $_POST['passwordInput'];
-
-                if (!empty($pw)) {
-
-                    $user = $this->sr->getUserByName($userName);
-
-                    if (is_null($user)) {
-                        $userData = array(
-                            'name' => $userName,
-                            'enabled' => false,
-                        );
-                    } else {
-                        $userData = array(
-                            'name' => $user->name,
-                            'enabled' => $user->enabled,
-                        );
-                    }
-
-                    $userData['hash'] = password_hash($pw, PASSWORD_BCRYPT);
-
-                    $this->sr->setUser($userData);
-
-                    $this->msg = "$userName password has been updated.";
-                    $this->msgStyle = "color:#000000";
-                } else {
-                    $this->msg = "Password may not be blank.";
-                    $this->msgStyle = "color:#FF0000";
-                }
-
-                return 'Update';
-
-            } elseif (in_array('btnCancel', array_keys($_POST))) {
-
-                return 'Cancel';
-
-            } elseif (in_array('btnExport', array_keys($_POST))) {
-
-                $this->msg = null;
-
-                return 'SchedTemplateExport';
-
-            } elseif (in_array('btnImport', array_keys($_POST))) {
-
-                $this->msg = null;
-
-                return 'SchedImport';
-
-            } elseif (in_array('btnExportLog', array_keys($_POST))) {
-
-                $this->msg = null;
-
-                return 'ExportLog';
-
-            } elseif (in_array('btnLogItem', array_keys($_POST))) {
-
-                $projectKey = !is_null($this->event) ? $this->event->projectKey : '' ;
-                $msg = $this->user->name . ': ' . $_POST['logNote'];
-                $this->sr->logInfo($projectKey, $msg);
-            } else {
-                $this->msg = null;
-            }
-        }
-
-		return null;
-
-	}
-    private function renderUsers()
-    {
-		$users = $this->sr->getAllUsers();
-
-		$selectOptions = null;
-		foreach($users as $user) {
-			if ($user->name == $this->userName) {
-				$selectOptions .= "<option selected>$user->name</option>\n";
-			}
-			else {
-				$selectOptions .= "<option>$user->name</option>\n";
-			}
-		}
-		return $selectOptions;
     }
 }
