@@ -5,7 +5,6 @@ use Slim\Container;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\AbstractController;
-use App\Action\Admin\AdminView;
 
 class AdminController extends AbstractController
 {

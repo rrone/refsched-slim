@@ -105,9 +105,15 @@ $container[App\Action\SchedulerRepository::class] = function ($db) {
     return new \App\Action\SchedulerRepository($db);
 };
 
-$container[App\Action\Logon\LogonDBController::class] = function ($c) use ($sr) {
+$container[App\Action\Logon\LogonView::class] = function ($c) use($sr) {
 
-    return new \App\Action\Logon\LogonDBController($c, $sr);
+    return new \App\Action\Logon\LogonView($c->get('view'), $sr);
+};
+
+$container[App\Action\Logon\LogonDBController::class] = function ($c) use ($sr) {
+    $v = new \App\Action\Logon\LogonView($c->get('view'), $sr);
+
+    return new \App\Action\Logon\LogonDBController($c, $sr, $v);
 };
 
 $container[App\Action\Greet\SchedGreetDBController::class] = function ($c) use($sr) {
@@ -161,9 +167,9 @@ $container[App\Action\Admin\AdminView::class] = function ($c) use($sr) {
 };
 
 $container[App\Action\Admin\AdminController::class] = function ($c) use($sr) {
-    $av = new \App\Action\Admin\AdminView($c->get('view'), $sr);
+    $v = new \App\Action\Admin\AdminView($c->get('view'), $sr);
 
-    return new \App\Action\Admin\AdminController($c, $av);
+    return new \App\Action\Admin\AdminController($c, $v);
 };
 
 $container[App\Action\Admin\SchedTemplateExportController::class] = function ($c) use($sr, $exporter) {

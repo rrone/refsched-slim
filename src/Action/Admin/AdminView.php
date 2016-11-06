@@ -9,13 +9,6 @@ use Slim\Views\Twig;
 
 class AdminView extends AbstractView
 {
-	/* @var SchedulerRepository */
-	private $sr;
-
-    private $user;
-    private $msg;
-    private $msgStyle;
-
 	public function __construct(Twig $view, SchedulerRepository $repository)
     {
         parent::__construct($view);
@@ -85,9 +78,11 @@ class AdminView extends AbstractView
 
             } elseif (in_array('btnLogItem', array_keys($_POST))) {
 
-                $projectKey = !is_null($event) ? $event->projectKey : '' ;
-                $msg = $this->user->name . ': ' . $_POST['logNote'];
-                $this->sr->logInfo($projectKey, $msg);
+                if(!empty($_POST['logNote'])) {
+                    $projectKey = !is_null($event) ? $event->projectKey : '';
+                    $msg = $this->user->name . ': ' . $_POST['logNote'];
+                    $this->sr->logInfo($projectKey, $msg);
+                }
             } else {
                 $this->msg = null;
             }
@@ -112,9 +107,9 @@ class AdminView extends AbstractView
 
         $this->view->render($response, 'admin.html.twig', $content);
 
-        return $response;
+        return null;
     }
-    public function renderUsers()
+    protected function renderUsers()
     {
 		$users = $this->sr->getAllUsers();
 

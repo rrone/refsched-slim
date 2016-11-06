@@ -17,6 +17,13 @@ class AbstractView
     /* @var Twig */
     protected $view;
 
+    /* @var SchedulerRepository */
+    protected $sr;
+
+    protected $user;
+    protected $msg;
+    protected $msgStyle;
+
     public function __construct(Twig $view)
     {
         $this->view = $view;
