@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: rick
- * Date: 11/6/16
- * Time: 8:23 AM
- */
-
 namespace App\Action;
 
 use Slim\Container;
 use Slim\Views\Twig;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 class AbstractView
 {
@@ -24,6 +17,7 @@ class AbstractView
     /* @var SchedulerRepository */
     protected $sr;
 
+    //view variables
     protected $user;
     protected $event;
 
@@ -33,6 +27,7 @@ class AbstractView
     protected $location;
     protected $msg;
     protected $msgStyle;
+    protected $menu;
 
     //default layout colors
     protected $colorTitle = '#80ccff';

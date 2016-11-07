@@ -3,19 +3,18 @@
 namespace App\Action;
 
 use Slim\Container;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 abstract class AbstractController
 {
     //database connection
     protected $conn;
 
-    //schedule repository
+    /* @var SchedulerRepository */
     protected $sr;
 	
     //shared variables
-    protected $view;
-    protected $logger;
     protected $container;
     protected $root;
 
@@ -28,17 +27,31 @@ abstract class AbstractController
     {
         $this->container = $container;
 
-        $this->view = $container->get('view');
-
         $this->root = __DIR__ . '/../../var';
     }
-    protected function logStamp($request)
+    public function __invoke(Request $request, Response $response, $args)
+    {
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
+        if (!$this->authed) {
+            return $response->withRedirect($this->container->get('logonPath'));
+        }
+
+        $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : false;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+
+        if (is_null($this->event) || is_null($this->user)) {
+            return $response->withRedirect($this->container->get('logonPath'));
+        }
+
+        return null;
+    }
+    protected function logStamp(Request $request)
     {
         if(isset($_SESSION['admin'])){
             return null;
         }
 
-        $uri = $request->getURI()->getPath();
+        $uri = $request->getUri()->getPath();
         $user = isset($this->user) ? $this->user->name : 'Anonymous';
         $projectKey = isset($this->event) ? $this->event->projectKey : '';
         $post = $request->isPost() ? 'with updated ref assignments' : '';

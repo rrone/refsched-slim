@@ -2,7 +2,8 @@
 namespace App\Action\Greet;
 
 use Slim\Container;
-use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Http\Request;
+use Slim\Http\Response;
 use App\Action\AbstractView;
 use App\Action\SchedulerRepository;
 
@@ -13,11 +14,13 @@ class GreetView extends AbstractView
     {
         parent::__construct($container, $schedulerRepository);
     }
+    public function handler(Request $request, Response $response)
+    {
+        $this->user = $request->getHeader('user')[0];
+        $this->event = $request->getHeader('event')[0];
+    }
     public function render(Response &$response)
     {
-        $this->user = $response->getHeader('user')[0];
-        $this->event = $response->getHeader('event')[0];
-
         $html = $this->renderView();
 
         $content = array(

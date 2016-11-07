@@ -155,19 +155,25 @@ $container[App\Action\Greet\SchedGreetDBController::class] = function ($c) use($
 };
 
 // -----------------------------------------------------------------------------
+// SchedFull class
+// -----------------------------------------------------------------------------
+$container[App\Action\Full\SchedFullView::class] = function ($c) use($sr) {
+
+    return new \App\Action\Full\SchedFullView($c, $sr);
+};
+
+$container[App\Action\Full\SchedFullDBController::class] = function ($c) use($sr) {
+    $v = new \App\Action\Full\SchedFullView($c, $sr);
+
+    return new \App\Action\Full\SchedFullDBController($c, $v);
+};
+
+// -----------------------------------------------------------------------------
 // SchedSched class
 // -----------------------------------------------------------------------------
 $container[App\Action\Sched\SchedSchedDBController::class] = function ($c) use($sr) {
 
     return new \App\Action\Sched\SchedSchedDBController($c, $sr);
-};
-
-// -----------------------------------------------------------------------------
-// SchedFull class
-// -----------------------------------------------------------------------------
-$container[App\Action\Full\SchedFullDBController::class] = function ($c) use($sr) {
-
-    return new \App\Action\Full\SchedFullDBController($c, $sr);
 };
 
 // -----------------------------------------------------------------------------
