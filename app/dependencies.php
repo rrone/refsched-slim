@@ -199,9 +199,15 @@ $container[App\Action\Sched\SchedSchedDBController::class] = function ($c) use($
 // -----------------------------------------------------------------------------
 // SchedMaster class
 // -----------------------------------------------------------------------------
-$container[App\Action\Master\SchedMasterDBController::class] = function ($c) use($sr) {
+$container[App\Action\Master\SchedMasterView::class] = function ($c) use($sr) {
 
-    return new \App\Action\Master\SchedMasterDBController($c, $sr);
+    return new \App\Action\Master\SchedMasterView($c, $sr);
+};
+
+$container[App\Action\Master\SchedMasterDBController::class] = function ($c) use($sr) {
+    $v = new \App\Action\Master\SchedMasterView($c, $sr);
+
+    return new \App\Action\Master\SchedMasterDBController($c, $v);
 };
 
 // -----------------------------------------------------------------------------
