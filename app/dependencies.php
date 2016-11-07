@@ -171,9 +171,9 @@ $container[App\Action\Full\SchedFullDBController::class] = function ($c) use($sr
 // -----------------------------------------------------------------------------
 // SchedExport class
 // -----------------------------------------------------------------------------
-$container[App\Action\Full\SchedExportXl::class] = function ($c) use($sr) {
+$container[App\Action\Full\SchedExportXl::class] = function ($c) use($sr, $exporter) {
 
-    return new \App\Action\Full\SchedExportXl($c, $sr);
+    return new \App\Action\Full\SchedExportXl($c, $sr, $exporter);
 };
 
 $container[App\Action\Full\SchedExportController::class] = function ($c) use($sr, $exporter) {
@@ -185,13 +185,13 @@ $container[App\Action\Full\SchedExportController::class] = function ($c) use($sr
 // -----------------------------------------------------------------------------
 // SchedSched class
 // -----------------------------------------------------------------------------
-$container[App\Action\Full\SchedFullView::class] = function ($c) use($sr) {
+$container[App\Action\Sched\SchedSchedView::class] = function ($c) use($sr) {
 
-    return new \App\Action\Full\SchedFullView($c, $sr);
+    return new \App\Action\Sched\SchedSchedView($c, $sr);
 };
 
 $container[App\Action\Sched\SchedSchedDBController::class] = function ($c) use($sr) {
-    $v = new \App\Action\Full\SchedFullView($c, $sr);
+    $v = new \App\Action\Sched\SchedSchedView($c, $sr);
 
     return new \App\Action\Sched\SchedSchedDBController($c, $v);
 };
