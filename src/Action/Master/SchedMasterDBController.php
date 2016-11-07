@@ -26,14 +26,14 @@ class SchedMasterDBController extends AbstractController
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
          if (!$this->authed) {
-            return $response->withRedirect($this->greetPath);
+            return $response->withRedirect($this->container->get('greetPath'));
          }
 
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->logStamp($request);
@@ -95,7 +95,7 @@ class SchedMasterDBController extends AbstractController
 				$projectKey = $event->projectKey;
 
                 $html .= "<h3 class=\"center\"> Green shading change indicates different start times</h3>\n";
-				$html .=  "<form name=\"master_sched\" method=\"post\" action=\"$this->masterPath\">\n";
+				$html .=  "<form name=\"master_sched\" method=\"post\" action=\"$this->container->get('masterPath')\">\n";
 
                 $html .= $this->menu();
 
@@ -178,7 +178,7 @@ class SchedMasterDBController extends AbstractController
                 $this->bottommenu = null;
 			}
 			else {
-				$html .=  "<h2 class=\"center\">You probably want the <a href=\"$this->schedPath\">scheduling</a> page.</h2>";
+				$html .=  "<h2 class=\"center\">You probably want the <a href=\"$this->container->get('schedPath')\">scheduling</a> page.</h2>";
 				$this->topmenu = null;
                 $this->bottommenu = $this->menu();
 			}
@@ -194,20 +194,20 @@ class SchedMasterDBController extends AbstractController
     {
         $unassigned = $this->sr->getUnassignedGames($this->event->projectKey);
 
-        $html =  "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\"><a href=\"$this->greetPath\">Home</a>&nbsp;-&nbsp;\n";
+        $html =  "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\"><a href=\"$this->container->get('greetPath')\">Home</a>&nbsp;-&nbsp;\n";
 
-        $html .= "<a href=\"$this->fullPath\">View the full schedule</a> - \n";
+        $html .= "<a href=\"$this->container->get('fullPath')\">View the full schedule</a> - \n";
 
         if (count($unassigned)) {
             if ($this->justOpen) {
-                $html .= "<a href=\"$this->masterPath\">View all referee teams</a> - \n";
+                $html .= "<a href=\"$this->container->get('masterPath')\">View all referee teams</a> - \n";
             } else {
-                $html .= "<a href=\"$this->masterPath?open\">View open referee teams</a> - \n";
+                $html .= "<a href=\"$this->container->get('masterPath')?open\">View open referee teams</a> - \n";
             }
         }
-        $html .= "<a href=\"$this->schedPath\">View Assignors</a>&nbsp;-&nbsp;\n";
-		$html .= "<a href=\"$this->refsPath\">Edit referee assignments</a> - \n";
-        $html .=  "<a href=\"$this->endPath\">Log off</a>";
+        $html .= "<a href=\"$this->container->get('schedPath')\">View Assignors</a>&nbsp;-&nbsp;\n";
+		$html .= "<a href=\"$this->container->get('refsPath')\">Edit referee assignments</a> - \n";
+        $html .=  "<a href=\"$this->container->get('endPath')\">Log off</a>";
         $html .=  "<input  class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
         $html .=  "<div class='clear-fix'></div>";
         $html .= "</h3>\n";

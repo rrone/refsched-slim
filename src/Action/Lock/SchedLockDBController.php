@@ -22,21 +22,21 @@ class SchedLockDBController extends AbstractController
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         if (!$this->authed) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->logStamp($request);
 
         $this->renderLock();
 
-        return $response->withRedirect($this->greetPath);
+        return $response->withRedirect($this->container->get('greetPath'));
 
 //        $content = array(
 //            'view' => array (
@@ -72,14 +72,14 @@ class SchedLockDBController extends AbstractController
         }
         elseif ( $this->user->admin) {
            $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"$this->masterPath\">Schedule Page</a></h2>";
+           $html .= "You should go to the <a href=\"$this->container->get('masterPath')\">Schedule Page</a></h2>";
         }
         elseif ( !$this->user->admin ) {
            $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h2>";
+           $html .= "You should go to the <a href=\"$this->container->get('schedPath')\">Schedule Page</a></h2>";
         }
         else {
-           $html .= "<h2 class=\"center\">You need to <a href=\"$this->logonPath\">logon</a> first.</h2>";
+           $html .= "<h2 class=\"center\">You need to <a href=\"$this->container->get('logonPath')\">logon</a> first.</h2>";
         }
 
         return $html;
@@ -89,9 +89,9 @@ class SchedLockDBController extends AbstractController
 //    {
 //        $html =
 //<<<EOT
-//      <h3 align="center"><a href="$this->greetPath">Go to main screen</a>&nbsp;-&nbsp;
-//      <a href="$this->masterPath">Go to schedule</a>&nbsp;-&nbsp;
-//      <a href="$this->endPath">Log off</a></h3>
+//      <h3 align="center"><a href="$this->container->get('greetPath')">Go to main screen</a>&nbsp;-&nbsp;
+//      <a href="$this->container->get('masterPath')">Go to schedule</a>&nbsp;-&nbsp;
+//      <a href="$this->container->get('endPath')">Log off</a></h3>
 //EOT;
 //        return $html;
 //    }

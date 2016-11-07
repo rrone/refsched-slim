@@ -30,13 +30,13 @@ class SchedImportController extends AbstractController
     {
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
         if (is_null($this->user) || !$this->user->admin) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 
         if (is_null($this->event) || is_null($this->user)) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->logStamp($request);
@@ -50,7 +50,7 @@ class SchedImportController extends AbstractController
         $content = array(
             'view' => array(
                 'admin' => $this->user->admin,
-                'action' => $this->schedImportPath,
+                'action' => $this->container->get('schedImportPath'),
                 'message' => $this->msg,
                 'messageStyle' => $this->msgStyle,
             )
@@ -71,7 +71,7 @@ class SchedImportController extends AbstractController
             $files = $request->getUploadedFiles();
 
             if(empty($files)){
-                return $this->adminPath;
+                return $this->container->get('adminPath');
             }
 
             $upload = $files['uploadfile'];
@@ -106,7 +106,7 @@ class SchedImportController extends AbstractController
                             unlink($file); // delete file
                     };
 
-                    return $this->adminPath;
+                    return $this->container->get('adminPath');
             }
 
         }

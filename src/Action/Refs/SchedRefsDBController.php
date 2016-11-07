@@ -25,14 +25,14 @@ class SchedRefsDBController extends AbstractController
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         if (!$this->authed) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->logStamp($request);
@@ -40,7 +40,7 @@ class SchedRefsDBController extends AbstractController
         if ($this->handleRequest($request)) {
             $_SESSION['target_id'] = array_keys($_POST);
 
-            return $response->withRedirect($this->editrefPath);
+            return $response->withRedirect($this->container->get('editrefPath'));
         }
 
         $content = array(
@@ -98,7 +98,7 @@ class SchedRefsDBController extends AbstractController
                     $html .= "<h2  class=\"center\">You are currently scheduled for the following games</h2></div>\n";
                 }
                 $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
-                $html .= "<form name=\"addref\" method=\"post\" action=\"$this->refsPath\">\n";
+                $html .= "<form name=\"addref\" method=\"post\" action=\"$this->container->get('refsPath')\">\n";
                 $html .= "<table class=\"sched_table\" width=\"100%\">\n";
                 $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
                 $html .= "<th>Game No.</th>";
@@ -180,7 +180,7 @@ class SchedRefsDBController extends AbstractController
                 $this->bottommenu = $this->menu();
             } else {
                 $html .= "<h2 class=\"center\">You do not currently have any games scheduled.</h2>\n";
-                $this->bottommenu = "<h3 class=\"center\">You should go to the <a href=\"$this->schedPath\">Schedule Page</a></h3>";
+                $this->bottommenu = "<h3 class=\"center\">You should go to the <a href=\"$this->container->get('schedPath')\">Schedule Page</a></h3>";
             }
         } else {
             $html .= $this->errorCheck();
@@ -192,18 +192,18 @@ class SchedRefsDBController extends AbstractController
 
     private function menu()
     {
-        $html = "<h3 align=\"center\"><a href=\"$this->greetPath\">Home</a>&nbsp;-&nbsp;\n";
+        $html = "<h3 align=\"center\"><a href=\"$this->container->get('greetPath')\">Home</a>&nbsp;-&nbsp;\n";
 
-        $html .= "<a href=\"$this->fullPath\">View the full schedule</a>&nbsp;-&nbsp\n";
+        $html .= "<a href=\"$this->container->get('fullPath')\">View the full schedule</a>&nbsp;-&nbsp\n";
 
         if ($this->user->admin) {
-            $html .= "<a href=\"$this->schedPath\">View Assignors</a>&nbsp;-&nbsp;\n";
-            $html .= "<a href=\"$this->masterPath\">Select Assignors</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('schedPath')\">View Assignors</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('masterPath')\">Select Assignors</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a href=\"$this->schedPath\">Go to ". $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('schedPath')\">Go to ". $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .= "<a href=\"$this->endPath\">Log off</a></h3>\n";
+        $html .= "<a href=\"$this->container->get('endPath')\">Log off</a></h3>\n";
 
         return $html;
     }

@@ -26,7 +26,7 @@ class SchedEndController extends AbstractController
 
         session_destroy();
         
-        return $response->withRedirect($this->logonPath);
+        return $response->withRedirect($this->container->get('logonPath'));
     }
 }
 

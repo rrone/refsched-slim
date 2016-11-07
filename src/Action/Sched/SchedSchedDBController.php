@@ -39,14 +39,14 @@ class SchedSchedDBController extends AbstractController
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
          if (!$this->authed) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
          }
 
 		$this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->handleRequest($request);
@@ -298,10 +298,10 @@ class SchedSchedDBController extends AbstractController
                 $showavailable = true;
 			}
 			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned == $limit_list[ 'all' ] ) {
-				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked and you are at your game limit<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe submit button on this page has been disabled and available games are not shown<br>\nYou probably want to <a href=\"$this->greetPath\">Go to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></span></h3>\n";
+				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked and you are at your game limit<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe submit button on this page has been disabled and available games are not shown<br>\nYou probably want to <a href=\"$this->container->get('greetPath')\">Go to the Main Page</a> or <a href=\"$this->container->get('endPath')\">Log Off</a></span></h3>\n";
 			}
 			elseif ( $locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned > $limit_list[ 'all' ] ) {
-				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked and you are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe Submit button has been disabled and available games are not shown<br>\nYou probably want to <a href=\"$this->greetPath\">Go to the Main Page</a> or <a href=\"$this->endPath\">Log Off</a></span></h3>\n";
+				$html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked and you are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe Submit button has been disabled and available games are not shown<br>\nYou probably want to <a href=\"$this->container->get('greetPath')\">Go to the Main Page</a> or <a href=\"$this->container->get('endPath')\">Log Off</a></span></h3>\n";
 			}
 			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned < $limit_list['all'] ) {
 				$tmplimit = $limit_list['all'];
@@ -313,7 +313,7 @@ class SchedSchedDBController extends AbstractController
                 $showavailable = true;
 			}
 			elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned > $limit_list['all'] ) {
-			    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nIf you continue from here you will not be able to keep all the games you are signed up for and may lose some of the games you already have<br>\nIf you want to keep these games and remain over the game limit it is recommended that you do not hit submit but do something else instead<br>\n<a href=\"$this->greetPath\">Go to the Main Page</a></span></h3>\n";
+			    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nIf you continue from here you will not be able to keep all the games you are signed up for and may lose some of the games you already have<br>\nIf you want to keep these games and remain over the game limit it is recommended that you do not hit submit but do something else instead<br>\n<a href=\"$this->container->get('greetPath')\">Go to the Main Page</a></span></h3>\n";
                 $showavailable = true;
 			}
 			elseif ( $locked && count( $limit_list ) ) {
@@ -361,7 +361,7 @@ class SchedSchedDBController extends AbstractController
                 $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
                 $submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled' ;
 
-                $html .= "<form name=\"form1\" method=\"post\" action=\"$this->schedPath\">\n";
+                $html .= "<form name=\"form1\" method=\"post\" action=\"$this->container->get('schedPath')\">\n";
 
                 $html .= "<div align=\"left\">";
 
@@ -484,30 +484,30 @@ EOD;
     {
         $html =
 <<<EOD
-    <a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
-    <a href="$this->fullPath">View the full schedule</a>&nbsp;-&nbsp;
+    <a href="$this->container->get('greetPath')">Home</a>&nbsp;-&nbsp;
+    <a href="$this->container->get('fullPath')">View the full schedule</a>&nbsp;-&nbsp;
 EOD;
         if($this->user->admin){
             $html .=
 <<<EOD
-        <a href="$this->masterPath">Select Assignors</a>&nbsp;-&nbsp;
-        <a href="$this->refsPath">Edit referee assignments</a>&nbsp;-&nbsp;
+        <a href="$this->container->get('masterPath')">Select Assignors</a>&nbsp;-&nbsp;
+        <a href="$this->container->get('refsPath')">Edit referee assignments</a>&nbsp;-&nbsp;
 EOD;
         } else {
             if ($this->num_assigned) {
                 $uname = $this->user->name;
-                $showAll = !empty($this->showgroup) ? "<a href=\"$this->schedPath\">View all $uname games</a>&nbsp;-&nbsp;" : '';
+                $showAll = !empty($this->showgroup) ? "<a href=\"$this->container->get('schedPath')\">View all $uname games</a>&nbsp;-&nbsp;" : '';
                 $html .=
 <<<EOD
         $showAll
-        <a href="$this->refsPath">Edit $uname referee assignments</a>&nbsp;-&nbsp;
+        <a href="$this->container->get('refsPath')">Edit $uname referee assignments</a>&nbsp;-&nbsp;
 EOD;
             }
         }
 
         $html .=
 <<<EOD
-    <a href="$this->endPath">Log off</a>
+    <a href="$this->container->get('endPath')">Log off</a>
 EOD;
 
         return $html;

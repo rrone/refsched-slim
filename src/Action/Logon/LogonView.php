@@ -8,7 +8,7 @@
 
 namespace App\Action\Logon;
 
-use Slim\Views\Twig;
+use Slim\Container;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Action\AbstractView;
@@ -19,9 +19,9 @@ class LogonView extends AbstractView
     private $users;
     private $enabled;
 
-    public function __construct(Twig $view, SchedulerRepository $repository)
+    public function __construct(Container $container, SchedulerRepository $repository)
     {
-        parent::__construct($view);
+        parent::__construct($container, $repository);
 
         $this->sr = $repository;
     }
@@ -64,24 +64,24 @@ class LogonView extends AbstractView
     }
     public function render(Response &$response)
     {
-        $logonPath = $response->getHeader('logonPath')[0];
-
         $content = array(
             'events' => $this->sr->getCurrentEvents(),
-            'content' => $this->renderView($logonPath),
+            'content' => $this->renderView(),
             'message' => $this->msg,
         );
 
         $this->view->render($response, 'logon.html.twig', $content);
 
+        return $response;
     }
-    protected function renderView($logonPath)
+    protected function renderView()
     {
         $this->users = $this->sr->getUsers();
         $this->enabled = $this->sr->getEnabledEvents();
 
         $users = $this->users;
         $enabled = $this->enabled;
+        $logonPath = $this->container->get('logonPath');
 
         if (count($enabled) > 0) {
 

@@ -24,7 +24,7 @@ class SchedEditRefDBController extends AbstractController
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         if (!$this->authed) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : false;
@@ -32,7 +32,7 @@ class SchedEditRefDBController extends AbstractController
         $this->target_id = isset($_SESSION['target_id']) ? $_SESSION['target_id'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->logStamp($request);
@@ -40,7 +40,7 @@ class SchedEditRefDBController extends AbstractController
         if ($request->isPost()) {
             if ($this->handleRequest($request)) {
 
-                return $response->withRedirect($this->refsPath);
+                return $response->withRedirect($this->container->get('refsPath'));
             }
         }
 
@@ -120,7 +120,7 @@ class SchedEditRefDBController extends AbstractController
                         $date = date('D, d M', strtotime($game->date));
                         $time = date('H:i', strtotime($game->time));
                         if ($game->game_number == $target_game && ($game->assignor == $this->user->name|| $this->user->admin)) {
-                            $html .= "<form name=\"editref\" method=\"post\" action=\"$this->editrefPath\">\n";
+                            $html .= "<form name=\"editref\" method=\"post\" action=\"$this->container->get('editrefPath')\">\n";
                             $html .= "<table class=\"sched_table\" width=\"100%\">\n";
                             $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
                             $html .= "<th>Game No.</th>";
@@ -164,7 +164,7 @@ class SchedEditRefDBController extends AbstractController
             }
         } else {
             $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
-            $html .= "You should go to the <a href=\"$this->refsPath\">Referee Edit Page</a></h2>";
+            $html .= "You should go to the <a href=\"$this->container->get('refsPath')\">Referee Edit Page</a></h2>";
         }
 
         return $html;
@@ -175,21 +175,21 @@ class SchedEditRefDBController extends AbstractController
     {
         $html =
             <<<EOD
-<h3 align="center"><a href="$this->greetPath">Home</a>&nbsp;-&nbsp;
-<a href="$this->fullPath">View the full game schedule</a>&nbsp;-&nbsp
+<h3 align="center"><a href="$this->container->get('greetPath')">Home</a>&nbsp;-&nbsp;
+<a href="$this->container->get('fullPath')">View the full game schedule</a>&nbsp;-&nbsp
 
 EOD;
 
-"<h3 class=\"center\"><a href=\"$this->fullPath\">View the full game schedule</a>";
+"<h3 class=\"center\"><a href=\"$this->container->get('fullPath')\">View the full game schedule</a>";
         if ($this->user->admin) {
-            $html .= "<a href=\"$this->masterPath\">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('masterPath')\">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a href=\"$this->refsPath\">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('refsPath')\">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         }
 
         $html .=
             <<<EOD
-<a href="$this->endPath">Log off</a></h3>
+<a href="$this->container->get('endPath')">Log off</a></h3>
 EOD;
 
         return $html;

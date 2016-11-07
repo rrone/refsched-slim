@@ -26,14 +26,14 @@ class SchedFullDBController extends AbstractController
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         if (!$this->authed) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : false;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->handleRequest($request);
@@ -190,22 +190,22 @@ class SchedFullDBController extends AbstractController
 
     private function menu()
     {
-        $html = "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\"><a href=\"$this->greetPath\">Home</a>&nbsp;-&nbsp;\n";
+        $html = "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\"><a href=\"$this->container->get('greetPath')\">Home</a>&nbsp;-&nbsp;\n";
         if ($this->justOpen) {
-            $html .= "<a href=\"$this->fullPath\">View full schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('fullPath')\">View full schedule</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a href=\"$this->fullPath?open\">View schedule with no referees</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('fullPath')?open\">View schedule with no referees</a>&nbsp;-&nbsp;\n";
         }
         if ($this->user->admin) {
-            $html .= "<a href=\"$this->schedPath\">View Assignors</a>&nbsp;-&nbsp;\n";
-            $html .= "<a href=\"$this->masterPath\">Select Assignors</a>&nbsp;-&nbsp;\n";
-            $html .= "<a href=\"$this->refsPath\">Edit referee assignments</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('schedPath')\">View Assignors</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('masterPath')\">Select Assignors</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('refsPath')\">Edit referee assignments</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a href=\"$this->schedPath\">Go to ". $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
-            $html .= "<a href=\"$this->refsPath\">Edit ". $this->user->name . " referees</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('schedPath')\">Go to ". $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->container->get('refsPath')\">Edit ". $this->user->name . " referees</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .= "<a href=\"$this->endPath\">Log off</a>";
+        $html .= "<a href=\"$this->container->get('endPath')\">Log off</a>";
 
         $html .= "<a href=\"$this->fullXlsPath\" class=\"btn btn-primary btn-xs right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>\n";
         $html .= "<div class='clear-fix'></div>";

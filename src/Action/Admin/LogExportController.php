@@ -30,20 +30,20 @@ class LogExportController extends AbstractController
     {
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
         if (is_null($this->user) || !$this->user->admin) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
 
         if (is_null($this->event) || is_null($this->user)) {
-            return $response->withRedirect($this->logonPath);
+            return $response->withRedirect($this->container->get('logonPath'));
         }
 
         $this->logStamp($request);
 
 
         if (is_null($this->event)) {
-            return $response->withRedirect($this->fullPath);
+            return $response->withRedirect($this->container->get('fullPath'));
         }
         // generate the response
         $response = $response->withHeader('Content-Type', $this->exporter->contentType);
