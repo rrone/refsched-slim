@@ -213,14 +213,20 @@ $container[App\Action\Master\SchedMasterDBController::class] = function ($c) use
 // -----------------------------------------------------------------------------
 // Lock & Unlock classes
 // -----------------------------------------------------------------------------
-$container[App\Action\Lock\SchedLockDBController::class] = function ($c) use($sr) {
+$container[App\Action\Lock\SchedLockView::class] = function ($c) use($sr) {
+    return new \App\Action\Lock\SchedLockView($c, $sr);
+};
 
-    return new \App\Action\Lock\SchedLockDBController($c, $sr);
+$container[App\Action\Lock\SchedLockDBController::class] = function ($c) use($sr) {
+    $v = new \App\Action\Lock\SchedLockView($c, $sr);
+
+    return new \App\Action\Lock\SchedLockDBController($c, $v);
 };
 
 $container[App\Action\Lock\SchedUnlockDBController::class] = function ($c) use($sr) {
+    $v = new \App\Action\Lock\SchedLockView($c, $sr);
 
-    return new \App\Action\Lock\SchedUnlockDBController($c, $sr);
+    return new \App\Action\Lock\SchedUnlockDBController($c, $v);
 };
 
 // -----------------------------------------------------------------------------

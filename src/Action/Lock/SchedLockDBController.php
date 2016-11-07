@@ -2,99 +2,35 @@
 namespace App\Action\Lock;
 
 use Slim\Container;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Http\Request;
+use Slim\Http\Response;
 use App\Action\AbstractController;
-use App\Action\SchedulerRepository;
 
 class SchedLockDBController extends AbstractController
 {
-    public function __construct(Container $container, SchedulerRepository $repository)
-    {
+    private $lulView;
 
+    public function __construct(Container $container, SchedLockView $lockView)
+    {
         parent::__construct($container);
 
-        $this->sr = $repository;
-
+        $this->lulView = $lockView;
     }
 
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
-        if (!$this->authed) {
-            return $response->withRedirect($this->container->get('logonPath'));
-        }
-
-        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
-
-        if (is_null($this->event) || is_null($this->user)) {
-            return $response->withRedirect($this->container->get('logonPath'));
-        }
+        parent::__invoke($request, $response, $args);
 
         $this->logStamp($request);
 
-        $this->renderLock();
+        $request = $request->withHeader('user', $this->user);
+        $request = $request->withHeader('event', $this->event);
+
+        $this->lulView->handler($request, $response);
+        $this->lulView->renderLock();
 
         return $response->withRedirect($this->container->get('greetPath'));
-
-//        $content = array(
-//            'view' => array (
-//                'user' => $this->user,
-//                'ulock' => $this->renderLock(),
-//                'topmenu' => $this->menu(),
-//                'menu' => $this->menu(),
-//                'title' => $this->page_title,
-//				'dates' => $this->dates,
-//				'location' => $this->location,
-//            )
-//        );
-
-//        $this->view->render($response, 'sched.ulock.html.twig', $content);
     }
-
-    private function renderLock()
-    {
-        $html = null;
-        $event = $this->event;
-
-		if (!empty($event)) {
-			$projectKey = $event->projectKey;
-            $locked = $this->sr->getLocked($projectKey);
-
-            if ( $locked ) {
-               $html .= "<h3 align=\"center\">The schedule is already locked!</h3>\n";
-            }
-			elseif ( $this->user->admin) {
-               $this->sr->lockProject($projectKey);
-               $html .= "<h3 align=\"center\">The schedule has been locked!</h3>\n";
-            }
-        }
-        elseif ( $this->user->admin) {
-           $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"$this->container->get('masterPath')\">Schedule Page</a></h2>";
-        }
-        elseif ( !$this->user->admin ) {
-           $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
-           $html .= "You should go to the <a href=\"$this->container->get('schedPath')\">Schedule Page</a></h2>";
-        }
-        else {
-           $html .= "<h2 class=\"center\">You need to <a href=\"$this->container->get('logonPath')\">logon</a> first.</h2>";
-        }
-
-        return $html;
-
-    }
-//    private function menu()
-//    {
-//        $html =
-//<<<EOT
-//      <h3 align="center"><a href="$this->container->get('greetPath')">Go to main screen</a>&nbsp;-&nbsp;
-//      <a href="$this->container->get('masterPath')">Go to schedule</a>&nbsp;-&nbsp;
-//      <a href="$this->container->get('endPath')">Log off</a></h3>
-//EOT;
-//        return $html;
-//    }
 }
 
 
