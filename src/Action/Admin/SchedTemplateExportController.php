@@ -1,126 +1,38 @@
 <?php
-namespace  App\Action\Admin;
+namespace App\Action\Admin;
 
 use Slim\Container;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Http\Request;
+use Slim\Http\Response;
 use App\Action\AbstractController;
-use App\Action\SchedulerRepository;
-use App\Action\AbstractExporter;
 
 class SchedTemplateExportController extends AbstractController
 {
-	private $exporter;
-	private $outFileName;
-	
-	public function __construct(
-			Container $container,
-            SchedulerRepository $repository,
-			AbstractExporter $exporter)
+	private $exportXl;
+
+	public function __construct(Container $container, SchedTemplateExport $exportXl)
     {
-		
 		parent::__construct($container);
 
-        $this->sr = $repository;
-		$this->exporter = $exporter;
-
-		$this->outFileName = 'GameScheduleTemplate_' . date('Ymd_His') . '.' . $exporter->getFileExtension();
-		
+		$this->exportXl = $exportXl;
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
-
-        if (is_null($this->user) || !$this->user->admin) {
-            return $response->withRedirect($this->container->get('greetPath'));
-        }
-
-        $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
-
-        if (is_null($this->event) || is_null($this->user)) {
+        if(!$this->isAuthorized()) {
             return $response->withRedirect($this->container->get('logonPath'));
+        };
+
+        if (!$this->user->admin) {
+            return $response->withRedirect($this->container->get('greetPath'));
         }
 
         $this->logStamp($request);
 
-        $file = $this->generateFile();
-        if ($file['valid']) {
-            // generate the response
-            $response = $response->withHeader('Content-Type', $this->exporter->contentType);
-            $response = $response->withHeader('Content-Disposition', 'attachment; filename='. $this->outFileName);
+        $request = $request->withHeader('user', $this->user);
+        $request = $request->withHeader('event', $this->event);
 
-            $body = $response->getBody();
-            $content = $file['content'];
-            $body->write($this->exporter->export($content));
+        $response = $this->exportXl->handler($request, $response);
 
-            return $response;
-
-        } else {
-            if (!empty($this->event)) {
-                $msg = $this->event->name . ' at ' . $this->event->location . ' on ' . $this->event->dates;
-                $content = array(
-                    'view' => array(
-                        'admin' => $this->user->admin,
-                        'action' => $this->userUpdatePath,
-                        'message' => "There are no games in the database for the event: \"$msg\"",
-                    )
-                );
-
-                $this->view->render($response, 'modal.html.twig', $content);
-            }
-        }
-
-        return null;
+        return $response;
     }
-    public function generateFile()
-    {
-        $content = null;
-        
-        $event = $this->event;
-
-		if (!empty($event)) {
-			$projectKey = $event->projectKey;
-
-			//set the header labels
-            $labels = $this->sr->getGamesHeader();
-
-            if (!is_null($labels)){
-                foreach($labels as $key=>$label) {
-                    $hdr[] = $label;
-                    switch ($label) {
-                        case 'projectKey':
-                            $row[] = $projectKey;
-                            break;
-                        case 'medalRound':
-                            $row[] = '0';
-                            break;
-                        case 'date':
-                            $dateCol = $key;
-                            break;
-                        default:
-                            $row[] = null;
-                    }
-                }
-
-                $data[] = $hdr;
-                $data[] = $row;
-
-                $dateCol = chr($dateCol+65) . ":" . chr($dateCol+65);
-
-                $wkbk['FullSchedule']['data'] = $data;
-                $wkbk['FullSchedule']['options']['freezePane'] = 'A2';
-                $wkbk['FullSchedule']['options']['style'] = array($dateCol=>'yyyy-mm-dd');
-
-                $content = array('valid'=>true, 'content'=>$wkbk);
-
-            } else {
-
-                $content = array('valid'=>false, 'content'=>null);
-
-            }
-		}
-
-        return $content;
-
-	}
 }

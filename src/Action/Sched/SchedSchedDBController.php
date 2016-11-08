@@ -18,7 +18,9 @@ class SchedSchedDBController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        parent::__invoke($request, $response, $args);
+        if(!$this->isAuthorized()) {
+            return $response->withRedirect($this->container->get('logonPath'));
+        };
 
         $this->logStamp($request);
 

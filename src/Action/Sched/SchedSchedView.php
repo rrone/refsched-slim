@@ -10,7 +10,6 @@ use App\Action\AbstractView;
 class SchedSchedView extends AbstractView
 {
     private $showgroup;
-    private $msgGroup;
 
     private $num_assigned;
     private $num_unassigned;
@@ -345,17 +344,15 @@ class SchedSchedView extends AbstractView
 
                 $html .= "<div align=\"left\">";
 
-                if (!$showavailable || !$this->num_unassigned) {
-                    $html .= "<h3 class=\"h3-btn\" >";
-                } else {
-                    $html .= "<h3 class=\"h3-btn\" >Available games :";
+                if(!$this->user->admin && (($showavailable && $kount) || $this->num_assigned)) {
+                    $html .= "<h3 class=\"h3-btn center\" ><input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
+                    $html .= "<div class='clear-fix'></div>\n";
                 }
 
+                if ($showavailable && $this->num_unassigned) {
+                    $html .= "<h3>Available games :</h3>";
+                }
                 $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
-                $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
-                $html .= "<div class='clear-fix'></div>";
-
-                $html .= "</h3>\n";
 
                 if($this->num_unassigned) {
                     $html .= "<table class=\"sched_table\" >\n";

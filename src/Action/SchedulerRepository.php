@@ -295,6 +295,8 @@ class SchedulerRepository
     }
     public function getNextGameId()
     {
+        $id = 0;
+
         $games = $this->db->table('games')
             ->get();
 

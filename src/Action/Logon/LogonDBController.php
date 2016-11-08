@@ -21,16 +21,11 @@ class LogonDBController extends AbstractController
     {
         $this->logonView->handler($request, $response);
 
-		$this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
-
-        if ($this->authed) {
-            $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
-            $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
+        if($this->isAuthorized()) {
             $this->logStamp($request);
 
             return $response->withRedirect($this->container->get('greetPath'));
-        }
-		else {
+        } else {
             $this->logonView->render($response);
 
 			return $response;

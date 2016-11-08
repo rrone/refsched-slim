@@ -105,7 +105,8 @@ $db = $container->get('db');
 $sr = new \App\Action\SchedulerRepository($db);
 $exporter = new \App\Action\AbstractExporter('xls');
 $importer = new \App\Action\AbstractImporter('csv');
-$view = $container['view'];
+$view = $container->get('view');
+$uploadPath = $container->get('settings')['upload_path'];
 
 $container[App\Action\SchedulerRepository::class] = function ($db) {
 
@@ -117,11 +118,11 @@ $container[App\Action\SchedulerRepository::class] = function ($db) {
 // -----------------------------------------------------------------------------
 $container[App\Action\Admin\AdminView::class] = function ($c) use($sr) {
 
-    return new \App\Action\Admin\AdminView($c->get('view'), $sr);
+    return new \App\Action\Admin\AdminView($c, $sr);
 };
 
 $container[App\Action\Admin\AdminController::class] = function ($c) use($sr) {
-    $v = new \App\Action\Admin\AdminView($c->get('view'), $sr);
+    $v = new \App\Action\Admin\AdminView($c, $sr);
 
     return new \App\Action\Admin\AdminController($c, $v);
 };
@@ -171,13 +172,13 @@ $container[App\Action\Full\SchedFullDBController::class] = function ($c) use($sr
 // -----------------------------------------------------------------------------
 // SchedExport class
 // -----------------------------------------------------------------------------
-$container[App\Action\Full\SchedExportXl::class] = function ($c) use($sr, $exporter) {
+$container[App\Action\Full\SchedExportXl::class] = function ($c) use($sr) {
 
-    return new \App\Action\Full\SchedExportXl($c, $sr, $exporter);
+    return new \App\Action\Full\SchedExportXl($sr);
 };
 
-$container[App\Action\Full\SchedExportController::class] = function ($c) use($sr, $exporter) {
-    $v = new \App\Action\Full\SchedExportXl($c, $sr, $exporter);
+$container[App\Action\Full\SchedExportController::class] = function ($c) use($sr) {
+    $v = new \App\Action\Full\SchedExportXl($sr);
 
     return new \App\Action\Full\SchedExportController($c, $v);
 };
@@ -214,6 +215,7 @@ $container[App\Action\Master\SchedMasterDBController::class] = function ($c) use
 // Lock & Unlock classes
 // -----------------------------------------------------------------------------
 $container[App\Action\Lock\SchedLockView::class] = function ($c) use($sr) {
+
     return new \App\Action\Lock\SchedLockView($c, $sr);
 };
 
@@ -232,34 +234,71 @@ $container[App\Action\Lock\SchedUnlockDBController::class] = function ($c) use($
 // -----------------------------------------------------------------------------
 // SchedRefs class
 // -----------------------------------------------------------------------------
-$container[App\Action\Refs\SchedRefsDBController::class] = function ($c) use($sr) {
+$container[App\Action\Refs\SchedRefsView::class] = function ($c) use($sr) {
 
-    return new \App\Action\Refs\SchedRefsDBController($c, $sr);
+    return new \App\Action\Refs\SchedRefsView($c, $sr);
+};
+
+$container[App\Action\Refs\SchedRefsDBController::class] = function ($c) use($sr) {
+    $v = new \App\Action\Refs\SchedRefsView($c, $sr);
+
+    return new \App\Action\Refs\SchedRefsDBController($c, $v);
 };
 
 // -----------------------------------------------------------------------------
 // EditRef class
 // -----------------------------------------------------------------------------
-$container[App\Action\EditRef\SchedEditRefDBController::class] = function ($c) use($sr) {
+$container[App\Action\EditRef\SchedEditRefView::class] = function ($c) use($sr) {
 
-    return new \App\Action\EditRef\SchedEditRefDBController($c, $sr);
+    return new \App\Action\EditRef\SchedEditRefView($c, $sr);
+};
+
+$container[App\Action\EditRef\SchedEditRefDBController::class] = function ($c) use($sr) {
+    $v = new \App\Action\EditRef\SchedEditRefView($c, $sr);
+
+    return new \App\Action\EditRef\SchedEditRefDBController($c, $v);
 };
 
 // -----------------------------------------------------------------------------
 // SchedTemplateExport class
 // -----------------------------------------------------------------------------
-$container[App\Action\Admin\SchedTemplateExportController::class] = function ($c) use($sr, $exporter) {
+$container[App\Action\Admin\SchedTemplateExport::class] = function ($c) use($sr) {
 
-    return new \App\Action\Admin\SchedTemplateExportController($c, $sr, $exporter);
+    return new \App\Action\Admin\SchedTemplateExport($c, $sr);
+};
+
+$container[App\Action\Admin\SchedTemplateExportController::class] = function ($c) use($sr, $exporter) {
+    $v = new \App\Action\Admin\SchedTemplateExport($c, $sr, $exporter);
+
+    return new \App\Action\Admin\SchedTemplateExportController($c, $v);
 };
 
 // -----------------------------------------------------------------------------
 // SchedImport class
 // -----------------------------------------------------------------------------
-$container[App\Action\Admin\SchedImportController::class] = function ($c) use($sr, $importer) {
-    $uploadPath = $c->get('settings')['upload_path'];
+$container[App\Action\Admin\SchedImport::class] = function ($c) use($sr, $uploadPath) {
 
-    return new \App\Action\Admin\SchedImportController($c, $sr, $importer, $uploadPath);
+    return new \App\Action\Admin\SchedImport($c, $sr, $uploadPath);
+};
+
+$container[App\Action\Admin\SchedImportController::class] = function ($c) use($sr, $uploadPath) {
+    $v = new \App\Action\Admin\SchedImport($c, $sr, $uploadPath);
+
+    return new \App\Action\Admin\SchedImportController($c, $v);
+};
+
+// -----------------------------------------------------------------------------
+// LogExport class
+// -----------------------------------------------------------------------------
+$container[App\Action\Admin\LogExport::class] = function ($c) use($sr, $exporter) {
+
+    return new \App\Action\Admin\LogExport($c, $sr, $exporter);
+};
+
+$container[App\Action\Admin\LogExportController::class] = function ($c) use($sr) {
+    $v = new \App\Action\Admin\LogExport($c, $sr);
+
+    return new \App\Action\Admin\LogExportController($c, $v);
 };
 
 // -----------------------------------------------------------------------------
@@ -270,10 +309,3 @@ $container[App\Action\End\SchedEndController::class] = function ($c) use($sr) {
     return new \App\Action\End\SchedEndController($c, $sr);
 };
 
-// -----------------------------------------------------------------------------
-// LogExport class
-// -----------------------------------------------------------------------------
-$container[App\Action\Admin\LogExportController::class] = function ($c) use($sr, $exporter) {
-
-    return new \App\Action\Admin\LogExportController($c, $sr, $exporter);
-};

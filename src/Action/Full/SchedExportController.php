@@ -20,11 +20,9 @@ class SchedExportController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        parent::__invoke($request, $response, $args);
-
-        if (is_null($this->event)) {
+        if(!$this->isAuthorized()) {
             return $response->withRedirect($this->container->get('fullPath'));
-        }
+        };
 
         $this->logStamp($request);
 

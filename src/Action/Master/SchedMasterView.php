@@ -83,10 +83,11 @@ class SchedMasterView extends AbstractView
                 $this->location = $event->location;
                 $projectKey = $event->projectKey;
 
-                $html .= "<h3 class=\"center\"> Green shading change indicates different start times</h3>\n";
                 $html .=  "<form name=\"master_sched\" method=\"post\" action=" . $this->container->get('masterPath') . ">\n";
 
                 $html .= $this->menu();
+
+                $html .= "<h3 class=\"center\"> Green shading change indicates different start times</h3>\n";
 
                 $html .=  "<table class=\"sched_table\" width=\"100%\">\n";
                 $html .=  "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
@@ -198,8 +199,8 @@ class SchedMasterView extends AbstractView
         $html .= "<a href=" . $this->container->get('refsPath') . ">Edit referee assignments</a> - \n";
         $html .=  "<a href=" . $this->container->get('endPath') . ">Log off</a>";
         $html .=  "<input  class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
+        $html .= "</h3>";
         $html .=  "<div class='clear-fix'></div>";
-        $html .= "</h3>\n";
 
         return $html;
 

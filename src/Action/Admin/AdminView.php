@@ -2,16 +2,16 @@
 namespace App\Action\Admin;
 
 use App\Action\AbstractView;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Container;
+use Slim\Http\Request;
+use Slim\Http\Response;
 use App\Action\SchedulerRepository;
-use Slim\Views\Twig;
 
 class AdminView extends AbstractView
 {
-	public function __construct(Twig $view, SchedulerRepository $repository)
+	public function __construct(Container $container, SchedulerRepository $repository)
     {
-        parent::__construct($view);
+        parent::__construct($container, $repository);
 
 		$this->sr = $repository;
     }

@@ -4,18 +4,16 @@ namespace App\Action;
 
 use Slim\Container;
 use Slim\Http\Request;
-use Slim\Http\Response;
 
 abstract class AbstractController
 {
     //database connection
     protected $conn;
 
-    /* @var SchedulerRepository */
-    protected $sr;
+    /* @var Container */
+    protected $container;
 	
     //shared variables
-    protected $container;
     protected $root;
 
 	//session variables
@@ -29,25 +27,29 @@ abstract class AbstractController
 
         $this->root = __DIR__ . '/../../var';
     }
-    public function __invoke(Request $request, Response $response, $args)
+    protected function isAuthorized()
     {
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         if (!$this->authed) {
-            return $response->withRedirect($this->container->get('logonPath'));
+            return null;
         }
 
         $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : false;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
-            return $response->withRedirect($this->container->get('logonPath'));
+            return null;
         }
 
-        return null;
+        return true;
     }
     protected function logStamp(Request $request)
     {
         if(isset($_SESSION['admin'])){
+            return null;
+        }
+
+        if(is_null($this->sr)){
             return null;
         }
 

@@ -4,25 +4,25 @@ namespace App\Action\Full;
 
 
 use App\Action\AbstractExporter;
-use App\Action\AbstractView;
-use Slim\Container;
 use App\Action\SchedulerRepository;
 use Slim\Http\Response;
 use Slim\Http\Request;
 
-class SchedExportXl extends AbstractView
+class SchedExportXl extends AbstractExporter
 {
-    private $exporter;
-    private $outFileName;
+    /* @var SchedulerRepository */
+    private $sr;
 
-    public function __construct(Container $container, SchedulerRepository $schedulerRepository, AbstractExporter $abstractExporter)
+    private $outFileName;
+    private $user;
+    private $event;
+
+    public function __construct(SchedulerRepository $schedulerRepository)
     {
-        parent::__construct($container, $schedulerRepository);
+        parent::__construct('xls');
 
         $this->sr = $schedulerRepository;
-        $this->exporter = $abstractExporter;
-        $this->exporter->setFormat('xls');
-        $this->outFileName = 'GameSchedule_' . date('Ymd_His') . '.' . $this->exporter->getFileExtension();
+        $this->outFileName = 'GameSchedule_' . date('Ymd_His') . '.' . $this->getFileExtension();
     }
     public function handler(Request $request, Response $response)
     {
@@ -30,17 +30,17 @@ class SchedExportXl extends AbstractView
         $this->event = $request->getHeader('event')[0];
 
         // generate the response
-        $response = $response->withHeader('Content-Type', $this->exporter->contentType);
+        $response = $response->withHeader('Content-Type', $this->contentType);
         $response = $response->withHeader('Content-Disposition', 'attachment; filename='. $this->outFileName);
 
         $content = null;
 
         $this->generateScheduleData($content);
-//        $this->generateSummaryCountData($content);
+        $this->generateSummaryCountData($content);
         $this->generateSummaryCountDateDivision($content);
 
         $body = $response->getBody();
-        $body->write($this->exporter->export($content));
+        $body->write($this->export($content));
 
         return $response;
     }

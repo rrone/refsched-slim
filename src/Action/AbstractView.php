@@ -64,7 +64,7 @@ class AbstractView
         $html = null;
 
         if ( !$this->container->get('authed') ) {
-            $html .= "<h2 class=\"center\">You need to <a href=\"$this->container->get('logonPath')\">logon</a> first.</h2>";
+            $html .= "<h2 class=\"center\">You need to <a href=" . $this->container->get('logonPath') . ">logon</a> first.</h2>";
         }
         else {
             $html .= "<h1 class=\"center\">Something is not right</h1>";
