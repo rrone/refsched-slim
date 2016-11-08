@@ -37,6 +37,8 @@ class SchedImportController extends AbstractController
             return $response->withRedirect($path);
         }
 
-        return null;
+        $this->importer->render($response);
+
+        return $response;
     }
 }

@@ -93,7 +93,7 @@ class SchedImport extends AbstractImporter
         return null;
     }
 
-    protected function render(Response &$response)
+    public function render(Response &$response)
     {
         $content = array(
             'view' => array(
