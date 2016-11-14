@@ -37,9 +37,10 @@ $settings = [
         'version' => [
             'version' => '2016.11.06.0-dev'
         ]
-        
-
     ],
+
+    'settings.test' => false,
+
 ];
 
 $local = include(__DIR__ . '/../config/local.php');
