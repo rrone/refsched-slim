@@ -104,7 +104,7 @@ class SchedulerRepository
 		}
 		
         $event = $this->db->table('events')
-			->where('eventKey', '=', $projectKey)
+			->where('projectKey', '=', $projectKey)
 			->get();
 
 		return $this->getZero($event);

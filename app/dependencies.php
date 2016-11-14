@@ -102,7 +102,7 @@ $container['sr'] = function ($c) {
 // Action dependency Injection
 // -----------------------------------------------------------------------------
 $db = $container->get('db');
-$sr = new \App\Action\SchedulerRepository($db);
+$sr = $container['sr'];
 $exporter = new \App\Action\AbstractExporter('xls');
 $importer = new \App\Action\AbstractImporter('csv');
 $view = $container->get('view');

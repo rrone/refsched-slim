@@ -27,14 +27,25 @@ abstract class AbstractController
 
         $this->root = __DIR__ . '/../../var';
     }
+    private function isTest()
+    {
+        return $this->container->get('settings.test');
+    }
     protected function isAuthorized()
     {
+        if($this->isTest()){
+            $session = $this->container['session'];
+            $_SESSION['authed'] = $session['authed'];
+            $_SESSION['user'] = $session['user'];
+            $_SESSION['event'] = $session['event'];
+        }
+
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         if (!$this->authed) {
             return null;
         }
 
-        $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : false;
+        $this->event = isset($_SESSION['event']) ? $_SESSION['event'] : null;
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         if (is_null($this->event) || is_null($this->user)) {
@@ -45,11 +56,17 @@ abstract class AbstractController
     }
     protected function logStamp(Request $request)
     {
+        if($this->isTest()){
+            return null;
+        }
+
         if(isset($_SESSION['admin'])){
             return null;
         }
 
-        if(is_null($this->sr)){
+        $sr = $this->container['sr'];
+
+        if(is_null($sr)){
             return null;
         }
 
@@ -95,7 +112,7 @@ abstract class AbstractController
         }
 
         if(!is_null($logMsg)){
-            $this->sr->logInfo($projectKey, $logMsg);
+            $sr->logInfo($projectKey, $logMsg);
         }
 
         return null;
