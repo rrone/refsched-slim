@@ -1,7 +1,6 @@
 <?php
 namespace App\Action\Full;
 
-
 use App\Action\AbstractView;
 use Slim\Container;
 use App\Action\SchedulerRepository;
@@ -21,10 +20,7 @@ class SchedFullView extends AbstractView
     {
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
-
-        if (count($_GET)) {
-            $this->justOpen = array_key_exists('open', $_GET);
-        }
+        $this->justOpen = array_key_exists('open', $request->getParams());
 
         return null;
     }

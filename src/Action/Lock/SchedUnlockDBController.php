@@ -19,7 +19,9 @@ class SchedUnlockDBController extends AbstractController
 
     public function __invoke(Request $request, Response $response, $args)
     {
-        if(!$this->isAuthorized()) {
+        if(!$this->isAuthorized() ||  !$this->user->admin) {
+            echo ('Unauthorized: back to logon'); // for testing
+
             return $response->withRedirect($this->container->get('logonPath'));
         };
 
@@ -30,6 +32,8 @@ class SchedUnlockDBController extends AbstractController
 
         $this->lulView->handler($request, $response);
         $this->lulView->renderUnlock();
+
+        echo ('Unlocked: back to greet'); // for testing
 
         return $response->withRedirect($this->container->get('greetPath'));
     }

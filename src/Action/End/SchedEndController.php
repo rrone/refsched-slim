@@ -22,6 +22,8 @@ class SchedEndController extends AbstractController
         session_unset();
 
         session_destroy();
+
+        echo ('back to logon'); // for testing
         
         return $response->withRedirect($this->container->get('logonPath'));
     }

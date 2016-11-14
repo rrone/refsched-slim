@@ -71,7 +71,7 @@ class SchedLockView extends AbstractView
     {
         $html = null;
 
-        if (!empty($this->event)) {
+        if (!empty($this->event) && $this->user->admin) {
             $projectKey = $this->event->projectKey;
             $locked = $this->sr->getLocked($projectKey);
 

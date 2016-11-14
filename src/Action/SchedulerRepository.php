@@ -47,12 +47,12 @@ class SchedulerRepository
 		if(empty($name)) {
 			return null;
 		}
-		
+
 		$user = $this->db->table('users')
 			->where('name', 'like', $name)
 			->get();
-		
-		return $this->getZero($user);
+
+        return $this->getZero($user);
 
 	}
 	public function setUser($user)

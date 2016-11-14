@@ -25,11 +25,12 @@ define('PROJECT_ROOT', realpath(__DIR__ . '/..'));
 require_once PROJECT_ROOT . '/vendor/autoload.php';
 
 // Initialize our own copy of the slim application
-abstract class AppTestCase extends WebTestCase
+class AppTestCase extends WebTestCase
 {
     protected $local;
     protected $sr;
     protected $c;
+    private $cookies = array();
 
     public function getSlimInstance() {
 
@@ -59,22 +60,41 @@ abstract class AppTestCase extends WebTestCase
         return $app;
     }
 
-    public function requestFactory($_uri, $_method, $_headers, $_cookies, $_serverParams, $_body)
+    protected function request($method, $path, $data = array(), $optionalHeaders = array())
     {
-        $env = Environment::mock();
-        $uri = Uri::createFromString($_uri);
-        $headers = Headers::createFromEnvironment($env);
-        foreach($_headers as $h){
-            $headers[] = $h;
+        //Make method uppercase
+        $method = strtoupper($method);
+        $options = array(
+            'REQUEST_METHOD' => $method,
+            'REQUEST_URI' => $path
+        );
+
+        if ($method === 'GET') {
+            $options['QUERY_STRING'] = http_build_query($data);
+        } else {
+            $params = json_encode($data);
         }
-        $cookies = [];
+
+        // Prepare a mock environment
+        $env = Environment::mock(array_merge($options, $optionalHeaders));
+        $uri = Uri::createFromEnvironment($env);
+        $headers = Headers::createFromEnvironment($env);
+        $cookies = $this->cookies;
         $serverParams = $env->all();
         $body = new RequestBody();
-        $body = $body->write($_body);
-        $uploadedFiles = UploadedFile::createFromEnvironment($env);
-        $request = new Request($_method, $uri, $headers, $cookies, $serverParams, $body, $uploadedFiles);
 
-        return $request;
+        // Attach JSON request
+        if (isset($params)) {
+            $headers->set('Content-Type', 'application/json;charset=utf8');
+            $body->write($params);
+        }
+
+        return new Request($method, $uri, $headers, $cookies, $serverParams, $body);
+    }
+
+    protected function setCookie($name, $value)
+    {
+        $this->cookies[$name] = $value;
     }
 };
 
