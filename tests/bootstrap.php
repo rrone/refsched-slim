@@ -13,21 +13,32 @@ date_default_timezone_set('UTC');
 use Slim\App;
 use App\Action\SchedulerRepository;
 use There4\Slim\Test\WebTestCase;
+use Slim\Http\Environment;
+use Slim\Http\Uri;
+use Slim\Http\Headers;
+use Slim\Http\RequestBody;
+use Slim\Http\UploadedFile;
+use Slim\Http\Request;
 
 define('PROJECT_ROOT', realpath(__DIR__ . '/..'));
 
 require_once PROJECT_ROOT . '/vendor/autoload.php';
+
 // Initialize our own copy of the slim application
-abstract class LocalWebTestCase extends WebTestCase
+abstract class AppTestCase extends WebTestCase
 {
+    protected $local;
+    protected $sr;
+    protected $c;
+
     public function getSlimInstance() {
 
-        $local = include(PROJECT_ROOT . '/config/local.php');
+        $this->local = include(PROJECT_ROOT . '/config/local.php');
 
 // Instantiate the app
         $settings = require PROJECT_ROOT . '/app/settings.php';
         $settings['debug'] = true;
-        $settings['settings']['db'] = $local['db_test'];
+        $settings['settings']['db'] = $this->local['db_test'];
 //Define where the log goes: syslog
 
         $app = new App($settings);
@@ -41,16 +52,29 @@ abstract class LocalWebTestCase extends WebTestCase
 // Register routes
         require PROJECT_ROOT . '/app/routes.php';
 
-        $c = $app->getContainer();
-        $sr = new SchedulerRepository($c->get('db'));
-        $c['settings.test'] = true;
-        $c['session'] = [
-            'authed' => true,
-            'user' => $sr->getUserByName('Area 1B'),
-            'event' => $sr->getEvent('2016U16U19Chino')
-        ];
+        $this->c = $app->getContainer();
+        $this->sr = new SchedulerRepository($this->c->get('db'));
+        $app->getContainer()['settings.test'] = true;
 
         return $app;
+    }
+
+    public function requestFactory($_uri, $_method, $_headers, $_cookies, $_serverParams, $_body)
+    {
+        $env = Environment::mock();
+        $uri = Uri::createFromString($_uri);
+        $headers = Headers::createFromEnvironment($env);
+        foreach($_headers as $h){
+            $headers[] = $h;
+        }
+        $cookies = [];
+        $serverParams = $env->all();
+        $body = new RequestBody();
+        $body = $body->write($_body);
+        $uploadedFiles = UploadedFile::createFromEnvironment($env);
+        $request = new Request($_method, $uri, $headers, $cookies, $serverParams, $body, $uploadedFiles);
+
+        return $request;
     }
 };
 

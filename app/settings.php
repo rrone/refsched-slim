@@ -46,4 +46,8 @@ $settings = [
 $local = include(__DIR__ . '/../config/local.php');
 $settings['settings']['db'] = $local['db'];
 
+$settings['test']['user'] = $local['user_test'];
+
+$settings['test']['admin'] = $local['admin_test'];
+
 return $settings;
