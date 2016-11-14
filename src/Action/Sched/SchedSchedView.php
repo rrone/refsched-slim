@@ -33,8 +33,8 @@ class SchedSchedView extends AbstractView
     }
     public function handler(Request $request, Response $response)
     {
-        $this->user = $request->getHeader('user')[0];
-        $this->event = $request->getHeader('event')[0];
+        $this->user = $request->getAttribute('user');
+        $this->event = $request->getAttribute('event');
 
         if ($request->isPost() && !$this->isRepost($request)) {
             $projectKey = $this->event->projectKey;

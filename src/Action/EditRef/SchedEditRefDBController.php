@@ -27,9 +27,9 @@ class SchedEditRefDBController extends AbstractController
 
         $this->logStamp($request);
 
-        $request = $request->withHeader('user', $this->user);
-        $request = $request->withHeader('event', $this->event);
-        $request = $request->withHeader('game_id', $game_id);
+        $request = $request->withAttribute('user', $this->user);
+        $request = $request->withAttribute('event', $this->event);
+        $request = $request->withAttribute('game_id', $game_id);
 
         $this->schedEditRefView->handler($request, $response);
         if(!isset($_SESSION['game_id'])){

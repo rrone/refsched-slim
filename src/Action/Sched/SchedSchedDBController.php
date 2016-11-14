@@ -24,8 +24,8 @@ class SchedSchedDBController extends AbstractController
 
         $this->logStamp($request);
 
-        $request = $request->withHeader('user', $this->user);
-        $request = $request->withHeader('event', $this->event);
+        $request = $request->withAttribute('user', $this->user);
+        $request = $request->withAttribute('event', $this->event);
 
         $this->schedSchedView->handler($request, $response);
         $this->schedSchedView->render($response);

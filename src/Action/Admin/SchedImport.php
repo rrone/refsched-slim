@@ -38,8 +38,8 @@ class SchedImport extends AbstractImporter
 
     public function handler(Request $request)
     {
-        $this->user = $request->getHeader('user')[0];
-        $this->event = $request->getHeader('event')[0];
+        $this->user = $request->getAttribute('user');
+        $this->event = $request->getAttribute('event');
 
         $this->msg = null;
 

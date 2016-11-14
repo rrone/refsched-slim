@@ -8,6 +8,9 @@ set -e
 echo "  Checkout master branch from Git repository..."
 #git checkout master
 
+echo "  Build public resources..."
+./node_modules/.bin/gulp build
+
 echo "  Clear distribution folder..."
 rm -f -r dist
 

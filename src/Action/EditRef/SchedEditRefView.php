@@ -19,9 +19,9 @@ class SchedEditRefView extends AbstractView
     }
     public function handler(Request $request, Response $response)
     {
-        $this->user = $request->getHeader('user')[0];
-        $this->event = $request->getHeader('event')[0];
-        $this->game_id = $request->getHeader('game_id')[0];
+        $this->user = $request->getAttribute('user');
+        $this->event = $request->getAttribute('event');
+        $this->game_id = $request->getAttribute('game_id');
 
         if($request->isPost()) {
             switch (count($_POST) > 3) {

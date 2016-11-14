@@ -306,6 +306,6 @@ $container[App\Action\Admin\LogExportController::class] = function ($c) use($sr)
 // -----------------------------------------------------------------------------
 $container[App\Action\End\SchedEndController::class] = function ($c) use($sr) {
 
-    return new \App\Action\End\SchedEndController($c, $sr);
+    return new \App\Action\End\SchedEndController($c);
 };
 

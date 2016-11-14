@@ -5,6 +5,7 @@ use Illuminate\Database\Capsule\Manager;
 
 class SchedulerRepository
 {
+    /* @var Manager */
     private $db;
 
     public function __construct(Manager $db)
@@ -14,7 +15,7 @@ class SchedulerRepository
     }
 	private function getZero($elem)
 	{
-		return isset($elem[0]) ? $elem[0] : null;
+		return isset($elem[0]) ? (object) $elem[0] : null;
 	}
 	//User table functions
     public function getAllUsers()
@@ -69,7 +70,7 @@ class SchedulerRepository
 			);
 
 			$this->db->table('users')
-				->create([$newUser]);
+                ->insert([$newUser]);
 			
 		}
 		else {

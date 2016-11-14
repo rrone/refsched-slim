@@ -25,8 +25,8 @@ class SchedMasterDBController extends AbstractController
 
         $this->logStamp($request);
 
-        $request = $request->withHeader('user', $this->user);
-        $request = $request->withHeader('event', $this->event);
+        $request = $request->withAttribute('user', $this->user);
+        $request = $request->withAttribute('event', $this->event);
 
         $this->masterView->handler($request, $response);
         $this->masterView->render($response);

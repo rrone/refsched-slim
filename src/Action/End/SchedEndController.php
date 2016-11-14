@@ -5,15 +5,12 @@ use Slim\Container;
 use Slim\Http\Request as Request;
 use Slim\Http\Response as Response;
 use App\Action\AbstractController;
-use App\Action\SchedulerRepository;
 
 class SchedEndController extends AbstractController
 {
-    public function __construct(Container $container, SchedulerRepository $repository) {
+    public function __construct(Container $container) {
 
         parent::__construct($container);
-
-        $this->sr = $repository;
     }
     public function __invoke(Request $request, Response $response, $args)
     {

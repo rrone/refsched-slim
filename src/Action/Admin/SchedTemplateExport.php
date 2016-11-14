@@ -35,8 +35,8 @@ class SchedTemplateExport extends AbstractExporter
     }
     public function handler(Request $request, Response $response)
     {
-        $this->user = $request->getHeader('user')[0];
-        $this->event = $request->getHeader('event')[0];
+        $this->user = $request->getAttribute('user');
+        $this->event = $request->getAttribute('event');
 
         $file = $this->renderFile();
         if ($file['valid']) {

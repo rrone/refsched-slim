@@ -6,7 +6,8 @@
   "scripts": {
     "gulp-build": "./node_modules/.bin/gulp build",
     "gulp-watch": "./node_modules/.bin/gulp watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "dist.sh"
   },
   "author": "",
   "license": "ISC",

@@ -16,8 +16,8 @@ class GreetView extends AbstractView
     }
     public function handler(Request $request, Response $response)
     {
-        $this->user = $request->getHeader('user')[0];
-        $this->event = $request->getHeader('event')[0];
+        $this->user = $request->getAttribute('user');
+        $this->event = $request->getAttribute('event');
     }
     public function render(Response &$response)
     {

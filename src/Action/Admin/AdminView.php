@@ -17,8 +17,8 @@ class AdminView extends AbstractView
     }
 	public function handler(Request $request, Response $response)
 	{
-        $this->user = $request->getHeader('user')[0];
-        $event = $request->getHeader('event')[0];
+        $this->user = $request->getAttribute('user');
+        $event = $request->getAttribute('event');
 
         if ( $request->isPost() ) {
             if (in_array('btnUpdate', array_keys($_POST))) {
