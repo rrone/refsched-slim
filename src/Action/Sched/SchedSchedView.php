@@ -366,7 +366,9 @@ class SchedSchedView extends AbstractView
                     $html .= "<th>Home</th>";
                     $html .= "<th>Away</th>";
                     $html .= "<th>Referee Team</th>";
-                    $html .= "<th>Assign to ". $this->user->name ."</th>";
+                    if(!$this->user->admin) {
+                        $html .= "<th>Assign to " . $this->user->name . "</th>";
+                    }
                     $html .= "</tr>";
                     $wasHTML = $html;
                     for ($kant = 0; $kant < $kount; $kant++) {
@@ -395,7 +397,9 @@ class SchedSchedView extends AbstractView
                                 $html .= "<td>".$this->home[$kant]."</td>";
                                 $html .= "<td>".$this->away[$kant]."</td>";
                                 $html .= "<td>&nbsp;</td>";
-                                $html .= "<td><input type=\"checkbox\" name=\"assign:".$this->game_id[$kant]."\" value=\"".$this->game_id[$kant]."\"></td>";
+                                if(!$this->user->admin){
+                                    $html .= "<td><input type=\"checkbox\" name=\"assign:".$this->game_id[$kant]."\" value=\"".$this->game_id[$kant]."\"></td>";
+                                }
                                 $html .= "</tr>\n";
                             }
                         }
