@@ -6,7 +6,7 @@
   "scripts": {
     "gulp-build": "./node_modules/.bin/gulp build",
     "gulp-watch": "./node_modules/.bin/gulp watch",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "/usr/local/bin/php -dxdebug.coverage_enable=1 ~/Dev/refsched/vendor/phpunit/phpunit/PHPUnit --configuration ~/Dev/refsched/phpunit.xml",
     "deploy": "dist.sh"
   },
   "author": "",
