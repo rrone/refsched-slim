@@ -42,15 +42,14 @@ class LogonTest extends AppTestCase
             'event' => null
         ];
 
-        $response = (object) $this->client->get('/');
-        $view = (string)$response->getBody();
+        $view = $this->client->get('/');
 
         $this->assertContains('<h1>Section 1 Event Schedule</h1>', $view);
     }
 
     public function testUserLogon()
     {
-        $sr = (object) $this->sr;
+        $sr = (object)$this->sr;
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -71,11 +70,12 @@ class LogonTest extends AppTestCase
             'Submit' => 'Logon'
         );
 
-        $response = (object) $this->client->post($url, $body, $headers);
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->post($url, $body, $headers);
         $url = implode($response->getHeader('Location'));
         $this->assertEquals('/greet', $url);
 
-        $response = (object) $this->client->get($url);
+        $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
         $this->assertContains('<h3 class="center">Welcome Area 1B Assignor</h3>', $view);
 

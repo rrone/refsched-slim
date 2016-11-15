@@ -23,7 +23,7 @@ class AppWebTestClient extends WebTestClient
     {
         parent::__construct($slim);
 
-        $this->followRedirects(false);
+//        $this->followRedirects(false);
         $this->returnAsResponseObject(false);
     }
 
@@ -105,18 +105,18 @@ class AppWebTestClient extends WebTestClient
         $app = $this->app;
         $this->response = $app($this->request, $response);
 
-        if($this->followRedirect){
-            while(empty((string)$this->response->getBody()))
-            {
-                $this->returnAsResponseObject(true);
-                $url = implode($this->response->getHeader('Location'));
-
-                $this->response = $this->request('get', $url);
-                var_dump((string)$this->response->getBody());
-
-            }
-        }
-
+//        if($this->followRedirect){
+//            while(empty((string)$this->response->getBody()))
+//            {
+//                $this->returnAsResponseObject(true);
+//                $url = implode($this->response->getHeader('Location'));
+//
+//                $this->response = $this->request('get', $url);
+//                var_dump((string)$this->response->getBody());
+//
+//            }
+//        }
+//
         // Return the application output
         if($this->returnAsObject){
             $return = $this->response;
@@ -133,11 +133,11 @@ class AppWebTestClient extends WebTestClient
         $this->cookies[$name] = $value;
     }
 
-    public function followRedirects($value)
-    {
-        $this->followRedirect = $value;
-    }
-
+//    public function followRedirects($value)
+//    {
+//        $this->followRedirect = $value;
+//    }
+//
     public function returnAsResponseObject($value)
     {
         $this->returnAsObject = $value;
