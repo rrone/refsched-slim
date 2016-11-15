@@ -79,6 +79,8 @@ class AbstractView
     protected function isRepost(Request $request){
 
         if ($request->isPost()) {
+            $_POST = $request->getParsedBody();
+
             if (isset($_SESSION['postdata'])) {
                 if ($_POST == $_SESSION['postdata']) {
                     return true;

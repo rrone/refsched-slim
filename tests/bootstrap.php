@@ -17,7 +17,6 @@ use Slim\Http\Environment;
 use Slim\Http\Uri;
 use Slim\Http\Headers;
 use Slim\Http\RequestBody;
-use Slim\Http\UploadedFile;
 use Slim\Http\Request;
 
 define('PROJECT_ROOT', realpath(__DIR__ . '/..'));

@@ -53,6 +53,7 @@ class SchedSchedView extends AbstractView
                 }
             }
 
+            $_POST = $request->getParsedBody();
             $array_of_keys = array_keys($_POST);
 
             //parse the POST data

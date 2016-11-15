@@ -21,6 +21,8 @@ class AdminView extends AbstractView
         $event = $request->getAttribute('event');
 
         if ( $request->isPost() ) {
+            $_POST = $request->getParsedBody();
+
             if (in_array('btnUpdate', array_keys($_POST))) {
                 $userName = $_POST['selectUser'];
                 $pw = $_POST['passwordInput'];

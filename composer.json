@@ -14,12 +14,15 @@
     "autoload": {
         "psr-4": {
             "App\\": "src",
+            "Tests\\": "tests",
             "Upload\\": "vendor/codeguy/upload/src"
         }
     },
     "require-dev": {
         "symfony/debug": "^3.1",
-        "phpunit/phpunit": "^5.6"
+        "phpunit/phpunit": "^5.6",
+        "phpunit/php-invoker": "^1.1",
+        "there4/slim-test-helpers": "^2.1"
     },
     "require": {
         "slim/slim": "^3.0",

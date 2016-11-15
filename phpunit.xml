@@ -2,7 +2,7 @@
 
 <!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit
-        backupGlobals               = "true"
+        backupGlobals               = "false"
         backupStaticAttributes      = "false"
         colors                      = "true"
         convertErrorsToExceptions   = "false"
@@ -12,14 +12,17 @@
         stopOnFailure               = "false"
         syntaxCheck                 = "true"
         bootstrap                   = "tests/bootstrap.php">
+
     <logging>
         <log type="coverage-html" target="var/coverage/"/>
     </logging>
+
     <testsuites>
         <testsuite name="Unit Test Suite">
             <directory suffix="Test.php">src/Action</directory>
         </testsuite>
     </testsuites>
+
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix="Test.php">src/Action</directory>

@@ -24,6 +24,8 @@ class SchedEditRefView extends AbstractView
         $this->game_id = $request->getAttribute('game_id');
 
         if($request->isPost()) {
+            $_POST = $request->getParsedBody();
+
             switch (count($_POST) > 3) {
                 case 3:
                     $data = $request->getParsedBody();

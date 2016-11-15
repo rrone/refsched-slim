@@ -28,6 +28,8 @@ class LogonView extends AbstractView
     public function handler(Request $request, Response $response)
     {
         if ($request->isPost()) {
+            $_POST = $request->getParsedBody();
+
             $userName = isset($_POST['user']) ? $_POST['user'] : null;
             $user = $this->sr->getUserByName($userName);
             $_SESSION['user'] = $user;
