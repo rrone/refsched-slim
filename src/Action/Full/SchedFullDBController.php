@@ -84,7 +84,8 @@ class SchedFullDBController extends AbstractController
 
             $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
-            $html .= "<h3 class=\"center\"> Green shading change indicates different start times</h3>\n";
+            $html .= "<h3 class=\"center\">Green: Assignments covered (Yah!) / Yellow: Open Slots / Red: Needs your attention / Grey: Not yours to cover<br><br>\n";
+            $html .= "Green shading change indicates different start times</h3>\n";
 
             $html .= "<table class=\"sched_table\" width=\"100%\">\n";
             $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
@@ -116,7 +117,7 @@ class SchedFullDBController extends AbstractController
                     if ( !$testtime ) {
                         $testtime = $time;
                     }
-                    elseif ( $testtime != $time && !empty($game->assignor)) {
+                    elseif ( ($testtime != $time && $game->assignor == $this->user->name) || ($testtime != $time && $this->user->admin && !empty($game->assignor))) {
                         $testtime = $time;
                         switch ($rowColor) {
                             case $this->colorGroup1:
