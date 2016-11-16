@@ -109,7 +109,7 @@ class SchedFullDBController extends AbstractController
             $testtime = null;
 
             foreach ($games as $game) {
-                if (!$this->justOpen || ($this->justOpen && empty($game->cr))) {
+                if (!$this->justOpen || ($this->justOpen && (empty($game->cr) || empty($game->ar1) || empty($game->ar2)  || ( $has4th && empty($game->r4th))))) {
                     $date = date('D, d M', strtotime($game->date));
                     $time = date('H:i', strtotime($game->time));
 
@@ -194,7 +194,7 @@ class SchedFullDBController extends AbstractController
         if ($this->justOpen) {
             $html .= "<a href=\"$this->fullPath\">View full schedule</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a href=\"$this->fullPath?open\">View schedule with no referees</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=\"$this->fullPath?open\">View schedule with open slots</a>&nbsp;-&nbsp;\n";
         }
         if ($this->user->admin) {
             $html .= "<a href=\"$this->schedPath\">View Assignors</a>&nbsp;-&nbsp;\n";
