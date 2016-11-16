@@ -79,7 +79,9 @@ class SchedRefsView extends AbstractView
                 if (!$this->user->admin) {
                     $html .= "<h2  class=\"center\">You are currently scheduled for the following games</h2></div>\n";
                 }
-                $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
+                $html .= "<h3 class=\"center\">Green: Assignments covered (Yah!) / Yellow: Open Slots / Red: Needs your attention / Grey: Not yours to cover<br><br>\n";
+                $html .= "Green shading change indicates different start times</h3>\n";
+
                 $html .= "<form name=\"addref\" method=\"post\" action=\"" . $this->container->get('refsPath') . "\">\n";
                 $html .= "<table class=\"sched_table\" width=\"100%\">\n";
                 $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";

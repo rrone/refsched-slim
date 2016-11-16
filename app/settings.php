@@ -35,7 +35,7 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2016.11.14.0'
+            'version' => '2016.11.14.01'
         ]
     ],
 
