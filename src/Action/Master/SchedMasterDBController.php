@@ -94,7 +94,9 @@ class SchedMasterDBController extends AbstractController
 				$this->location = $event->location;
 				$projectKey = $event->projectKey;
 
-                $html .= "<h3 class=\"center\"> Green shading change indicates different start times</h3>\n";
+                $html .= "<h3 class=\"center\">Green: Assignments made (Yah!) / Red: Needs your attention<br><br>\n";
+                $html .= "Green shading change indicates different start times</h3>\n";
+
 				$html .=  "<form name=\"master_sched\" method=\"post\" action=\"$this->masterPath\">\n";
 
                 $html .= $this->menu();
@@ -141,7 +143,7 @@ class SchedMasterDBController extends AbstractController
                         }
 
                         if ( empty($game->assignor) ) {
-							$html .=  "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                            $html .=  "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
 						}
                         else {
                             $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
