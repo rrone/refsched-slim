@@ -24,7 +24,7 @@ class LogonDBController extends AbstractController
         if($this->isAuthorized()) {
             $this->logStamp($request);
 
-            return $response->withRedirect($this->container->get('greetPath'));
+            return $response->withRedirect($this->getBaseURL('greetPath'));
         } else {
             $this->logonView->render($response);
 

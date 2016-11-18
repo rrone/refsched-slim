@@ -82,7 +82,7 @@ class SchedRefsView extends AbstractView
                 $html .= "<h3 class=\"center\">Green: Assignments covered (Yah!) / Yellow: Open Slots / Red: Needs your attention / Grey: Not yours to cover<br><br>\n";
                 $html .= "Green shading change indicates different start times</h3>\n";
 
-                $html .= "<form name=\"addref\" method=\"post\" action=\"" . $this->container->get('refsPath') . "\">\n";
+                $html .= "<form name=\"addref\" method=\"post\" action=\"" . $this->getBaseURL('refsPath') . "\">\n";
                 $html .= "<table class=\"sched_table\" width=\"100%\">\n";
                 $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
                 $html .= "<th>Game No.</th>";
@@ -165,7 +165,7 @@ class SchedRefsView extends AbstractView
                 $this->bottommenu = $this->menu();
             } else {
                 $html .= "<h2 class=\"center\">You do not currently have any games scheduled.</h2>\n";
-                $this->bottommenu = "<h3 class=\"center\">You should go to the <a href=" . $this->container->get('schedPath') . ">Schedule Page</a></h3>";
+                $this->bottommenu = "<h3 class=\"center\">You should go to the <a href=" . $this->getBaseURL('schedPath') . ">Schedule Page</a></h3>";
             }
         } else {
             $html .= $this->errorCheck();
@@ -177,18 +177,18 @@ class SchedRefsView extends AbstractView
 
     private function menu()
     {
-        $html = "<h3 align=\"center\"><a href=" . $this->container->get('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
+        $html = "<h3 align=\"center\"><a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
 
-        $html .= "<a href=" . $this->container->get('fullPath') . ">View the full schedule</a>&nbsp;-&nbsp\n";
+        $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a>&nbsp;-&nbsp\n";
 
         if ($this->user->admin) {
-            $html .= "<a href=" . $this->container->get('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;\n";
-            $html .= "<a href=" . $this->container->get('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a href=" . $this->container->get('schedPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=" . $this->getBaseURL('schedPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .= "<a href=" . $this->container->get('endPath') . ">Log off</a></h3>\n";
+        $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a></h3>\n";
 
         return $html;
     }

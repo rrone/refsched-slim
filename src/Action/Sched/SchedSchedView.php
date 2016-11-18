@@ -277,10 +277,10 @@ class SchedSchedView extends AbstractView
                 $showavailable = true;
             }
             elseif ( $locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned == $limit_list[ 'all' ] ) {
-                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked and you are at your game limit<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe submit button on this page has been disabled and available games are not shown<br>\nYou probably want to <a href=" .$this->container->get('greetPath') .">Go to the Main Page</a> or <a href=" . $this->container->get('endPath') . ">Log Off</a></span></h3>\n";
+                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked and you are at your game limit<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe submit button on this page has been disabled and available games are not shown<br>\nYou probably want to <a href=" . $$this->getBaseURL('greetPath') .">Go to the Main Page</a> or <a href=" . $this->getBaseURL('endPath') . ">Log Off</a></span></h3>\n";
             }
             elseif ( $locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned > $limit_list[ 'all' ] ) {
-                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked and you are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe Submit button has been disabled and available games are not shown<br>\nYou probably want to <a href=" . $this->container->get('greetPath') . ">Go to the Main Page</a> or <a href=" . $this->container->get('endPath') . ">Log Off</a></span></h3>\n";
+                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked and you are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe Submit button has been disabled and available games are not shown<br>\nYou probably want to <a href=" . $this->getBaseURL('greetPath') . ">Go to the Main Page</a> or <a href=" . $this->getBaseURL('endPath') . ">Log Off</a></span></h3>\n";
             }
             elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned < $limit_list['all'] ) {
                 $tmplimit = $limit_list['all'];
@@ -292,7 +292,7 @@ class SchedSchedView extends AbstractView
                 $showavailable = true;
             }
             elseif ( !$locked && array_key_exists( 'all', $limit_list ) && $this->num_assigned > $limit_list['all'] ) {
-                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nIf you continue from here you will not be able to keep all the games you are signed up for and may lose some of the games you already have<br>\nIf you want to keep these games and remain over the game limit it is recommended that you do not hit submit but do something else instead<br>\n<a href=" . $this->container->get('greetPath') . ">Go to the Main Page</a></span></h3>\n";
+                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nIf you continue from here you will not be able to keep all the games you are signed up for and may lose some of the games you already have<br>\nIf you want to keep these games and remain over the game limit it is recommended that you do not hit submit but do something else instead<br>\n<a href=" . $this->getBaseURL('greetPath') . ">Go to the Main Page</a></span></h3>\n";
                 $showavailable = true;
             }
             elseif ( $locked && count( $limit_list ) ) {
@@ -340,7 +340,7 @@ class SchedSchedView extends AbstractView
                 $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
                 $submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled' ;
 
-                $html .= "<form name=\"form1\" method=\"post\" action=" . $this->container->get('schedPath'). ">\n";
+                $html .= "<form name=\"form1\" method=\"post\" action=" . $this->getBaseURL('schedPath'). ">\n";
 
                 $html .= "<div align=\"left\">";
 
@@ -463,21 +463,21 @@ EOD;
     }
     private function menuLinks()
     {
-        $html = "<a href=" . $this->container->get('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
-        $html .= "<a href=" . $this->container->get('fullPath') . ">View the full schedule</a>&nbsp;-&nbsp;\n";
+        $html = "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
+        $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a>&nbsp;-&nbsp;\n";
 
         if($this->user->admin){
-            $html .= "<a href=" . $this->container->get('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;\n";
-            $html .= "<a href=" . $this->container->get('refsPath') . ">Edit referee assignments</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Edit referee assignments</a>&nbsp;-&nbsp;\n";
         } else {
             if ($this->num_assigned) {
                 $uname = $this->user->name;
-                $showAll = !empty($this->showgroup) ? "<a href=" . $this->container->get('schedPath') . ">View all $uname games</a>&nbsp;-&nbsp;" : '';
-                $html .= $showAll . "<a href=" . $this->container->get('refsPath') . ">Edit $uname referee assignments</a>&nbsp;-&nbsp;\n";
+                $showAll = !empty($this->showgroup) ? "<a href=" . $this->getBaseURL('schedPath') . ">View all $uname games</a>&nbsp;-&nbsp;" : '';
+                $html .= $showAll . "<a href=" . $this->getBaseURL('refsPath') . ">Edit $uname referee assignments</a>&nbsp;-&nbsp;\n";
             }
         }
 
-        $html .= "<a href=" . $this->container->get('endPath') . ">Log off</a>\n";
+        $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a>\n";
 
         return $html;
     }

@@ -20,7 +20,7 @@ class SchedEditRefDBController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized()) {
-            return $response->withRedirect($this->container->get('logonPath'));
+            return $response->withRedirect($this->getBaseURL('logonPath'));
         };
 
         $game_id = isset($_SESSION['game_id']) ? $_SESSION['game_id'] : null;
@@ -33,7 +33,7 @@ class SchedEditRefDBController extends AbstractController
 
         $this->schedEditRefView->handler($request, $response);
         if(!isset($_SESSION['game_id'])){
-            return $response->withRedirect($this->container->get('refsPath'));
+            return $response->withRedirect($this->getBaseURL('refsPath'));
         }
         $this->schedEditRefView->render($response);
 

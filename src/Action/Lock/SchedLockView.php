@@ -54,14 +54,14 @@ class SchedLockView extends AbstractView
         }
         elseif ( $this->user->admin ) {
             $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
-            $html .= "You should go to the <a href=" . $this->container->get('masterPath') . ">Schedule Page</a></h2>";
+            $html .= "You should go to the <a href=" . $this->getBaseURL('masterPath') . ">Schedule Page</a></h2>";
         }
         elseif ( !$this->user->admin ) {
             $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
-            $html .= "You should go to the <a href=" . $this->container->get('schedPath') . ">Schedule Page</a></h2>";
+            $html .= "You should go to the <a href=" . $this->getBaseURL('schedPath') . ">Schedule Page</a></h2>";
         }
         else {
-            $html .= "<h2 class=\"center\">You need to <a href=" . $this->container->get('logonPath') . ">logon</a> first.</h2>";
+            $html .= "<h2 class=\"center\">You need to <a href=" . $this->getBaseURL('logonPath') . ">logon</a> first.</h2>";
         }
 
         return $html;
@@ -85,11 +85,11 @@ class SchedLockView extends AbstractView
         }
         elseif ( $this->user->admin ) {
             $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
-            $html .= "You should go to the <a href=" . $this->container->get('masterPath') . ">Schedule Page</a></h2>";
+            $html .= "You should go to the <a href=" . $this->getBaseURL('masterPath') . ">Schedule Page</a></h2>";
         }
         else {
             $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
-            $html .= "You should go to the <a href=" . $this->container->get('schedPath') . ">Schedule Page</a></h2>";
+            $html .= "You should go to the <a href=" . $this->getBaseURL('schedPath') . ">Schedule Page</a></h2>";
         }
 
         return $html;
@@ -97,9 +97,9 @@ class SchedLockView extends AbstractView
     }
     private function menu()
     {
-        $html = "<h3 align=\"center\"><a href=" . $this->container->get('greetPath') . ">Go to main screen</a>&nbsp;-&nbsp;\n";
-        $html .= "<a href=" . $this->container->get('masterPath') . ">Go to schedule</a>&nbsp;-&nbsp;\n";
-        $html .= "<a href=" . $this->container->get('endPath') . ">Log off</a></h3>\n";
+        $html = "<h3 align=\"center\"><a href=" . $this->getBaseURL('greetPath') . ">Go to main screen</a>&nbsp;-&nbsp;\n";
+        $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Go to schedule</a>&nbsp;-&nbsp;\n";
+        $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a></h3>\n";
 
         return $html;
     }

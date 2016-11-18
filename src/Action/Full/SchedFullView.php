@@ -170,24 +170,24 @@ class SchedFullView extends AbstractView
     }
     private function menu()
     {
-        $html = "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\"><a  href=" . $this->container->get('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
+        $html = "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\"><a  href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
         if ($this->justOpen) {
-            $html .= "<a  href=" . $this->container->get('fullPath') . ">View full schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a  href=" . $this->getBaseURL('fullPath') . ">View full schedule</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a href=" . $this->container->get('fullPath') . "?open>View schedule with open slots</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=" . $this->getBaseURL('fullPath') . "?open>View schedule with open slots</a>&nbsp;-&nbsp;\n";
         }
         if ($this->user->admin) {
-            $html .= "<a  href=" . $this->container->get('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;\n";
-            $html .= "<a  href=" . $this->container->get('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;\n";
-            $html .= "<a  href=" . $this->container->get('refsPath') . ">Edit referee assignments</a>&nbsp;-&nbsp;\n";
+            $html .= "<a  href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;\n";
+            $html .= "<a  href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;\n";
+            $html .= "<a  href=" . $this->getBaseURL('refsPath') . ">Edit referee assignments</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a  href=" . $this->container->get('schedPath') . ">Go to ". $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
-            $html .= "<a  href=" . $this->container->get('refsPath') . ">Edit ". $this->user->name . " referees</a>&nbsp;-&nbsp;\n";
+            $html .= "<a  href=" . $this->getBaseURL('schedPath') . ">Go to ". $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a  href=" . $this->getBaseURL('refsPath') . ">Edit ". $this->user->name . " referees</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .= "<a  href=" . $this->container->get('endPath') . ">Log off</a>";
+        $html .= "<a  href=" . $this->getBaseURL('endPath') . ">Log off</a>";
 
-        $html .= "<a  href=" . $this->container->get('fullXlsPath') . " class=\"btn btn-primary btn-xs right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>\n";
+        $html .= "<a  href=" . $this->getBaseURL('fullXlsPath') . " class=\"btn btn-primary btn-xs right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>\n";
         $html .= "<div class='clear-fix'></div>";
 
         $html .= "</h3>\n";

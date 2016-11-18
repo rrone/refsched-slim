@@ -20,7 +20,7 @@ class SchedFullDBController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized()) {
-            return $response->withRedirect($this->container->get('logonPath'));
+            return $response->withRedirect($this->getBaseURL('logonPath'));
         };
 
         $this->logStamp($request);

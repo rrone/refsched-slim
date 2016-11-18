@@ -23,7 +23,7 @@ class AdminController extends AbstractController
         $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         if (is_null($this->user) || !$this->user->admin) {
-            return $response->withRedirect($this->container->get('greetPath'));
+            return $response->withRedirect($this->getBaseURL('greetPath'));
         }
 
         $this->event = isset($_SESSION['event']) ?  $_SESSION['event'] : false;
@@ -32,25 +32,25 @@ class AdminController extends AbstractController
 
         $request = $request->withHeader('user', $this->user);
         $request = $request->withHeader('event', $this->event);
-        $response = $response->withHeader('adminPath', $this->container->get('adminPath'));
+        $response = $response->withHeader('adminPath', $this->getBaseURL('adminPath'));
         $result = $this->adminView->handler($request, $response);
 
         switch ($result) {
              case 'Cancel':
 
-                 return $response->withRedirect($this->container->get('greetPath'));
+                 return $response->withRedirect($this->getBaseURL('greetPath'));
 
             case 'SchedTemplateExport':
 
-                return $response->withRedirect($this->container->get('schedTemplatePath'));
+                return $response->withRedirect($this->getBaseURL('schedTemplatePath'));
 
             case 'SchedImport':
 
-                return $response->withRedirect($this->container->get('schedImportPath'));
+                return $response->withRedirect($this->getBaseURL('schedImportPath'));
 
             case 'ExportLog':
 
-                return $response->withRedirect($this->container->get('logExportPath'));
+                return $response->withRedirect($this->getBaseURL('logExportPath'));
         }
 
         $this->adminView->render($response);
