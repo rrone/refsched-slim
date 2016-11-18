@@ -188,5 +188,13 @@ class SchedImport extends AbstractImporter
 
     }
 
+    protected function getBaseURL($path)
+    {
+        $request = $this->container->get('request');
+        $baseUri = $request->getUri()->getBasePath() . $this->container->get($path);
+
+        return $baseUri;
+    }
+
 
 }
