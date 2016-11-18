@@ -50,7 +50,7 @@ class SchedImport extends AbstractImporter
             $files = $request->getUploadedFiles();
 
             if (empty($files)) {
-                return $this->container->get('adminPath');
+                return $this->getBaseURL('adminPath');
             }
 
             $upload = $files['uploadfile'];
@@ -85,7 +85,7 @@ class SchedImport extends AbstractImporter
                             unlink($file); // delete file
                     };
 
-                    return $this->container->get('adminPath');
+                    return $this->getBaseURL('adminPath');
             }
 
         }
@@ -98,7 +98,7 @@ class SchedImport extends AbstractImporter
         $content = array(
             'view' => array(
                 'admin' => $this->user->admin,
-                'action' => $this->container->get('schedImportPath'),
+                'action' => $this->getBaseURL('schedImportPath'),
                 'message' => $this->msg,
                 'messageStyle' => $this->msgStyle,
             )

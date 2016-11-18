@@ -92,9 +92,9 @@ class GreetView extends AbstractView
 
             if ($this->user->admin) {
                 if ($locked) {
-                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;-&nbsp;(<a href=" . $this->container->get('unlockPath') . ">Unlock</a> the schedule now)<br>\n";
+                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;-&nbsp;(<a href=" . $this->getBaseURL('unlockPath') . ">Unlock</a> the schedule now)<br>\n";
                 } else {
-                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;-&nbsp;(<a href=" .$this->container->get('lockPath') . ">Lock</a> the schedule now)<br>\n";
+                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;-&nbsp;(<a href=" .$this->getBaseURL('lockPath') . ">Lock</a> the schedule now)<br>\n";
                 }
             } else {
                 if ($locked) {
@@ -193,22 +193,22 @@ class GreetView extends AbstractView
 
             $html .= "<hr class=\"center\" width=\"25%\">";
             $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">ACTIONS</h3>\n";
-            $html .= "<h3 class=\"center\"><a href=" . $this->container->get('fullPath') . ">View the full game schedule</a></h3>";
+            $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('fullPath') . ">View the full game schedule</a></h3>";
 
             if ($this->user->admin) {
-                $html .= "<h3 class=\"center\"><a href=" . $this->container->get('schedPath') . ">View Assignors</a></h3>";
-                $html .= "<h3 class=\"center\"><a href=". $this->container->get('masterPath') . ">Select Assignors for games</a></h3>";
+                $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('schedPath') . ">View Assignors</a></h3>";
+                $html .= "<h3 class=\"center\"><a href=". $this->getBaseURL('masterPath') . ">Select Assignors for games</a></h3>";
             } else {
-                $html .= "<h3 class=\"center\">Goto $uname Schedule: <a href=" . $this->container->get('schedPath') . ">All games</a> - ";
+                $html .= "<h3 class=\"center\">Goto $uname Schedule: <a href=" . $this->getBaseURL('schedPath') . ">All games</a> - ";
                 foreach ($groups as $group) {
-                    $html .= "<a href=\"" . $this->container->get('schedPath'). "?group=$group\">$group</a>" . $delim;
+                    $html .= "<a href=\"" . $this->getBaseURL('schedPath'). "?group=$group\">$group</a>" . $delim;
                 }
                 $html = substr($html, 0, strlen($html) - 3) . "</h3>";
             }
 
-            $html .= "<h3 class=\"center\"><a href=" . $this->container->get('refsPath') . ">Edit $uname Referee Assignments</a></h3>";
+            $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('refsPath') . ">Edit $uname Referee Assignments</a></h3>";
             //         $html .= "<h3 class=\"center\"><a href=\"/summary.htm\">Summary of the playoffs</a></h3>";
-            $html .= "<h3 class=\"center\"><a href=" . $this->container->get('endPath') . ">LOG OFF</a></h3>";
+            $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('endPath') . ">LOG OFF</a></h3>";
             $html .= "</center>";
         }
 

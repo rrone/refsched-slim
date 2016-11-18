@@ -33,7 +33,7 @@ abstract class AbstractController
     }
     protected function isAuthorized()
     {
-        if($this->isTest()){
+        if($this->isTest() && isset($this->container['session'])){
             $session = $this->container['session'];
             $_SESSION['authed'] = $session['authed'];
             $_SESSION['user'] = $session['user'];
@@ -76,18 +76,18 @@ abstract class AbstractController
         $post = $request->isPost() ? 'with updated ref assignments' : '';
 
         switch ($uri) {
-            case $this->container->get('logonPath'):
+            case $this->getBaseURL('logonPath'):
             case '/':
             case 'logon':
             case '/logon':
                 //TODO: Why is $uri == '/adm' passing this case?
-                $logMsg = $uri != $this->container->get('adminPath') ? "$user: Scheduler logon" : null;
+                $logMsg = $uri != $this->getBaseURL('adminPath') ? "$user: Scheduler logon" : null;
                 break;
-            case $this->container->get('endPath'):
+            case $this->getBaseURL('endPath'):
             case 'end':
                 $logMsg = "$user: Scheduler log off";
                 break;
-            case $this->container->get('editrefPath'):
+            case $this->getBaseURL('editrefPath'):
             case 'editref':
                 if(!empty($post)) {
                     $logMsg = "$user: Scheduler $uri dispatched $post";
@@ -95,12 +95,12 @@ abstract class AbstractController
                     return null;
                 }
                 break;
-            case $this->container->get('fullPath'):
+            case $this->getBaseURL('fullPath'):
             case 'full':
                 $msg = isset($_GET['open']) ? ' no referees view' : '';
                 $logMsg = "$user: Scheduler $uri$msg dispatched";
                 break;
-            case $this->container->get('schedPath'):
+            case $this->getBaseURL('schedPath'):
             case 'sched':
                 $showgroup = isset($_GET[ 'group' ]) ? $_GET[ 'group' ] : null;
                 $msg = empty($showgroup) ? '' : " for $showgroup";
@@ -118,4 +118,14 @@ abstract class AbstractController
         return null;
 
     }
+
+    protected function getBaseURL($path)
+    {
+        $request = $this->container->get('request');
+
+        $baseUri = $request->getUri()->getBasePath() . $this->container->get($path);
+
+        return $baseUri;
+    }
+
 }

@@ -33,7 +33,7 @@ class AbstractView
     protected $colorTitle = '#80ccff';
     protected $colorOpenSlots = '#FFF484';
     protected $colorUnassigned = '#ffb3b3';
-    protected $colorGroup1= '#00e67a';
+    protected $colorGroup1 = '#00e67a';
     protected $colorGroup2 = '#4dffac';
     protected $colorOpenOpen = '#ffcccc';
     protected $colorHighlight = '#FFBC00';
@@ -46,37 +46,42 @@ class AbstractView
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
         $this->container = $container;
-        $this->view = $this->container->get('view');
+        $this->view = $container->get('view');
         $this->sr = $schedulerRepository;
 
         $this->page_title = "Section 1 Referee Scheduler";
     }
+
     protected function handler(Request $request, Response $response)
     {
 
     }
+
     protected function render(Response &$response)
     {
 
     }
+
     protected function errorCheck()
     {
         $html = null;
 
-        if ( !$this->container->get('authed') ) {
-            $html .= "<h2 class=\"center\">You need to <a href=" . $this->container->get('logonPath') . ">logon</a> first.</h2>";
-        }
-        else {
+        if (!$this->getBaseURL('authed')) {
+            $html .= "<h2 class=\"center\">You need to <a href=" . $this->getBaseURL('logonPath') . ">logon</a> first.</h2>";
+        } else {
             $html .= "<h1 class=\"center\">Something is not right</h1>";
         }
 
         return $html;
     }
+
     protected function divisionAge($div)
     {
-        return substr($div,0,3);
+        return substr($div, 0, 3);
     }
-    protected function isRepost(Request $request){
+
+    protected function isRepost(Request $request)
+    {
 
         if ($request->isPost()) {
             $_POST = $request->getParsedBody();
@@ -94,4 +99,13 @@ class AbstractView
 
         return false;
     }
+
+    protected function getBaseURL($path)
+    {
+        $request = $this->container->get('request');
+        $baseUri = $request->getUri()->getBasePath() . $this->container->get($path);
+
+        return $baseUri;
+    }
+
 }

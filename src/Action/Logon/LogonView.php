@@ -83,7 +83,7 @@ class LogonView extends AbstractView
 
         $users = $this->users;
         $enabled = $this->enabled;
-        $logonPath = $this->container->get('logonPath');
+        $logonPath = $this->getBaseURL('logonPath');
 
         if (count($enabled) > 0) {
 

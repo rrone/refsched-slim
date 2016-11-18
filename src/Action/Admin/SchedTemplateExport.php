@@ -66,7 +66,7 @@ class SchedTemplateExport extends AbstractExporter
         $content = array(
             'view' => array(
                 'admin' => $this->user->admin,
-                'action' => $this->container->get('adminPath'),
+                'action' => $this->getBaseURL('adminPath'),
                 'message' => "There are no games in the database for the event: $msg",
             )
         );

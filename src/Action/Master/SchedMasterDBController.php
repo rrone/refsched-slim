@@ -20,7 +20,7 @@ class SchedMasterDBController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized()) {
-            return $response->withRedirect($this->container->get('logonPath'));
+            return $response->withRedirect($this->getBaseURL('logonPath'));
         };
 
         $this->logStamp($request);
@@ -31,9 +31,7 @@ class SchedMasterDBController extends AbstractController
         $this->masterView->handler($request, $response);
         $this->masterView->render($response);
 
-
         return $response;
-
     }
 }
 

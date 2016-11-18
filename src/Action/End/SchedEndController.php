@@ -25,7 +25,7 @@ class SchedEndController extends AbstractController
 
         echo ('back to logon'); // for testing
         
-        return $response->withRedirect($this->container->get('logonPath'));
+        return $response->withRedirect($this->getBaseURL('logonPath'));
     }
 }
 

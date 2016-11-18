@@ -83,11 +83,12 @@ class SchedMasterView extends AbstractView
                 $this->location = $event->location;
                 $projectKey = $event->projectKey;
 
-                $html .=  "<form name=\"master_sched\" method=\"post\" action=" . $this->container->get('masterPath') . ">\n";
+                $html .=  "<form name=\"master_sched\" method=\"post\" action=" . $this->getBaseURL('masterPath') . ">\n";
 
                 $html .= $this->menu();
 
-                $html .= "<h3 class=\"center\"> Green shading change indicates different start times</h3>\n";
+                $html .= "<h3 class=\"center\">Green: Assignments made (Yah!) / Red: Needs your attention<br><br>\n";
+                $html .= "Green shading change indicates different start times</h3>\n";
 
                 $html .=  "<table class=\"sched_table\" width=\"100%\">\n";
                 $html .=  "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
@@ -131,7 +132,7 @@ class SchedMasterView extends AbstractView
                         }
 
                         if ( empty($game->assignor) ) {
-                            $html .=  "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                            $html .=  "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
                         }
                         else {
                             $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
@@ -168,7 +169,7 @@ class SchedMasterView extends AbstractView
                 $this->bottommenu = null;
             }
             else {
-                $html .=  "<h2 class=\"center\">You probably want the <a href=" . $this->container->get('schedPath') . ">scheduling</a> page.</h2>";
+                $html .=  "<h2 class=\"center\">You probably want the <a href=" . $this->getBaseURL('schedPath') . ">scheduling</a> page.</h2>";
                 $this->topmenu = null;
                 $this->bottommenu = $this->menu();
             }
@@ -184,20 +185,20 @@ class SchedMasterView extends AbstractView
     {
         $unassigned = $this->sr->getUnassignedGames($this->event->projectKey);
 
-        $html =  "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\"><a href=" . $this->container->get('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
+        $html =  "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\"><a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
 
-        $html .= "<a href=" . $this->container->get('fullPath') . ">View the full schedule</a> - \n";
+        $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a> - \n";
 
         if (count($unassigned)) {
             if ($this->justOpen) {
-                $html .= "<a href=" . $this->container->get('masterPath') . ">View all referee teams</a> - \n";
+                $html .= "<a href=" . $this->getBaseURL('masterPath') . ">View all referee teams</a> - \n";
             } else {
-                $html .= "<a href=" . $this->container->get('masterPath') . "?open>View open referee teams</a> - \n";
+                $html .= "<a href=" . $this->getBaseURL('masterPath') . "?open>View open referee teams</a> - \n";
             }
         }
-        $html .= "<a href=" . $this->container->get('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;\n";
-        $html .= "<a href=" . $this->container->get('refsPath') . ">Edit referee assignments</a> - \n";
-        $html .=  "<a href=" . $this->container->get('endPath') . ">Log off</a>";
+        $html .= "<a href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;\n";
+        $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Edit referee assignments</a> - \n";
+        $html .=  "<a href=" . $this->getBaseURL('endPath') . ">Log off</a>";
         $html .=  "<input  class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">\n";
         $html .= "</h3>";
         $html .=  "<div class='clear-fix'></div>";
