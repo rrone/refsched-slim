@@ -176,6 +176,7 @@ class SchedulerRepository
 				['projectKey', 'like', $projectKey],
 				['division', 'like', $group],
                 ['medalRound', 'like', $medalRound],
+                ['date', '<=', date('Y-m-d')]
 			])
 			->get();
 	}

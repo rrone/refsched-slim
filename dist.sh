@@ -32,7 +32,10 @@ mv -f dist/public/app_prod.php dist/public/app.php
 
 echo "  Removing OSX jetsam..."
 find dist -type f -name '.DS_Store' -delete
+
+echo "  Removing development jetsam..."
 find dist -type f -name 'app_*' -delete
+find dist -type f -name '*Test.php' -delete
 rm -f -r dist/config/.git
 find dist/config -type f -name '.env' -delete
 
