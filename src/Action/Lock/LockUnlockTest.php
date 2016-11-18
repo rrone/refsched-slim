@@ -53,7 +53,9 @@ class LockUnlockTest extends AppTestCase
         $response = $app($request, $response);
 
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('Unauthorized: back to logon',(string)$response->getBody());
+
+        $url = implode($response->getHeader('Location'));
+        $this->assertEquals('/', $url);
 
         // invoke the lock controller action as user and test it
         $user = $this->local['user_test']['user'];
@@ -73,7 +75,9 @@ class LockUnlockTest extends AppTestCase
         $response = $app($request, $response);
 
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('Unauthorized: back to logon',(string)$response->getBody());
+
+        $url = implode($response->getHeader('Location'));
+        $this->assertEquals('/greet', $url);
 
         // invoke the lock controller action as unauthorized and test it
         $user = $this->local['admin_test']['user'];
@@ -94,7 +98,10 @@ class LockUnlockTest extends AppTestCase
         $response = $app($request, $response);
 
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('Locked: back to greet',(string)$response->getBody());
+
+        $url = implode($response->getHeader('Location'));
+        $this->assertEquals('/greet', $url);
+
 
     }
 
@@ -125,7 +132,9 @@ class LockUnlockTest extends AppTestCase
         $response = $app($request, $response);
 
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('Unauthorized: back to logon',(string)$response->getBody());
+
+        $url = implode($response->getHeader('Location'));
+        $this->assertEquals('/', $url);
 
         // invoke the lock controller action as user and test it
         $user = $this->local['user_test']['user'];
@@ -145,7 +154,9 @@ class LockUnlockTest extends AppTestCase
         $response = $app($request, $response);
 
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('Unauthorized: back to logon',(string)$response->getBody());
+
+        $url = implode($response->getHeader('Location'));
+        $this->assertEquals('/', $url);
 
         // invoke the lock controller action as admin and test it
         $user = $this->local['admin_test']['user'];
@@ -166,7 +177,9 @@ class LockUnlockTest extends AppTestCase
         $response = $app($request, $response);
 
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('Unlocked: back to greet',(string)$response->getBody());
+
+        $url = implode($response->getHeader('Location'));
+        $this->assertEquals('/greet', $url);
 
     }
 }

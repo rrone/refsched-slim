@@ -72,6 +72,7 @@ class LogonTest extends AppTestCase
 
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->post($url, $body, $headers);
+
         $url = implode($response->getHeader('Location'));
         $this->assertEquals('/greet', $url);
 

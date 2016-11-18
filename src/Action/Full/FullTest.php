@@ -47,13 +47,13 @@ class LogonDBControllerTest extends AppTestCase
         ];
 
         $view = $this->client->get('/full');
-        $this->assertContains("<a  href=/full?open>View schedule with no referees</a>",$view);
+        $this->assertContains("<a href=/full?open>View schedule with open slots</a>",$view);
         $this->assertContains("<a  href=/sched>Go to $user schedule</a>",$view);
 
         $params = ['open' => '1'];
-        $view = $this->client->get('/full', $params);
+        $view = $this->client->get('/full?open', $params);
 
-        $this->assertContains("<a  href=/full>View full schedule</a>",$view);
+        $this->assertContains("/full>View full schedule</a>",$view);
         $this->assertContains("<a  href=/sched>Go to $user schedule</a>",$view);
     }
 
