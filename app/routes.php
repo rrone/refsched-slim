@@ -7,51 +7,68 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+$container = $app->getContainer();
+
 //Request::setTrustedProxies(array('127.0.0.1'));
 
 $app->map(['GET', 'POST'], '/', App\Action\Logon\LogonDBController::class)
     ->setName('logon');
+$container['logonPath'] = $container->get('router')->pathFor('logon');
 
 $app->map(['GET', 'POST'], '/logon', App\Action\Logon\LogonDBController::class);
 
 $app->map(['GET', 'POST'], '/editref', App\Action\EditRef\SchedEditRefDBController::class)
     ->setName('editref');
+$container['editrefPath'] = $container->get('router')->pathFor('editref');
 
 $app->map(['GET', 'POST'], '/end', App\Action\End\SchedEndController::class)
     ->setName('end');
+$container['endPath'] = $container->get('router')->pathFor('end');
 
 $app->map(['GET', 'POST'], '/full', App\Action\Full\SchedFullDBController::class)
     ->setName('full');
+$container['fullPath'] = $container->get('router')->pathFor('full');
 
 $app->map(['GET', 'POST'], '/greet', App\Action\Greet\SchedGreetDBController::class)
     ->setName('greet');
+$container['greetPath'] = $container->get('router')->pathFor('greet');
 
 $app->map(['GET', 'POST'], '/lock', App\Action\Lock\SchedLockDBController::class)
     ->setName('lock');
-
-$app->map(['GET', 'POST'], '/refs', App\Action\Refs\SchedRefsDBController::class)
-    ->setName('refs');
-
-$app->map(['GET', 'POST'], '/master', App\Action\Master\SchedMasterDBController::class)
-    ->setName('master');
-
-$app->map(['GET', 'POST'], '/sched', App\Action\Sched\SchedSchedDBController::class)
-    ->setName('sched');
+$container['lockPath'] = $container->get('router')->pathFor('lock');
 
 $app->map(['GET', 'POST'], '/unlock', App\Action\Lock\SchedUnlockDBController::class)
     ->setName('unlock');
-    
+$container['unlockPath'] = $container->get('router')->pathFor('unlock');
+
+$app->map(['GET', 'POST'], '/refs', App\Action\Refs\SchedRefsDBController::class)
+    ->setName('refs');
+$container['refsPath'] = $container->get('router')->pathFor('refs');
+
+$app->map(['GET', 'POST'], '/master', App\Action\Master\SchedMasterDBController::class)
+    ->setName('master');
+$container['masterPath'] = $container->get('router')->pathFor('master');
+
+$app->map(['GET', 'POST'], '/sched', App\Action\Sched\SchedSchedDBController::class)
+    ->setName('sched');
+$container['schedPath'] = $container->get('router')->pathFor('sched');
+
 $app->map(['GET', 'POST'], '/fullexport', App\Action\Full\SchedExportController::class)
     ->setName('fullexport');
-    
+$container['fullXlsPath'] = $container->get('router')->pathFor('fullexport');
+
 $app->map(['GET', 'POST'], '/adm', App\Action\Admin\AdminController::class)
     ->setName('admin');
+$container['adminPath'] = $container->get('router')->pathFor('admin');
 
 $app->map(['GET', 'POST'], '/adm/template', App\Action\Admin\SchedTemplateExportController::class)
     ->setName('sched_template');
+$container['schedTemplatePath'] = $container->get('router')->pathFor('sched_template');
 
 $app->map(['GET', 'POST'], '/adm/import', App\Action\Admin\SchedImportController::class)
     ->setName('sched_import');
+$container['schedImportPath'] = $container->get('router')->pathFor('sched_import');
 
 $app->get('/adm/log', App\Action\Admin\LogExportController::class)
     ->setName('log_export');
+$container['logExportPath'] = $container->get('router')->pathFor('log_export');

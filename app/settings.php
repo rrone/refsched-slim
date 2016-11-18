@@ -35,11 +35,12 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2016.11.04.08'
+            'version' => '2016.11.14.03'
         ]
-        
-
     ],
+
+    'settings.test' => false,
+
 ];
 
 $local = include(__DIR__ . '/../config/local.php');
