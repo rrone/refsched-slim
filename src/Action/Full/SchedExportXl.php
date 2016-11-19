@@ -96,11 +96,10 @@ class SchedExportXl extends AbstractExporter
 
             //set the data : game in each row
             foreach ( $games as $game ) {
-                $date = date('D, d M Y',strtotime($game->date));
                 $time = date('H:i', strtotime($game->time));
                 $row = array(
                     $game->game_number,
-                    $date,
+                    $game->date,
                     $time,
                     $game->field,
                     $game->division,
