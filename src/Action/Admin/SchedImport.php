@@ -149,11 +149,12 @@ class SchedImport extends AbstractImporter
     protected function importFile($file)
     {
         $data = $this->getData($file);
-        $projectKey = $this->event->projectKey;
+
         $changes = array('adds' => 0, 'updates' => 0);
 
         if (!empty($data)) {
             $games['hdr'] = $data[0];
+            $projectKey = $this->event->projectKey;
 
             foreach ($data as $key => $game) {
                 if (($key > 0) && in_array($projectKey, $game)) {
@@ -166,11 +167,15 @@ class SchedImport extends AbstractImporter
 
         $adds = $changes['adds'];
         $updates = $changes['updates'];
-        $this->msg = "Upload complete. \n $adds items added. \n $updates items updated.";
-        $this->msgStyle = "color:#0000FF";
+        if (empty($changes['errors'])) {
+            $this->msg = "Upload complete. \n $adds items added. \n $updates items updated.";
+            $this->msgStyle = "color:#0000FF";
+        } else {
+            $this->msg = "Error in data: " . $changes['errors'];
+            $this->msgStyle = "color:#0000FF";
+        }
 
         return null;
-
     }
 
     protected function validHeader()
