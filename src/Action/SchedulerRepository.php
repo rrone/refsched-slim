@@ -184,9 +184,9 @@ class SchedulerRepository
         $group .= '%';
         $medalRound = $medalRound ? '%' : false;
 
-        return $this->db->table('games')
+        $games = $this->db->table('games')
             ->where([
-                ['projectKey', 'like', $projectKey],
+                ['projectKey', '=', $projectKey],
                 ['division', 'like', $group],
                 ['medalRound', 'like', $medalRound],
             ])
@@ -197,6 +197,8 @@ class SchedulerRepository
 
             ])
             ->get();
+
+         return $games;
     }
 
     public function getUnassignedGames($projectKey = '%', $group = '%', $medalRound = false)
@@ -345,11 +347,11 @@ class SchedulerRepository
 
         $hdr = $data['hdr'];
         $games = $data['data'];
-        $newGames = [];
 
         $changes = array('adds' => 0, 'updates' => 0, 'errors' => []);
 
         //convert float to int
+        $newGames = [];
         foreach ($games as $game) {
             foreach ($game as $key => &$value) {
                 if (is_float($value)) {
@@ -358,8 +360,8 @@ class SchedulerRepository
             }
             $newGames[] = $game;
         }
-
         $games = $newGames;
+
         if (!empty($games)) {
             foreach ($games as $game) {
                 $nextData = [];
@@ -367,14 +369,34 @@ class SchedulerRepository
                     $nextData[$hdr[$key]] = $game[$key];
                 }
 
-                if (!empty($nextData['projectKey'])) {
+                //ensure empty fields default to correct type
+                foreach ($nextData as $key => $value) {
+                    if (is_null($value)) {
+                        switch ($key) {
+                            case 'date':
+                                $value = date('Y-m-d');
+                                break;
+                            case 'time':
+                                $value = "00:00";
+                                break;
+                            case 'medalRound':
+                                $value = 0;
+                                break;
+                            default:
+                                $value = '';
+                        }
+                    }
+                    $typedData[$key] = $value;
+                }
 
-                    $isGame = $this->getGameByKeyAndNumber($nextData['projectKey'], $nextData['game_number']);
+                if (!empty($typedData['projectKey'])) {
+
+                    $isGame = $this->getGameByKeyAndNumber($typedData['projectKey'], $typedData['game_number']);
 
                     if (empty($isGame)) {
-                        $result = $this->insertGame($nextData);
+                        $result = $this->insertGame($typedData);
                     } else {
-                        $result = $this->updateGame($nextData);
+                        $result = $this->updateGame($typedData);
                     }
 
                     $changes['adds'] += $result['adds'];
