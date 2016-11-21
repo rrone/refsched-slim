@@ -66,3 +66,8 @@ $container['schedImportPath'] = $container->get('router')->pathFor('sched_import
 $app->get('/adm/log', App\Action\Admin\LogExportController::class)
     ->setName('log_export');
 $container['logExportPath'] = $container->get('router')->pathFor('log_export');
+
+$app->get('/na', App\Action\NoEvents\NoEventsController::class)
+    ->setName('na');
+$container['naPath'] = $container->get('router')->pathFor('na');
+

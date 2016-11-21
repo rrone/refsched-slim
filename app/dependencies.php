@@ -309,3 +309,18 @@ $container[App\Action\End\SchedEndController::class] = function ($c) use($sr) {
     return new \App\Action\End\SchedEndController($c);
 };
 
+// -----------------------------------------------------------------------------
+// NoEventsView class
+// -----------------------------------------------------------------------------
+$container[App\Action\NoEvents\NoEventsView::class] = function ($c) use($sr) {
+
+    return new \App\Action\NoEvents\NoEventsView($c, $sr);
+};
+
+$container[App\Action\NoEvents\NoEventsController::class] = function ($c) use($sr) {
+    $v = new \App\Action\NoEvents\NoEventsView($c, $sr);
+
+    return new \App\Action\NoEvents\NoEventsController($c, $v);
+};
+
+
