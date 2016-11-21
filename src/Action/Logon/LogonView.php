@@ -131,7 +131,7 @@ EOD;
         else {
             $html = <<<EOD
             <div class="center no-content">
-                <h2>Rest easy...there are no events are available to schedule.</h2>
+                <h2>Rest easy...there are no events available to schedule.</h2>
                 <h2>Go referee some games yourself.</h2>
             </div>
 EOD;

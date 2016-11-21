@@ -17,6 +17,7 @@ rm -f -r dist
 echo "  Setup distribution folder..."
 mkdir dist
 mkdir dist/var
+mkdir dist/var/uploads
 mkdir dist/src
 
 echo "  Copying app folders to distribution..."
@@ -35,7 +36,7 @@ find dist -type f -name '.DS_Store' -delete
 
 echo "  Removing development jetsam..."
 find dist -type f -name 'app_*' -delete
-find dist -type f -name '*Test.php' -delete
+find dist/src -type f -name '*Test.php' -delete
 rm -f -r dist/config/.git
 find dist/config -type f -name '.env' -delete
 
