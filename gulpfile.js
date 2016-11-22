@@ -4,21 +4,22 @@ const concat = require('gulp-concat');
 
 const appResourceDir   = path.join(__dirname, 'src/resources/public');
 const nodeModulesDir = path.join(__dirname,'node_modules');
+const vendorDir = path.join(__dirname,'vendor');
 const appWebDir   = path.join(__dirname, 'public');
 
 const appTask = function() {
 
     // Control the order
     gulp.src([
-            //appResourceDir + '/css/style.css',
-            appResourceDir + '/css/refsched.css',
+            appResourceDir + '/css/style.css',
+            appResourceDir + '/css/refsched.css'
         ])
         .pipe(concat("app.css"))
         .pipe(gulp.dest('public/css'));
 
      //Java scripts
     gulp.src([
-            appResourceDir + '/js/app.js',
+            appResourceDir + '/js/app.js'
         ])
         .pipe(concat("ext.js"))
         .pipe(gulp.dest(appWebDir +'/js'));
@@ -26,7 +27,7 @@ const appTask = function() {
     // images
     gulp.src([
             appResourceDir + '/images/*.png',
-            appResourceDir + '/images/*.ico',
+            appResourceDir + '/images/*.ico'
             
         ])
         .pipe(gulp.dest(appWebDir +'/images'));
@@ -42,14 +43,27 @@ const nodeModulesTask = function() {
             path.join(nodeModulesDir,'purecss/build/grids-responsive-min.css'),
             path.join(nodeModulesDir,'purecss/build/buttons-min.css'),
             path.join(nodeModulesDir,'purecss/build/pure-nr-min.css'),
+            path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.min.css')
+            // path.join(vendorDir,'components/bootstrap/css/bootstrap.min.css'),
+            // path.join(vendorDir,'components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')
         ])
-        .pipe(gulp.dest('public/css'));
+        .pipe(gulp.dest(appWebDir + '/css'));
     //
     gulp.src([
             path.join(nodeModulesDir,'jquery/dist/jquery.min.js'),
             path.join(nodeModulesDir,'bootstrap/dist/js/bootstrap.min.js'),
+            path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.min.js')
+            // path.join(vendorDir,'components/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')
         ])
         .pipe(gulp.dest(appWebDir +'/js'));
+    //
+    gulp.src([
+        path.join(vendorDir,'components/bootstrap/fonts/glyphicons-halflings-regular.ttf'),
+        path.join(vendorDir,'components/bootstrap/fonts/glyphicons-halflings-regular.woff'),
+        path.join(vendorDir,'components/bootstrap/fonts/glyphicons-halflings-regular.woff2')
+    ])
+        .pipe(gulp.dest(appWebDir +'/fonts'));
+
 };
 gulp.task('node_modules',nodeModulesTask);
 
