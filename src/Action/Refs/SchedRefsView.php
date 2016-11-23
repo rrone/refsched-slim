@@ -85,7 +85,7 @@ class SchedRefsView extends AbstractView
                 $html .= "Green shading change indicates different start times</h3>\n";
 
                 $html .= "<form name=\"addref\" method=\"post\" action=\"" . $this->getBaseURL('refsPath') . "\">\n";
-                $html .= "<table class=\"sched_table\" width=\"100%\">\n";
+                $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                 $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
                 $html .= "<th>Game No.</th>";
                 $html .= "<th>Date</th>";

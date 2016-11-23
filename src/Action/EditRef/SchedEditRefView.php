@@ -92,7 +92,7 @@ class SchedEditRefView extends AbstractView
                         $time = date('H:i', strtotime($game->time));
                         if ($game->game_number == $target_game && ($game->assignor == $this->user->name|| $this->user->admin)) {
                             $html .= "<form name=\"editref\" method=\"post\" action=" . $this->getBaseURL('editrefPath') . ">\n";
-                            $html .= "<table class=\"sched_table\" width=\"100%\">\n";
+                            $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                             $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
                             $html .= "<th>Game No.</th>";
                             $html .= "<th>Date</th>";

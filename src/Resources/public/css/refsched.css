@@ -59,11 +59,25 @@ th {
     line-height: 3rem;
     text-align: center;
 }
-.sched_table th, .sched_table td {
+.sched-table, .edit-table {
+    width: 100%;
+    margin: 0 5px;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+.sched-table th, .sched-table td {
     border: 1px solid #9c9c9c;
 }
-.sched_table tr {
+.sched-table tr {
     line-height: 2em;
+}
+
+.edit-table input {
+    width: 94%;
+    margin: 1px 3%;
+}
+.edit-table th {
+    line-height: 1.5rem;
 }
 .contentarea {
     padding-right: 15px;

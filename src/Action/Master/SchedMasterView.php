@@ -90,7 +90,7 @@ class SchedMasterView extends AbstractView
                 $html .= "<h3 class=\"center\">Green: Assignments made (Yah!) / Red: Needs your attention<br><br>\n";
                 $html .= "Green shading change indicates different start times</h3>\n";
 
-                $html .=  "<table class=\"sched_table\" width=\"100%\">\n";
+                $html .=  "<table class=\"sched-table\" width=\"100%\">\n";
                 $html .=  "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
                 $html .=  "<th>Game No.</th>";
                 $html .=  "<th>Date</th>";

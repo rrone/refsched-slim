@@ -23,20 +23,4 @@
 {% endblock %}
 
 {% block script %}
-
-    <script type="text/javascript" src="{{ base_url() }}/js/jquery.min.js" charset="UTF-8"></script>
-    <script type="text/javascript" src="{{ base_url() }}/js/jquery.datetimepicker.min.js" charset="UTF-8"></script>
-    <script type="text/javascript">
-        $('.form_date').datetimepicker({
-            datepicker: true,
-            timepicker: false,
-            format: 'hh:ii',
-        });
-        $('.form_time').datetimepicker({
-            datepicker: false,
-            timepicker: true,
-            format: 'yyyy-mm-dd',
-        });
-    </script>
-
 {% endblock %}

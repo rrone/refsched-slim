@@ -11,7 +11,7 @@ class SchedulerRepository
     public function __construct(Manager $db)
     {
         $this->db = $db;
-		        
+
     }
 
     private function getZero($elem)
@@ -198,7 +198,7 @@ class SchedulerRepository
             ])
             ->get();
 
-         return $games;
+        return $games;
     }
 
     public function getUnassignedGames($projectKey = '%', $group = '%', $medalRound = false)
@@ -339,13 +339,13 @@ class SchedulerRepository
         return $id;
     }
 
-    public function addGames($data)
+    public function modifyGames($data)
     {
         if (is_null($data)) {
             return null;
         }
 
-        $hdr = $data['hdr'];
+        $hdr = array_values($data['hdr']);
         $games = $data['data'];
 
         $changes = array('adds' => 0, 'updates' => 0, 'errors' => []);
@@ -355,7 +355,7 @@ class SchedulerRepository
         foreach ($games as $game) {
             foreach ($game as $key => &$value) {
                 if (is_float($value)) {
-                    $value = (int) $value;
+                    $value = (int)$value;
                 }
             }
             $newGames[] = $game;
@@ -365,7 +365,8 @@ class SchedulerRepository
         if (!empty($games)) {
             foreach ($games as $game) {
                 $nextData = [];
-                foreach ($game as $key=>$field) {
+                $game = array_values($game);
+                foreach ($game as $key => $field) {
                     $nextData[$hdr[$key]] = $game[$key];
                 }
 
@@ -448,7 +449,8 @@ class SchedulerRepository
         //doing update by projectKey & game number; including id caused integrity error
         unset($game->id);
         unset($data['id']);
-        $data['time'] = $data['time'] . ':00';
+
+        $data['time'] = date('H:i:s', strtotime($data['time']));
 
         $dif = array_diff((array)$game, $data);
 

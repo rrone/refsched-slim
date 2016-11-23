@@ -356,7 +356,7 @@ class SchedSchedView extends AbstractView
                 $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
 
                 if($this->num_unassigned) {
-                    $html .= "<table class=\"sched_table\" >\n";
+                    $html .= "<table class=\"sched-table\" >\n";
                     $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
                     $html .= "<th>Game No</th>";
                     $html .= "<th>Date</th>";
@@ -496,12 +496,12 @@ EOD;
         $html .= "<h3>$this->showgroup Games assigned to $user->name :</h3>\n";
 
         if (empty($kount)) {
-            $html .= "<table class=\"sched_table\" >\n";
+            $html .= "<table class=\"sched-table\" >\n";
             $html .= "<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";
             $html .= "<td>$user->name has no games assigned</td>";
             $html .= "</tr>\n";
         } else {
-            $html .= "<table class=\"sched_table\" >\n";
+            $html .= "<table class=\"sched-table\" >\n";
             $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">\n";
             $html .= "<th>Game No</th>\n";
             $html .= "<th>Date</th>\n";

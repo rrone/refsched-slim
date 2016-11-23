@@ -162,7 +162,7 @@ class SchedImport extends AbstractImporter
                 }
             }
 
-            $changes = $this->sr->addGames($games);
+            $changes = $this->sr->modifyGames($games);
         }
 
         $adds = $changes['adds'];
