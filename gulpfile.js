@@ -52,7 +52,7 @@ const nodeModulesTask = function() {
     gulp.src([
             path.join(nodeModulesDir,'jquery/dist/jquery.min.js'),
             path.join(nodeModulesDir,'bootstrap/dist/js/bootstrap.min.js'),
-            path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.min.js')
+            path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.full.js')
             // path.join(vendorDir,'components/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')
         ])
         .pipe(gulp.dest(appWebDir +'/js'));

@@ -92,24 +92,8 @@ class EditGameView extends AbstractView
                 foreach ($games as $game) {
                     $html .= "<tr align=\"center\" bgcolor=\"#00FF88\">";
                     $html .= "<td>$game->game_number</td>";
-                    $html .= "<td>
-                                <div class=\"input-group date form_date col-xs-12\" data-date=\"\" data-date-format=\"yyyy-mm-dd\"
-                                    data-link-field=\"dtp_input-$game->id\" data-link-format=\"yyyy-mm-dd\">
-                                    <input class=\"form-control col-xs-6\" type=\"text\" name=\"$game->id+date\" value=\"$game->date\"
-                                       readonly>
-                                    <span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-calendar\"></span></span>
-                                </div>
-                                <input type=\"hidden\" id=\"dtp_input-$game->id\" value=\"\"/>
-                                </td>";
-                    $html .= "<td>
-                                <div class=\"input-group date form_time col-xs-12\" data-date=\"\" data-date-format=\"hh:ii\"
-                                 data-link-field=\"dtp_input-$game->id\" data-link-format=\"hh:ii\">
-                                    <input class=\"form-control col-xs-9\" type=\"text\" name=\"$game->id+time\" value=\"$game->time\"
-                                       readonly>
-                                    <span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-time\"></span></span>
-                                </div>
-                                <input type=\"hidden\" id=\"dtp_input-$game->id\" value=\"\"/>
-                                </td>";
+                    $html .= "<td><input class=\"form_date\" type=\"text\" name=\"$game->id+date\" size=\"15\" value=\"$game->date\" readonly></td>";
+                    $html .= "<td><input class=\"form_time\" type=\"text\" name=\"$game->id+time\" size=\"15\" value=\"$game->time\" readonly></td>";
                     $html .= "<td><input type=\"text\" name=\"$game->id+field\" size=\"15\" value=\"$game->field\"></td>";
                     $html .= "<td><input type=\"text\" name=\"$game->id+division\" size=\"15\" value=\"$game->division\"></td>";
                     $html .= "<td><input type=\"text\" name=\"$game->id+pool\" size=\"15\" value=\"$game->pool\"></td>";

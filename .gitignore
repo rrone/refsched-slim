@@ -12,3 +12,4 @@ config
 .idea
 *.zip
 src/Model
+public/fonts
