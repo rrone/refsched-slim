@@ -98,9 +98,9 @@ class GreetView extends AbstractView
                 }
             } else {
                 if ($locked) {
-                    $html .= "The schedule is presently <span style=\"color:$this->colorAlert\">locked</span><br>\n";
+                    $html .= "The schedule is presently <span style=\"color:$this->colorAlert\">locked</span><br><br>\n";
                 } else {
-                    $html .= "The schedule is presently <span style=\"color:$this->colorSuccess\">unlocked</span><br>\n";
+                    $html .= "The schedule is presently <span style=\"color:$this->colorSuccess\">unlocked</span><br><br>\n";
                 }
             }
 
@@ -127,7 +127,7 @@ class GreetView extends AbstractView
                         } else {
                             $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time<br>\n";
                         }
-                    } else {
+                    } elseif (!$this->user->admin) {
                         foreach ($limit_list as $k => $v) {
                             if ($used_list[$k]) {
                                 if ($v == 'none') {
@@ -147,9 +147,9 @@ class GreetView extends AbstractView
                 if ($num_area == 0) {
                     $html .= "$uname is not currently assigned to any games.<br>";
                 } elseif ($num_area == 1) {
-                    $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> game.<br>";
+                    $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> game.<br><br>";
                 } else {
-                    $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> games.<br>";
+                    $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> games.<br><br>";
                 }
 
                 if (count($limit_list) == 0){
@@ -183,9 +183,9 @@ class GreetView extends AbstractView
 
                 if ($locked && !array_key_exists('none', $limit_list)) {
                     if (!$allatlimit) {
-                        $html .= "You may sign ". $this->user->name . " teams up for games but you may not remove them</h3>\n";
+                        $html .= "<br>You may sign ". $this->user->name . " teams up for games but you may not remove them</h3>\n";
                     } else {
-                        $html .= "Since ". $this->user->name . " is at or above your limit, you will not be able to sign teams up for games</h3>\n";
+                        $html .= "<br>Since ". $this->user->name . " is at or above your limit, you will not be able to sign teams up for games</h3>\n";
                     }
                 }
             }

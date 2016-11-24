@@ -286,12 +286,10 @@ class SchedSchedView extends AbstractView
                 $showavailable = true;
             } elseif (!$locked && array_key_exists('all', $limit_list) && $this->num_assigned == $limit_list['all']) {
                 $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at your game limit<br>You will have to unassign yourself from games to sign up for others</span></h3>\n";
-                $showavailable = true;
             } elseif (!$locked && array_key_exists('all', $limit_list) && $this->num_assigned > $limit_list['all']) {
                 $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nIf you continue from here you will not be able to keep all the games you are signed up for and may lose some of the games you already have<br>\nIf you want to keep these games and remain over the game limit it is recommended that you do not hit submit but do something else instead<br>\n<a href=" . $this->getBaseURL('greetPath') . ">Go to the Main Page</a></span></h3>\n";
-                $showavailable = true;
             } elseif ($locked && count($limit_list)) {
-                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The system is locked";
+                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked<br>";
                 if ($showavailable) {
                     $html .= "<br>You can add games to divisions that are below the limit but not unassign your Area from games<br>";
                 }
@@ -305,7 +303,8 @@ class SchedSchedView extends AbstractView
                             $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
                         }
                     }
-                    $showavailable = ($assigned_list[$k] < $limit_list[$k]) || (!isset($limit_list[$k]));
+
+                    $showavailable = ($assigned_list[$k] < $limit_list[$k]) || !isset($limit_list[$k]) || $limit_list[$k] == 'none';
                 }
 
                 $html .= "</h3>\n";
@@ -342,8 +341,9 @@ class SchedSchedView extends AbstractView
                 if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned)) {
                     $html .= "<h3 class=\"h3-btn center\" >";
                     $html .= $this->menuLinks();
-                    $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
+                    $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
                     $html .= "<div class='clear-fix'></div>\n";
+                    $html .= "<h3>";
                 }
 
                 $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
@@ -427,14 +427,18 @@ class SchedSchedView extends AbstractView
                 if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned)) {
                     $html .= "<h3 class=\"h3-btn center\" >";
                     $html .= $this->menuLinks();
-                    $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
+                    $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
                     $html .= "<div class='clear-fix'></div>\n";
+                    $html .= "<h3>";
                 }
 
                 $html .= "</form>\n";
 
             } else {
-                $html .= "<h3 class=\"center\">You have no games assigned.</h3><br>\n";
+                $html .= "<h3 class=\"center\">You have no games assigned.</h3>\n";
+                $html .= "<h3 class=\"h3-btn center\" >";
+                $html .= $this->menuLinks();
+                $html .= "<h3>";
             }
 
             $_SESSION['locked'] = $locked;
