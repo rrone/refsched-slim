@@ -85,6 +85,12 @@ class AdminView extends AbstractView
                     $msg = $this->user->name . ': ' . $_POST['logNote'];
                     $this->sr->logInfo($projectKey, $msg);
                 }
+            } elseif (in_array('btnEditGames', array_keys($_POST))) {
+
+                $this->msg = null;
+
+                return 'EditGames';
+
             } else {
                 $this->msg = null;
             }

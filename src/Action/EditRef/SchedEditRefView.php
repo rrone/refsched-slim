@@ -144,15 +144,20 @@ class SchedEditRefView extends AbstractView
 
     private function menu()
     {
-        $html = "<h3 align=\"center\"><a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
+        $html = "<h3 align=\"center\">";
+
+        $html .= "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
         $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full game schedule</a>&nbsp;-&nbsp\n";
         if ($this->user->admin) {
+            $html .= "<a href=" . $this->getBaseURL('editGamePath') . ">Edit games</a>&nbsp;-&nbsp;\n";
             $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         } else {
             $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a></h3>";
+        $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a>";
+
+        $html .= "</h3>";
 
         return $html;
     }

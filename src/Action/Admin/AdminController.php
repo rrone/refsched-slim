@@ -51,6 +51,10 @@ class AdminController extends AbstractController
             case 'ExportLog':
 
                 return $response->withRedirect($this->getBaseURL('logExportPath'));
+
+            case 'EditGames':
+
+                return $response->withRedirect($this->getBaseURL('editGamePath'));
         }
 
         $this->adminView->render($response);
