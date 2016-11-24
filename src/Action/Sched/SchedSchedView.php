@@ -168,7 +168,7 @@ class SchedSchedView extends AbstractView
             'view' => array(
                 'admin' => $this->user->admin,
                 'content' => $this->renderView(),
-                'topmenu' => $this->menu(),
+                'topmenu' => null,
                 'menu' => null,
                 'title' => $this->page_title,
                 'dates' => $this->dates,
@@ -333,7 +333,6 @@ class SchedSchedView extends AbstractView
             $rowColor = $this->colorDarkGray;
 
             if ($this->num_assigned || ($showavailable && $this->num_unassigned)) {
-                $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
                 $submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled';
 
                 $html .= "<form name=\"form1\" method=\"post\" action=" . $this->getBaseURL('schedPath') . ">\n";
@@ -341,9 +340,13 @@ class SchedSchedView extends AbstractView
                 $html .= "<div align=\"left\">";
 
                 if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned)) {
-                    $html .= "<h3 class=\"h3-btn center\" ><input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
+                    $html .= "<h3 class=\"h3-btn center\" >";
+                    $html .= $this->menuLinks();
+                    $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
                     $html .= "<div class='clear-fix'></div>\n";
                 }
+
+                $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
 
                 if ($showavailable && $this->num_unassigned) {
                     $html .= "<h3>Available games :</h3>";
@@ -422,9 +425,12 @@ class SchedSchedView extends AbstractView
                 }
 
                 if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned)) {
-                    $html .= "<h3 class=\"center h3-btn\">" . $this->menuLinks() . "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
-                    $html .= "<div class='clear-fix'></div>";
+                    $html .= "<h3 class=\"h3-btn center\" >";
+                    $html .= $this->menuLinks();
+                    $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\"></h3>\n";
+                    $html .= "<div class='clear-fix'></div>\n";
                 }
+
                 $html .= "</form>\n";
 
             } else {
