@@ -12,7 +12,7 @@ class EndTest extends AppTestCase
     {
         $this->app = $this->getSlimInstance();
 
-        $this->client = new WebTestClient($this->app);
+        $this->client = new AppWebTestClient($this->app);
     }
 
     public function testEnd()
@@ -30,7 +30,10 @@ class EndTest extends AppTestCase
         $response = $app($request, $response);
 
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('back to logon',(string)$response->getBody());
+
+        $url = implode($response->getHeader('Location'));
+
+        $this->assertEquals('/', $url);
     }
 
 }
