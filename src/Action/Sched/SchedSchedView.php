@@ -341,7 +341,9 @@ class SchedSchedView extends AbstractView
                 if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned) || $this->user->admin) {
                     $html .= "<h3 class=\"h3-btn center\" >";
                     $html .= $this->menuLinks();
-                    $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
+                    if(!$this->user->admin) {
+                        $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
+                    }
                     $html .= "<div class='clear-fix'></div>\n";
                     $html .= "<h3>";
                 }
@@ -427,7 +429,9 @@ class SchedSchedView extends AbstractView
                 if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned) || $this->user->admin) {
                     $html .= "<h3 class=\"h3-btn center\" >";
                     $html .= $this->menuLinks();
-                    $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
+                    if(!$this->user->admin) {
+                        $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
+                    }
                     $html .= "<div class='clear-fix'></div>\n";
                     $html .= "<h3>";
                 }
