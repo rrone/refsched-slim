@@ -7,7 +7,7 @@ use App\Action\AbstractView;
 use App\Action\Full\SchedFullDBController;
 use App\Action\Full\SchedFullView;
 
-class LogonDBControllerTest extends AppTestCase
+class FullTest extends AppTestCase
 {
     public function setUp()
     {
@@ -47,6 +47,7 @@ class LogonDBControllerTest extends AppTestCase
         ];
 
         $view = $this->client->get('/full');
+
         $this->assertContains("<a href=/full?open>View schedule with open slots</a>",$view);
         $this->assertContains("<a  href=/sched>Go to $user schedule</a>",$view);
 

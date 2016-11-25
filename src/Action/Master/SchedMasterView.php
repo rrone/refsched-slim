@@ -201,7 +201,7 @@ class SchedMasterView extends AbstractView
         $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Edit referee assignments</a> - ";
         $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a>";
 
-        $html .= "<input  class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
+        $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
         $html .= "<div class='clear-fix'></div>";
 
         $html .= "</h3>\n";
