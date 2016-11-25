@@ -17,10 +17,6 @@ class LogonTest extends AppTestCase
 //     Setup App controller
         $this->app = $this->getSlimInstance();
         $this->client = new AppWebTestClient($this->app);
-
-        $this->eventLabel = $this->local['user_test']['event'];
-        $this->userName = $this->local['user_test']['user'];
-        $this->passwd = $this->local['user_test']['passwd'];
     }
 
     public function testRoot()
@@ -47,9 +43,13 @@ class LogonTest extends AppTestCase
         $this->assertContains('<h1>Section 1 Event Schedule</h1>', $view);
     }
 
-    public function testUserLogon()
+    public function testLogonAsUser()
     {
         $sr = (object)$this->sr;
+
+        $this->eventLabel = $this->local['user_test']['event'];
+        $this->userName = $this->local['user_test']['user'];
+        $this->passwd = $this->local['user_test']['passwd'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -77,7 +77,45 @@ class LogonTest extends AppTestCase
 
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
-        $this->assertContains('<h3 class="center">Welcome Area 1B Assignor</h3>', $view);
+        $this->assertContains("<h3 class=\"center\">Welcome $this->userName Assignor</h3>", $view);
+
+    }
+
+    public function testLogonAsAdmin()
+    {
+        $sr = (object)$this->sr;
+
+        $this->eventLabel = $this->local['admin_test']['event'];
+        $this->userName = $this->local['admin_test']['user'];
+        $this->passwd = $this->local['admin_test']['passwd'];
+
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
+            'user' => $sr->getUserByName($this->userName),
+            'event' => $sr->getEventByLabel($this->eventLabel)
+        ];
+
+        $url = '/';
+        $headers = array(
+            'cache-control' => 'no-cache',
+            'content-type' => 'multipart/form-data;'
+        );
+        $body = array(
+            'event' => $this->eventLabel,
+            'user' => $this->userName,
+            'passwd' => $this->passwd,
+            'Submit' => 'Logon'
+        );
+
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->post($url, $body, $headers);
+
+        $url = implode($response->getHeader('Location'));
+        $this->assertEquals('/greet', $url);
+
+        $response = (object)$this->client->get($url);
+        $view = (string)$response->getBody();
+        $this->assertContains("<h3 class=\"center\">Welcome $this->userName Assignor</h3>", $view);
 
     }
 

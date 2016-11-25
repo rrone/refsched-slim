@@ -26,7 +26,7 @@ class SchedRefsTest extends AppTestCase
 
     }
 
-    public function testEditGameAsAnonymous()
+    public function testSchedRefsAsAnonymous()
     {
         // instantiate the view and test it
 
@@ -47,7 +47,7 @@ class SchedRefsTest extends AppTestCase
         $this->assertEquals('/', $url);
     }
 
-    public function testEditGameAsUser()
+    public function testSchedRefsAsUser()
     {
         // instantiate the view and test it
 
@@ -78,4 +78,34 @@ class SchedRefsTest extends AppTestCase
         $this->assertContains("value=\"Edit Assignments\">",$view);
     }
 
+    public function testSchedRefsAsAdmin()
+    {
+        // instantiate the view and test it
+
+        $view = new SchedRefsView($this->c, $this->sr);
+        $this->assertTrue($view instanceof AbstractView);
+
+        // instantiate the controller
+
+        $controller = new SchedRefsDBController($this->c, $view);
+        $this->assertTrue($controller instanceof AbstractController);
+
+        // invoke the controller action and test it
+
+        $user = $this->local['admin_test']['user'];
+        $projectKey = $this->local['admin_test']['projectKey'];
+
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
+            'user' => $this->sr->getUserByName($user),
+            'event' => $this->sr->getEvent($projectKey)
+        ];
+
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get($this->testUri);
+        $view = (string)$response->getBody();
+
+        $this->assertContains("<input class=\"btn btn-primary btn-xs \" type=\"submit\"",$view);
+        $this->assertContains("value=\"Edit Assignments\">",$view);
+    }
 }

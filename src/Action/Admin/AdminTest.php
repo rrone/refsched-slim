@@ -28,7 +28,7 @@ class AdminTest extends AppTestCase
 
     }
 
-    public function testEditGameAsAnonymous()
+    public function testAdminAsAnonymous()
     {
         // instantiate the view and test it
 
@@ -49,7 +49,7 @@ class AdminTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
-    public function testEditGameAsUser()
+    public function testAdminAsUser()
     {
         // instantiate the view and test it
 
@@ -79,7 +79,7 @@ class AdminTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
-    public function testEditGameAsAdmin()
+    public function testAdminAsAdmin()
     {
         // instantiate the view and test it
 

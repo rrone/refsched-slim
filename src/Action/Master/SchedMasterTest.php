@@ -26,7 +26,28 @@ class SchedMasterTest extends AppTestCase
 
     }
 
-    public function testEditGameAsUser()
+    public function testSchedMasterAsAnonymous()
+    {
+        // instantiate the view and test it
+
+        $view = new SchedMasterView($this->c, $this->sr);
+        $this->assertTrue($view instanceof AbstractView);
+
+        // instantiate the controller
+
+        $controller = new SchedMasterDBController($this->c, $view);
+        $this->assertTrue($controller instanceof AbstractController);
+
+        // invoke the controller action and test it
+
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get($this->testUri);
+        $url = implode($response->getHeader('Location'));
+
+        $this->assertEquals('/greet', $url);
+    }
+
+    public function testSchedMasterAsUser()
     {
         // instantiate the view and test it
 
@@ -56,7 +77,7 @@ class SchedMasterTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
-    public function testEditGameAsAdmin()
+    public function testSchedMasterAsAdmin()
     {
         // instantiate the view and test it
 

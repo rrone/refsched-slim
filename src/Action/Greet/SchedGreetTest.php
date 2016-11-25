@@ -19,11 +19,32 @@ class SchedGreetTest extends AppTestCase
             'event' => null
         ];
 
-        $this->client = new WebTestClient($this->app);
+        $this->client = new AppWebTestClient($this->app);
 
     }
 
-   public function testUserGreet()
+    public function testGreetAsAnonymous()
+    {
+        // instantiate the view and test it
+
+        $view = new GreetView($this->c, $this->sr);
+        $this->assertTrue($view instanceof AbstractView);
+
+        // instantiate the controller
+
+        $controller = new SchedGreetDBController($this->c, $view);
+        $this->assertTrue($controller instanceof AbstractController);
+
+        // invoke the controller action and test it
+
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/greet');
+        $url = implode($response->getHeader('Location'));
+
+        $this->assertEquals('/', $url);
+    }
+
+    public function testGreetAsUser()
     {
         // instantiate the view and test it
 
@@ -50,7 +71,7 @@ class SchedGreetTest extends AppTestCase
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>",$view);
     }
 
-    public function testAdminGreet()
+    public function testGreetAsAdmin()
     {
         // instantiate the view and test it
 
@@ -74,6 +95,7 @@ class SchedGreetTest extends AppTestCase
 
         $view = $this->client->get('/greet');
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>",$view);
+        $this->assertContains("<h3 class=\"center\"><a href=/editgame>Edit games</a>",$view);
     }
 
 }

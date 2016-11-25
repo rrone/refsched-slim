@@ -19,11 +19,37 @@ class FullTest extends AppTestCase
             'event' => null
         ];
 
-        $this->client = new WebTestClient($this->app);
+        $this->client = new AppWebTestClient($this->app);
 
     }
 
-    public function testUserFull()
+    public function testFullAsAnonymous()
+    {
+        // instantiate the view and test it
+
+        $view = new SchedFullView($this->c, $this->sr);
+        $this->assertTrue($view instanceof AbstractView);
+
+        // instantiate the controller
+
+        $controller = new SchedFullDBController($this->c, $view);
+        $this->assertTrue($controller instanceof AbstractController);
+
+        // invoke the controller action and test it
+
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/full');
+        $url = implode($response->getHeader('Location'));
+
+        $this->assertEquals('/', $url);
+
+        $params = ['open' => '1'];
+        $view = $this->client->get('/full?open', $params);
+
+        $this->assertEquals('/', $url);
+    }
+
+    public function testFullAsUser()
     {
         // instantiate the view and test it
 

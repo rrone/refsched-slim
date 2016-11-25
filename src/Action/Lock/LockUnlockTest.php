@@ -17,15 +17,6 @@ class LockUnlockTest extends AppTestCase
         $this->app = $this->getSlimInstance();
     }
 
-    public function testView()
-    {
-        // instantiate the view and test it
-
-        $this->view = new SchedLockView($this->c, $this->sr);
-        $this->assertTrue($this->view instanceof AbstractView);
-
-    }
-
     public function testLock()
     {
         // instantiate the view

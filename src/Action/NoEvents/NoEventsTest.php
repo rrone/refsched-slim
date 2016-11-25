@@ -23,7 +23,7 @@ class NoEventsTest extends AppTestCase
 
     }
 
-    public function testUserSched()
+    public function testNoEventsAsAnonymous()
     {
         // instantiate the view and test it
 
