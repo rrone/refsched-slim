@@ -45,11 +45,11 @@ class SchedLockView extends AbstractView
             $locked = $this->sr->getLocked($projectKey);
 
             if ( $locked ) {
-                $html .= "<h3 align=\"center\">The schedule is already locked!</h3>\n";
+                $html .= "<h3 class=\"center\">The schedule is already locked!</h3>\n";
             }
             elseif ( $this->user->admin) {
                 $this->sr->lockProject($projectKey);
-                $html .= "<h3 align=\"center\">The schedule has been locked!</h3>\n";
+                $html .= "<h3 class=\"center\">The schedule has been locked!</h3>\n";
             }
         }
         elseif ( $this->user->admin ) {
@@ -76,11 +76,11 @@ class SchedLockView extends AbstractView
             $locked = $this->sr->getLocked($projectKey);
 
             if ( !$locked ) {
-                $html .= "<h3 align=\"center\">The schedule is already unlocked!</h3>\n";
+                $html .= "<h3 class=\"center\">The schedule is already unlocked!</h3>\n";
             }
             elseif ( $this->user->admin ) {
                 $this->sr->unlockProject($projectKey);
-                $html .= "<h3 align=\"center\">The schedule has been unlocked!</h3>\n";
+                $html .= "<h3 class=\"center\">The schedule has been unlocked!</h3>\n";
             }
         }
         elseif ( $this->user->admin ) {
@@ -97,7 +97,7 @@ class SchedLockView extends AbstractView
     }
     private function menu()
     {
-        $html = "<h3 align=\"center\"><a href=" . $this->getBaseURL('greetPath') . ">Go to main screen</a>&nbsp;-&nbsp;\n";
+        $html = "<h3 class=\"center\"><a href=" . $this->getBaseURL('greetPath') . ">Go to main screen</a>&nbsp;-&nbsp;\n";
         $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Go to schedule</a>&nbsp;-&nbsp;\n";
         $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a></h3>\n";
 

@@ -87,7 +87,7 @@ class GreetView extends AbstractView
             $uname = $this->user->name;
 
             $html .= "<h3 class=\"center\">Welcome ". $uname ." Assignor</h3>\n";
-            $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">CURRENT STATUS</h3>\n<h3 align=\"center\">";
+            $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">CURRENT STATUS</h3>\n<h3 class=\"center\">";
             $html .= "<h3 class=\"center\">";
 
             if ($this->user->admin) {

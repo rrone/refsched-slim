@@ -93,7 +93,7 @@ class SchedEditRefView extends AbstractView
                         if ($game->game_number == $target_game && ($game->assignor == $this->user->name|| $this->user->admin)) {
                             $html .= "<form name=\"editref\" method=\"post\" action=" . $this->getBaseURL('editrefPath') . ">\n";
                             $html .= "<table class=\"sched-table\" width=\"100%\">\n";
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
                             $html .= "<th>Game No.</th>";
                             $html .= "<th>Date</th>";
                             $html .= "<th>Time</th>";
@@ -108,7 +108,7 @@ class SchedEditRefView extends AbstractView
                                 $html .= "<th>4th</th>";
                             }
                             $html .= "</tr>\n";
-                            $html .= "<tr align=\"center\" bgcolor=\"#00FF88\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"#00FF88\">";
                             $html .= "<td>$game->game_number</td>";
                             $html .= "<td>$date</td>";
                             $html .= "<td>$time</td>";
@@ -144,7 +144,7 @@ class SchedEditRefView extends AbstractView
 
     private function menu()
     {
-        $html = "<h3 align=\"center\">";
+        $html = "<h3 class=\"center\">";
 
         $html .= "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
         $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full game schedule</a>&nbsp;-&nbsp\n";

@@ -66,7 +66,7 @@ class SchedFullView extends AbstractView
             $html .= "Green shading change indicates different start times</h3>\n";
 
             $html .= "<table class=\"sched-table\" width=\"100%\">\n";
-            $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
             $html .= "<th>Game No.</th>";
             $html .= "<th>Date</th>";
             $html .= "<th>Time</th>";
@@ -109,32 +109,32 @@ class SchedFullView extends AbstractView
                     if ($game->assignor == $this->user->name) {
                         //no refs
                         if (empty($game->cr) && empty($game->ar1) && empty($game->ar2)) {
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
                             //open AR  or 4th slots
                         }
                         elseif (empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
                             //match covered
                         }
                         else {
-                            $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                         }
                     } else {
-                        $html .= "<tr align=\"center\" bgcolor=\"$this->colorLtGray\">";
+                        $html .= "<tr class=\"center\" bgcolor=\"$this->colorLtGray\">";
                     }
                     if($this->user->admin){
                         //no assignor
                         if (empty($game->assignor)) {
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
                             //my open slots
                         } elseif ($game->assignor == $this->user->name && empty($game->cr) && empty($game->ar1) && empty($game->ar2)) {
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
                             //assigned open slots
                         } elseif (empty($game->cr) || empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
                             //match covered
                         } else {
-                            $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                         }
                     }
 
@@ -170,10 +170,10 @@ class SchedFullView extends AbstractView
     {
         $html = null;
 
-        $html .= "<h3 align=\"center\" style=\"margin-top: 20px; line-height: 3em;\">";
+        $html .= "<h3 class=\"center h3-btn\" style=\"margin-top: 20px; line-height: 3em;\">";
 
         if($pos == 'bottom') {
-            $html .= "<a  href=" . $this->getBaseURL('fullXlsPath') . " class=\"btn btn-primary btn-xs right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>";
+            $html .= "<a  href=" . $this->getBaseURL('fullXlsPath') . " class=\"btn btn-primary btn-xs export right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>";
             $html .= "<div class='clear-fix'></div>";
         }
 
@@ -196,7 +196,7 @@ class SchedFullView extends AbstractView
         $html .= "<a  href=" . $this->getBaseURL('endPath') . ">Log off</a><br>";
 
         if($pos == 'top') {
-            $html .= "<a  href=" . $this->getBaseURL('fullXlsPath') . " class=\"btn btn-primary btn-xs right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>";
+            $html .= "<a  href=" . $this->getBaseURL('fullXlsPath') . " class=\"btn btn-primary btn-xs export right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>";
             $html .= "<div class='clear-fix'></div>";
         }
 

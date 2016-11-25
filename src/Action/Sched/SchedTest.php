@@ -48,7 +48,7 @@ class SchedSchedTest extends AppTestCase
 
         $view = $this->client->get('/sched');
 
-        $this->assertContains("<h3 align=\"center\">$user Schedule</h3>",$view);
+        $this->assertContains("<h3 class=\"center\">$user Schedule</h3>",$view);
         $this->assertContains("<a href=/refs>Edit $user referee assignments</a>",$view);
     }
 

@@ -86,7 +86,7 @@ class SchedRefsView extends AbstractView
 
                 $html .= "<form name=\"addref\" method=\"post\" action=\"" . $this->getBaseURL('refsPath') . "\">\n";
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";
-                $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+                $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
                 $html .= "<th>Game No.</th>";
                 $html .= "<th>Date</th>";
                 $html .= "<th>Time</th>";
@@ -113,7 +113,7 @@ class SchedRefsView extends AbstractView
                     $time = date('H:i', strtotime($game->time));
                     if ($game->assignor == $this->user->name || $this->user->admin) {
                         if (!$game->assignor && $this->user->admin) {
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
                         } else {
                             if (!$testtime) {
                                 $testtime = $time;
@@ -129,13 +129,13 @@ class SchedRefsView extends AbstractView
                             }
                             //no refs
                             if (empty($game->cr) && empty($game->ar1) && empty($game->ar2)) {
-                                $html .= "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                                $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
                                 //open AR  or 4th slots
                             } elseif (empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
-                                $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                                $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
                                 //match covered
                             } else {
-                                $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
+                                $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                             }
                         }
                         $html .= "<td>$game->game_number</td>";
@@ -179,7 +179,7 @@ class SchedRefsView extends AbstractView
 
     private function menu()
     {
-        $html = "<h3 align=\"center\">";
+        $html = "<h3 class=\"h3-btn center\">";
 
         $html .= "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;";
 

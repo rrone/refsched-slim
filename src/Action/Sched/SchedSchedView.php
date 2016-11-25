@@ -331,14 +331,14 @@ class SchedSchedView extends AbstractView
 
             $rowColor = $this->colorDarkGray;
 
-            if ($this->num_assigned || ($showavailable && $this->num_unassigned)) {
+            if ($this->num_assigned || ($showavailable && $this->num_unassigned) || $this->user->admin) {
                 $submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled';
 
                 $html .= "<form name=\"form1\" method=\"post\" action=" . $this->getBaseURL('schedPath') . ">\n";
 
-                $html .= "<div align=\"left\">";
+                $html .= "<div class=\"center\">";
 
-                if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned)) {
+                if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned) || $this->user->admin) {
                     $html .= "<h3 class=\"h3-btn center\" >";
                     $html .= $this->menuLinks();
                     $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
@@ -355,7 +355,7 @@ class SchedSchedView extends AbstractView
 
                 if ($this->num_unassigned) {
                     $html .= "<table class=\"sched-table\" >\n";
-                    $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+                    $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
                     $html .= "<th>Game No</th>";
                     $html .= "<th>Date</th>";
                     $html .= "<th>Time</th>";
@@ -386,7 +386,7 @@ class SchedSchedView extends AbstractView
                                     }
                                 }
 
-                                $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
+                                $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                                 $html .= "<td>" . $this->game_no[$kant] . "</td>";
                                 $html .= "<td>" . $this->date[$kant] . "</td>";
                                 $html .= "<td>" . $this->time[$kant] . "</td>";
@@ -404,7 +404,7 @@ class SchedSchedView extends AbstractView
                         }
                     }
                     if ($html == $wasHTML) {
-                        $html .= "<tr align=\"center\">";
+                        $html .= "<tr class=\"center\">";
                         $html .= "<td colspan=\"10\" > No neutral assignments available. </td>";
                         $html .= "</tr>\n";
                     }
@@ -424,7 +424,7 @@ class SchedSchedView extends AbstractView
                     }
                 }
 
-                if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned)) {
+                if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned) || $this->user->admin) {
                     $html .= "<h3 class=\"h3-btn center\" >";
                     $html .= $this->menuLinks();
                     $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
@@ -453,7 +453,7 @@ class SchedSchedView extends AbstractView
 
     private function menu()
     {
-        $html = "<h3 align=\"center\">";
+        $html = "<h3 class=\"center\">";
 
         $html .= $this->menuLinks();
 
@@ -491,20 +491,22 @@ class SchedSchedView extends AbstractView
 
         $assigned = in_array($user->name, $this->ref_team);
         if (!$assigned) {
-            $html .= "<h3>$this->showgroup Games assigned to $user->name: <span style=\"color:$this->colorAlert\">NONE</span></h3><br>\n";
+            $html .= "<h3 class=\"left\">$this->showgroup Games assigned to $user->name: <span style=\"color:$this->colorAlert\">NONE</span></h3><br>\n";
+            $html .= "<div class=\"clear-fix\"></div>";
             return $html;
         }
 
-        $html .= "<h3>$this->showgroup Games assigned to $user->name :</h3>\n";
+        $html .= "<h3 class=\"left\">$this->showgroup Games assigned to $user->name :</h3>\n";
+        $html .= "<div class=\"clear-fix\"></div>";
 
         if (empty($kount)) {
             $html .= "<table class=\"sched-table\" >\n";
-            $html .= "<tr align=\"center\" bgcolor=\"$this->colorHighlight\">";
+            $html .= "<tr class=\"center\" bgcolor=\"$this->colorHighlight\">";
             $html .= "<td>$user->name has no games assigned</td>";
             $html .= "</tr>\n";
         } else {
             $html .= "<table class=\"sched-table\" >\n";
-            $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">\n";
+            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">\n";
             $html .= "<th>Game No</th>\n";
             $html .= "<th>Date</th>\n";
             $html .= "<th>Time</th>\n";
@@ -537,7 +539,7 @@ class SchedSchedView extends AbstractView
                         }
                     }
 
-                    $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
+                    $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                     $html .= "<td>" . $this->game_no[$kant] . "</td>";
                     $html .= "<td>" . $this->date[$kant] . "</td>";
                     $html .= "<td>" . $this->time[$kant] . "</td>";
@@ -557,7 +559,7 @@ class SchedSchedView extends AbstractView
                     $html .= "</tr>\n";
                 }
             }
-            $html .= "</table><br>";
+            $html .= "</table>";
         }
 
         return $html;

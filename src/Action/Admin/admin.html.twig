@@ -11,7 +11,7 @@
 {% block content %}
     <div class="col-xs-8 col-xs-offset-2">
         <div class="panel panel-default">
-            <div class="panel-heading center"><h1>Administrative Functions</h1></div>
+            <div class="panel-heading panel-masthead center"><h1>Administrative Functions</h1></div>
 
             <div class="panel panel-default">
                 <!-- Form Name -->
@@ -76,14 +76,6 @@
                         </fieldset>
                     </form>
                 </div>
-                <div class="form-group">
-                    <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
-                        <fieldset class="center">
-                            <button id="btnEditGames" name="btnEditGames" class="btn btn-primary btn-sm">Edit Games
-                            </button>
-                        </fieldset>
-                    </form>
-                </div>
 
             </div>
 
@@ -97,7 +89,7 @@
                         <fieldset style="margin-top: 10px;" class="center">
                             <div class="col-xs-12 center">
                                 <label class="col-xs-2 control-label" for="logNote">Log Note</label>
-                                <div class="col-xs-6">
+                                <div class="col-xs-7">
                                     <input style="width: 100%" id="logNote" name="logNote" type="text" placeholder=""
                                            class="form-control input-md">
                                 </div>

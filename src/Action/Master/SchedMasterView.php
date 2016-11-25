@@ -94,7 +94,7 @@ class SchedMasterView extends AbstractView
                 $html .= "Green shading change indicates different start times</h3>\n";
 
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";
-                $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+                $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
                 $html .= "<th>Game No.</th>";
                 $html .= "<th>Date</th>";
                 $html .= "<th>Time</th>";
@@ -134,9 +134,9 @@ class SchedMasterView extends AbstractView
                         }
 
                         if (empty($game->assignor)) {
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
                         } else {
-                            $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                         }
                         $html .= "<td>$game->game_number</td>";
                         $html .= "<td>$date</td>";
@@ -184,7 +184,7 @@ class SchedMasterView extends AbstractView
     {
         $unassigned = $this->sr->getUnassignedGames($this->event->projectKey);
 
-        $html = "<h3 align=\"center\" style=\"margin-top:20px; line-height:3em;\">";
+        $html = "<h3 class=\"center\" style=\"margin-top:20px; line-height:3em;\">";
         $html .= "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;";
 
         $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a> - ";
