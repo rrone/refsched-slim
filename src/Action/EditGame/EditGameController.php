@@ -1,22 +1,23 @@
 <?php
-namespace App\Action\Master;
+namespace App\Action\EditGame;
 
 use Slim\Container;
+use App\Action\AbstractController;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use App\Action\AbstractController;
 
-class SchedMasterDBController extends AbstractController
+class EditGameController extends AbstractController
 {
-    private $masterView;
+    /* @var EditGameView */
+    protected $editGameView;
 
-	public function __construct(Container $container, SchedMasterView $masterView) {
-		
-		parent::__construct($container);
-        
-        $this->masterView = $masterView;
+    public function __construct(Container $container, EditGameView $editGameView)
+    {
+        parent::__construct($container);
 
+        $this->editGameView = $editGameView;
     }
+
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized() || !$this->user->admin) {
@@ -28,11 +29,10 @@ class SchedMasterDBController extends AbstractController
         $request = $request->withAttribute('user', $this->user);
         $request = $request->withAttribute('event', $this->event);
 
-        $this->masterView->handler($request, $response);
-        $this->masterView->render($response);
+        $this->editGameView->handler($request, $response);
+
+        $this->editGameView->render($response);
 
         return $response;
     }
 }
-
-

@@ -19,6 +19,7 @@ $settings = [
                 __DIR__ . '/../src/Action/Sched',
                 __DIR__ . '/../src/Action/Admin',
                 __DIR__ . '/../src/Action/NoEvents',
+                __DIR__ . '/../src/Action/EditGame',
             ],
             'twig' => [
                 'cache' => __DIR__ . '/../var/cache/twig',
@@ -36,7 +37,7 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2016.11.21.01'
+            'version' => '2016.11.24.01'
         ]
     ],
 

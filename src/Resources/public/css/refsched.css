@@ -1,123 +1,152 @@
 
 body,td,th {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #000000;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #000000;
 }
 body {
-	background-color: #FFFFFF;
+    background-color: #FFFFFF;
 }
 a:link {
-	color: #0066CC;
-	text-decoration: none;
+    color: #0066CC;
+    text-decoration: none;
 }
 a:visited {
-	text-decoration: none;
-	color: #0099FF;
+    text-decoration: none;
+    color: #0099FF;
 }
 a:hover {
-	text-decoration: none;
-	color: #0000FF;
-	background-color: #FFFFCC;
+    text-decoration: none;
+    color: #0000FF;
+    background-color: #FFFFCC;
 }
 a:active {
-	text-decoration: none;
-	color: #CC0000;
-	background-color: #FFFFCC;
+    text-decoration: none;
+    color: #CC0000;
+    background-color: #FFFFCC;
 }
 h1, h2, h3 {
-	font-weight: bold;
+    font-weight: bold;
 }
 h1 {
-	font-size: 16px;
+    font-size: 16px;
 }
 h2 {
-	font-size: 14px;
+    font-size: 14px;
 }
 h3 {
-	font-size: 12px;
-	padding: 0 20px;
+    font-size: 12px;
+    padding: 0 20px;
 }
 .h3-btn {
-	line-height: 3em;
+    margin-top: 10px;
+    line-height: 3em;
 }
 .style4 a:link {
-	color: #FFFFFF;
-	text-decoration: underline;
+    color: #FFFFFF;
+    text-decoration: underline;
 }
 .style4 a:visited {
-	color: #FFFFFF;
-	text-decoration: underline;
+    color: #FFFFFF;
+    text-decoration: underline;
 }
 table {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	border: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border: 0;
 }
 th {
-	line-height: 3rem;
-	text-align: center;
+    line-height: 3rem;
+    text-align: center;
 }
-.sched_table th, .sched_table td {
-	border: 1px solid #9c9c9c;
+.sched-table, .edit-table {
+    width: 100%;
+    margin: 0 5px;
+    border-collapse: collapse;
+    table-layout: auto;
 }
-.sched_table tr {
-	line-height: 2em;
+.sched-table th, .sched-table td {
+    border: 1px solid #9c9c9c;
+}
+.sched-table tr {
+    line-height: 2em;
+}
+
+.edit-table input {
+    width: 94%;
+    margin: 1px 3%;
+    line-height: 2rem;
+}
+.edit-table th {
+    line-height: 3rem;
+}
+.maincontent {
+    margin: 10px auto;
 }
 .contentarea {
-	padding-right: 15px;
-	padding-left: 15px;
-	line-height: 1.4;
-	vertical-align: top;
-	text-align: left;
+    padding-right: 15px;
+    padding-left: 15px;
+    line-height: 1.4;
+    vertical-align: top;
+    text-align: left;
 }
 .foottext {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: xx-small;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: xx-small;
 }
 .center {
-	text-align: center;
+    text-align: center;
 }
 .center.no-content h2 {
-	margin: 20px 0;
+    margin: 20px 0;
 }
 .right {
-	float: right;
+    float: right;
 }
 .left {
-	float: left;
+    float: left;
 }
 .clear-fix {
-	clear: both;
+    clear: both;
 }
 .btn  {
-	margin: 10px 20px;
+    margin: 10px 20px;
 }
 .left-margin {
-	margin-left: 20px;
+    margin-left: 20px;
 }
 .form-control {
-	width: 80%;
+    width: 80%;
 }
 select.form-control,
 input.form-control {
-	margin: 5px 20px;
+    margin: 5px 20px;
     font-size: 13px;
-	height: 2.25em;
+    height: 2.25em;
+}
+.edit-table input.form-control {
+    margin: inherit;
 }
 a.btn:visited, a.btn:link {
-	color: #fff;
+    color: #fff;
     background-color: #337ab7;
     border-color: #2e6da4;
 }
 legend {
-	line-height: 3em;
+    line-height: 3em;
+}
+.export {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.panel-default>.panel-masthead {
+    background-color: #ddd;
 }
 @media only screen and (max-width: 768px){
-	select.form-control, input.form-control {
-		width: 90%;
-	}
+    select.form-control, input.form-control {
+        width: 90%;
+    }
 }
 .panel { margin-bottom: inherit }
 .no-border { border: 0 }

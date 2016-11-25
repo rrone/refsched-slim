@@ -323,4 +323,18 @@ $container[App\Action\NoEvents\NoEventsController::class] = function ($c) use($s
     return new \App\Action\NoEvents\NoEventsController($c, $v);
 };
 
+// -----------------------------------------------------------------------------
+// EditGameView class
+// -----------------------------------------------------------------------------
+$container[App\Action\EditGame\EditGameView::class] = function ($c) use($sr) {
+
+    return new \App\Action\EditGame\EditGameView($c, $sr);
+};
+
+$container[App\Action\EditGame\EditGameController::class] = function ($c) use($sr) {
+    $v = new \App\Action\EditGame\EditGameView($c, $sr);
+
+    return new \App\Action\EditGame\EditGameController($c, $v);
+};
+
 

@@ -87,7 +87,7 @@ class GreetView extends AbstractView
             $uname = $this->user->name;
 
             $html .= "<h3 class=\"center\">Welcome ". $uname ." Assignor</h3>\n";
-            $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">CURRENT STATUS</h3>\n<h3 align=\"center\">";
+            $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">CURRENT STATUS</h3>\n<h3 class=\"center\">";
             $html .= "<h3 class=\"center\">";
 
             if ($this->user->admin) {
@@ -98,9 +98,9 @@ class GreetView extends AbstractView
                 }
             } else {
                 if ($locked) {
-                    $html .= "The schedule is presently <span style=\"color:$this->colorAlert\">locked</span><br>\n";
+                    $html .= "The schedule is presently <span style=\"color:$this->colorAlert\">locked</span><br><br>\n";
                 } else {
-                    $html .= "The schedule is presently <span style=\"color:$this->colorSuccess\">unlocked</span><br>\n";
+                    $html .= "The schedule is presently <span style=\"color:$this->colorSuccess\">unlocked</span><br><br>\n";
                 }
             }
 
@@ -127,7 +127,7 @@ class GreetView extends AbstractView
                         } else {
                             $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time<br>\n";
                         }
-                    } else {
+                    } elseif (!$this->user->admin) {
                         foreach ($limit_list as $k => $v) {
                             if ($used_list[$k]) {
                                 if ($v == 'none') {
@@ -147,9 +147,9 @@ class GreetView extends AbstractView
                 if ($num_area == 0) {
                     $html .= "$uname is not currently assigned to any games.<br>";
                 } elseif ($num_area == 1) {
-                    $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> game.<br>";
+                    $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> game.<br><br>";
                 } else {
-                    $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> games.<br>";
+                    $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> games.<br><br>";
                 }
 
                 if (count($limit_list) == 0){
@@ -183,9 +183,9 @@ class GreetView extends AbstractView
 
                 if ($locked && !array_key_exists('none', $limit_list)) {
                     if (!$allatlimit) {
-                        $html .= "You may sign ". $this->user->name . " teams up for games but you may not remove them</h3>\n";
+                        $html .= "<br>You may sign ". $this->user->name . " teams up for games but you may not remove them</h3>\n";
                     } else {
-                        $html .= "Since ". $this->user->name . " is at or above your limit, you will not be able to sign teams up for games</h3>\n";
+                        $html .= "<br>Since ". $this->user->name . " is at or above your limit, you will not be able to sign teams up for games</h3>\n";
                     }
                 }
             }
@@ -193,23 +193,25 @@ class GreetView extends AbstractView
 
             $html .= "<hr class=\"center\" width=\"25%\">";
             $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">ACTIONS</h3>\n";
-            $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('fullPath') . ">View the full game schedule</a></h3>";
+            $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('fullPath') . ">View full game schedule</a></h3>";
 
             if ($this->user->admin) {
-                $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('schedPath') . ">View Assignors</a></h3>";
-                $html .= "<h3 class=\"center\"><a href=". $this->getBaseURL('masterPath') . ">Select Assignors for games</a></h3>";
+                $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('editGamePath') . ">Edit games</a></h3>";
+                $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('schedPath') . ">View Match Assignors</a></h3>";
+                $html .= "<h3 class=\"center\"><a href=". $this->getBaseURL('masterPath') . ">Select Match Assignors</a></h3>";
+                $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('refsPath') . ">Edit Referee Assignments</a></h3>";
             } else {
                 $html .= "<h3 class=\"center\">Goto $uname Schedule: <a href=" . $this->getBaseURL('schedPath') . ">All games</a> - ";
                 foreach ($groups as $group) {
                     $html .= "<a href=\"" . $this->getBaseURL('schedPath'). "?group=$group\">$group</a>" . $delim;
                 }
                 $html = substr($html, 0, strlen($html) - 3) . "</h3>";
+                $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('refsPath') . ">Edit $uname Referee Assignments</a></h3>";
+
             }
 
-            $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('refsPath') . ">Edit $uname Referee Assignments</a></h3>";
-            //         $html .= "<h3 class=\"center\"><a href=\"/summary.htm\">Summary of the playoffs</a></h3>";
-            $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('endPath') . ">LOG OFF</a></h3>";
-            $html .= "</center>";
+            $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('endPath') . ">Log Off</a></h3>";
+
         }
 
         return $html;

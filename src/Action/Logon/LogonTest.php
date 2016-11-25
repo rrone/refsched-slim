@@ -59,7 +59,6 @@ class LogonTest extends AppTestCase
 
         $url = '/';
         $headers = array(
-            'postman-token' => '1b3de564-12b7-b8a3-7546-17d65a3d4d4c',
             'cache-control' => 'no-cache',
             'content-type' => 'multipart/form-data;'
         );

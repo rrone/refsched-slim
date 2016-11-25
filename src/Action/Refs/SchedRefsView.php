@@ -85,8 +85,8 @@ class SchedRefsView extends AbstractView
                 $html .= "Green shading change indicates different start times</h3>\n";
 
                 $html .= "<form name=\"addref\" method=\"post\" action=\"" . $this->getBaseURL('refsPath') . "\">\n";
-                $html .= "<table class=\"sched_table\" width=\"100%\">\n";
-                $html .= "<tr align=\"center\" bgcolor=\"$this->colorTitle\">";
+                $html .= "<table class=\"sched-table\" width=\"100%\">\n";
+                $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
                 $html .= "<th>Game No.</th>";
                 $html .= "<th>Date</th>";
                 $html .= "<th>Time</th>";
@@ -113,7 +113,7 @@ class SchedRefsView extends AbstractView
                     $time = date('H:i', strtotime($game->time));
                     if ($game->assignor == $this->user->name || $this->user->admin) {
                         if (!$game->assignor && $this->user->admin) {
-                            $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
                         } else {
                             if (!$testtime) {
                                 $testtime = $time;
@@ -129,13 +129,13 @@ class SchedRefsView extends AbstractView
                             }
                             //no refs
                             if (empty($game->cr) && empty($game->ar1) && empty($game->ar2)) {
-                                $html .= "<tr align=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                                $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
                                 //open AR  or 4th slots
                             } elseif (empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
-                                $html .= "<tr align=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                                $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
                                 //match covered
                             } else {
-                                $html .= "<tr align=\"center\" bgcolor=\"$rowColor\">";
+                                $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                             }
                         }
                         $html .= "<td>$game->game_number</td>";
@@ -179,18 +179,23 @@ class SchedRefsView extends AbstractView
 
     private function menu()
     {
-        $html = "<h3 align=\"center\"><a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
+        $html = "<h3 class=\"h3-btn center\">";
 
-        $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a>&nbsp;-&nbsp\n";
+        $html .= "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;";
+
+        $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a>&nbsp;-&nbsp";
 
         if ($this->user->admin) {
-            $html .= "<a href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;\n";
-            $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=" . $this->getBaseURL('editGamePath') . ">Edit games</a>&nbsp;-&nbsp;";
+            $html .= "<a href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;";
+            $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;";
         } else {
-            $html .= "<a href=" . $this->getBaseURL('schedPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=" . $this->getBaseURL('schedPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;";
         }
 
-        $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a></h3>\n";
+        $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a>";
+
+        $html .= "</h3>\n";
 
         return $html;
     }

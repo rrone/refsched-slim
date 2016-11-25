@@ -1,20 +1,26 @@
 {% extends "layout.html.twig" %}
 
+{% block head %}
+{% endblock %}
+
 {% block content %}
-    
+
     <h2 class="center">
         {{ view.title | raw }}<br>
         {{ view.location | raw }}<br>
         {{ view.dates | raw }}
     </h2>
     <h3 class="center">{{ view.description | raw }}</h3>
-    
+
     <span class="center" style="color: #FF0000">{{ view.message | raw }}</span>
-    
+
     {{ view.topmenu | raw }}
 
     {{ view.content | raw }}
 
     {{ view.menu | raw }}
-        
+
+{% endblock %}
+
+{% block script %}
 {% endblock %}

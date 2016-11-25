@@ -1,31 +1,32 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <table width="98%" class="maincontent">
-        <tr>
-            <td align="center" class="contentarea">
+    <div class="maincontent">
+        <table width="98%">
+            <tr>
+                <td>
+                    <div class="center">
+                        <h1>Section 1 Event Schedule</h1>
 
-                <div align="center">
-                    <h1>Section 1 Event Schedule</h1>
+                        {% for event in events %}
+                            <h3>{{ event.name }}, {{ event.location }}<br>
+                                {{ event.dates }}</h3>
+                        {% endfor %}
+                    </div>
+                    <hr>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="center no-content">
+                        <h2>Rest easy...there are no events available to schedule.</h2>
+                        <h2>Go referee some games yourself.</h2>
+                    </div>
+                    {{ content | raw }}
 
-                    {% for event in events %}
-                        <h3>{{ event.name }}, {{ event.location }}<br>
-                            {{ event.dates }}</h3>
-                    {% endfor %}
-                </div>
-                <hr>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="center no-content">
-                    <h2>Rest easy...there are no events available to schedule.</h2>
-                    <h2>Go referee some games yourself.</h2>
-                </div>
-                {{ content | raw }}
+                </td>
+            </tr>
 
-            </td>
-        </tr>
-
-    </table>
+        </table>
+    </div>
 {% endblock %}

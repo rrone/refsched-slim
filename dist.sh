@@ -11,6 +11,9 @@ echo "  Checkout master branch from Git repository..."
 echo "  Build public resources..."
 ./node_modules/.bin/gulp build
 
+echo "  Purge composer development items..."
+composer install --no-dev
+
 echo "  Clear distribution folder..."
 rm -f -r dist
 
@@ -45,4 +48,7 @@ rm -f -r ~/Dropbox/_open/_ayso/s1/web/referee_site/refsched
 mkdir ~/Dropbox/_open/_ayso/s1/web/referee_site/refsched
 cp -f -r dist/* ~/Dropbox/_open/_ayso/s1/web/referee_site/refsched
 
-echo "...complete"
+echo "  Restore composer development items..."
+composer update
+
+echo "...distribution complete"

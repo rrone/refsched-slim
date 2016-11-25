@@ -71,3 +71,6 @@ $app->get('/na', App\Action\NoEvents\NoEventsController::class)
     ->setName('na');
 $container['naPath'] = $container->get('router')->pathFor('na');
 
+$app->map(['GET', 'POST'], '/editgame', App\Action\EditGame\EditGameController::class)
+    ->setName('edit_game');
+$container['editGamePath'] = $container->get('router')->pathFor('edit_game');
