@@ -95,7 +95,7 @@ class SchedMasterView extends AbstractView
 
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                $html .= "<th>Game No.</th>";
+                $html .= "<th>Game#</th>";
                 $html .= "<th>Date</th>";
                 $html .= "<th>Time</th>";
                 $html .= "<th>Field</th>";

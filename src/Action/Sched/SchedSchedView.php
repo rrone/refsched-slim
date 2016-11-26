@@ -97,7 +97,7 @@ class SchedSchedView extends AbstractView
                                 );
 
                                 $this->sr->updateAssignments($data);
-                                $this->msg .= "<p>You have <strong>removed</strong> your referee team from $game->division Game No. $game->game_number on $game->date at $game->time on $game->field</p>";
+                                $this->msg .= "<p>You have <strong>removed</strong> your referee team from $game->division Game# $game->game_number on $game->date at $game->time on $game->field</p>";
                             }
                         }
                     }
@@ -141,14 +141,14 @@ class SchedSchedView extends AbstractView
                                 $this->sr->updateAssignor($data);
                                 $added[$game->id] = $game;
                                 $games_now[$div]++;
-                                $this->msg .= "<p>You have <strong>scheduled</strong> $game->division Game No. $game->game_number on $date on $game->field at $time</p>";
+                                $this->msg .= "<p>You have <strong>scheduled</strong> $game->division Game# $game->game_number on $date on $game->field at $time</p>";
                             } else {
                                 $atLimit[$div]++;
-                                $this->msg .= "<p>You have <strong>not scheduled</strong> $game->division Game No. $game->game_number on $date on $game->field at $time because you are at your game limit!</p>";
+                                $this->msg .= "<p>You have <strong>not scheduled</strong> $game->division Game# $game->game_number on $date on $game->field at $time because you are at your game limit!</p>";
                             }
                         } else {
                             $unavailable[$game->id] = $game;
-                            $this->msg = "<p>Sorry, $game->division Game No. $game->game_number has been scheduled by $game->assignor</p>";
+                            $this->msg = "<p>Sorry, $game->division Game# $game->game_number has been scheduled by $game->assignor</p>";
                         }
                     }
                 }

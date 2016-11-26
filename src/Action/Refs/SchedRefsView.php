@@ -78,16 +78,13 @@ class SchedRefsView extends AbstractView
             $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
             if ($this->num_assigned) {
-                if (!$this->user->admin) {
-                    $html .= "<h2  class=\"center\">You are currently scheduled for the following games</h2></div>\n";
-                }
                 $html .= "<h3 class=\"center\">Green: Assignments covered (Yah!) / Yellow: Open Slots / Red: Needs your attention / Grey: Not yours to cover<br><br>\n";
                 $html .= "Green shading change indicates different start times</h3>\n";
 
                 $html .= "<form name=\"addref\" method=\"post\" action=\"" . $this->getBaseURL('refsPath') . "\">\n";
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                $html .= "<th>Game No.</th>";
+                $html .= "<th>Game#</th>";
                 $html .= "<th>Date</th>";
                 $html .= "<th>Time</th>";
                 $html .= "<th>Field</th>";
