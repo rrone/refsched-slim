@@ -24,24 +24,13 @@ class SchedEditRefView extends AbstractView
         $this->game_id = $request->getAttribute('game_id');
 
         if($request->isPost()) {
-            $_POST = $request->getParsedBody();
+            $data = $request->getParsedBody();
 
-            switch (count($_POST) > 3) {
-                case 3:
-                    $data = $request->getParsedBody();
-
-                    foreach ($data as $key => &$value) {
-                        if ($value != 'Update Assignments') {
-                            $pattern = "/^[a-z ,.'-]+$/i";
-                            $matches = [];
-                            preg_match($pattern, $value, $matches);
-                            if (empty($matches)) {
-                                $value = '';
-                            }
-                        }
-                    }
-                    $this->sr->updateAssignments($data);
+            foreach ($data as $key => &$value) {
+                $value = $this->stdName($value);
             }
+
+            $this->sr->updateAssignments($data);
 
             unset($_SESSION['game_id']);
         }
@@ -75,8 +64,7 @@ class SchedEditRefView extends AbstractView
 
             $target_game = $this->sr->gameIdToGameNumber($this->game_id);
             if (!is_null($target_game)) {
-                $html .= "<h2 class=\"center\">Enter Referee's First and Last name.<br>" .
-                    "<span style=\"color:#FF0000\"><i>NOTE: Adding \"??\" or \"Area name\" is NOT helpful.</i></span></h2><br>";
+                $html .= "<h2 class=\"center\">Enter Referee's First and Last name.</h2><br><";
 
                 if($this->user->admin) {
                     $games = $this->sr->getGames($projectKey, '%', true);
@@ -85,6 +73,8 @@ class SchedEditRefView extends AbstractView
                 }
 
                 $numRefs = $this->sr->numberOfReferees($projectKey);
+                $nameRegex = "^('Area')|([A-Z]{1}[a-z]{1,20}[, ]{0,2}[A-Z]{1}[a-z]{1,20}[, ]{0,2}[A-Z]{0,1}[a-z]{0,20}){0,1}";
+                $nameHint = "First Last or Last, First (Proper case; no initials)";
 
                 if (count($games)) {
                     foreach ($games as $game) {
@@ -116,11 +106,11 @@ class SchedEditRefView extends AbstractView
                             $html .= "<td>$game->division</td>";
                             $html .= "<td>$game->pool</td>";
                             $html .= "<td>$game->assignor</td>";
-                            $html .= "<td><input type=\"text\" name=\"cr\" size=\"15\" value=\"$game->cr\"></td>";
-                            $html .= "<td><input type=\"text\" name=\"ar1\" size=\"15\" value=\"$game->ar1\"></td>";
-                            $html .= "<td><input type=\"text\" name=\"ar2\" size=\"15\" value=\"$game->ar2\"></td>";
+                            $html .= "<td><input type=\"text\" name=\"cr\" value=\"$game->cr\" placeholder=\"First Last\" pattern=\"$nameRegex\" title=\"$nameHint\"></td>";
+                            $html .= "<td><input type=\"text\" name=\"ar1\" value=\"$game->ar1\" placeholder=\"First Last\" pattern=\"$nameRegex\" title=\"$nameHint\"></td>";
+                            $html .= "<td><input type=\"text\" name=\"ar2\" value=\"$game->ar2\" placeholder=\"First Last\" pattern=\"$nameRegex\" title=\"$nameHint\"></td>";
                             if ($numRefs > 3) {
-                                $html .= "<td><input type=\"text\" name=\"r4th\" size=\"15\" value=\"$game->r4th\"></td>";
+                                $html .= "<td><input type=\"text\" name=\"r4th\" size=\"15\" value=\"$game->r4th\" placeholder=\"First Last\" pattern=\"$nameRegex\"  title=\"$nameHint\"></td>";
                             }
                             $html .= "</tr>\n";
                             $html .= "</table>\n";
@@ -161,4 +151,33 @@ class SchedEditRefView extends AbstractView
 
         return $html;
     }
+
+    private function stdName($name)
+    {
+        $nameOut = '';
+
+        //deal with Last, First
+        if(strpos($name, ',' )){
+            $tempName = explode(',', $name);
+            foreach($tempName as $k=>$item) {
+                if($k > 0){
+                    $nameOut .= $item . ' ';
+                }
+            }
+            $nameOut .= $tempName[0];
+        } else {
+            $nameOut = $name;
+        }
+
+        //propercase
+        $tempName = explode(' ', strtolower($nameOut));
+
+        $nameOut = '';
+        foreach($tempName as $item) {
+            $nameOut .= ucfirst($item) . ' ';
+        }
+
+        return trim($nameOut);
+    }
+
 }
