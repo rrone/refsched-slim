@@ -38,12 +38,16 @@ class SchedExportXl extends AbstractExporter
         $this->generateScheduleData($content);
         $this->generateSummaryCountData($content);
         $this->generateSummaryCountDateDivision($content);
+        $this->generateAssignmentsByRefereeData($content);
 
+        /** @noinspection PhpUndefinedMethodInspection */
         $body = $response->getBody();
+        /** @noinspection PhpUndefinedMethodInspection */
         $body->write($this->export($content));
 
         return $response;
     }
+
     private function generateSummaryCountData(&$content)
     {
         $event = $this->event;
@@ -54,13 +58,13 @@ class SchedExportXl extends AbstractExporter
             $counts = $this->sr->getGameCounts($projectKey);
 
             //set the header labels
-            $labels = array ('Assignor','Date','Division','Game Count');
+            $labels = array('Assignor', 'Date', 'Division', 'Game Count');
 
-            $data =  array($labels);
+            $data = array($labels);
 
             //set the data : game in each row
-            foreach ( $counts as $count ) {
-                $date = date('D, d M Y',strtotime($count->date));
+            foreach ($counts as $count) {
+                $date = date('D, d M Y', strtotime($count->date));
                 $row = array(
                     $count->assignor,
                     $date,
@@ -77,6 +81,37 @@ class SchedExportXl extends AbstractExporter
 
         return $content;
     }
+
+    private function generateAssignmentsByRefereeData(&$content)
+    {
+        $event = $this->event;
+
+        if (!empty($event)) {
+            $projectKey = $event->projectKey;
+
+            $refs = $this->sr->assignmentsByReferee($projectKey);
+
+            //set the header labels
+            $labels = array ('Referee');
+
+            $data =  array($labels);
+
+            //set the data : game in each row
+            foreach ( $refs as $k=>$ref ) {
+                $row = array(
+                    $k
+                );
+                $data[] = $row;
+            }
+
+            $content['Referee Count']['data'] = $data;
+            $content['Referee Count']['options']['freezePane'] = 'A2';
+
+        }
+
+        return $content;
+    }
+
     private function generateScheduleData(&$content)
     {
         $event = $this->event;

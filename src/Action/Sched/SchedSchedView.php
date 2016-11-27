@@ -455,16 +455,16 @@ class SchedSchedView extends AbstractView
 
     }
 
-    private function menu()
-    {
-        $html = "<h3 class=\"center\">";
-
-        $html .= $this->menuLinks();
-
-        $html .= "</h3>\n";
-
-        return $html;
-    }
+//    private function menu()
+//    {
+//        $html = "<h3 class=\"center\">";
+//
+//        $html .= $this->menuLinks();
+//
+//        $html .= "</h3>\n";
+//
+//        return $html;
+//    }
 
     private function menuLinks()
     {

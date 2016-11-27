@@ -108,7 +108,7 @@ class SchedFullView extends AbstractView
 
                     if ($game->assignor == $this->user->name) {
                         //no refs
-                        if (empty($game->cr) && empty($game->ar1) && empty($game->ar2)) {
+                        if (empty($game->cr) && empty($game->ar1) && empty($game->ar2) && (!$has4th || $has4th && empty($game->r4th)) ) {
                             $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
                             //open AR  or 4th slots
                         }
@@ -127,7 +127,7 @@ class SchedFullView extends AbstractView
                         if (empty($game->assignor)) {
                             $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
                             //my open slots
-                        } elseif ($game->assignor == $this->user->name && empty($game->cr) && empty($game->ar1) && empty($game->ar2)) {
+                        } elseif ($game->assignor == $this->user->name && empty($game->cr) && empty($game->ar1) && empty($game->ar2) && (!$has4th || $has4th && empty($game->r4th))) {
                             $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
                             //assigned open slots
                         } elseif (empty($game->cr) || empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
@@ -137,7 +137,6 @@ class SchedFullView extends AbstractView
                             $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                         }
                     }
-
 
                     $html .= "<td>$game->game_number</td>";
                     $html .= "<td>$date</td>";

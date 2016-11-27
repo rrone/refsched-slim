@@ -29,13 +29,15 @@ class SchedRefsDBController extends AbstractController
         $request = $request->withAttribute('event', $this->event);
 
         $this->schedRefsView->handler($request, $response);
-        if(isset($_SESSION['game_id'])){
-            return $response->withRedirect($this->getBaseURL('editrefPath'));
+
+        if($request->isPost()) {
+            $_SESSION['game_id'] = array_keys($_POST);
+            $response =  $response->withRedirect($this->getBaseURL('editrefPath'));
+        } else {
+            $this->schedRefsView->render($response);
         }
-        $this->schedRefsView->render($response);
 
         return $response;
-
     }
 }
 

@@ -17,24 +17,28 @@ class SchedEditRefView extends AbstractView
 
         $this->sr = $schedulerRepository;
     }
+
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
         $this->game_id = $request->getAttribute('game_id');
 
-        if($request->isPost()) {
+        if ($request->isPost()) {
             $data = $request->getParsedBody();
 
             foreach ($data as $key => &$value) {
                 $value = $this->stdName($value);
             }
 
-            $this->sr->updateAssignments($data);
+            $gameNum = $this->sr->gameIdToGameNumber($this->game_id);
+            $game = $this->sr->getGameByKeyAndNumber($this->event->projectKey, $gameNum);
 
-            unset($_SESSION['game_id']);
+            if (!is_null($game) && (($game->assignor == $this->user->name) || $this->user->admin))
+                $this->sr->updateAssignments($data);
         }
     }
+
     public function render(Response &$response)
     {
         $content = array(
@@ -46,12 +50,13 @@ class SchedEditRefView extends AbstractView
                 'title' => $this->page_title,
                 'dates' => $this->dates,
                 'location' => $this->location,
-                'description' => "Assign " . $this->user->name. " Referees",
+                'description' => "Assign " . $this->user->name . " Referees",
             )
         );
 
         $this->view->render($response, 'sched.html.twig', $content);
     }
+
     private function renderEditRef()
     {
         $html = null;
@@ -63,10 +68,12 @@ class SchedEditRefView extends AbstractView
             $projectKey = $this->event->projectKey;
 
             $target_game = $this->sr->gameIdToGameNumber($this->game_id);
-            if (!is_null($target_game)) {
-                $html .= "<h2 class=\"center\">Enter Referee's First and Last name.</h2><br><";
+            $game = $this->sr->getGameByKeyAndNumber($projectKey, $target_game);
 
-                if($this->user->admin) {
+            if (!is_null($target_game) && (($game->assignor == $this->user->name) || $this->user->admin)) {
+                $html .= "<h2 class=\"center\">Enter Referee's First and Last name.</h2><br>";
+
+                if ($this->user->admin) {
                     $games = $this->sr->getGames($projectKey, '%', true);
                 } else {
                     $games = $this->sr->getGames($projectKey);
@@ -80,7 +87,7 @@ class SchedEditRefView extends AbstractView
                     foreach ($games as $game) {
                         $date = date('D, d M', strtotime($game->date));
                         $time = date('H:i', strtotime($game->time));
-                        if ($game->game_number == $target_game && ($game->assignor == $this->user->name|| $this->user->admin)) {
+                        if ($game->game_number == $target_game && ($game->assignor == $this->user->name || $this->user->admin)) {
                             $html .= "<form name=\"editref\" method=\"post\" action=" . $this->getBaseURL('editrefPath') . ">\n";
                             $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                             $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
@@ -123,13 +130,9 @@ class SchedEditRefView extends AbstractView
             } else {
                 $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The matching game was not found or your Area was not assigned to it.<br>You might want to check the schedule and try again.</span></h3>\n";
             }
-        } else {
-            $html .= "<h2 class=\"center\">You seem to have gotten here by a different path<br>\n";
-            $html .= "You should go to the <a href=" . $this->getBaseURL('refsPath') . ">Referee Edit Page</a></h2>";
         }
 
         return $html;
-
     }
 
     private function menu()
@@ -157,10 +160,10 @@ class SchedEditRefView extends AbstractView
         $nameOut = '';
 
         //deal with Last, First
-        if(strpos($name, ',' )){
+        if (strpos($name, ',')) {
             $tempName = explode(',', $name);
-            foreach($tempName as $k=>$item) {
-                if($k > 0){
+            foreach ($tempName as $k => $item) {
+                if ($k > 0) {
                     $nameOut .= $item . ' ';
                 }
             }
@@ -173,7 +176,7 @@ class SchedEditRefView extends AbstractView
         $tempName = explode(' ', strtolower($nameOut));
 
         $nameOut = '';
-        foreach($tempName as $item) {
+        foreach ($tempName as $item) {
             $nameOut .= ucfirst($item) . ' ';
         }
 

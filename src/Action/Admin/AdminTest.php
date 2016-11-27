@@ -3,14 +3,12 @@ namespace Tests;
 
 use App\Action\Admin\AdminController;
 use App\Action\Admin\AdminView;
-use App\Action\EditGame\EditGameController;
-use App\Action\EditGame\EditGameView;
 use App\Action\AbstractController;
 use App\Action\AbstractView;
 
 class AdminTest extends AppTestCase
 {
-   protected $testUri;
+    protected $testUri;
 
     public function setUp()
     {

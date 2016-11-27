@@ -3,29 +3,47 @@ namespace App\Action;
 
 use Illuminate\Database\Capsule\Manager;
 
+/**
+ * Class SchedulerRepository
+ * @package App\Action
+ */
 class SchedulerRepository
 {
     /* @var Manager */
     private $db;
 
+    /**
+     * SchedulerRepository constructor.
+     * @param Manager $db
+     */
     public function __construct(Manager $db)
     {
         $this->db = $db;
 
     }
 
+    /**
+     * @param $elem
+     * @return null|object
+     */
     private function getZero($elem)
     {
         return isset($elem[0]) ? (object)$elem[0] : null;
     }
 
     //User table functions
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function getAllUsers()
     {
         return $this->db->table('users')
             ->get();
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function getUsers()
     {
         return $this->db->table('users')
@@ -33,6 +51,10 @@ class SchedulerRepository
             ->get();
     }
 
+    /**
+     * @param $hash
+     * @return null|object
+     */
     public function getUserByPW($hash)
     {
         if (empty($hash)) {
@@ -47,6 +69,10 @@ class SchedulerRepository
 
     }
 
+    /**
+     * @param $name
+     * @return null|object
+     */
     public function getUserByName($name)
     {
         if (empty($name)) {
@@ -61,6 +87,10 @@ class SchedulerRepository
 
     }
 
+    /**
+     * @param $user
+     * @return null
+     */
     public function setUser($user)
     {
         if (empty($user)) {
@@ -87,9 +117,14 @@ class SchedulerRepository
                     'hash' => $hash,
                 ]);
         }
+
+        return null;
     }
 
     //Events table functions
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function getCurrentEvents()
     {
         return $this->db->table('events')
@@ -98,6 +133,9 @@ class SchedulerRepository
             ->get();
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function getEnabledEvents()
     {
         return $this->db->table('events')
@@ -106,6 +144,10 @@ class SchedulerRepository
             ->get();
     }
 
+    /**
+     * @param $projectKey
+     * @return null|object
+     */
     public function getEvent($projectKey)
     {
         if (empty($projectKey)) {
@@ -119,6 +161,10 @@ class SchedulerRepository
         return $this->getZero($event);
     }
 
+    /**
+     * @param $label
+     * @return null|object
+     */
     public function getEventByLabel($label)
     {
         $event = $this->db->table('events')
@@ -128,6 +174,10 @@ class SchedulerRepository
         return $this->getZero($event);
     }
 
+    /**
+     * @param $projectKey
+     * @return mixed
+     */
     public function getEventLabel($projectKey)
     {
         $event = $this->getEvent($projectKey);
@@ -135,6 +185,10 @@ class SchedulerRepository
         return $event->label;
     }
 
+    /**
+     * @param $projectKey
+     * @return null
+     */
     public function getLocked($projectKey)
     {
         $status = $this->db->table('events')
@@ -149,6 +203,10 @@ class SchedulerRepository
         }
     }
 
+    /**
+     * @param $projectKey
+     * @return null
+     */
     public function numberOfReferees($projectKey)
     {
         $numRefs = $this->db->table('events')
@@ -164,6 +222,9 @@ class SchedulerRepository
         }
     }
 
+    /**
+     * @param $key
+     */
     public function lockProject($key)
     {
         $this->db->table('events')
@@ -171,6 +232,9 @@ class SchedulerRepository
             ->update(['locked' => true]);
     }
 
+    /**
+     * @param $key
+     */
     public function unlockProject($key)
     {
         $this->db->table('events')
@@ -179,6 +243,12 @@ class SchedulerRepository
     }
 
     //Games table functions
+    /**
+     * @param string $projectKey
+     * @param string $group
+     * @param bool $medalRound
+     * @return \Illuminate\Support\Collection
+     */
     public function getGames($projectKey = '%', $group = '%', $medalRound = false)
     {
         $group .= '%';
@@ -201,6 +271,12 @@ class SchedulerRepository
         return $games;
     }
 
+    /**
+     * @param string $projectKey
+     * @param string $group
+     * @param bool $medalRound
+     * @return \Illuminate\Support\Collection
+     */
     public function getUnassignedGames($projectKey = '%', $group = '%', $medalRound = false)
     {
         $group .= '%';
@@ -216,6 +292,12 @@ class SchedulerRepository
             ->get();
     }
 
+    /**
+     * @param $projectKey
+     * @param $rep
+     * @param bool $medalRound
+     * @return \Illuminate\Support\Collection
+     */
     public function getGamesByRep($projectKey, $rep, $medalRound = false)
     {
         return $this->db->table('games')
@@ -228,6 +310,10 @@ class SchedulerRepository
 
     }
 
+    /**
+     * @param $projectKey
+     * @return array
+     */
     public function getGroups($projectKey)
     {
         $groups = $this->db->table('games')
@@ -248,6 +334,10 @@ class SchedulerRepository
         return $result;
     }
 
+    /**
+     * @param $projectKey
+     * @param $rep
+     */
     public function clearAssignor($projectKey, $rep)
     {
         $this->db->table('games')
@@ -258,6 +348,10 @@ class SchedulerRepository
             ->update(['assignor' => '']);
     }
 
+    /**
+     * @param $data
+     * @return null
+     */
     public function updateAssignor($data)
     {
         if (empty($data)) {
@@ -272,8 +366,14 @@ class SchedulerRepository
                     ->update(['assignor' => $rep]);
             }
         }
+
+        return null;
     }
 
+    /**
+     * @param $data
+     * @return null
+     */
     public function updateAssignments($data)
     {
         if (empty($data)) {
@@ -293,8 +393,14 @@ class SchedulerRepository
                     ]);
             }
         }
+
+        return null;
     }
 
+    /**
+     * @param $id
+     * @return null
+     */
     public function gameIdToGameNumber($id)
     {
         $gameNo = $this->db->table('games')
@@ -310,6 +416,9 @@ class SchedulerRepository
         }
     }
 
+    /**
+     * @return array|null
+     */
     public function getGamesHeader()
     {
         $games = $this->getGames();
@@ -323,6 +432,9 @@ class SchedulerRepository
         return null;
     }
 
+    /**
+     * @return int
+     */
     public function getNextGameId()
     {
         $id = 0;
@@ -339,6 +451,10 @@ class SchedulerRepository
         return $id;
     }
 
+    /**
+     * @param $data
+     * @return array|null
+     */
     public function modifyGames($data)
     {
         if (is_null($data)) {
@@ -412,7 +528,12 @@ class SchedulerRepository
 
     }
 
-    private function getGameByKeyAndNumber($projectKey, $game_number)
+    /**
+     * @param $projectKey
+     * @param $game_number
+     * @return null|object
+     */
+    public function getGameByKeyAndNumber($projectKey, $game_number)
     {
         $game = $this->db->table('games')
             ->where([
@@ -424,6 +545,10 @@ class SchedulerRepository
         return $this->getZero($game);
     }
 
+    /**
+     * @param $id
+     * @return null|object
+     */
     private function getGame($id)
     {
         $game = $this->db->table('games')
@@ -433,6 +558,10 @@ class SchedulerRepository
         return $this->getZero($game);
     }
 
+    /**
+     * @param $data
+     * @return array|null
+     */
     private function updateGame($data)
     {
         if (empty($data)) {
@@ -468,6 +597,10 @@ class SchedulerRepository
         return $changes;
     }
 
+    /**
+     * @param $data
+     * @return array|null
+     */
     private function insertGame($data)
     {
         if (empty($data)) {
@@ -491,6 +624,10 @@ class SchedulerRepository
         return $changes;
     }
 
+    /**
+     * @param $projectKey
+     * @return \Illuminate\Support\Collection
+     */
     public function getGameCounts($projectKey)
     {
         return $this->db->table('games')
@@ -500,6 +637,10 @@ class SchedulerRepository
             ->get();
     }
 
+    /**
+     * @param $projectKey
+     * @return \Illuminate\Support\Collection
+     */
     public function getDatesDivisions($projectKey)
     {
         return $this->db->table('games')
@@ -511,7 +652,65 @@ class SchedulerRepository
             ->get();
     }
 
+    static function firstLastSort($a, $b)
+    {
+        if ($a == $b) {
+            return 0;
+        }
+
+        $A = explode(' ', $a);
+        $B = explode(' ', $b);
+
+        $lastA = isset($A[1]) ? $A[1] : '';
+        $lastB = isset($B[1]) ? $B[1] : '';
+
+        return ($lastA < $lastB) ? -1 : 1;
+    }
+
+    public function assignmentsByReferee($projectKey)
+    {
+        $cr = $this->db->table('games')
+            ->selectRaw('DISTINCT cr AS Referee')
+            ->where('projectKey', 'like', $projectKey)
+            ->where('cr', '<>', '');
+
+        $ar1 = $this->db->table('games')
+            ->selectRaw('DISTINCT ar1 AS Referee')
+            ->where('projectKey', 'like', $projectKey)
+            ->where('ar1', '<>', '');
+
+        $ar2 = $this->db->table('games')
+            ->selectRaw('DISTINCT ar2 AS Referee')
+            ->where('projectKey', 'like', $projectKey)
+            ->where('ar2', '<>', '');
+
+        $r4th = $this->db->table('games')
+            ->selectRaw('DISTINCT r4th AS Referee')
+            ->where('projectKey', 'like', $projectKey)
+            ->where('r4th', '<>', '');
+
+        $refs = $cr
+            ->union($ar1)
+            ->union($ar2)
+            ->union($r4th);
+
+        $result = $refs
+            ->get();
+
+        foreach ($result as $ref){
+            $refList[] = $ref->Referee;
+        }
+
+        usort($refList, array($this, "firstLastSort"));
+
+        return $refList;
+    }
+
     //Limits table functions
+    /**
+     * @param $projectKey
+     * @return \Illuminate\Support\Collection
+     */
     public function getLimits($projectKey)
     {
         return $this->db->table('limits')
@@ -520,6 +719,11 @@ class SchedulerRepository
     }
 
     //Log writer
+    /**
+     * @param $projectKey
+     * @param $msg
+     * @return null
+     */
     public function logInfo($projectKey, $msg)
     {
         $data = [
@@ -534,9 +738,17 @@ class SchedulerRepository
         return null;
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function getAccessLog()
     {
         return $this->db->table('log')
             ->get();
+    }
+
+    public function showVariables()
+    {
+        var_dump($this->db->getConnection());die();
     }
 }

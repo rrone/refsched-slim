@@ -38,6 +38,9 @@ abstract class AbstractController
             $_SESSION['authed'] = $session['authed'];
             $_SESSION['user'] = $session['user'];
             $_SESSION['event'] = $session['event'];
+            if(isset($session['game_id'])){
+                $_SESSION['game_id'] = $session['game_id'];
+            }
         }
 
         $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
@@ -56,10 +59,10 @@ abstract class AbstractController
     }
     protected function logStamp(Request $request)
     {
-        if($this->isTest()){
-            return null;
-        }
-
+//        if($this->isTest()){
+//            return null;
+//        }
+//
         if(isset($_SESSION['admin'])){
             return null;
         }

@@ -23,14 +23,6 @@ class SchedRefsView extends AbstractView
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
 
-        if ($request->isPost()) {
-            $_POST = $request->getParsedBody();
-
-            $_SESSION['game_id'] = array_keys($_POST);
-        } else {
-            unset($_SESSION['game_id']);
-        }
-
         return null;
     }
 

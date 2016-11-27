@@ -22,6 +22,7 @@ class LockUnlockTest extends AppTestCase
         // instantiate the view
 
         $view = new SchedLockView($this->c, $this->sr);
+        $this->assertTrue($view instanceof AbstractView);
 
         // instantiate the Lock controller & test it
 

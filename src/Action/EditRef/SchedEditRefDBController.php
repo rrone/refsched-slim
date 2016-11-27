@@ -32,10 +32,13 @@ class SchedEditRefDBController extends AbstractController
         $request = $request->withAttribute('game_id', $game_id);
 
         $this->schedEditRefView->handler($request, $response);
-        if(!isset($_SESSION['game_id'])){
-            return $response->withRedirect($this->getBaseURL('refsPath'));
+
+        if($request->isPost()) {
+            $response =  $response->withRedirect($this->getBaseURL('refsPath'));
         }
-        $this->schedEditRefView->render($response);
+        else {
+            $this->schedEditRefView->render($response);
+        }
 
         return $response;
     }

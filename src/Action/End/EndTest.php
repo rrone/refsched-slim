@@ -2,7 +2,6 @@
 namespace Tests;
 
 use App\Action\End\SchedEndController;
-use There4\Slim\Test\WebTestClient;
 use App\Action\AbstractController;
 use Slim\Http\Response;
 
@@ -29,8 +28,10 @@ class EndTest extends AppTestCase
         $app = $this->client->app;
         $response = $app($request, $response);
 
+        /** @noinspection PhpUndefinedMethodInspection */
         $this->assertEquals(302, $response->getStatusCode());
 
+        /** @noinspection PhpUndefinedMethodInspection */
         $url = implode($response->getHeader('Location'));
 
         $this->assertEquals('/', $url);

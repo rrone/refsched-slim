@@ -12,6 +12,7 @@ date_default_timezone_set('UTC');
 
 use Slim\App;
 use App\Action\SchedulerRepository;
+use Slim\Container;
 use There4\Slim\Test\WebTestCase;
 use Slim\Http\Environment;
 use Slim\Http\Uri;
@@ -27,8 +28,20 @@ require_once PROJECT_ROOT . '/vendor/autoload.php';
 class AppTestCase extends WebTestCase
 {
     protected $local;
+
+    /**
+     * @var SchedulerRepository
+     */
     protected $sr;
+
+    /**
+     * @var Container
+     */
     protected $c;
+
+    /* @var \Tests\AppWebTestClient */
+    protected $client;
+
     private $cookies = array();
 
     public function getSlimInstance() {

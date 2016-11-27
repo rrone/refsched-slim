@@ -1,7 +1,6 @@
 <?php
 namespace Tests;
 
-use There4\Slim\Test\WebTestClient;
 use App\Action\AbstractController;
 use App\Action\AbstractView;
 use App\Action\Greet\SchedGreetDBController;
