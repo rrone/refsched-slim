@@ -668,6 +668,10 @@ class SchedulerRepository
         return $result;
     }
 
+    /**
+     * @param $projectKey
+     * @return \Illuminate\Support\Collection
+     */
     public function getDates($projectKey)
     {
         $result = $this->db->table('games')
@@ -687,6 +691,9 @@ class SchedulerRepository
      */
     static function firstLastSort($a, $b)
     {
+        $a = (object)$a;
+        $b = (object)$b;
+
         if ($a == $b) {
             return 0;
         }
@@ -701,69 +708,14 @@ class SchedulerRepository
     }
 
     /**
-     * @param $projectKey
+     * @param array $result
      * @return array
      */
-    public function refereeAssignmentMap($projectKey)
+    private function aggregateRefereeAssignments(array $result)
     {
-        $has4th = $this->numberOfReferees($projectKey) > 3;
-
-        $select4th = $has4th ? '0 as r4th' : '';
-
-        $cr = $this->db->table('games')
-            ->selectRaw('cr as name, date, time, division, COUNT(cr) as crCount, 0 as ar1Count, 0 as ar2Count ' . $select4th)
-            ->where([
-                ['projectKey', $projectKey],
-                ['cr', '<>', '']
-            ])
-            ->groupBy(['cr', 'date', 'division']);
-
-        $ar1 = $this->db->table('games')
-            ->selectRaw('ar1 as name, date, time, division, 0 as crCount, COUNT(ar1) as ar1Count, 0 as ar2Count ' . $select4th)
-            ->where([
-                ['projectKey', $projectKey],
-                ['ar1', '<>', '']
-            ])
-            ->groupBy(['ar1', 'date', 'division']);
-
-        $ar2 = $this->db->table('games')
-            ->selectRaw('ar2 as name, date, time, division, 0 as crCount, 0 as ar1Count, COUNT(ar2) as ar2Count ' . $select4th)
-            ->where([
-                ['projectKey', $projectKey],
-                ['ar2', '<>', '']
-            ])
-            ->groupBy(['ar2', 'date', 'division']);
-
-        $refs = $cr
-            ->union($ar1)
-            ->union($ar2);
-
-        if ($has4th) {
-            $r4th = $this->db->table('games')
-                ->selectRaw('r4th as name, date, time, division, 0 as crCount, 0 as ar1Count, 0 as ar2Count, COUNT(r4th) as r4thCount')
-                ->where([
-                    ['projectKey', $projectKey],
-                    ['r4th', '<>', '']
-                ])
-                ->groupBy(['r4th', 'date', 'division']);
-
-            $refs = $refs
-                ->union($r4th);
-        }
-
-        $result = $refs
-            ->orderBy('name', 'asc')
-            ->orderBy('date', 'asc')
-            ->orderBy('time', 'asc')
-            ->orderBy('division', 'asc')
-            ->get();
-        $arrResult = $result->all();
-
-        usort($arrResult, array($this, "firstLastSort"));
-
         $refList = [];
         $div = null;
-        foreach ($arrResult as $ref) {
+        foreach ($result as $ref) {
             $arrRef = (array)$ref;
             foreach ($arrRef as $hdr => $val) {
                 switch ($hdr) {
@@ -835,6 +787,18 @@ class SchedulerRepository
             $refsList[] = $ref;
         }
 
+        return $refsList;
+    }
+
+    /**
+     * @param array $refsList
+     * @param $projectKey
+     * @return array
+     */
+    private function sortRefereeAssignments(array $refsList, $projectKey)
+    {
+        usort($refsList, array($this, "firstLastSort"));
+
         $emptySortList = ['name' => '', 'All' => 0, 'Ref' => 0, 'AR' => 0];
 
         $result = $this->getDates($projectKey);
@@ -859,6 +823,73 @@ class SchedulerRepository
         }
 
         return $sortedRefsList;
+    }
+
+    /**
+     * @param $projectKey
+     * @return array
+     */
+    public function refereeAssignmentMap($projectKey)
+    {
+        $has4th = $this->numberOfReferees($projectKey) > 3;
+
+        $select4th = $has4th ? '0 as r4th' : '';
+
+        $cr = $this->db->table('games')
+            ->selectRaw('cr as name, date, time, division, COUNT(cr) as crCount, 0 as ar1Count, 0 as ar2Count ' . $select4th)
+            ->where([
+                ['projectKey', $projectKey],
+                ['cr', '<>', '']
+            ])
+            ->groupBy(['cr', 'date', 'division']);
+
+        $ar1 = $this->db->table('games')
+            ->selectRaw('ar1 as name, date, time, division, 0 as crCount, COUNT(ar1) as ar1Count, 0 as ar2Count ' . $select4th)
+            ->where([
+                ['projectKey', $projectKey],
+                ['ar1', '<>', '']
+            ])
+            ->groupBy(['ar1', 'date', 'division']);
+
+        $ar2 = $this->db->table('games')
+            ->selectRaw('ar2 as name, date, time, division, 0 as crCount, 0 as ar1Count, COUNT(ar2) as ar2Count ' . $select4th)
+            ->where([
+                ['projectKey', $projectKey],
+                ['ar2', '<>', '']
+            ])
+            ->groupBy(['ar2', 'date', 'division']);
+
+        $refs = $cr
+            ->union($ar1)
+            ->union($ar2);
+
+        if ($has4th) {
+            $r4th = $this->db->table('games')
+                ->selectRaw('r4th as name, date, time, division, 0 as crCount, 0 as ar1Count, 0 as ar2Count, COUNT(r4th) as r4thCount')
+                ->where([
+                    ['projectKey', $projectKey],
+                    ['r4th', '<>', '']
+                ])
+                ->groupBy(['r4th', 'date', 'division']);
+
+            $refs = $refs
+                ->union($r4th);
+        }
+
+        $result = $refs
+            ->orderBy('name', 'asc')
+            ->orderBy('date', 'asc')
+            ->orderBy('time', 'asc')
+            ->orderBy('division', 'asc')
+            ->get();
+        $arrResult = $result->all();
+
+        $refsList = $this->aggregateRefereeAssignments($arrResult);
+
+        $sortedRefsList = $this->sortRefereeAssignments($refsList, $projectKey);
+
+        return $sortedRefsList;
+
     }
 
 //Limits table functions

@@ -33,6 +33,7 @@ class SchedTemplateExport extends AbstractExporter
 
         $this->outFileName = 'GameScheduleTemplate_' . date('Ymd_His') . '.' . $this->getFileExtension();
     }
+
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
@@ -42,7 +43,7 @@ class SchedTemplateExport extends AbstractExporter
         if ($file['valid']) {
             // generate the response
             $response = $response->withHeader('Content-Type', $this->contentType);
-            $response = $response->withHeader('Content-Disposition', 'attachment; filename='. $this->outFileName);
+            $response = $response->withHeader('Content-Disposition', 'attachment; filename=' . $this->outFileName);
 
             $body = $response->getBody();
             $content = $file['content'];
@@ -60,6 +61,7 @@ class SchedTemplateExport extends AbstractExporter
 
         return null;
     }
+
     protected function render(Response &$response)
     {
         $msg = $this->event->name . ' at ' . $this->event->location . ' on ' . $this->event->dates;
@@ -73,6 +75,7 @@ class SchedTemplateExport extends AbstractExporter
 
         $this->view->render($response, 'modal.html.twig', $content);
     }
+
     protected function renderFile()
     {
         $content = null;
@@ -87,8 +90,8 @@ class SchedTemplateExport extends AbstractExporter
             //set the header labels
             $labels = $this->sr->getGamesHeader();
 
-            if (!is_null($labels)){
-                foreach($labels as $key=>$label) {
+            if (!is_null($labels)) {
+                foreach ($labels as $key => $label) {
                     $hdr[] = $label;
                     switch ($label) {
                         case 'projectKey':
@@ -108,18 +111,21 @@ class SchedTemplateExport extends AbstractExporter
                 $data[] = $hdr;
                 $data[] = $row;
 
-                $dateCol = chr($dateCol+65) . ":" . chr($dateCol+65);
+                $dateCol = chr($dateCol + 65) . ":" . chr($dateCol + 65);
 
                 $wkbk['FullSchedule']['data'] = $data;
                 $wkbk['FullSchedule']['options']['freezePane'] = 'A2';
-                $wkbk['FullSchedule']['options']['style'] = array($dateCol=>'yyyy-mm-dd');
+                $wkbk['FullSchedule']['options']['style'] = array($dateCol => 'yyyy-mm-dd');
 
-                $content = array('valid'=>true, 'content'=>$wkbk);
+                $content = array('valid' => true, 'content' => $wkbk);
 
             } else {
 
-                $content = array('valid'=>false, 'content'=>null);
+                $content = array('valid' => false, 'content' => null);
             }
+        } else {
+
+            $content = array('valid' => false, 'content' => null);
         }
 
         return $content;
