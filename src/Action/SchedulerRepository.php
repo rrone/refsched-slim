@@ -632,7 +632,7 @@ class SchedulerRepository
     {
         return $this->db->table('games')
             ->selectRaw('assignor, date, division, COUNT(division) as game_count')
-            ->where('projectKey', 'like', $projectKey)
+            ->where('projectKey', $projectKey)
             ->groupBy(['assignor', 'division'])
             ->get();
     }
@@ -645,21 +645,54 @@ class SchedulerRepository
     {
         return $this->db->table('games')
             ->selectRaw('DISTINCT assignor, date, division')
-            ->where('projectKey', 'like', $projectKey)
+            ->where('projectKey', $projectKey)
             ->orderBy('assignor', 'asc')
             ->orderBy('date', 'asc')
             ->orderBy('division', 'asc')
             ->get();
     }
 
+    /**
+     * @param $projectKey
+     * @return \Illuminate\Support\Collection
+     */
+    public function getDivisions($projectKey)
+    {
+        $result = $this->db->table('games')
+            ->selectRaw('SUBSTR(division,1,3) as uDiv')
+            ->distinct()
+            ->where('projectKey', $projectKey)
+            ->orderBy('division', 'asc')
+            ->get();
+
+        return $result;
+    }
+
+    public function getDates($projectKey)
+    {
+        $result = $this->db->table('games')
+            ->select('date')
+            ->distinct()
+            ->where('projectKey', $projectKey)
+            ->orderBy('date', 'asc')
+            ->get();
+
+        return $result;
+    }
+
+    /**
+     * @param $a
+     * @param $b
+     * @return int
+     */
     static function firstLastSort($a, $b)
     {
         if ($a == $b) {
             return 0;
         }
 
-        $A = explode(' ', $a);
-        $B = explode(' ', $b);
+        $A = explode(' ', $a->name);
+        $B = explode(' ', $b->name);
 
         $lastA = isset($A[1]) ? $A[1] : '';
         $lastB = isset($B[1]) ? $B[1] : '';
@@ -667,64 +700,188 @@ class SchedulerRepository
         return ($lastA < $lastB) ? -1 : 1;
     }
 
-    public function assignmentsByReferee($projectKey)
+    /**
+     * @param $projectKey
+     * @return array
+     */
+    public function refereeAssignmentMap($projectKey)
     {
+        $has4th = $this->numberOfReferees($projectKey) > 3;
+
+        $select4th = $has4th ? '0 as r4th' : '';
+
         $cr = $this->db->table('games')
-            ->selectRaw('DISTINCT cr AS Referee')
-            ->where('projectKey', 'like', $projectKey)
-            ->where('cr', '<>', '');
+            ->selectRaw('cr as name, date, time, division, COUNT(cr) as crCount, 0 as ar1Count, 0 as ar2Count ' . $select4th)
+            ->where([
+                ['projectKey', $projectKey],
+                ['cr', '<>', '']
+            ])
+            ->groupBy(['cr', 'date', 'division']);
 
         $ar1 = $this->db->table('games')
-            ->selectRaw('DISTINCT ar1 AS Referee')
-            ->where('projectKey', 'like', $projectKey)
-            ->where('ar1', '<>', '');
+            ->selectRaw('ar1 as name, date, time, division, 0 as crCount, COUNT(ar1) as ar1Count, 0 as ar2Count ' . $select4th)
+            ->where([
+                ['projectKey', $projectKey],
+                ['ar1', '<>', '']
+            ])
+            ->groupBy(['ar1', 'date', 'division']);
 
         $ar2 = $this->db->table('games')
-            ->selectRaw('DISTINCT ar2 AS Referee')
-            ->where('projectKey', 'like', $projectKey)
-            ->where('ar2', '<>', '');
-
-        $r4th = $this->db->table('games')
-            ->selectRaw('DISTINCT r4th AS Referee')
-            ->where('projectKey', 'like', $projectKey)
-            ->where('r4th', '<>', '');
+            ->selectRaw('ar2 as name, date, time, division, 0 as crCount, 0 as ar1Count, COUNT(ar2) as ar2Count ' . $select4th)
+            ->where([
+                ['projectKey', $projectKey],
+                ['ar2', '<>', '']
+            ])
+            ->groupBy(['ar2', 'date', 'division']);
 
         $refs = $cr
             ->union($ar1)
-            ->union($ar2)
-            ->union($r4th);
+            ->union($ar2);
 
-        $result = $refs
-            ->get();
+        if ($has4th) {
+            $r4th = $this->db->table('games')
+                ->selectRaw('r4th as name, date, time, division, 0 as crCount, 0 as ar1Count, 0 as ar2Count, COUNT(r4th) as r4thCount')
+                ->where([
+                    ['projectKey', $projectKey],
+                    ['r4th', '<>', '']
+                ])
+                ->groupBy(['r4th', 'date', 'division']);
 
-        foreach ($result as $ref){
-            $refList[] = $ref->Referee;
+            $refs = $refs
+                ->union($r4th);
         }
 
-        usort($refList, array($this, "firstLastSort"));
+        $result = $refs
+            ->orderBy('name', 'asc')
+            ->orderBy('date', 'asc')
+            ->orderBy('time', 'asc')
+            ->orderBy('division', 'asc')
+            ->get();
+        $arrResult = $result->all();
 
-        return $refList;
+        usort($arrResult, array($this, "firstLastSort"));
+
+        $refList = [];
+        $div = null;
+        foreach ($arrResult as $ref) {
+            $arrRef = (array)$ref;
+            foreach ($arrRef as $hdr => $val) {
+                switch ($hdr) {
+                    case 'name':
+                        if (!isset($refList[$ref->name])) {
+                            $refList[$ref->name] = [];
+                        }
+                        break;
+                    case 'date':
+                        if (!isset($refList[$ref->name][$val])) {
+                            $refList[$ref->name][$val] = [];
+                            $refList[$ref->name][$val] = 0;
+                        }
+                        if ($val) {
+                            $refList[$ref->name][$val] += 1;
+                        }
+                        break;
+                    case 'division':
+                        $div = substr($val, 0, 3);
+                        if (!isset($refList[$ref->name][$div])) {
+                            $refList[$ref->name][$div] = 0;
+                        }
+                        $refList[$ref->name][$div] += 1;
+                        break;
+                    case 'crCount':
+                        if (!isset($refList[$ref->name]['Ref'])) {
+                            $refList[$ref->name]['Ref'] = [];
+                            $refList[$ref->name]['Ref'] = 0;
+                        }
+                        if ($val) {
+                            $refList[$ref->name]['Ref'] += 1;
+                        }
+                        break;
+                    case 'ar1Count':
+                    case 'ar2Count':
+                        if (!isset($refList[$ref->name]['AR'])) {
+                            $refList[$ref->name]['AR'] = [];
+                            $refList[$ref->name]['AR'] = 0;
+                        }
+                        if ($val) {
+                            $refList[$ref->name]['AR'] += 1;
+                        }
+                        break;
+                    case
+                    'r4th':
+                        if (!isset($refList[$ref->name]['4th'])) {
+                            $refList[$ref->name]['4th'] = [];
+                            $refList[$ref->name]['4th'] = 0;
+                        }
+                        if ($val) {
+                            $refList[$ref->name]['4th'] += 1;
+                        }
+                }
+            }
+            $refList[$ref->name]['All'] = $refList[$ref->name]['Ref'];
+            $refList[$ref->name]['All'] += $refList[$ref->name]['AR'];
+            if (isset($refList[$ref->name]['4th'])) {
+                $refList[$ref->name]['All'] += $refList[$ref->name]['4th'];
+            }
+        }
+
+        $refsList = [];
+        foreach ($refList as $name => $data) {
+            $ref = ['name' => $name];
+
+            foreach ($data as $k => $item) {
+                $ref[$k] = $item;
+            }
+            $refsList[] = $ref;
+        }
+
+        $emptySortList = ['name' => '', 'All' => 0, 'Ref' => 0, 'AR' => 0];
+
+        $result = $this->getDates($projectKey);
+        $arrDates = $result->all();
+        foreach ($arrDates as $date) {
+            $emptySortList[$date->date] = 0;
+        }
+
+        $result = $this->getDivisions($projectKey);
+        $arrDivs = $result->all();
+        foreach ($arrDivs as $div) {
+            $emptySortList[$div->uDiv] = 0;
+        }
+
+        $sortedRefsList = [];
+        foreach (array_values($refsList) as $item) {
+            $sortedList = $emptySortList;
+            foreach ($item as $k => $v) {
+                $sortedList[$k] = $v;
+            }
+            $sortedRefsList[] = (object)$sortedList;
+        }
+
+        return $sortedRefsList;
     }
 
-    //Limits table functions
+//Limits table functions
     /**
      * @param $projectKey
      * @return \Illuminate\Support\Collection
      */
-    public function getLimits($projectKey)
+    public
+    function getLimits($projectKey)
     {
         return $this->db->table('limits')
             ->where('projectKey', '=', $projectKey)
             ->get();
     }
 
-    //Log writer
+//Log writer
     /**
      * @param $projectKey
      * @param $msg
      * @return null
      */
-    public function logInfo($projectKey, $msg)
+    public
+    function logInfo($projectKey, $msg)
     {
         $data = [
             'timestamp' => date('Y-m-d H:i:s'),
@@ -741,14 +898,20 @@ class SchedulerRepository
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function getAccessLog()
+    public
+    function getAccessLog()
     {
         return $this->db->table('log')
             ->get();
     }
 
-    public function showVariables()
+    /**
+     *
+     */
+    public
+    function showVariables()
     {
-        var_dump($this->db->getConnection());die();
+        var_dump($this->db->getConnection());
+        die();
     }
 }

@@ -31,27 +31,29 @@ class AbstractExporter
         $this->format = $format;
         $this->objPHPExcel = new PHPExcel();
 
-        switch($format) {
+        switch ($format) {
             case 'csv':
                 $this->fileExtension = 'csv';
-                $this->contentType   = 'text/csv';
+                $this->contentType = 'text/csv';
                 break;
             case 'xls':
                 $this->fileExtension = 'xlsx';
-                $this->contentType   = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+                $this->contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
                 break;
             //case 'pdf':
             //    $this->fileExtension = "pdf";
             //    $this->contentType = "application/pdf";
         }
     }
+
     public function getFileExtension()
     {
         return $this->fileExtension;
     }
+
     public function setFormat($format)
     {
-         $this->format = $format;
+        $this->format = $format;
     }
 
     /**
@@ -61,8 +63,10 @@ class AbstractExporter
     public function export($content)
     {
         switch ($this->format) {
-            case 'csv': return $this->exportCSV ($content);
-            case 'xls': return $this->exportXLSX($content);
+            case 'csv':
+                return $this->exportCSV($content);
+            case 'xls':
+                return $this->exportXLSX($content);
 //            case 'pdf': return $this->exportPdf($content);
         }
 
@@ -84,7 +88,8 @@ class AbstractExporter
     //    return ob_get_clean();
     //
     //}
-    public function exportCSV($content) {
+    public function exportCSV($content)
+    {
 
         //for csv type, only export first sheet
         $content = array_values($content);
@@ -99,13 +104,15 @@ class AbstractExporter
         return ob_get_clean();
 
     }
+
     public function is_asso($a)
     {
-        foreach(array_keys($a) as $key)
+        foreach (array_keys($a) as $key)
             if (!is_int($key)) return true;
 
         return false;
     }
+
     public function exportXLSX($content, $sheetName = 'Sheet')
     {
         $xl = $this->objPHPExcel;
@@ -114,13 +121,13 @@ class AbstractExporter
         $isAssoc = $this->is_asso($content);
 
         // ensure unique sheetname
-        foreach ($content as $shName=>$data) {
+        foreach ($content as $shName => $data) {
             if ($isAssoc) {
                 $sheetName = $shName;
             }
 
             $xl->createSheet();
-            $xl->setActiveSheetIndex($xl->getSheetCount()-1);
+            $xl->setActiveSheetIndex($xl->getSheetCount() - 1);
 
             $this->writeWorksheet($data, $sheetName);
         }
@@ -137,7 +144,8 @@ class AbstractExporter
         return ob_get_clean();
 
     }
-    public function writeWorksheet($content, $shName="Sheet")
+
+    public function writeWorksheet($content, $shName = "Sheet")
     {
         //check for data
         if (!isset($content['data'])) return null;
@@ -154,12 +162,12 @@ class AbstractExporter
         $ws->fromArray($data, NULL, 'A1');
 
         //auto-size columns
-        foreach(range('A',$ws->getHighestDataColumn()) as $col) {
+        foreach (range('A', $ws->getHighestDataColumn()) as $col) {
             $ws->getColumnDimension($col)->setAutoSize(true);
         }
 
         //apply options
-        if (isset($options['hideCols'])){
+        if (isset($options['hideCols'])) {
             // Hide sheet columns.
             $cols = $options['hideCols'];
             foreach ($cols as $col) {
@@ -169,14 +177,14 @@ class AbstractExporter
 
         //freeze pane
         //$options['freezePane'] = 'A2';
-        if (isset($options['freezePane'])){
+        if (isset($options['freezePane'])) {
             $ws->freezePane($options['freezePane']);
         }
-        
+
         // date format
         // ['options']['style'] = array('M:M'=>'yyyy-mm-dd');
-        if (isset($options['style'])){
-            foreach ($options['style'] as $rng=>$format) {
+        if (isset($options['style'])) {
+            foreach ($options['style'] as $rng => $format) {
                 $ws->getStyle($rng)
                     ->getNumberFormat()
                     ->setFormatCode($format);
@@ -185,23 +193,28 @@ class AbstractExporter
 
         //horizontal alignment
         //$options['horizontalAlignment'] = 'left';
-        if (isset($options['horizontalAlignment'])){
-            switch ($options['horizontalAlignment']) {
-                case 'center':
-                    $ws->getStyle( $ws->calculateWorksheetDimension() )->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);  
-                    break;
-                case 'general':
-                    $ws->getStyle( $ws->calculateWorksheetDimension() )->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_GENERAL);                      
-                    break;
-                case 'justify':
-                    $ws->getStyle( $ws->calculateWorksheetDimension() )->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY);                                          
-                    break;
-                case 'left':
-                    $ws->getStyle( $ws->calculateWorksheetDimension() )->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);                                          
-                    break;
-                case 'right':
-                    $ws->getStyle( $ws->calculateWorksheetDimension() )->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);                                          
-                    break;
+        if (isset($options['horizontalAlignment'])) {
+            foreach ($options['horizontalAlignment'] as $rng => $format) {
+                if ($rng == 'WS') {
+                    $rng = $ws->calculateWorksheetDimension();
+                }
+                switch ($format) {
+                    case 'center':
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        break;
+                    case 'general':
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_GENERAL);
+                        break;
+                    case 'justify':
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY);
+                        break;
+                    case 'left':
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                        break;
+                    case 'right':
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+                        break;
+                }
             }
         }
 
@@ -216,7 +229,7 @@ class AbstractExporter
 
             //turn protection on
             $ws->getProtection()->setSheet(true);
-            
+
             //now unprotect requested range
             foreach ($range as $cells) {
                 $ws->getStyle($cells)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
@@ -226,7 +239,7 @@ class AbstractExporter
         //ensure sheet name is unique
         $inc = 1;
         $name = $shName;
-        while (!is_null($this->objPHPExcel->getSheetByName($name) ) ){
+        while (!is_null($this->objPHPExcel->getSheetByName($name))) {
             $name = $shName . $inc;
             $inc += 1;
         }
