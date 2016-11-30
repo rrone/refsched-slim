@@ -68,9 +68,9 @@ class AbstractExporter
             case 'xls':
                 return $this->exportXLSX($content);
 //            case 'pdf': return $this->exportPdf($content);
+            default:
+                return null;
         }
-
-        return null;
     }
     //public function exportPdf($content, $padlen = 18)
     //{
@@ -192,7 +192,7 @@ class AbstractExporter
         }
 
         //horizontal alignment
-        //$options['horizontalAlignment'] = 'left';
+        //$options['horizontalAlignment'] = ['WS'=>'left'];
         if (isset($options['horizontalAlignment'])) {
             foreach ($options['horizontalAlignment'] as $rng => $format) {
                 if ($rng == 'WS') {

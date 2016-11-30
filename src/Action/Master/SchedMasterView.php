@@ -33,6 +33,7 @@ class SchedMasterView extends AbstractView
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
 
+        $_GET = $request->getParams();
         if (count($_GET)) {
             $this->justOpen = array_key_exists('open', $_GET);
         }

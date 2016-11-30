@@ -118,7 +118,7 @@ class FullTest extends AppTestCase
         $this->assertContains("<a  href=/sched>View Assignors</a>",$view);
 
         $params = ['open' => '1'];
-        $view = $this->client->get('/full?open', $params);
+        $view = $this->client->get('/full', $params);
 
         $this->assertContains("/full>View full schedule</a>",$view);
         $this->assertContains("<a  href=/master>Select Assignors</a>",$view);

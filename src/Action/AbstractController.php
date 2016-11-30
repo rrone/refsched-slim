@@ -73,6 +73,7 @@ abstract class AbstractController
             return null;
         }
 
+        $_GET = $request->getParams();
         $uri = $request->getUri()->getPath();
         $user = isset($this->user) ? $this->user->name : 'Anonymous';
         $projectKey = isset($this->event) ? $this->event->projectKey : '';

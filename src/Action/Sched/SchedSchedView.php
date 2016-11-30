@@ -29,7 +29,7 @@ class SchedSchedView extends AbstractView
     {
         parent::__construct($container, $schedulerRepository);
 
-        $this->showgroup = false;
+        $this->showgroup = null;
     }
 
     public function handler(Request $request, Response $response)
@@ -155,6 +155,7 @@ class SchedSchedView extends AbstractView
             }
         }
 
+        $_GET = $request->getParams();
         if (count($_GET) && array_key_exists('group', $_GET)) {
             $this->showgroup = $_GET['group'];
         }
@@ -370,7 +371,7 @@ class SchedSchedView extends AbstractView
                     if (!$this->user->admin) {
                         $html .= "<th>Assign to " . $this->user->name . "</th>";
                     }
-                    $html .= "</tr>";
+                    $html .= "</tr>\n";
                     $wasHTML = $html;
                     for ($kant = 0; $kant < $kount; $kant++) {
                         if (($this->showgroup && $this->showgroup == $this->divisionAge($this->div[$kant])) || !$this->showgroup) {
@@ -411,7 +412,7 @@ class SchedSchedView extends AbstractView
                         $html .= "</tr>\n";
                     }
 
-                    $html .= "</table>";
+                    $html .= "</table>\n";
                 }
 
                 if (!$this->user->admin) {
@@ -432,8 +433,8 @@ class SchedSchedView extends AbstractView
                     if(!$this->user->admin) {
                         $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
                     }
-                    $html .= "<div class='clear-fix'></div>\n";
-                    $html .= "<h3>";
+                    $html .= "<div class='clear-fix'></div>";
+                    $html .= "<h3>\n";
                 }
 
                 $html .= "</form>\n";
@@ -442,7 +443,7 @@ class SchedSchedView extends AbstractView
                 $html .= "<h3 class=\"center\">You have no games assigned.</h3>\n";
                 $html .= "<h3 class=\"h3-btn center\" >";
                 $html .= $this->menuLinks();
-                $html .= "<h3>";
+                $html .= "<h3>\n";
             }
 
             $_SESSION['locked'] = $locked;
@@ -496,12 +497,12 @@ class SchedSchedView extends AbstractView
         $assigned = in_array($user->name, $this->ref_team);
         if (!$assigned) {
             $html .= "<h3 class=\"left\">$this->showgroup Games assigned to $user->name: <span style=\"color:$this->colorAlert\">NONE</span></h3><br>\n";
-            $html .= "<div class=\"clear-fix\"></div>";
+            $html .= "<div class=\"clear-fix\"></div>\n";
             return $html;
         }
 
         $html .= "<h3 class=\"left\">$this->showgroup Games assigned to $user->name :</h3>\n";
-        $html .= "<div class=\"clear-fix\"></div>";
+        $html .= "<div class=\"clear-fix\"></div>\n";
 
         if (empty($kount)) {
             $html .= "<table class=\"sched-table\" >\n";
@@ -510,18 +511,18 @@ class SchedSchedView extends AbstractView
             $html .= "</tr>\n";
         } else {
             $html .= "<table class=\"sched-table\" >\n";
-            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">\n";
-            $html .= "<th>Game No</th>\n";
-            $html .= "<th>Date</th>\n";
-            $html .= "<th>Time</th>\n";
-            $html .= "<th>Field</th>\n";
-            $html .= "<th>Division</th>\n";
-            $html .= "<th>Pool</th>\n";
-            $html .= "<th>Home</th>\n";
-            $html .= "<th>Away</th>\n";
-            $html .= "<th>Referee Team</th>\n";
+            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
+            $html .= "<th>Game No</th>";
+            $html .= "<th>Date</th>";
+            $html .= "<th>Time</th>";
+            $html .= "<th>Field</th>";
+            $html .= "<th>Division</th>";
+            $html .= "<th>Pool</th>";
+            $html .= "<th>Home</th>";
+            $html .= "<th>Away</th>";
+            $html .= "<th>Referee Team</th>";
             if ($checkbox) {
-                $html .= "<th>Assigned</th>\n";
+                $html .= "<th>Assigned</th>";
             }
             $html .= "</tr>\n";
 

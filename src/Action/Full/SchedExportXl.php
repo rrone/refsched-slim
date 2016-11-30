@@ -77,7 +77,7 @@ class SchedExportXl extends AbstractExporter
 
             $content['Summary Count']['data'] = $data;
             $content['Summary Count']['options']['freezePane'] = 'A2';
-
+            $content['Summary Count']['options']['horizontalAlignment'] = ['WS'=>'justify'];
         }
 
         return $content;
@@ -119,7 +119,6 @@ class SchedExportXl extends AbstractExporter
             $content['Referee Game Count']['data'] = $data;
             $content['Referee Game Count']['options']['freezePane'] = 'A2';
             $content['Referee Game Count']['options']['horizontalAlignment'] = ['B1:H1000'=>'center'];
-
         }
 
         return $content;
@@ -168,7 +167,7 @@ class SchedExportXl extends AbstractExporter
 
             $content['FullSchedule']['data'] = $data;
             $content['FullSchedule']['options']['freezePane'] = 'A2';
-
+            $content['FullSchedule']['options']['horizontalAlignment'] = ['WS'=>'left'];
         }
 
         return $content;

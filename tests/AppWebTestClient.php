@@ -98,7 +98,7 @@ class AppWebTestClient extends WebTestClient
             $body->write($params);
         }
 
-        $this->request  = new Request($method, $uri, $headers, $cookies, $serverParams, $body);
+        $this->request = new Request($method, $uri, $headers, $cookies, $serverParams, $body);
         $response = new Response();
 
         // Invoke request
