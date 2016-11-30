@@ -27,9 +27,10 @@ class SchedUnlockDBController extends AbstractController
 
         $request = $request->withAttribute('user', $this->user);
         $request = $request->withAttribute('event', $this->event);
+        $request = $request->withAttribute('unlock', true);
 
         $this->lulView->handler($request, $response);
-        $this->lulView->renderUnlock();
+        $this->lulView->render($response);
 
         return $response->withRedirect($this->getBaseURL('greetPath'));
     }

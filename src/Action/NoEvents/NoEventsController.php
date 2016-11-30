@@ -19,6 +19,8 @@ class NoEventsController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
+        $this->noEventsView->handler($request, $response);
+
         $this->noEventsView->render($response);
 
         return $response;

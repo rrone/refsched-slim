@@ -118,7 +118,7 @@ class SchedExportXl extends AbstractExporter
             }
             $content['Referee Game Count']['data'] = $data;
             $content['Referee Game Count']['options']['freezePane'] = 'A2';
-            $content['Referee Game Count']['options']['horizontalAlignment'] = ['B1:H1000'=>'center'];
+            $content['Referee Game Count']['options']['horizontalAlignment'] = ['B1:H'=>'center'];
         }
 
         return $content;

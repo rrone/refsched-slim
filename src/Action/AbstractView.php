@@ -6,7 +6,7 @@ use Slim\Views\Twig;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class AbstractView
+abstract class AbstractView
 {
     /* @var Container */
     protected $container;
@@ -52,15 +52,9 @@ class AbstractView
         $this->page_title = "Section 1 Referee Scheduler";
     }
 
-    protected function handler(Request $request, Response $response)
-    {
+    abstract protected function handler(Request $request, Response $response);
 
-    }
-
-    protected function render(Response &$response)
-    {
-
-    }
+    abstract protected function render(Response &$response);
 
     protected function errorCheck()
     {

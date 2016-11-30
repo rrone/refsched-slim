@@ -37,9 +37,9 @@ class AppWebTestClient extends WebTestClient
         return $this->request('get', $path, $data, $optionalHeaders);
     }
 
-    public function post($path, $data = array(), $optionalHeaders = array())
+    public function post($path, $data = array(), $optionalHeaders = array(), $uploadedFiles = array())
     {
-        return $this->request('post', $path, $data, $optionalHeaders);
+        return $this->request('post', $path, $data, $optionalHeaders, $uploadedFiles);
     }
 
     public function patch($path, $data = array(), $optionalHeaders = array())
@@ -69,7 +69,7 @@ class AppWebTestClient extends WebTestClient
 
     // Abstract way to make a request to SlimPHP, this allows us to mock the
     // slim environment
-    private function request($method, $path, $data = array(), $optionalHeaders = array())
+    private function request($method, $path, $data = array(), $optionalHeaders = array(), $uploadedFiles = array())
     {
         //Make method uppercase
         $method = strtoupper($method);
@@ -98,7 +98,8 @@ class AppWebTestClient extends WebTestClient
             $body->write($params);
         }
 
-        $this->request = new Request($method, $uri, $headers, $cookies, $serverParams, $body);
+        $this->request = new Request($method, $uri, $headers, $cookies, $serverParams, $body, $uploadedFiles);
+
         $response = new Response();
 
         // Invoke request

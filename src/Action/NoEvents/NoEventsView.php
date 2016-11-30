@@ -3,6 +3,7 @@
 namespace App\Action\NoEvents;
 
 use Slim\Container;
+use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractView;
 use App\Action\SchedulerRepository;
@@ -14,6 +15,11 @@ class NoEventsView extends AbstractView
         parent::__construct($container, $repository);
 
         $this->sr = $repository;
+    }
+
+    public function handler(Request $request, Response $response)
+    {
+        return null;
     }
 
     public function render(Response &$response)

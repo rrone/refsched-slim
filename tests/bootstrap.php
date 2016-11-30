@@ -1,8 +1,6 @@
 <?php
 namespace Tests;
 
-session_start();
-
 // Settings to make all errors more obvious during testing
 error_reporting(-1);
 ini_set('display_errors', 1);
@@ -66,6 +64,7 @@ class AppTestCase extends WebTestCase
         require PROJECT_ROOT . '/app/routes.php';
 
         $this->c = $app->getContainer();
+
         $this->sr = new SchedulerRepository($this->c->get('db'));
         $app->getContainer()['settings.test'] = true;
 

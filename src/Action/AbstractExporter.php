@@ -18,7 +18,7 @@ use PHPExcel_Style_Alignment;
     );
 */
 
-class AbstractExporter
+abstract class AbstractExporter
 {
     private $format;
     private $objPHPExcel;
@@ -145,6 +145,13 @@ class AbstractExporter
 
     }
 
+    private function pregMatch($rng)
+    {
+        preg_match('/(.+[a-zA-Z])/', $rng, $matches);
+
+        return strtoupper($matches[0]);
+    }
+
     public function writeWorksheet($content, $shName = "Sheet")
     {
         //check for data
@@ -185,6 +192,14 @@ class AbstractExporter
         // ['options']['style'] = array('M:M'=>'yyyy-mm-dd');
         if (isset($options['style'])) {
             foreach ($options['style'] as $rng => $format) {
+                if ($rng == 'WS') {
+                    $rng = $ws->calculateWorksheetDimension();
+                } else {
+                    $rowCount = $ws->getHighestRow();
+                    $rng = $this->pregMatch($rng);
+                    $rng .= $rowCount;
+                }
+
                 $ws->getStyle($rng)
                     ->getNumberFormat()
                     ->setFormatCode($format);
@@ -197,7 +212,12 @@ class AbstractExporter
             foreach ($options['horizontalAlignment'] as $rng => $format) {
                 if ($rng == 'WS') {
                     $rng = $ws->calculateWorksheetDimension();
+                } else {
+                    $rowCount = $ws->getHighestRow();
+                    $rng = $this->pregMatch($rng);
+                    $rng .= $rowCount;
                 }
+
                 switch ($format) {
                     case 'center':
                         $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);

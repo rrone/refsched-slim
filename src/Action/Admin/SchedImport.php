@@ -114,18 +114,7 @@ class SchedImport extends AbstractImporter
 
         $file->moveTo($path);
 
-        $ext = strtoupper(pathinfo($path, PATHINFO_EXTENSION));
-
-        switch ($ext) {
-            case 'CSV':
-                $data = $this->importCSV($path);
-                break;
-            case 'XLSX':
-                $data = $this->importXLSX($path);
-                break;
-            default:
-                $data = null;
-        }
+        $data = $this->import($path);
 
         return $data;
 

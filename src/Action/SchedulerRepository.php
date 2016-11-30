@@ -897,8 +897,7 @@ class SchedulerRepository
      * @param $projectKey
      * @return \Illuminate\Support\Collection
      */
-    public
-    function getLimits($projectKey)
+    public function getLimits($projectKey)
     {
         return $this->db->table('limits')
             ->where('projectKey', '=', $projectKey)
@@ -911,8 +910,7 @@ class SchedulerRepository
      * @param $msg
      * @return null
      */
-    public
-    function logInfo($projectKey, $msg)
+    public function logInfo($projectKey, $msg)
     {
         $data = [
             'timestamp' => date('Y-m-d H:i:s'),
@@ -929,8 +927,7 @@ class SchedulerRepository
     /**
      * @return \Illuminate\Support\Collection
      */
-    public
-    function getAccessLog()
+    public function getAccessLog()
     {
         return $this->db->table('log')
             ->get();
@@ -939,8 +936,7 @@ class SchedulerRepository
     /**
      *
      */
-    public
-    function showVariables()
+    public function showVariables()
     {
         var_dump($this->db->getConnection());
         die();

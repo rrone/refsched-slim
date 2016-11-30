@@ -16,7 +16,7 @@ use PHPExcel_IOFactory;
     );
 */
 
-class AbstractImporter
+abstract class AbstractImporter
 {
     private $format;
     private $objPHPExcel;

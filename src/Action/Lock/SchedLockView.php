@@ -9,6 +9,9 @@ use App\Action\SchedulerRepository;
 
 class SchedLockView extends AbstractView
 {
+    private $lock;
+    private $unlock;
+
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
         parent::__construct($container, $schedulerRepository);
@@ -20,6 +23,32 @@ class SchedLockView extends AbstractView
     {
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
+        $this->lock = $request->getAttribute('lock');
+        $this->unlock = $request->getAttribute('unlock');
+    }
+
+    public function render(Response &$response)
+    {
+        $cont = null;
+
+        if($this->lock) {
+            $cont = $this->renderLock();
+        } elseif ($this->unlock) {
+            $cont = $this->renderUnlock();
+        }
+
+        $content = array(
+            'view' => array(
+                'admin' => $this->user->admin,
+                'content' => $cont,
+                'title' => $this->page_title,
+                'dates' => $this->dates,
+                'location' => $this->location,
+                'description' => "Schedule Status"
+            )
+        );
+
+        $this->view->render($response, 'sched.html.twig', $content);
     }
 
     public function renderLock()

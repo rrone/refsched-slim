@@ -186,4 +186,34 @@ class SchedSchedTest extends AppTestCase
         $this->assertContains("<a href=/sched>View all $user games</a>", $view);
     }
 
+    public function testNoGamesAsUser()
+    {
+        // instantiate the view and test it
+
+        $view = new SchedSchedView($this->c, $this->sr);
+        $this->assertTrue($view instanceof AbstractView);
+
+        // instantiate the controller
+
+        $controller = new SchedSchedDBController($this->c, $view);
+        $this->assertTrue($controller instanceof AbstractController);
+
+        // invoke the controller action and test it
+
+        $user = $this->local['empty_test']['user'];
+        $projectKey = $this->local['empty_test']['projectKey'];
+
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
+            'user' => $this->sr->getUserByName($user),
+            'event' => $this->sr->getEvent($projectKey)
+        ];
+
+        $view = $this->client->get('/sched');
+
+        $this->assertContains("<h3 class=\"center\">$user Schedule</h3>", $view);
+        $this->assertContains("For U16, you are assigned to <span style=\"color:#CC0000\">0</span> games with no limit", $view);
+        $this->assertContains("For U19, you are assigned to <span style=\"color:#CC0000\">0</span> games", $view);
+    }
+
 }

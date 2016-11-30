@@ -8,7 +8,7 @@ $container = $app->getContainer();
 // -----------------------------------------------------------------------------
 
 // Twig
-$container['view'] = function ($c) {
+$container['view'] = function (\Slim\Container $c) {
     $settings = $c->get('settings');
     $view = new Slim\Views\Twig($settings['view']['template_path'], $settings['view']['twig']);
 
@@ -28,7 +28,7 @@ $container['view'] = function ($c) {
 };
 
 // Flash messages
-$container['flash'] = function ($c) {
+$container['flash'] = function () {
     return new Slim\Flash\Messages;
 };
 
@@ -63,7 +63,7 @@ unset($container['errorHandler']);
 // -----------------------------------------------------------------------------
 
 // monolog
-$container['logger'] = function ($c) {
+$container['logger'] = function (\Slim\Container $c) {
     $settings = $c->get('settings');
     $logger = new Monolog\Logger($settings['logger']['name']);
     $logger->pushProcessor(new Monolog\Processor\UidProcessor());
@@ -91,7 +91,7 @@ $container['db'] = function ($c) {
     return $capsule;
 };
 
-$container['sr'] = function ($c) {
+$container['sr'] = function (\Slim\Container $c) {
     $db = $c->get('db');
     $scheduleRepository = new \App\Action\SchedulerRepository($db);
 
@@ -103,8 +103,6 @@ $container['sr'] = function ($c) {
 // -----------------------------------------------------------------------------
 $db = $container->get('db');
 $sr = $container['sr'];
-$exporter = new \App\Action\AbstractExporter('xls');
-$importer = new \App\Action\AbstractImporter('csv');
 $view = $container->get('view');
 $uploadPath = $container->get('settings')['upload_path'];
 
@@ -172,7 +170,7 @@ $container[App\Action\Full\SchedFullDBController::class] = function ($c) use($sr
 // -----------------------------------------------------------------------------
 // SchedExport class
 // -----------------------------------------------------------------------------
-$container[App\Action\Full\SchedExportXl::class] = function ($c) use($sr) {
+$container[App\Action\Full\SchedExportXl::class] = function () use($sr) {
 
     return new \App\Action\Full\SchedExportXl($sr);
 };
@@ -267,8 +265,8 @@ $container[App\Action\Admin\SchedTemplateExport::class] = function ($c) use($sr)
     return new \App\Action\Admin\SchedTemplateExport($c, $sr);
 };
 
-$container[App\Action\Admin\SchedTemplateExportController::class] = function ($c) use($sr, $exporter) {
-    $v = new \App\Action\Admin\SchedTemplateExport($c, $sr, $exporter);
+$container[App\Action\Admin\SchedTemplateExportController::class] = function ($c) use($sr) {
+    $v = new \App\Action\Admin\SchedTemplateExport($c, $sr);
 
     return new \App\Action\Admin\SchedTemplateExportController($c, $v);
 };
@@ -290,9 +288,9 @@ $container[App\Action\Admin\SchedImportController::class] = function ($c) use($s
 // -----------------------------------------------------------------------------
 // LogExport class
 // -----------------------------------------------------------------------------
-$container[App\Action\Admin\LogExport::class] = function ($c) use($sr, $exporter) {
+$container[App\Action\Admin\LogExport::class] = function ($c) use($sr) {
 
-    return new \App\Action\Admin\LogExport($c, $sr, $exporter);
+    return new \App\Action\Admin\LogExport($c, $sr);
 };
 
 $container[App\Action\Admin\LogExportController::class] = function ($c) use($sr) {

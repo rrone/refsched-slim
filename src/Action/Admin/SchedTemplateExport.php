@@ -101,6 +101,7 @@ class SchedTemplateExport extends AbstractExporter
                             $row[] = '0';
                             break;
                         case 'date':
+                            $row[] = null;
                             $dateCol = $key;
                             break;
                         default:
@@ -111,7 +112,7 @@ class SchedTemplateExport extends AbstractExporter
                 $data[] = $hdr;
                 $data[] = $row;
 
-                $dateCol = chr($dateCol + 65) . ":" . chr($dateCol + 65);
+                $dateCol = chr($dateCol + 65) . "1:" . chr($dateCol + 65);
 
                 $wkbk['FullSchedule']['data'] = $data;
                 $wkbk['FullSchedule']['options']['freezePane'] = 'A2';

@@ -13,10 +13,13 @@ use App\Action\Admin\SchedTemplateExport;
 use App\Action\Admin\SchedTemplateExportController;
 use App\Action\Admin\SchedImport;
 use App\Action\Admin\SchedImportController;
+use Slim\Http\UploadedFile;
+
 
 class AdminTest extends AppTestCase
 {
     protected $testUri;
+    protected $_object;
 
     public function setUp()
     {
@@ -330,5 +333,103 @@ class AdminTest extends AppTestCase
         $this->assertContains("<h1>Schedule Import</h1>", $view);
     }
 
+    public function testTestCSVAsAdmin()
+    {
+        // instantiate the view and test it
 
+        $uploadPath = $this->app->getContainer()->get('settings')['upload_path'];
+
+        $view = new SchedImport($this->c, $this->sr, $uploadPath);
+        $this->assertTrue($view instanceof AbstractImporter);
+
+        // instantiate the controller
+
+        $controller = new SchedImportController($this->c, $view);
+        $this->assertTrue($controller instanceof AbstractController);
+
+        // invoke the controller action and test it
+
+        $user = $this->local['admin_test']['user'];
+        $projectKey = $this->local['admin_test']['projectKey'];
+
+        $this->client->app->getContainer()['session'] = ['authed' => true,
+            'user' => $this->sr->getUserByName($user),
+            'event' => $this->sr->getEvent($projectKey)];
+
+        $url = '/adm/import';
+        $headers = array(
+            'cache-control' => 'no-cache',
+            'content-type' => 'multipart/form-data;'
+        );
+        $body = array(
+            'Test' => ''
+        );
+
+        $filePath = PROJECT_ROOT . '/tests/testfiles/';
+        $fileName = 'TestGameSchedule_20161130_135854.csv';
+        $tmpName = tempnam('/tmp', '');
+        copy($filePath . $fileName, $tmpName);
+
+        $uploadFile = new UploadedFile($tmpName, $fileName, 'text/csv', filesize($tmpName));
+
+        $uploadedFiles = ['uploadfile' => $uploadFile];
+
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->post($url, $body, $headers, $uploadedFiles);
+
+        $view = (string)$response->getBody();
+
+        $this->assertContains("Success! The file contains recognized fields.", $view);
+
+    }
+
+    public function testUploadCSVAsAdmin()
+    {
+        // instantiate the view and test it
+
+        $uploadPath = $this->app->getContainer()->get('settings')['upload_path'];
+
+        $view = new SchedImport($this->c, $this->sr, $uploadPath);
+        $this->assertTrue($view instanceof AbstractImporter);
+
+        // instantiate the controller
+
+        $controller = new SchedImportController($this->c, $view);
+        $this->assertTrue($controller instanceof AbstractController);
+
+        // invoke the controller action and test it
+
+        $user = $this->local['admin_test']['user'];
+        $projectKey = $this->local['admin_test']['projectKey'];
+
+        $this->client->app->getContainer()['session'] = ['authed' => true,
+            'user' => $this->sr->getUserByName($user),
+            'event' => $this->sr->getEvent($projectKey)];
+
+        $url = '/adm/import';
+        $headers = array(
+            'cache-control' => 'no-cache',
+            'content-type' => 'multipart/form-data;'
+        );
+        $body = array(
+            'Upload' => ''
+        );
+
+        $filePath = PROJECT_ROOT . '/tests/testfiles/';
+        $fileName = 'TestGameSchedule_20161130_135854.csv';
+        $tmpName = tempnam('/tmp', '');
+        copy($filePath . $fileName, $tmpName);
+
+        $uploadFile = new UploadedFile($tmpName, $fileName, 'text/csv', filesize($tmpName));
+
+        $uploadedFiles = ['uploadfile' => $uploadFile];
+
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->post($url, $body, $headers, $uploadedFiles);
+
+        $view = (string)$response->getBody();
+
+        $this->assertContains("Upload complete.", $view);
+
+    }
 }
