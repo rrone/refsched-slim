@@ -37,7 +37,7 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2016.11.29.02'
+            'version' => '2016.11.29.03'
         ]
     ],
 
@@ -53,5 +53,7 @@ $settings['test']['user'] = $local['user_test'];
 $settings['test']['admin'] = $local['admin_test'];
 
 $settings['test']['empty'] = $local['empty_test'];
+
+$settings['test']['dev'] = $local['dev_test'];
 
 return $settings;

@@ -17,7 +17,6 @@ use App\Action\SchedulerRepository;
 class LogonView extends AbstractView
 {
     private $users;
-    private $enabled;
 
     public function __construct(Container $container, SchedulerRepository $repository)
     {
@@ -57,6 +56,7 @@ class LogonView extends AbstractView
                 }
                 else {
                     session_unset();
+                    unset($_SESSION);
                     $this->msg = 'Unrecognized password for ' . $_POST['user'];
                 }
             }
@@ -78,11 +78,9 @@ class LogonView extends AbstractView
     }
     protected function renderView()
     {
-        $this->users = $this->sr->getUsers();
-        $this->enabled = $this->sr->getEnabledEvents();
+        $users = $this->sr->getUsers();
+        $enabled = $this->sr->getEnabledEvents();
 
-        $users = $this->users;
-        $enabled = $this->enabled;
         $logonPath = $this->getBaseURL('logonPath');
 
         if (count($enabled) > 0) {
@@ -129,12 +127,10 @@ EOD;
 EOD;
         }
         else {
-            $html = <<<EOD
-            <div class="center no-content">
+            $html = "<div class=\"center no-content\">
                 <h2>Rest easy...there are no events available to schedule.</h2>
                 <h2>Go referee some games yourself.</h2>
-            </div>
-EOD;
+                </div>";
         }
 
         return $html;

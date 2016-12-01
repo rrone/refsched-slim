@@ -23,6 +23,8 @@ class SchedTemplateExport extends AbstractExporter
     private $user;
     private $event;
 
+    private $baseURL;
+
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
         parent::__construct('xls');
@@ -59,6 +61,8 @@ class SchedTemplateExport extends AbstractExporter
             }
         }
 
+        $this->baseURL = $this->container->get('request')->getUri()->getBasePath() . $this->container->get('adminPath');
+
         return null;
     }
 
@@ -68,7 +72,7 @@ class SchedTemplateExport extends AbstractExporter
         $content = array(
             'view' => array(
                 'admin' => $this->user->admin,
-                'action' => $this->getBaseURL('adminPath'),
+                'action' => $this->baseURL,
                 'message' => "There are no games in the database for the event: $msg",
             )
         );
