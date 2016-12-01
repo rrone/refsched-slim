@@ -37,10 +37,11 @@ class SchedExportXl extends AbstractExporter
         $content = null;
 
         $this->generateScheduleData($content);
-        $this->generateSummaryCountData($content);
-        $this->generateSummaryCountDateDivision($content);
-        $this->generateAssignmentsByRefereeData($content);
-
+        if($this->user->admin) {
+//            $this->generateSummaryCountData($content);
+            $this->generateSummaryCountDateDivision($content);
+            $this->generateAssignmentsByRefereeData($content);
+        }
         /** @noinspection PhpUndefinedMethodInspection */
         $body = $response->getBody();
         /** @noinspection PhpUndefinedMethodInspection */
@@ -49,39 +50,39 @@ class SchedExportXl extends AbstractExporter
         return $response;
     }
 
-    private function generateSummaryCountData(&$content)
-    {
-        $event = $this->event;
-
-        if (!empty($event)) {
-            $projectKey = $event->projectKey;
-
-            $counts = $this->sr->getGameCounts($projectKey);
-
-            //set the header labels
-            $labels = array('Assignor', 'Date', 'Division', 'Game Count');
-
-            $data = array($labels);
-
-            //set the data : game in each row
-            foreach ($counts as $count) {
-                $date = date('D, d M Y', strtotime($count->date));
-                $row = array(
-                    $count->assignor,
-                    $date,
-                    $count->division,
-                    $count->game_count,
-                );
-                $data[] = $row;
-            }
-
-            $content['Summary Count']['data'] = $data;
-            $content['Summary Count']['options']['freezePane'] = 'A2';
-            $content['Summary Count']['options']['horizontalAlignment'] = ['WS'=>'justify'];
-        }
-
-        return $content;
-    }
+//    private function generateSummaryCountData(&$content)
+//    {
+//        $event = $this->event;
+//
+//        if (!empty($event)) {
+//            $projectKey = $event->projectKey;
+//
+//            $counts = $this->sr->getGameCounts($projectKey);
+//
+//            //set the header labels
+//            $labels = array('Assignor', 'Date', 'Division', 'Game Count');
+//
+//            $data = array($labels);
+//
+//            //set the data : game in each row
+//            foreach ($counts as $count) {
+//                $date = date('D, d M Y', strtotime($count->date));
+//                $row = array(
+//                    $count->assignor,
+//                    $date,
+//                    $count->division,
+//                    $count->game_count,
+//                );
+//                $data[] = $row;
+//            }
+//
+//            $content['Summary Count']['data'] = $data;
+//            $content['Summary Count']['options']['freezePane'] = 'A2';
+//            $content['Summary Count']['options']['horizontalAlignment'] = ['WS'=>'justify'];
+//        }
+//
+//        return $content;
+//    }
 
     private function generateAssignmentsByRefereeData(&$content)
     {
