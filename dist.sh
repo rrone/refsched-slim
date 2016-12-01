@@ -14,6 +14,8 @@ echo "  Build public resources..."
 ./node_modules/.bin/gulp build
 
 echo "  Purge composer development items..."
+## Disable xdebug for composer performance
+mv /usr/local/etc/php/7.0/conf.d/ext-xdebug.ini /usr/local/etc/php/7.0/conf.d/ext-xdebug.~ini
 composer install --no-dev
 
 echo "  Clear distribution folder..."
@@ -47,5 +49,7 @@ find $dist/config -type f -name '.env' -delete
 
 echo "  Restore composer development items..."
 composer update
+## Restore xdebug
+mv /usr/local/etc/php/7.0/conf.d/ext-xdebug.~ini /usr/local/etc/php/7.0/conf.d/ext-xdebug.ini
 
 echo "...distribution complete"
