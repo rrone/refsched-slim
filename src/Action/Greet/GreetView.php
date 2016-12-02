@@ -127,22 +127,8 @@ class GreetView extends AbstractView
                         } else {
                             $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time<br>\n";
                         }
-                    } elseif (!$this->user->admin) {
-                        foreach ($limit_list as $k => $v) {
-                            if ($used_list[$k]) {
-                                if ($v == 'none') {
-                                    $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit for $k<br>\n";
-                                } else {
-                                    $html .= "There is a <span style=\"color:$this->colorWarning\">$v</span> game limit for $k<br>\n";
-                                }
-                            }
-                        }
-                        if (count($assigned_list) < count($used_list)){
-                            $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit for all other divisions<br>\n";
-                        }
                     }
                 }
-
             } else {
                 if ($num_area == 0) {
                     $html .= "$uname is not currently assigned to any games.<br>";

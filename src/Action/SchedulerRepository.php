@@ -108,6 +108,10 @@ class SchedulerRepository
             $this->db->table('users')
                 ->insert([$newUser]);
 
+            $newUser = $this->getUserByName($newUser['name']);
+
+            return $newUser->id;
+
         } else {
             $hash = $user['hash'];
 
@@ -116,11 +120,24 @@ class SchedulerRepository
                 ->update([
                     'hash' => $hash,
                 ]);
+
+            return $u->id;
         }
 
-        return null;
     }
 
+    public function dropUserById($id)
+    {
+        if(empty($id)) {
+            return null;
+        }
+
+        $this->db->table('users')
+            ->where('id', $id)
+            ->delete();
+
+        return $id;
+    }
     //Events table functions
     /**
      * @return \Illuminate\Support\Collection
@@ -300,7 +317,7 @@ class SchedulerRepository
      */
     public function getGamesByRep($projectKey, $rep, $medalRound = false)
     {
-        return $this->db->table('games')
+        $games = $this->db->table('games')
             ->where([
                 ['projectKey', '=', $projectKey],
                 ['medalRound', 'like', $medalRound],
@@ -308,6 +325,7 @@ class SchedulerRepository
             ])
             ->get();
 
+        return $games;
     }
 
     /**
@@ -477,7 +495,6 @@ class SchedulerRepository
             $newGames[] = $game;
         }
         $games = $newGames;
-
         if (!empty($games)) {
             foreach ($games as $game) {
                 $nextData = [];
@@ -549,7 +566,7 @@ class SchedulerRepository
      * @param $id
      * @return null|object
      */
-    private function getGame($id)
+    public function getGame($id)
     {
         $game = $this->db->table('games')
             ->where('id', '=', $id)
@@ -562,7 +579,7 @@ class SchedulerRepository
      * @param $data
      * @return array|null
      */
-    private function updateGame($data)
+    public function updateGame($data)
     {
         if (empty($data)) {
             return null;
@@ -601,7 +618,7 @@ class SchedulerRepository
      * @param $data
      * @return array|null
      */
-    private function insertGame($data)
+    public function insertGame($data)
     {
         if (empty($data)) {
             return null;
@@ -833,7 +850,7 @@ class SchedulerRepository
     {
         $has4th = $this->numberOfReferees($projectKey) > 3;
 
-        $select4th = $has4th ? '0 as r4th' : '';
+        $select4th = $has4th ? ', 0 as r4th' : '';
 
         $cr = $this->db->table('games')
             ->selectRaw('cr as name, date, time, division, COUNT(cr) as crCount, 0 as ar1Count, 0 as ar2Count ' . $select4th)
@@ -938,7 +955,6 @@ class SchedulerRepository
      */
     public function showVariables()
     {
-        var_dump($this->db->getConnection());
-        die();
+        return $this->db->getConnection();
     }
 }
