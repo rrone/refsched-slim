@@ -45,7 +45,7 @@ $settings = [
 
 ];
 
-$local = include(__DIR__ . '/../config/local.php');
+$local = include(PROJECT_ROOT . '/config/local.php');
 $settings['settings']['db'] = $local['db'];
 
 $settings['test']['user'] = $local['user_test'];
