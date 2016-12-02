@@ -646,9 +646,9 @@ class SchedulerRepository
         return $this->db->table('games')
             ->selectRaw('DISTINCT assignor, date, division')
             ->where('projectKey', $projectKey)
-            ->orderBy('assignor', 'asc')
             ->orderBy('date', 'asc')
             ->orderBy('division', 'asc')
+            ->orderBy('assignor', 'asc')
             ->get();
     }
 
