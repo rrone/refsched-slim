@@ -183,5 +183,40 @@ class FullTest extends AppTestCase
         $this->assertContains('.xlsx', $contentDisposition);
     }
 
+    public function testFullExportAsAdmin()
+    {
+        // instantiate the view and test it
+
+        $view = new SchedFullView($this->c, $this->sr);
+        $this->assertTrue($view instanceof AbstractView);
+
+        // instantiate the controller
+
+        $controller = new SchedFullDBController($this->c, $view);
+        $this->assertTrue($controller instanceof AbstractController);
+
+        // invoke the controller action and test it
+
+        $user = $this->local['admin_test']['user'];
+        $projectKey = $this->local['admin_test']['projectKey'];
+
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
+            'user' => $this->sr->getUserByName($user),
+            'event' => $this->sr->getEvent($projectKey)
+        ];
+
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/fullexport');
+
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=GameSchedule', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);
+    }
+
 
 }

@@ -432,4 +432,20 @@ class AdminTest extends AppTestCase
         $this->assertContains("Upload complete.", $view);
 
     }
+
+    public function testPOSTPWChange()
+    {
+        /* TODO: Add POST Test for PW change */
+    }
+
+    public function testPOSTLogMemo()
+    {
+        /* TODO: Add POST Test for Log memo */
+    }
+
+    public function testDoneButton()
+    {
+        /* TODO: Add POST Test for Done button */
+    }
+
 }

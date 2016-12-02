@@ -161,8 +161,6 @@ class SchedMasterView extends AbstractView
             $html .= "</form>\n";
             $this->topmenu = null;
             $this->bottommenu = null;
-        } else {
-            $html .= $this->errorCheck();
         }
 
         return $html;

@@ -16,8 +16,6 @@ use App\Action\SchedulerRepository;
 
 class LogonView extends AbstractView
 {
-    private $users;
-
     public function __construct(Container $container, SchedulerRepository $repository)
     {
         parent::__construct($container, $repository);

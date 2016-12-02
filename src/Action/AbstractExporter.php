@@ -32,10 +32,6 @@ abstract class AbstractExporter
         $this->objPHPExcel = new PHPExcel();
 
         switch ($format) {
-            case 'csv':
-                $this->fileExtension = 'csv';
-                $this->contentType = 'text/csv';
-                break;
             case 'xls':
                 $this->fileExtension = 'xlsx';
                 $this->contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -51,11 +47,6 @@ abstract class AbstractExporter
         return $this->fileExtension;
     }
 
-    public function setFormat($format)
-    {
-        $this->format = $format;
-    }
-
     /**
      * @param $content
      * @return null|string
@@ -63,11 +54,8 @@ abstract class AbstractExporter
     public function export($content)
     {
         switch ($this->format) {
-            case 'csv':
-                return $this->exportCSV($content);
             case 'xls':
                 return $this->exportXLSX($content);
-//            case 'pdf': return $this->exportPdf($content);
             default:
                 return null;
         }
@@ -88,22 +76,22 @@ abstract class AbstractExporter
     //    return ob_get_clean();
     //
     //}
-    public function exportCSV($content)
-    {
-
-        //for csv type, only export first sheet
-        $content = array_values($content);
-
-        $this->writeWorksheet($content[0]);
-
-        $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'CSV');
-
-        ob_start();
-        $objWriter->save('php://output'); // Instead of file name
-
-        return ob_get_clean();
-
-    }
+//    public function exportCSV($content)
+//    {
+//
+//        //for csv type, only export first sheet
+//        $content = array_values($content);
+//
+//        $this->writeWorksheet($content[0]);
+//
+//        $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'CSV');
+//
+//        ob_start();
+//        $objWriter->save('php://output'); // Instead of file name
+//
+//        return ob_get_clean();
+//
+//    }
 
     public function is_asso($a)
     {

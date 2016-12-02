@@ -79,7 +79,65 @@ class EditGameTest extends AppTestCase
         $response = (object)$this->client->get('/editgame');
         $view = (string)$response->getBody();
 
-        $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"action\" value=\"Update Games\">",$view);
+        $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"action\" value=\"Update Games\">", $view);
     }
+
+    public function testGamePostAsAdmin()
+    {
+        // instantiate the view and test it
+
+        $view = new EditGameView($this->c, $this->sr);
+        $this->assertTrue($view instanceof AbstractView);
+
+        // instantiate the controller
+
+        $controller = new EditGameController($this->c, $view);
+        $this->assertTrue($controller instanceof AbstractController);
+
+        // invoke the controller action and test it
+
+        $user = $this->local['admin_test']['user'];
+        $projectKey = $this->local['admin_test']['projectKey'];
+        $event = $this->sr->getEvent($projectKey);
+
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
+            'user' => $this->sr->getUserByName($user),
+            'event' => $this->sr->getEvent($projectKey),
+        ];
+        $this->client->returnAsResponseObject(true);
+
+        // reset edit names
+        $url = '/editgame';
+        $headers = array(
+            'cache-control' => 'no-cache',
+            'content-type' => 'multipart/form-data;'
+        );
+        $body = array(
+            'action' => 'Update Games',
+            '457+projectKey' => $projectKey,
+            '457+id' => '457',
+            '457+game_number' => '1',
+            '457+away' => 'C2--test',
+        );
+
+        $response = (object)$this->client->post($url, $body, $headers);
+        $view = (string)$response->getBody();
+        $this->assertContains("<td><input type=\"text\" name=\"457+away\" value=\"C2--test\"></td>", $view);
+
+        // reset edit names
+        $body = array(
+            'action' => 'Update Games',
+            '457+projectKey' => $projectKey,
+            '457+id' => '457',
+            '457+game_number' => '1',
+            '457+away' => 'C2',
+        );
+
+        $response = (object)$this->client->post($url, $body, $headers);
+        $view = (string)$response->getBody();
+        $this->assertContains("<td><input type=\"text\" name=\"457+away\" value=\"C2\"></td>", $view);
+    }
+
 
 }

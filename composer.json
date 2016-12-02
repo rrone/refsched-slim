@@ -27,7 +27,11 @@
         "silex/silex": "^2.0",
         "symfony/browser-kit": "^3.1",
         "phpunit/dbunit": "^2.0",
-        "there4/slim-test-helpers": "^2.1"
+        "there4/slim-test-helpers": "^2.1",
+        "symfony/console": "^3.2",
+        "symfony/event-dispatcher": "^3.2",
+        "symfony/filesystem": "^3.2",
+        "symfony/process": "^3.2"
     },
     "require": {
         "slim/slim": "^3.0",

@@ -56,19 +56,6 @@ abstract class AbstractView
 
     abstract protected function render(Response &$response);
 
-    protected function errorCheck()
-    {
-        $html = null;
-
-        if (!$this->getBaseURL('authed')) {
-            $html .= "<h2 class=\"center\">You need to <a href=" . $this->getBaseURL('logonPath') . ">logon</a> first.</h2>";
-        } else {
-            $html .= "<h1 class=\"center\">Something is not right</h1>";
-        }
-
-        return $html;
-    }
-
     protected function divisionAge($div)
     {
         return substr($div, 0, 3);
