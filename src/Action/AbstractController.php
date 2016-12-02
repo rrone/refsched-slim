@@ -34,6 +34,7 @@ abstract class AbstractController
     protected function isAuthorized()
     {
         if($this->isTest() && isset($this->container['session'])){
+            unset ($_SESSION);
             $session = $this->container['session'];
             $_SESSION['authed'] = $session['authed'];
             $_SESSION['user'] = $session['user'];
@@ -82,17 +83,16 @@ abstract class AbstractController
         switch ($uri) {
             case $this->getBaseURL('logonPath'):
             case '/':
-            case 'logon':
             case '/logon':
                 //TODO: Why is $uri == '/adm' passing this case?
                 $logMsg = $uri != $this->getBaseURL('adminPath') ? "$user: Scheduler logon" : null;
                 break;
             case $this->getBaseURL('endPath'):
-            case 'end':
+            case '/end':
                 $logMsg = "$user: Scheduler log off";
                 break;
             case $this->getBaseURL('editrefPath'):
-            case 'editref':
+            case '/editref':
                 if(!empty($post)) {
                     $logMsg = "$user: Scheduler $uri dispatched $post";
                 } else {
@@ -100,12 +100,12 @@ abstract class AbstractController
                 }
                 break;
             case $this->getBaseURL('fullPath'):
-            case 'full':
+            case '/full':
                 $msg = isset($_GET['open']) ? ' no referees view' : '';
                 $logMsg = "$user: Scheduler $uri$msg dispatched";
                 break;
             case $this->getBaseURL('schedPath'):
-            case 'sched':
+            case '/sched':
                 $showgroup = isset($_GET[ 'group' ]) ? $_GET[ 'group' ] : null;
                 $msg = empty($showgroup) ? '' : " for $showgroup";
                 $logMsg = "$user: Scheduler $uri$msg dispatched";

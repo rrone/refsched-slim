@@ -154,6 +154,14 @@ class SchedSchedTest extends AppTestCase
         $this->assertContains("<h3 class=\"center\">$user Schedule</h3>", $view);
         $this->assertContains("<input class=\"btn btn-primary btn-xs right \" type=\"submit\"", $view);
         $this->assertContains("value=\"Submit\">", $view);
+
+        //test isRepost
+        $response = (object)$this->client->post($url, $body, $headers);
+        $view = (string)$response->getBody();
+
+        $this->assertContains("<h3 class=\"center\">$user Schedule</h3>", $view);
+        $this->assertContains("<input class=\"btn btn-primary btn-xs right \" type=\"submit\"", $view);
+        $this->assertContains("value=\"Submit\">", $view);
     }
 
     public function testSchedGroupU16AsUser()
