@@ -2,10 +2,16 @@
 namespace Tests;
 
 use App\Action\SchedulerRepository;
-
+use App\Action\Logon\LogonView;
+use Slim\Container;
 
 class ActionTest extends AppTestCase
 {
+    /**
+     * @var Container
+     */
+    protected $c;
+
     private $mockSR;
     private $projectKey = '2016U16U19Chino';
     private $userName;
@@ -13,8 +19,8 @@ class ActionTest extends AppTestCase
 
     public function setUp()
     {
-        $app = $this->getSlimInstance();
-        $this->c = $app->getContainer();
+        $this->app = $this->getSlimInstance();
+        $this->c = $this->app->getContainer();
         $db = $this->c->get('db');
 
         $this->mockSR = new SchedulerRepository($db);
@@ -172,4 +178,5 @@ class ActionTest extends AppTestCase
         $this->assertNotEmpty($result);
 
     }
+
 }

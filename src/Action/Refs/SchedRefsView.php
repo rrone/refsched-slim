@@ -158,8 +158,6 @@ class SchedRefsView extends AbstractView
                 $html .= "<h2 class=\"center\">You do not currently have any games scheduled.</h2>\n";
                 $this->bottommenu = "<h3 class=\"center\">You should go to the <a href=" . $this->getBaseURL('schedPath') . ">Schedule Page</a></h3>";
             }
-        } else {
-            $html .= $this->errorCheck();
         }
 
         return $html;

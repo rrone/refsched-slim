@@ -448,8 +448,6 @@ class SchedSchedView extends AbstractView
 
             $_SESSION['locked'] = $locked;
 
-        } else {
-            $html .= $this->errorCheck();
         }
 
         return $html;
