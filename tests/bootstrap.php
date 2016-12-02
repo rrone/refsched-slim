@@ -42,7 +42,7 @@ class AppTestCase extends WebTestCase
 // Instantiate the app
         $settings = require PROJECT_ROOT . '/app/settings.php';
         $settings['debug'] = true;
-        $settings['settings']['db'] = $local['db_test'];
+        $settings['settings']['db'] = $this->local['db_test'];
 
         $app = new \Slim\App($settings);
 
