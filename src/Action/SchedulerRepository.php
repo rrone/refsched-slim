@@ -633,7 +633,7 @@ class SchedulerRepository
         return $this->db->table('games')
             ->selectRaw('assignor, date, division, COUNT(division) as game_count')
             ->where('projectKey', $projectKey)
-            ->groupBy(['assignor', 'division'])
+            ->groupBy(['division','assignor', 'date'])
             ->get();
     }
 
@@ -643,13 +643,15 @@ class SchedulerRepository
      */
     public function getDatesDivisions($projectKey)
     {
-        return $this->db->table('games')
+        $result = $this->db->table('games')
             ->selectRaw('DISTINCT assignor, date, division')
             ->where('projectKey', $projectKey)
             ->orderBy('date', 'asc')
             ->orderBy('division', 'asc')
             ->orderBy('assignor', 'asc')
             ->get();
+
+        return $result;
     }
 
     /**

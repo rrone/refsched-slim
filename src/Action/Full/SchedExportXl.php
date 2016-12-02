@@ -37,7 +37,7 @@ class SchedExportXl extends AbstractExporter
         $content = null;
 
         $this->generateScheduleData($content);
-        if($this->user->admin) {
+        if ($this->user->admin) {
 //            $this->generateSummaryCountData($content);
             $this->generateSummaryCountDateDivision($content);
             $this->generateAssignmentsByRefereeData($content);
@@ -119,14 +119,13 @@ class SchedExportXl extends AbstractExporter
             }
             $content['Referee Game Count']['data'] = $data;
             $content['Referee Game Count']['options']['freezePane'] = 'A2';
-            $content['Referee Game Count']['options']['horizontalAlignment'] = ['B1:H'=>'center'];
+            $content['Referee Game Count']['options']['horizontalAlignment'] = ['B1:H' => 'center'];
         }
 
         return $content;
     }
 
-    private
-    function generateScheduleData(&$content)
+    private function generateScheduleData(&$content)
     {
         $event = $this->event;
 
@@ -168,15 +167,14 @@ class SchedExportXl extends AbstractExporter
 
             $content['FullSchedule']['data'] = $data;
             $content['FullSchedule']['options']['freezePane'] = 'A2';
-            $content['FullSchedule']['options']['horizontalAlignment'] = ['WS'=>'left'];
+            $content['FullSchedule']['options']['horizontalAlignment'] = ['WS' => 'left'];
         }
 
         return $content;
 
     }
 
-    private
-    function generateSummaryCountDateDivision(&$content)
+    private function generateSummaryCountDateDivision(&$content)
     {
         $event = $this->event;
 
@@ -200,41 +198,51 @@ class SchedExportXl extends AbstractExporter
             }
 
             $data = array($labels);
-            $assignorList = [];
-
-            foreach ($dateDivisions as $dateDivision) {
-                $assignor = $dateDivision->assignor;
-                //set the data : game in each row
-                $row = array($assignor);
-
-                foreach ($labels as $k => $item) {
-                    foreach ($counts as $count) {
-                        if ($assignor == $count->assignor) {
-                            $key = $count->date . " / " . $count->division;
-                            if ($key == $item) {
-                                $row[$k] = '' . $count->game_count;
-                            } elseif ($k > 0 && empty($row[$k])) {
-                                $row[$k] = null;
-                            }
-                        }
+            $rows = [];
+            foreach ($labels as $k => $v) {
+                foreach ($counts as $count) {
+                    $assignor = $count->assignor;
+                    if (!isset($rows[$assignor])) {
+                        $rows[$assignor]['Assignor'] = $assignor;
                     }
-                }
-
-                if (!in_array($assignor, $assignorList)) {
-                    $data[] = $row;
-                    if (!in_array($assignor, $assignorList)) {
-                        $assignorList[] = $assignor;
+                    $key = $count->date . " / " . $count->division;
+                    if ($key == $v) {
+                        $rows[$assignor][$v] = $count->game_count;
+                    } elseif (!isset($rows[$assignor][$v])) {
+                        $rows[$assignor][$v] = '';
                     }
                 }
             }
 
+            foreach ($rows as $row) {
+                $data[] = array_values($row);
+            }
+
+            usort($data, array($this, "sortOnRep"));
+
             $content['Summary by Date Division']['data'] = $data;
             $content['Summary by Date Division']['options']['freezePane'] = 'A2';
-            $content['Summary by Date Division']['options']['horizontalAlignment'] = ['WS'=>'center'];
-
+            $content['Summary by Date Division']['options']['horizontalAlignment'] = ['WS' => 'center'];
         }
 
         return $content;
+    }
+
+    static function sortOnRep($a, $b)
+    {
+        if ($a == $b) {
+            return 0;
+        }
+
+        if ($a[0] == 'Assignor') {
+            return -1;
+        }
+
+        if ($b[0] == 'Assignor') {
+            return 1;
+        }
+
+        return ($a[0] < $b[0]) ? -1 : 1;
     }
 
 }
