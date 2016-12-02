@@ -7,33 +7,33 @@ $settings = [
         // View settings
         'view' => [
             'template_path' => [
-                __DIR__ . '/../templates',
-                __DIR__ . '/../src/Action/EditRef',
-                __DIR__ . '/../src/Action/End',
-                __DIR__ . '/../src/Action/Full',
-                __DIR__ . '/../src/Action/Greet',
-                __DIR__ . '/../src/Action/Lock',
-                __DIR__ . '/../src/Action/Logon',
-                __DIR__ . '/../src/Action/Master',
-                __DIR__ . '/../src/Action/Refs',
-                __DIR__ . '/../src/Action/Sched',
-                __DIR__ . '/../src/Action/Admin',
-                __DIR__ . '/../src/Action/NoEvents',
-                __DIR__ . '/../src/Action/EditGame',
+                PROJECT_ROOT . '/templates',
+                PROJECT_ROOT . '/src/Action/EditRef',
+                PROJECT_ROOT . '/src/Action/End',
+                PROJECT_ROOT . '/src/Action/Full',
+                PROJECT_ROOT . '/src/Action/Greet',
+                PROJECT_ROOT . '/src/Action/Lock',
+                PROJECT_ROOT . '/src/Action/Logon',
+                PROJECT_ROOT . '/src/Action/Master',
+                PROJECT_ROOT . '/src/Action/Refs',
+                PROJECT_ROOT . '/src/Action/Sched',
+                PROJECT_ROOT . '/src/Action/Admin',
+                PROJECT_ROOT . '/src/Action/NoEvents',
+                PROJECT_ROOT . '/src/Action/EditGame',
             ],
             'twig' => [
-                'cache' => __DIR__ . '/../var/cache/twig',
+                'cache' => PROJECT_ROOT . '/var/cache/twig',
                 'debug' => true,
                 'auto_reload' => true,
             ],
         ],
 
-        'upload_path' => __DIR__ . '/../var/uploads/',
+        'upload_path' => PROJECT_ROOT . '/var/uploads/',
         
         // monolog settings
         'logger' => [
             'name' => 'app',
-            'path' => __DIR__ . '/../var/logs/app.log',
+            'path' => PROJECT_ROOT . '/var/logs/app.log',
         ],
 
         'version' => [
@@ -46,6 +46,7 @@ $settings = [
 ];
 
 $local = include(PROJECT_ROOT . '/config/local.php');
+
 $settings['settings']['db'] = $local['db'];
 
 $settings['test']['user'] = $local['user_test'];

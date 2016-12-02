@@ -17,12 +17,12 @@
     </logging>
     <testsuites>
         <testsuite name="Unit Test Suite">
-            <directory>tests/Action</directory>
+            <directory>src/Action</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix="Test.php">tests/Action/</directory>
+            <directory suffix="Test.php">src/Action</directory>
         </whitelist>
     </filter>
 
