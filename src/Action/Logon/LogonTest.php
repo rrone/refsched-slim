@@ -19,7 +19,7 @@ class LogonTest extends AppTestCase
         $this->client = new AppWebTestClient($this->app);
     }
 
-    public function xtestRoot()
+    public function testRoot()
     {
         // instantiate the view and test it
 
@@ -36,7 +36,7 @@ class LogonTest extends AppTestCase
         $this->assertContains('<h1>Section 1 Event Schedule</h1>', $view);
     }
 
-    public function xtestLogonAsUser()
+    public function testLogonAsUser()
     {
         $this->eventLabel = $this->local['user_test']['event'];
         $this->userName = $this->local['user_test']['user'];
