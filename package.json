@@ -6,13 +6,9 @@
   "scripts": {
     "gulp-build": "./node_modules/.bin/gulp build",
     "gulp-watch": "./node_modules/.bin/gulp watch",
-<<<<<<< HEAD
     "test": "/usr/local/bin/php ~/Dev/refsched/vendor/phpunit/phpunit/phpunit --bootstrap ~/Dev/refsched/tests/bootstrap.php --configuration ~/Dev/refsched/phpunit.xml",
-    "deploy": "dist.sh"
-=======
-    "test": "phpunit --coverage-html ./var/coverage src/",
+    "deploy": "dist.sh",
     "coverage": "open var/coverage/index.html"
->>>>>>> add_tests
   },
   "author": "",
   "license": "ISC",
