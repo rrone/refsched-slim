@@ -15,7 +15,11 @@ echo "  Build public resources..."
 
 echo "  Purge composer development items..."
 ## Disable xdebug for composer performance
-mv /usr/local/etc/php/7.0/conf.d/ext-xdebug.ini /usr/local/etc/php/7.0/conf.d/ext-xdebug.~ini
+if [ -e "/usr/local/etc/php/7.0/conf.d/ext-xdebug.ini" ]
+then
+    mv /usr/local/etc/php/7.0/conf.d/ext-xdebug.ini /usr/local/etc/php/7.0/conf.d/ext-xdebug.~ini
+fi
+
 composer install --no-dev
 
 echo "  Clear distribution folder..."
