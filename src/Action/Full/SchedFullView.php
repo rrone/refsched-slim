@@ -141,7 +141,7 @@ class SchedFullView extends AbstractView
                     $html .= "<td>$game->game_number</td>";
                     $html .= "<td>$date</td>";
                     $html .= "<td>$time</td>";
-                    $html .= "<td>$game->field</td>";
+                    $html .= "<td><a href='" . $this->getBaseURL('field map') . "' target='_blank'>$game->field</a></td>";
                     $html .= "<td>$game->division</td>";
                     $html .= "<td>$game->pool</td>";
                     $html .= "<td>$game->home</td>";

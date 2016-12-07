@@ -74,3 +74,7 @@ $container['naPath'] = $container->get('router')->pathFor('na');
 $app->map(['GET', 'POST'], '/editgame', App\Action\EditGame\EditGameController::class)
     ->setName('edit_game');
 $container['editGamePath'] = $container->get('router')->pathFor('edit_game');
+
+$app->get('/fieldmap', App\Action\PDF\PDFController::class)
+    ->setName('field map');
+$container['field map'] = $container->get('router')->pathFor('field map');
