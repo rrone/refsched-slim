@@ -21,7 +21,7 @@ class PDFController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized()) {
-            return $response->withRedirect($this->getBaseURL('greet'));
+            return $response->withRedirect($this->getBaseURL('greetPath'));
         };
 
         $this->logStamp($request);
