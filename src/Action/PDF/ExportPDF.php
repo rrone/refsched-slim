@@ -9,11 +9,13 @@ class ExportPDF
 {
     public function handler(Request $request, Response $response)
     {
+        $field_map = $request->getAttribute('field_map');
+
         // generate the response
         $response = $response->withHeader('Content-Type','application/pdf');
-        $response = $response->withHeader('Content-Disposition', 'inline; filename=extra_map.pdf');
+        $response = $response->withHeader('Content-Disposition', "inline; filename=$field_map");
 
-        $content = file_get_contents(__DIR__ . '/Extra_Map.pdf');
+        $content = file_get_contents(__DIR__ . "/$field_map");
 
         /** @noinspection PhpUndefinedMethodInspection */
         $body = $response->getBody();

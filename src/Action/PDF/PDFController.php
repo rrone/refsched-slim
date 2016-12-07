@@ -26,6 +26,8 @@ class PDFController extends AbstractController
 
         $this->logStamp($request);
 
+        $request = $request->withAttribute('field_map', $this->event->field_map);
+
         $response = $this->exportPDF->handler($request, $response);
 
         return $response;

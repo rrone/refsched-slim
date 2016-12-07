@@ -76,5 +76,5 @@ $app->map(['GET', 'POST'], '/editgame', App\Action\EditGame\EditGameController::
 $container['editGamePath'] = $container->get('router')->pathFor('edit_game');
 
 $app->get('/fieldmap', App\Action\PDF\PDFController::class)
-    ->setName('field map');
-$container['field map'] = $container->get('router')->pathFor('field map');
+    ->setName('fieldmap');
+$container['fieldmap'] = $container->get('router')->pathFor('fieldmap');
