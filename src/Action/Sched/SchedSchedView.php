@@ -352,7 +352,7 @@ class SchedSchedView extends AbstractView
                 $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
 
                 if ($showavailable && $this->num_unassigned) {
-                    $html .= "<h3>Available games :</h3>";
+                    $html .= "<h3 class='left'>Available games :</h3>";
                 }
                 $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
 
