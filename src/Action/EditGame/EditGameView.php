@@ -23,19 +23,22 @@ class EditGameView extends AbstractView
 
         if ($request->isPost()) {
             $_POST = $request->getParsedBody();
-            $formData = [];
+            if (in_array('Update Games', array_values($_POST))) {
+                $formData = [];
 
-            foreach ($_POST as $key => $value) {
-                if ($key != 'action') {
+                foreach ($_POST as $key => $value) {
                     $datKey = explode('+', $key);
-                    $formData['data'][$datKey[0]][$datKey[1]] = $value;
+                    if (isset($datKey[1])) {
+                        $formData['data'][$datKey[0]][$datKey[1]] = $value;
+                    }
                 }
-            }
-            if (empty($hdr)) {
-                $formData['hdr'] = array_keys(current(current($formData)));
-            }
 
-            $this->sr->modifyGames($formData);
+                if (empty($hdr)) {
+                    $formData['hdr'] = array_keys(current(current($formData)));
+                }
+
+                $this->sr->modifyGames($formData);
+            }
         }
     }
 

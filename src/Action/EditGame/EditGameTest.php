@@ -114,7 +114,7 @@ class EditGameTest extends AppTestCase
             'content-type' => 'multipart/form-data;'
         );
         $body = array(
-            'action' => 'Update Games',
+            0 => 'Update Games',
             '457+projectKey' => $projectKey,
             '457+id' => '457',
             '457+game_number' => '1',
@@ -127,7 +127,7 @@ class EditGameTest extends AppTestCase
 
         // reset edit names
         $body = array(
-            'action' => 'Update Games',
+            0 => 'Update Games',
             '457+projectKey' => $projectKey,
             '457+id' => '457',
             '457+game_number' => '1',

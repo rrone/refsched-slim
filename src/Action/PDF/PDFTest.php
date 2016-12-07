@@ -54,8 +54,8 @@ class PDFTest extends AppTestCase
     {
         // invoke the controller action and test it
 
-        $user = $this->local['admin_test']['user'];
-        $projectKey = $this->local['admin_test']['projectKey'];
+        $user = $this->local['user_test']['user'];
+        $projectKey = $this->local['user_test']['projectKey'];
         $event = $this->sr->getEvent($projectKey);
 
         $this->client->app->getContainer()['session'] = [
@@ -68,11 +68,6 @@ class PDFTest extends AppTestCase
 
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->get('/fieldmap');
-        $view = (string)$response->getBody();
-        $this->assertEquals('', $view);
-
-        $url = implode($response->getHeader('Location'));
-        $this->assertEquals('', $url);
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/pdf';
@@ -102,11 +97,6 @@ class PDFTest extends AppTestCase
 
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->get('/fieldmap');
-        $view = (string)$response->getBody();
-        $this->assertEquals('', $view);
-
-        $url = implode($response->getHeader('Location'));
-        $this->assertEquals('', $url);
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/pdf';
