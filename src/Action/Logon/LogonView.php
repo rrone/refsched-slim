@@ -22,6 +22,7 @@ class LogonView extends AbstractView
 
         $this->sr = $repository;
     }
+
     public function handler(Request $request, Response $response)
     {
         if ($request->isPost()) {
@@ -40,8 +41,7 @@ class LogonView extends AbstractView
             if ($authed) {
                 $_SESSION['authed'] = true;
                 $this->msg = null;
-            }
-            else {
+            } else {
                 //try master password
                 $user = $this->sr->getUserByName('Admin');
                 $hash = isset($user) ? $user->hash : null;
@@ -51,8 +51,7 @@ class LogonView extends AbstractView
                     $_SESSION['authed'] = true;
                     $_SESSION['admin'] = true;
                     $this->msg = null;
-                }
-                else {
+                } else {
                     session_unset();
                     unset($_SESSION);
                     $this->msg = 'Unrecognized password for ' . $_POST['user'];
@@ -62,10 +61,11 @@ class LogonView extends AbstractView
 
         return null;
     }
+
     public function render(Response &$response)
     {
         $content = array(
-            'events' => $this->sr->getCurrentEvents(),
+            'events' => $this->getCurrentEvents(),
             'content' => $this->renderView(),
             'message' => $this->msg,
         );
@@ -74,6 +74,7 @@ class LogonView extends AbstractView
 
         return $response;
     }
+
     protected function renderView()
     {
         $users = $this->sr->getUsers();
@@ -123,8 +124,7 @@ EOD;
         </div>
       </form>
 EOD;
-        }
-        else {
+        } else {
             $html = "<div class=\"center no-content\">
                 <h2>Rest easy...there are no events available to schedule.</h2>
                 <h2>Go referee some games yourself.</h2>
@@ -132,5 +132,21 @@ EOD;
         }
 
         return $html;
+    }
+
+    protected function getCurrentEvents()
+    {
+        $events = $this->sr->getCurrentEvents();
+
+        $linkedEvents = [];
+        foreach ($events as $event) {
+            if(!empty($event->infoLink)){
+                $event->name = "<a href='$event->infoLink'>$event->name</a>";
+            }
+
+            $linkedEvents[] = $event;
+        }
+
+        return $linkedEvents;
     }
 }
