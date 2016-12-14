@@ -79,7 +79,15 @@ class SchedMasterView extends AbstractView
             }
             $select_list[] = 'Other';
 
-            $this->page_title = $event->name;
+            if(!empty($this->event->infoLink)){
+                $eventLink = $this->event->infoLink;
+                $eventName = $this->event->name;
+                $eventName = "<a href='$eventLink' target='_blank'>$eventName</a>";
+            } else {
+                $eventName = $this->event->name;
+            }
+
+            $this->page_title = $eventName;
             $this->dates = $event->dates;
             $this->location = $event->location;
             $projectKey = $event->projectKey;

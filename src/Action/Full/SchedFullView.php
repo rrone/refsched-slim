@@ -50,7 +50,15 @@ class SchedFullView extends AbstractView
         if (!empty($this->event)) {
             $projectKey = $this->event->projectKey;
 
-            $this->page_title = $this->event->name;
+            if(!empty($this->event->infoLink)){
+                $eventLink = $this->event->infoLink;
+                $eventName = $this->event->name;
+                $eventName = "<a href='$eventLink' target='_blank'>$eventName</a>";
+            } else {
+                $eventName = $this->event->name;
+            }
+
+            $this->page_title = $eventName;
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
 
