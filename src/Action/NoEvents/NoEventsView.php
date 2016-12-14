@@ -25,11 +25,12 @@ class NoEventsView extends AbstractView
     public function render(Response &$response)
     {
         $content = array(
-            'events' => $this->sr->getCurrentEvents(),
+            'events' => $this->getCurrentEvents(),
         );
 
         $this->view->render($response, 'noevents.html.twig', $content);
 
         return $response;
     }
+
 }
