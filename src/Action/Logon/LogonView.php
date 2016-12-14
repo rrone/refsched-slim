@@ -141,7 +141,7 @@ EOD;
         $linkedEvents = [];
         foreach ($events as $event) {
             if(!empty($event->infoLink)){
-                $event->name = "<a href='$event->infoLink'>$event->name</a>";
+                $event->name = "<a href='$event->infoLink' target='_blank'>$event->name</a>";
             }
 
             $linkedEvents[] = $event;
