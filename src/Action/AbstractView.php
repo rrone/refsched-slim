@@ -58,7 +58,9 @@ abstract class AbstractView
 
     protected function divisionAge($div)
     {
-        return substr($div, 0, 3);
+        $u = stripos($div, "U");
+
+        return substr($div, $u, 3);
     }
 
     protected function isRepost(Request $request)

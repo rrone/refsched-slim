@@ -342,7 +342,8 @@ class SchedulerRepository
 
         $result = [];
         foreach ($groups as $group) {
-            $group = substr($group->division, 0, 3);
+            $u = stripos($group->division, "U");
+            $group = substr($group->division, $u, 3);
             if (!in_array($group, $result)) {
                 $result[] = $group;
             }
@@ -753,7 +754,8 @@ class SchedulerRepository
                         }
                         break;
                     case 'division':
-                        $div = substr($val, 0, 3);
+                        $u = stripos($val, "U");
+                        $div = substr($val, $u, 3);
                         if (!isset($refList[$ref->name][$div])) {
                             $refList[$ref->name][$div] = 0;
                         }
