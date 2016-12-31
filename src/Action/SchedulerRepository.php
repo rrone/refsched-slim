@@ -649,7 +649,7 @@ class SchedulerRepository
 
         $data['time'] = date('H:i:s', strtotime($data['time']));
 
-        $dif = array_diff((array)$game, $data);
+        $dif = array_diff_assoc($data, (array)$game);
 
         if (!empty($dif)) {
             $this->db->table('games')
