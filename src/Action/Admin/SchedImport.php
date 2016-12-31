@@ -143,6 +143,7 @@ class SchedImport extends AbstractImporter
 
         if (!empty($data)) {
             $games['hdr'] = $data[0];
+            $games['data'] = [];
             $projectKey = $this->event->projectKey;
 
             foreach ($data as $key => $game) {
