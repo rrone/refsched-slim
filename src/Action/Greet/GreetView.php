@@ -73,8 +73,9 @@ class GreetView extends AbstractView
             $this->location = $this->event->location;
 
             $locked = $this->sr->getLocked($projectKey);
+            $show_medal_round = $this->sr->getMedalRound($projectKey);
 
-            $games = $this->sr->getGames($projectKey);
+            $games = $this->sr->getGames($projectKey, $show_medal_round);
             $delim = ' - ';
             $num_assigned = 0;
             $num_area = 0;
@@ -100,9 +101,14 @@ class GreetView extends AbstractView
 
             if ($this->user->admin) {
                 if ($locked) {
-                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;-&nbsp;(<a href=" . $this->getBaseURL('unlockPath') . ">Unlock</a> the schedule now)<br>\n";
+                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;-&nbsp;(<a href=" . $this->getBaseURL('unlockPath') . ">Unlock</a> the schedule now)<br><br>\n";
                 } else {
-                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;-&nbsp;(<a href=" .$this->getBaseURL('lockPath') . ">Lock</a> the schedule now)<br>\n";
+                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;-&nbsp;(<a href=" .$this->getBaseURL('lockPath') . ">Lock</a> the schedule now)<br><br>\n";
+                }
+                if ($show_medal_round) {
+                    $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=" .$this->getBaseURL('hideMRPath') . ">Hide Medal Round Assignments</a> from users)<br><br>\n";
+                } else {
+                    $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=" . $this->getBaseURL('showMRPath') . ">Show Medal Round Assignments</a> to users)<br><br>\n";
                 }
             } else {
                 if ($locked) {

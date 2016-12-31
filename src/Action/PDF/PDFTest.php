@@ -2,7 +2,6 @@
 namespace Tests;
 
 use App\Action\AbstractController;
-use App\Action\AbstractView;
 use App\Action\PDF\PDFController;
 use App\Action\PDF\ExportPDF;
 

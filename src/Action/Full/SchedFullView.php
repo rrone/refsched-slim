@@ -62,10 +62,12 @@ class SchedFullView extends AbstractView
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
 
+            $show_medal_round = $this->sr->getMedalRound($projectKey);
+
             if($this->user->admin) {
                 $games = $this->sr->getGames($projectKey, '%', true);
             } else {
-                $games = $this->sr->getGames($projectKey);
+                $games = $this->sr->getGames($projectKey, $show_medal_round);
             }
 
             $has4th = $this->sr->numberOfReferees($projectKey) > 3;

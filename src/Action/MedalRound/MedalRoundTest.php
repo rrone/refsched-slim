@@ -3,11 +3,11 @@ namespace Tests;
 
 use App\Action\AbstractController;
 use App\Action\AbstractView;
-use App\Action\Lock\SchedLockDBController;
-use App\Action\Lock\SchedUnlockDBController;
-use App\Action\Lock\SchedLockView;
+use App\Action\MedalRound\HideMedalRoundController;
+use App\Action\MedalRound\ShowMedalRoundController;
+use App\Action\MedalRound\MedalRoundView;
 
-class LockUnlockTest extends AppTestCase
+class MedalRoundTest extends AppTestCase
 {
     public function setUp()
     {
@@ -22,14 +22,14 @@ class LockUnlockTest extends AppTestCase
     {
         // instantiate the view
 
-        $view = new SchedLockView($this->c, $this->sr);
+        $view = new MedalRoundView($this->c, $this->sr);
 
-        // instantiate the Unlock controller & test it
+        // instantiate the ShowMedalRound controller & test it
 
-        $controller = new SchedLockDBController($this->c, $view);
+        $controller = new HideMedalRoundController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
-        // invoke the unlock controller action as unauthorized and test it
+        // invoke the show medalround controller action as unauthorized and test it
         $this->app->getContainer()['session'] = [
             'authed' => false,
             'user' => null,
@@ -57,23 +57,23 @@ class LockUnlockTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
-        $this->assertContains("<h3 class=\"center\">The schedule is:&nbsp;<span style=\"color:#CC0000\">Locked</span>&nbsp;-&nbsp;(<a href=/unlock>Unlock</a> the schedule now)", $view);
+//        $this->assertContains("<h3 class=\"center\">The schedule is:&nbsp;<span style=\"color:#CC0000\">Locked</span>&nbsp;-&nbsp;(<a href=/unlock>Unlock</a> the schedule now)", $view);
 
-        $response = (object)$this->client->get('/lock');
+        $response = (object)$this->client->get('/hidemr');
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals('/greet', $url);
     }
 
-    public function testUnlockAsUser()
+    public function testShowMRAsUser()
     {
         // instantiate the view
 
-        $view = new SchedLockView($this->c, $this->sr);
+        $view = new MedalRoundView($this->c, $this->sr);
         $this->assertTrue($view instanceof AbstractView);
 
         // instantiate the Lock controller & test it
 
-        $controller = new SchedUnlockDBController($this->c, $view);
+        $controller = new ShowMedalRoundController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the lock controller action as authorized user and test it
@@ -93,7 +93,7 @@ class LockUnlockTest extends AppTestCase
         ];
 
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/unlock');
+        $response = (object)$this->client->get('/showmr');
         $url = implode($response->getHeader('Location'));
 
         $this->assertEquals(302, $response->getStatusCode());
@@ -103,18 +103,17 @@ class LockUnlockTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
-        $this->assertContains("<h3 class=\"center\">The schedule is presently <span style=\"color:#CC0000\">locked</span>", $view);
     }
 
-    public function testUnlockAsAdmin()
+    public function testShowMRAsAdmin()
     {
         // instantiate the view
 
-        $view = new SchedLockView($this->c, $this->sr);
+        $view = new MedalRoundView($this->c, $this->sr);
 
         // instantiate the Unlock controller & test it
 
-        $controller = new SchedUnlockDBController($this->c, $view);
+        $controller = new ShowMedalRoundController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the unlock controller action as authorized admin and test it
@@ -145,23 +144,22 @@ class LockUnlockTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
-        $this->assertContains("<h3 class=\"center\">The schedule is:&nbsp;<span style=\"color:#02C902\">Unlocked</span>&nbsp;-&nbsp;(<a href=/lock>Lock</a> the schedule now)", $view);
 
         $response = (object)$this->client->get('/unlock');
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals('/greet', $url);
     }
 
-    public function testLockAsUser()
+    public function testHideMRAsUser()
     {
         // instantiate the view
 
-        $view = new SchedLockView($this->c, $this->sr);
+        $view = new MedalRoundView($this->c, $this->sr);
         $this->assertTrue($view instanceof AbstractView);
 
-        // instantiate the Lock controller & test it
+        // instantiate the HideMedalRoundController & test it
 
-        $controller = new SchedLockDBController($this->c, $view);
+        $controller = new HideMedalRoundController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the lock controller action as authorized user and test it
@@ -185,22 +183,21 @@ class LockUnlockTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
-        $this->assertContains("<h3 class=\"center\">The schedule is presently <span style=\"color:#02C902\">unlocked</span>", $view);
     }
 
-    public function testLockAsAnonymous()
+    public function testHideAsAnonymous()
     {
         // instantiate the view
 
-        $view = new SchedLockView($this->c, $this->sr);
+        $view = new MedalRoundView($this->c, $this->sr);
         $this->assertTrue($view instanceof AbstractView);
 
-        // instantiate the Lock controller & test it
+        // instantiate the HideMedalRound controller & test it
 
-        $controller = new SchedLockDBController($this->c, $view);
+        $controller = new HideMedalRoundController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
-        // invoke the lock controller action as unauthorized and test it
+        // invoke the controller action as unauthorized and test it
         $this->app->getContainer()['session'] = [
             'authed' => false,
             'user' => null,
@@ -208,7 +205,7 @@ class LockUnlockTest extends AppTestCase
         ];
 
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/lock');
+        $response = (object)$this->client->get('/hidemr');
         $url = implode($response->getHeader('Location'));
 
         $this->assertEquals(302, $response->getStatusCode());
@@ -221,16 +218,16 @@ class LockUnlockTest extends AppTestCase
         $this->assertEquals('/', $url);
     }
 
-    public function testUnlockAsAnonymous()
+    public function testShowAsAnonymous()
     {
         // instantiate the view
 
-        $view = new SchedLockView($this->c, $this->sr);
+        $view = new MedalRoundView($this->c, $this->sr);
         $this->assertTrue($view instanceof AbstractView);
 
-        // instantiate the Lock controller & test it
+        // instantiate the controller & test it
 
-        $controller = new SchedLockDBController($this->c, $view);
+        $controller = new ShowMedalRoundController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the lock controller action as unauthorized and test it
@@ -241,7 +238,7 @@ class LockUnlockTest extends AppTestCase
         ];
 
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/unlock');
+        $response = (object)$this->client->get('/showmr');
         $url = implode($response->getHeader('Location'));
 
         $this->assertEquals(302, $response->getStatusCode());

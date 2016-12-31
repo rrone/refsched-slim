@@ -20,6 +20,7 @@ $settings = [
                 PROJECT_ROOT . '/src/Action/Admin',
                 PROJECT_ROOT . '/src/Action/NoEvents',
                 PROJECT_ROOT . '/src/Action/EditGame',
+                PROJECT_ROOT . '/src/Action/MedalRound',
             ],
             'twig' => [
                 'cache' => PROJECT_ROOT . '/var/cache/twig',
@@ -37,7 +38,7 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2016.12.30.01'
+            'version' => '2016.12.31.00'
         ]
     ],
 

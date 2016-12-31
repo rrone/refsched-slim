@@ -126,6 +126,10 @@ class SchedulerRepository
 
     }
 
+    /**
+     * @param $id
+     * @return null
+     */
     public function dropUserById($id)
     {
         if(empty($id)) {
@@ -251,12 +255,60 @@ class SchedulerRepository
 
     /**
      * @param $key
+     * @return null
+     */
+    public function showMedalRound($key)
+    {
+        $this->db->table('events')
+            ->where('projectKey', $key)
+            ->update(['show_medal_round' => true]);
+
+        return null;
+    }
+
+    /**
+     * @param $key
+     * @return null
+     */
+    public function hideMedalRound($key)
+    {
+        $this->db->table('events')
+            ->where('projectKey', $key)
+            ->update(['show_medal_round' => false]);
+//        print_r('hideMedalRound');die();
+
+        return null;
+    }
+
+    /**
+     * @param $projectKey
+     * @return mixed
+     */
+    public function getMedalRound($projectKey)
+    {
+        $status = $this->db->table('events')
+            ->where('projectKey', '=', $projectKey)
+            ->get();
+
+        $status = $this->getZero($status);
+        if (!is_null($status)) {
+            return $status->show_medal_round;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param $key
+     * @return mixed
      */
     public function unlockProject($key)
     {
         $this->db->table('events')
             ->where('projectKey', $key)
             ->update(['locked' => false]);
+
+        return null;
     }
 
     //Games table functions
@@ -487,7 +539,7 @@ class SchedulerRepository
 
         //convert float to int
         foreach ($games as &$game) {
-            foreach ($game as $key => $value) {
+            foreach ($game as $key => &$value) {
                 if (is_float($value)) {
                     $value = (int)$value;
                 }

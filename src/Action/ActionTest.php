@@ -2,7 +2,6 @@
 namespace Tests;
 
 use App\Action\SchedulerRepository;
-use App\Action\Logon\LogonView;
 use Slim\Container;
 
 class ActionTest extends AppTestCase

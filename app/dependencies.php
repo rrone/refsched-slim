@@ -349,3 +349,22 @@ $container[App\Action\PDF\PDFController::class] = function ($c) {
     return new \App\Action\PDF\PDFController($c, $v);
 };
 
+// -----------------------------------------------------------------------------
+// MedalRound classes
+// -----------------------------------------------------------------------------
+$container[App\Action\MedalRound\MedalRoundView::class] = function ($c) use ($sr) {
+
+    return new \App\Action\MedalRound\MedalRoundView($c, $sr);
+};
+
+$container[App\Action\MedalRound\ShowMedalRoundController::class] = function ($c) use ($sr) {
+    $v = new \App\Action\MedalRound\MedalRoundView($c, $sr);
+
+    return new \App\Action\MedalRound\ShowMedalRoundController($c, $v);
+};
+
+$container[App\Action\MedalRound\HideMedalRoundController::class] = function ($c) use ($sr) {
+    $v = new \App\Action\MedalRound\MedalRoundView($c, $sr);
+
+    return new \App\Action\MedalRound\HideMedalRoundController($c, $v);
+};

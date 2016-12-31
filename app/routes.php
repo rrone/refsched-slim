@@ -78,3 +78,12 @@ $container['editGamePath'] = $container->get('router')->pathFor('edit_game');
 $app->get('/fieldmap', App\Action\PDF\PDFController::class)
     ->setName('fieldmap');
 $container['fieldmap'] = $container->get('router')->pathFor('fieldmap');
+
+$app->map(['GET', 'POST'], '/hidemr', App\Action\MedalRound\HideMedalRoundController::class)
+    ->setName('hidemr');
+$container['hideMRPath'] = $container->get('router')->pathFor('hidemr');
+
+$app->map(['GET', 'POST'], '/showmr', App\Action\MedalRound\ShowMedalRoundController::class)
+    ->setName('showmr');
+$container['showMRPath'] = $container->get('router')->pathFor('showmr');
+

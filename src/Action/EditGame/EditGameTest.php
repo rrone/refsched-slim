@@ -103,7 +103,7 @@ class EditGameTest extends AppTestCase
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey),
+            'event' => $event,
         ];
         $this->client->returnAsResponseObject(true);
 
