@@ -77,7 +77,7 @@ class SchedMasterView extends AbstractView
             foreach ($users as $user) {
                 $select_list[] = $user->name;
             }
-            $select_list[] = 'Other';
+            $select_list[] = 'To Be Announced';
 
             if(!empty($this->event->infoLink)){
                 $eventLink = $this->event->infoLink;
