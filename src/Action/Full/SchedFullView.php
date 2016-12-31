@@ -67,7 +67,7 @@ class SchedFullView extends AbstractView
             if($this->user->admin) {
                 $games = $this->sr->getGames($projectKey, '%', true);
             } else {
-                $games = $this->sr->getGames($projectKey, $show_medal_round);
+                $games = $this->sr->getGames($projectKey, '%', $show_medal_round);
             }
 
             $has4th = $this->sr->numberOfReferees($projectKey) > 3;

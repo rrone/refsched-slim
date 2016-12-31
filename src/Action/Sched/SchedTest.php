@@ -117,6 +117,7 @@ class SchedSchedTest extends AppTestCase
 
         $user = $this->local['user_test']['user'];
         $projectKey = $this->local['user_test']['projectKey'];
+        $show_medal_round = $this->sr->getMedalRound($projectKey);
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -125,7 +126,7 @@ class SchedSchedTest extends AppTestCase
         ];
 
         $this->sr->updateAssignor([457=>$user]);
-        $games = $this->sr->getGamesByRep($projectKey,$user);
+        $games = $this->sr->getGamesByRep($projectKey, $user, $show_medal_round);
 
         $this->sr->updateAssignor([501=>'']);
         $unassignedGames = $this->sr->getUnassignedGames($projectKey, 'U16');

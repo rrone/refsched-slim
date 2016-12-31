@@ -74,6 +74,7 @@ class SchedEditRefView extends AbstractView
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
             $projectKey = $this->event->projectKey;
+            $show_medal_round = $this->sr->getMedalRound($projectKey);
 
             $target_game = $this->sr->gameIdToGameNumber($this->game_id);
             $game = $this->sr->getGameByKeyAndNumber($projectKey, $target_game);
@@ -84,7 +85,7 @@ class SchedEditRefView extends AbstractView
                 if ($this->user->admin) {
                     $games = $this->sr->getGames($projectKey, '%', true);
                 } else {
-                    $games = $this->sr->getGames($projectKey);
+                    $games = $this->sr->getGames($projectKey, '%', $show_medal_round);
                 }
 
                 $numRefs = $this->sr->numberOfReferees($projectKey);

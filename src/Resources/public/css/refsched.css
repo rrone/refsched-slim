@@ -30,9 +30,11 @@ h1, h2, h3 {
 }
 h1 {
     font-size: 16px;
+    line-height: 2.25rem;
 }
 h2 {
     font-size: 14px;
+    line-height: 2.25rem;
 }
 h3 {
     font-size: 12px;

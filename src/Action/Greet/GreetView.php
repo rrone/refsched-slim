@@ -75,7 +75,7 @@ class GreetView extends AbstractView
             $locked = $this->sr->getLocked($projectKey);
             $show_medal_round = $this->sr->getMedalRound($projectKey);
 
-            $games = $this->sr->getGames($projectKey, $show_medal_round);
+            $games = $this->sr->getGames($projectKey, '%', $show_medal_round);
             $delim = ' - ';
             $num_assigned = 0;
             $num_area = 0;

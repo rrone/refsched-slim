@@ -40,6 +40,8 @@ class SchedSchedView extends AbstractView
         if ($request->isPost() && !$this->isRepost($request)) {
             $projectKey = $this->event->projectKey;
             $locked = $this->sr->getLocked($projectKey);
+            $show_medal_round = $this->sr->getMedalRound($projectKey);
+
             $this->msg = null;
             $limit_list = [];
 
@@ -78,7 +80,7 @@ class SchedSchedView extends AbstractView
 
             if (!$locked) {
                 //remove drops if not locked
-                $assigned_games = $this->sr->getGamesByRep($projectKey, $this->user->name);
+                $assigned_games = $this->sr->getGamesByRep($projectKey, $this->user->name, $show_medal_round);
 
                 if (count($assign) != count($assigned_games)) {
                     $removed = [];
@@ -107,7 +109,7 @@ class SchedSchedView extends AbstractView
             }
 
             //initialize counting groups
-            $assigned_games = $this->sr->getGamesByRep($projectKey, $this->user->name);
+            $assigned_games = $this->sr->getGamesByRep($projectKey, $this->user->name, $show_medal_round);
             foreach ($assigned_games as $game) {
                 $div = $this->divisionAge($game->division);
                 if (!isset($games_now[$div])) {
@@ -120,7 +122,7 @@ class SchedSchedView extends AbstractView
                 //Update based on add/returned games
                 $added = [];
                 $unavailable = [];
-                $games = $this->sr->getGames($projectKey);
+                $games = $this->sr->getGames($projectKey, '%', $show_medal_round);
                 foreach ($games as $game) {
                     $date = date('D, d M', strtotime($game->date));
                     $time = date('H:i', strtotime($game->time));
@@ -231,9 +233,11 @@ class SchedSchedView extends AbstractView
             $testtime = null;
 
             $locked = $this->sr->getLocked($projectKey);
+            $show_medal_round = $this->sr->getMedalRound($projectKey);
+
             $_SESSION['locked'] = $locked;
 
-            $games = $this->sr->getGames($projectKey, $this->showgroup, $this->user->admin);
+            $games = $this->sr->getGames($projectKey, $this->showgroup, $this->user->admin || $show_medal_round);
             $this->num_assigned = 0;
             $this->num_unassigned = count($games);
 
@@ -448,7 +452,7 @@ class SchedSchedView extends AbstractView
                 $html .= "</form>\n";
 
             } else {
-                $html .= "<h3 class=\"center\">You have no games assigned.</h3>\n";
+//                $html .= "<h3 class=\"center\">You have no games assigned.</h3>\n";
                 $html .= "<h3 class=\"h3-btn center\" >";
                 $html .= $this->menuLinks();
                 $html .= "<h3>\n";

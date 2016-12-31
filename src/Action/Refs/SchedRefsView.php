@@ -62,11 +62,12 @@ class SchedRefsView extends AbstractView
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
             $projectKey = $this->event->projectKey;
+            $show_medal_round = $this->sr->getMedalRound($projectKey);
 
             if ($this->user->admin) {
                 $games = $this->sr->getGames($projectKey, '%', true);
             } else {
-                $games = $this->sr->getGames($projectKey);
+                $games = $this->sr->getGames($projectKey, '%', $show_medal_round);
             }
 
             foreach ($games as $game) {
