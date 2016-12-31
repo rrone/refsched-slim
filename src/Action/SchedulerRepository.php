@@ -485,22 +485,20 @@ class SchedulerRepository
         $changes = array('adds' => 0, 'updates' => 0, 'errors' => []);
 
         //convert float to int
-        $newGames = [];
-        foreach ($games as $game) {
-            foreach ($game as $key => &$value) {
+        foreach ($games as &$game) {
+            foreach ($game as $key => $value) {
                 if (is_float($value)) {
                     $value = (int)$value;
                 }
             }
-            $newGames[] = $game;
         }
-        $games = $newGames;
+
         if (!empty($games)) {
-            foreach ($games as $game) {
+            foreach ($games as &$game) {
                 $nextData = [];
-                $game = array_values($game);
-                foreach ($game as $key => $field) {
-                    $nextData[$hdr[$key]] = $game[$key];
+                $match = array_values($game);
+                foreach ($match as $key => $field) {
+                    $nextData[$hdr[$key]] = $match[$key];
                 }
 
                 //ensure empty fields default to correct type
