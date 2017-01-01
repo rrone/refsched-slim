@@ -405,7 +405,12 @@ class SchedSchedView extends AbstractView
                                 $html .= "<td>" . $this->game_no[$kant] . "</td>";
                                 $html .= "<td>" . $this->date[$kant] . "</td>";
                                 $html .= "<td>" . $this->time[$kant] . "</td>";
-                                $html .= "<td>" . $this->field[$kant] . "</td>";
+                                $field = $this->field[$kant];
+                                if(is_null($this->event->field_map)){
+                                    $html .= "<td>$field</td>";
+                                } else {
+                                    $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$field</a></td>";
+                                }
                                 $html .= "<td>" . $this->div[$kant] . "</td>";
                                 $html .= "<td>" . $this->pool[$kant] . "</td>";
                                 $html .= "<td>" . $this->home[$kant] . "</td>";
@@ -506,7 +511,7 @@ class SchedSchedView extends AbstractView
 
         $assigned = in_array($user->name, $this->ref_team);
         if (!$assigned) {
-            $html .= "<h3 class=\"left\">$this->showgroup Games assigned to $user->name: <span style=\"color:$this->colorAlert\">NONE</span></h3><br>\n";
+            $html .= "<h3 class=\"left\">$this->showgroup Games assigned to $user->name : <span style=\"color:$this->colorAlert\">NONE</span></h3><br>\n";
             $html .= "<div class=\"clear-fix\"></div>\n";
             return $html;
         }
@@ -558,7 +563,12 @@ class SchedSchedView extends AbstractView
                     $html .= "<td>" . $this->game_no[$kant] . "</td>";
                     $html .= "<td>" . $this->date[$kant] . "</td>";
                     $html .= "<td>" . $this->time[$kant] . "</td>";
-                    $html .= "<td>" . $this->field[$kant] . "</td>";
+                    $field = $this->field[$kant];
+                    if(is_null($this->event->field_map)){
+                        $html .= "<td>$field</td>";
+                    } else {
+                        $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$field</a></td>";
+                    }
                     $html .= "<td>" . $this->div[$kant] . "</td>";
                     $html .= "<td>" . $this->pool[$kant] . "</td>";
                     $html .= "<td>" . $this->home[$kant] . "</td>";

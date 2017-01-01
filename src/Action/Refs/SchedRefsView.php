@@ -139,7 +139,11 @@ class SchedRefsView extends AbstractView
                         $html .= "<td>$game->game_number</td>";
                         $html .= "<td>$date</td>";
                         $html .= "<td>$time</td>";
-                        $html .= "<td>$game->field</td>";
+                        if(is_null($this->event->field_map)){
+                            $html .= "<td>$game->field</td>";
+                        } else {
+                            $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$game->field</a></td>";
+                        }
                         $html .= "<td>$game->division</td>";
                         $html .= "<td>$game->pool</td>";
                         $html .= "<td>$game->home</td>";
