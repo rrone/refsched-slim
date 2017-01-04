@@ -9,18 +9,19 @@ use App\Action\SchedulerRepository;
 
 class AdminView extends AbstractView
 {
-	public function __construct(Container $container, SchedulerRepository $repository)
+    public function __construct(Container $container, SchedulerRepository $repository)
     {
         parent::__construct($container, $repository);
 
-		$this->sr = $repository;
+        $this->sr = $repository;
     }
-	public function handler(Request $request, Response $response)
-	{
+
+    public function handler(Request $request, Response $response)
+    {
         $this->user = $request->getAttribute('user');
         $event = $request->getAttribute('event');
 
-        if ( $request->isPost() ) {
+        if ($request->isPost()) {
             $_POST = $request->getParsedBody();
 
             if (in_array('btnUpdate', array_keys($_POST))) {
@@ -80,27 +81,63 @@ class AdminView extends AbstractView
 
             } elseif (in_array('btnLogItem', array_keys($_POST))) {
 
-                if(!empty($_POST['logNote'])) {
+                if (!empty($_POST['logNote'])) {
                     $projectKey = !is_null($event) ? $event->projectKey : '';
                     $msg = $this->user->name . ': ' . $_POST['logNote'];
                     $this->sr->logInfo($projectKey, $msg);
+                }
+            } elseif (in_array('btnUpdateAssignors', array_keys($_POST))) {
+                var_dump($_POST);
+
+                $users = [];
+                $keys = [];
+                foreach ($_POST as $item => $type) {
+                    $item = str_replace('_', ' ', $item);
+                    switch ($type) {
+                        case 'user':
+                            $users[] = $this->sr->getUserByName($item);
+                            break;
+                        case 'event':
+                            $keys[] = $this->sr->getEventByLabel($item)->projectKey;
+                            break;
+                    }
+                }
+
+                foreach ($users as $user) {
+                    if ($user->enabled) {
+                        $for_events = serialize($keys);
+                        $this->sr->updateUserEvents($user->id, $for_events);
+                    }
+                }
+
+            } elseif (in_array('btnResetAssignors', array_keys($_POST))) {
+                $keys = [];
+                $users = $this->sr->getAllUsers();
+
+                foreach ($users as $user) {
+                    if ($user->enabled) {
+                        $for_events = serialize($keys);
+                        $this->sr->updateUserEvents($user->id, $for_events);
+                    }
                 }
             } else {
                 $this->msg = null;
             }
         }
 
-		return null;
+        return null;
 
-	}
-	public function render(Response &$response)
+    }
+
+    public function render(Response &$response)
     {
         $adminPath = $response->getHeader('adminPath')[0];
 
         $content = array(
-            'view' => array (
+            'view' => array(
                 'admin' => $this->user->admin,
                 'users' => $this->renderUsers(),
+                'events' => $this->renderCurrentEvents(),
                 'action' => $adminPath,
                 'message' => $this->msg,
                 'messageStyle' => $this->msgStyle,
@@ -111,19 +148,34 @@ class AdminView extends AbstractView
 
         return null;
     }
+
     protected function renderUsers()
     {
-		$users = $this->sr->getAllUsers();
+        $users = $this->sr->getAllUsers();
 
-		$selectOptions = null;
-		foreach($users as $user) {
-			if ($user->name == $this->user->name) {
-				$selectOptions .= "<option selected>$user->name</option>\n";
-			}
-			else {
-				$selectOptions .= "<option>$user->name</option>\n";
-			}
-		}
-		return $selectOptions;
+        $selectOptions = [];
+        foreach ($users as $user) {
+            switch ($user->name) {
+                case 'Admin':
+                    break;
+                default:
+                    $selectOptions[] = "$user->name";
+            }
+        }
+
+        return $selectOptions;
     }
+
+    protected function renderCurrentEvents()
+    {
+        $events = $this->sr->getCurrentEvents();
+        $eventLabels = [];
+
+        foreach ($events as $event) {
+            $eventLabels[] = $event->label;
+        }
+
+        return $eventLabels;
+    }
+
 }

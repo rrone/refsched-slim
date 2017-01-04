@@ -47,42 +47,12 @@ class SchedulerRepository
      */
     public function getUsers($key = null)
     {
-        $enabledUsers = $this->db->table('users')
-            ->where('enabled', true)
+        $users = $this->db->table('users')
+            ->where([
+                ['enabled', true],
+                ['for_events', 'like', "%$key%"]
+            ])
             ->get();
-
-        /******** temp key load ***************/
-//        $keys = array(
-//            '2015U16U19Chino',
-//            '2016AllStarExtraPlayoffs',
-//            '2016U16U19Chino',
-//            '2017AllStarPlayoffs',
-//            '2017LeaguePlayoffs',
-//            '2017ExtraPlayoffs',
-//            '2016LeaguePlayoffs'
-//
-//        );
-//        foreach ($users as $user) {
-//            if ($user->enabled) {
-//                $for_events = serialize($keys);
-//                $this->updateUserEvents($user->id, $for_events);
-//            }
-//        }
-        /******** temp key load ***************/
-
-        $users = null;
-        if (!is_null($key)) {
-            $usersByEvent = null;
-            foreach ($enabledUsers as $user) {
-                $forEvents = in_array($key, unserialize($user->for_events));
-                if ($forEvents) {
-                    $usersByEvent[] = $user;
-                }
-            }
-            $users = collect($usersByEvent);
-        } else {
-            $users = $enabledUsers;
-        }
 
         return $users;
     }
@@ -92,7 +62,7 @@ class SchedulerRepository
      * @param $keys
      * @return null
      */
-    private function updateUserEvents($id, $keys)
+    public function updateUserEvents($id, $keys)
     {
         $forEvents = serialize($keys);
 

@@ -153,3 +153,14 @@ legend {
 .panel { margin-bottom: inherit }
 .no-border { border: 0 }
 .border { border: 1px solid #ddd }
+
+.rs-checkbox {
+    padding: 0 !important;
+    float: left !important;
+}
+
+.rs-control-label {
+    float: left;
+    width: calc(100%);
+    text-align: left;
+}

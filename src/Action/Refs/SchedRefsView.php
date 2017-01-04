@@ -155,8 +155,9 @@ class SchedRefsView extends AbstractView
                         if ($has4th) {
                             $html .= "<td>$game->r4th</td>";
                         }
+                        $locked = $game->locked ? 'disabled' : '';
                         if ($game->assignor || $this->user->admin) {
-                            $html .= "<td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\"></td>";
+                            $html .= "<td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\" $locked></td>";
                         } else {
                             $html .= "<td>&nbsp;</td>\n";
                         }

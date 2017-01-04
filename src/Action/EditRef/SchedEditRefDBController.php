@@ -23,8 +23,17 @@ class SchedEditRefDBController extends AbstractController
             return $response->withRedirect($this->getBaseURL('logonPath'));
         };
 
+        //check for game locked
         $game_id = isset($_SESSION['game_id']) ? $_SESSION['game_id'] : null;
+        $sr = $this->container['sr'];
+        $target_game = $sr->gameIdToGameNumber($game_id);
+        $game = $sr->getGameByKeyAndNumber($this->event->projectKey, $target_game);
 
+        if($game->locked){
+            return $response->withRedirect($this->getBaseURL('refsPath'));
+        }
+
+        //process edit assignments
         $this->logStamp($request);
 
         $request = $request->withAttribute('user', $this->user);

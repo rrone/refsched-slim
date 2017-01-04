@@ -27,15 +27,18 @@ class SchedEditRefView extends AbstractView
         if ($request->isPost()) {
             $data = $request->getParsedBody();
 
-            foreach ($data as $key => &$value) {
-                $value = $this->stdName($value);
+            if (array_key_exists("Update Assignments", array_keys($data))) {
+
+                foreach ($data as $key => &$value) {
+                    $value = $this->stdName($value);
+                }
+
+                $gameNum = $this->sr->gameIdToGameNumber($this->game_id);
+                $game = $this->sr->getGameByKeyAndNumber($this->event->projectKey, $gameNum);
+
+                if (!is_null($game) && (($game->assignor == $this->user->name) || $this->user->admin))
+                    $this->sr->updateAssignments($data);
             }
-
-            $gameNum = $this->sr->gameIdToGameNumber($this->game_id);
-            $game = $this->sr->getGameByKeyAndNumber($this->event->projectKey, $gameNum);
-
-            if (!is_null($game) && (($game->assignor == $this->user->name) || $this->user->admin))
-                $this->sr->updateAssignments($data);
         }
     }
 
@@ -62,7 +65,7 @@ class SchedEditRefView extends AbstractView
         $html = null;
 
         if (!empty($this->event)) {
-            if(!empty($this->event->infoLink)){
+            if (!empty($this->event->infoLink)) {
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;
                 $eventName = "<a href='$eventLink' target='_blank'>$eventName</a>";
@@ -130,6 +133,7 @@ class SchedEditRefView extends AbstractView
                             }
                             $html .= "</tr>\n";
                             $html .= "</table>\n";
+                            $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"cancel\" value=\"Cancel\">\n";
                             $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"$game->id\" value=\"Update Assignments\">\n";
                             $html .= "<div class='clear-fix'></div>";
                             $html .= "</form>\n";

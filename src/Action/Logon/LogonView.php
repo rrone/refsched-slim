@@ -79,13 +79,18 @@ class LogonView extends AbstractView
 
     protected function renderView($key = null)
     {
-        $users = $this->sr->getUsers($key);
-
         if (is_null($key)) {
             $enabled = $this->sr->getEnabledEvents();
         } else {
             $enabled = $this->sr->getEvent($key, true);
         }
+
+        if (empty($enabled)) {
+            return null;
+        }
+
+        $projectKey = isset($enabled[0]) ? $enabled[0]->projectKey : $enabled->projectKey;
+        $users = $this->sr->getUsers($projectKey);
 
         $logonPath = $this->getBaseURL('logonPath');
 
