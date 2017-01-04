@@ -14,13 +14,18 @@ class SchedEndController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
+        $this->isAuthorized();
+
         $this->logStamp($request);
+
+        $key = isset($_SESSION['param']) ? "?id=" . $_SESSION['param'] : '';
+        $resp = $response->withRedirect($this->getBaseURL('logonPath') . $key);
 
         session_unset();
 
         session_destroy();
 
-        return $response->withRedirect($this->getBaseURL('logonPath'));
+        return $resp;
     }
 }
 

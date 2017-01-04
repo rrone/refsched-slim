@@ -2,6 +2,7 @@
 namespace App\Action;
 
 use Illuminate\Database\Capsule\Manager;
+use Illuminate\Support\Collection;
 
 /**
  * Class SchedulerRepository
@@ -44,11 +45,64 @@ class SchedulerRepository
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function getUsers()
+    public function getUsers($key = null)
     {
-        return $this->db->table('users')
+        $enabledUsers = $this->db->table('users')
             ->where('enabled', true)
             ->get();
+
+        /******** temp key load ***************/
+//        $keys = array(
+//            '2015U16U19Chino',
+//            '2016AllStarExtraPlayoffs',
+//            '2016U16U19Chino',
+//            '2017AllStarPlayoffs',
+//            '2017LeaguePlayoffs',
+//            '2017ExtraPlayoffs',
+//            '2016LeaguePlayoffs'
+//
+//        );
+//        foreach ($users as $user) {
+//            if ($user->enabled) {
+//                $for_events = serialize($keys);
+//                $this->updateUserEvents($user->id, $for_events);
+//            }
+//        }
+        /******** temp key load ***************/
+
+        $users = null;
+        if (!is_null($key)) {
+            $usersByEvent = null;
+            foreach ($enabledUsers as $user) {
+                $forEvents = in_array($key, unserialize($user->for_events));
+                if ($forEvents) {
+                    $usersByEvent[] = $user;
+                }
+            }
+            $users = collect($usersByEvent);
+        } else {
+            $users = $enabledUsers;
+        }
+
+        return $users;
+    }
+
+    /**
+     * @param $id
+     * @param $keys
+     * @return null
+     */
+    private function updateUserEvents($id, $keys)
+    {
+        $forEvents = serialize($keys);
+
+        $this->db->table('users')
+            ->where('id', $id)
+            ->update([
+                'for_events' => $keys,
+            ]);
+
+        return null;
     }
 
     /**
@@ -132,7 +186,7 @@ class SchedulerRepository
      */
     public function dropUserById($id)
     {
-        if(empty($id)) {
+        if (empty($id)) {
             return null;
         }
 
@@ -169,7 +223,7 @@ class SchedulerRepository
      * @param $projectKey
      * @return null|object
      */
-    public function getEvent($projectKey)
+    public function getEvent($projectKey, $asCollection = false)
     {
         if (empty($projectKey)) {
             return null;
@@ -179,7 +233,11 @@ class SchedulerRepository
             ->where('projectKey', '=', $projectKey)
             ->get();
 
-        return $this->getZero($event);
+        if (!$asCollection) {
+            $event = $this->getZero($event);
+        }
+
+        return $event;
     }
 
     /**
@@ -701,7 +759,7 @@ class SchedulerRepository
         return $this->db->table('games')
             ->selectRaw('assignor, date, division, COUNT(division) as game_count')
             ->where('projectKey', $projectKey)
-            ->groupBy(['division','assignor', 'date'])
+            ->groupBy(['division', 'assignor', 'date'])
             ->get();
     }
 

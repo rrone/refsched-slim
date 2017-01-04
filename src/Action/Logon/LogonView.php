@@ -52,8 +52,8 @@ class LogonView extends AbstractView
                     $_SESSION['admin'] = true;
                     $this->msg = null;
                 } else {
-                    session_unset();
-                    unset($_SESSION);
+                    $_SESSION['authed'] = false;
+                    $_SESSION['admin'] = false;
                     $this->msg = 'Unrecognized password for ' . $_POST['user'];
                 }
             }
@@ -64,9 +64,11 @@ class LogonView extends AbstractView
 
     public function render(Response &$response)
     {
+        $key = isset($_SESSION['param']) ? $_SESSION['param'] : null;
+
         $content = array(
             'events' => $this->getCurrentEvents(),
-            'content' => $this->renderView(),
+            'content' => $this->renderView($key),
             'message' => $this->msg,
         );
 
@@ -75,10 +77,15 @@ class LogonView extends AbstractView
         return $response;
     }
 
-    protected function renderView()
+    protected function renderView($key = null)
     {
-        $users = $this->sr->getUsers();
-        $enabled = $this->sr->getEnabledEvents();
+        $users = $this->sr->getUsers($key);
+
+        if (is_null($key)) {
+            $enabled = $this->sr->getEnabledEvents();
+        } else {
+            $enabled = $this->sr->getEvent($key, true);
+        }
 
         $logonPath = $this->getBaseURL('logonPath');
 
