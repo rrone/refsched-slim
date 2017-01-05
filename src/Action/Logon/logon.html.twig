@@ -1,28 +1,43 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-<table width="98%"  class="maincontent">
-  <tr>
-    <td class="contentarea center">
-     
-			<div class="center">
-				<h1>Section 1 Event Schedule</h1>
+    <table width="98%" class="maincontent">
+        <tr>
+            <td class="contentarea center">
 
-                {% for event in events %}
-				<h3>{{ event.name | raw }}, {{ event.location }}<br>
-					{{ event.dates }}</h3>
-                {% endfor %}
-			</div>
-			<hr>
-    </td>
-	</tr>
-	<tr>
-		<td>
-    <p class="center"><span style="color: #FF0000">{{ message | raw }}</span></p>
-		{{ content | raw }}
-		
-		</td>
-	</tr>
-		
-</table>
+                <div class="center">
+                    <h1>Section 1 Event Schedule</h1>
+
+                    {% for event in events %}
+                        <h3>{{ event.name | raw }}, {{ event.location }}<br>
+                            {{ event.dates }}</h3>
+                    {% endfor %}
+                </div>
+                <hr>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="center"><span style="color: #FF0000">{{ message | raw }}</span></p>
+                {{ content | raw }}
+
+            </td>
+        </tr>
+
+    </table>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        $(function () {
+            $("#event").trigger("change");
+        });
+
+        $("#event").change(function () {
+            var label = $("#event option:selected").val().replace(/ /g, '_');
+            console.log (label);
+            $("#user").load("/logon/users?" + label);
+        });
+
+    </script>
 {% endblock %}

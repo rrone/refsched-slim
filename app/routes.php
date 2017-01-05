@@ -10,6 +10,9 @@ $app->map(['GET', 'POST'], '/', App\Action\Logon\LogonDBController::class)
 $container['logonPath'] = $container->get('router')->pathFor('logon');
 
 $app->map(['GET', 'POST'], '/logon', App\Action\Logon\LogonDBController::class);
+$app->map(['GET', 'POST'], '/logon/users', App\Action\Logon\LogonUsersController::class)
+    ->setName('logonUsers');
+$container['logonUsersPath'] = $container->get('router')->pathFor('logonUsers');
 
 $app->map(['GET', 'POST'], '/editref', App\Action\EditRef\SchedEditRefDBController::class)
     ->setName('editref');

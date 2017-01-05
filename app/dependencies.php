@@ -139,6 +139,12 @@ $container[App\Action\Logon\LogonDBController::class] = function ($c) use ($sr) 
     return new \App\Action\Logon\LogonDBController($c, $v);
 };
 
+$container[App\Action\Logon\LogonUsersController::class] = function ($c) use ($sr) {
+    $v = new \App\Action\Logon\LogonView($c, $sr);
+
+    return new \App\Action\Logon\LogonUsersController($c, $v);
+};
+
 // -----------------------------------------------------------------------------
 // Greet class
 // -----------------------------------------------------------------------------

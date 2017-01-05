@@ -69,6 +69,7 @@ class LogonView extends AbstractView
         $content = array(
             'events' => $this->getCurrentEvents(),
             'content' => $this->renderView($key),
+            'users' => $this->getBaseURL('logonUsersPath'),
             'message' => $this->msg,
         );
 
@@ -102,7 +103,7 @@ class LogonView extends AbstractView
 			<table>
 				<tr><td width="50%"><div class="right">Event: </div></td>
 					<td width="50%">
-						<select class="form-control left-margin" name="event">
+						<select id="event" class="form-control left-margin" name="event">
 EOD;
             foreach ($enabled as $option) {
                 $html .= "<option>$option->label</option>";
@@ -114,12 +115,14 @@ EOD;
 				</tr>
 		
 				<tr>
-					<td width="50%"><div class="right">ARA or representative from: </div></td>
-					<td width="50%"><select class="form-control left-margin" name="user">
+					<td width="50%"><div class="right">Assignor: </div></td>
+					<td width="50%"><select id="user" class="form-control left-margin" name="user">
 EOD;
-            foreach ($users as $user) {
-                $html .= "<option>$user->name</option>";
-            }
+//            foreach ($users as $user) {
+//                $html .= "<option>$user->name</option>";
+//            }
+
+            $html .= $this->selectedUsers(null);
 
             $html .= <<<EOD
                 			            </select></td>
@@ -144,5 +147,28 @@ EOD;
         }
 
         return $html;
+    }
+
+    public function selectedUsers($e)
+    {
+        if(empty($e)) {
+            return "<option>Please select an event</option>\n";
+        }
+
+        $event = $this->sr->getEventByLabel($e);
+
+        if(is_null($event)) {
+            return "<option>Please select an event</option>\n";
+        }
+
+        $users = $this->sr->getUsers($event->projectKey);
+
+        $options = null;
+        foreach ($users as $user) {
+            $options .= "<option>$user->name</option>\n";
+        }
+var_dump($options);
+
+        return $options;
     }
 }
