@@ -87,8 +87,6 @@ class AdminView extends AbstractView
                     $this->sr->logInfo($projectKey, $msg);
                 }
             } elseif (in_array('btnUpdateAssignors', array_keys($_POST))) {
-                var_dump($_POST);
-
                 $users = [];
                 $keys = [];
                 foreach ($_POST as $item => $type) {

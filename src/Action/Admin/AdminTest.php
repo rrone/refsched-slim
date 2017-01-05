@@ -135,9 +135,11 @@ class AdminTest extends AppTestCase
         $user = $this->local['user_test']['user'];
         $projectKey = $this->local['user_test']['projectKey'];
 
-        $this->client->app->getContainer()['session'] = ['authed' => true,
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)];
+            'event' => $this->sr->getEvent($projectKey)
+        ];
 
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->get('/adm/log');
@@ -164,9 +166,11 @@ class AdminTest extends AppTestCase
         $user = $this->local['admin_test']['user'];
         $projectKey = $this->local['admin_test']['projectKey'];
 
-        $this->client->app->getContainer()['session'] = ['authed' => true,
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)];
+            'event' => $this->sr->getEvent($projectKey),
+        ];
 
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->get('/adm/log');
@@ -197,9 +201,11 @@ class AdminTest extends AppTestCase
         $user = $this->local['user_test']['user'];
         $projectKey = $this->local['user_test']['projectKey'];
 
-        $this->client->app->getContainer()['session'] = ['authed' => true,
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)];
+            'event' => $this->sr->getEvent($projectKey)
+        ];
 
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->get('/adm/template');
@@ -226,9 +232,11 @@ class AdminTest extends AppTestCase
         $user = $this->local['admin_test']['user'];
         $projectKey = $this->local['admin_test']['projectKey'];
 
-        $this->client->app->getContainer()['session'] = ['authed' => true,
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)];
+            'event' => $this->sr->getEvent($projectKey)
+        ];
 
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->get('/adm/template');
@@ -290,9 +298,11 @@ class AdminTest extends AppTestCase
         $user = $this->local['user_test']['user'];
         $projectKey = $this->local['user_test']['projectKey'];
 
-        $this->client->app->getContainer()['session'] = ['authed' => true,
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)];
+            'event' => $this->sr->getEvent($projectKey)
+        ];
 
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->get('/adm/import');
@@ -321,9 +331,11 @@ class AdminTest extends AppTestCase
         $user = $this->local['admin_test']['user'];
         $projectKey = $this->local['admin_test']['projectKey'];
 
-        $this->client->app->getContainer()['session'] = ['authed' => true,
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)];
+            'event' => $this->sr->getEvent($projectKey)
+        ];
 
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->get('/adm/import');
@@ -352,9 +364,11 @@ class AdminTest extends AppTestCase
         $user = $this->local['admin_test']['user'];
         $projectKey = $this->local['admin_test']['projectKey'];
 
-        $this->client->app->getContainer()['session'] = ['authed' => true,
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)];
+            'event' => $this->sr->getEvent($projectKey)
+        ];
 
         $url = '/adm/import';
         $headers = array(
@@ -402,9 +416,11 @@ class AdminTest extends AppTestCase
         $user = $this->local['admin_test']['user'];
         $projectKey = $this->local['admin_test']['projectKey'];
 
-        $this->client->app->getContainer()['session'] = ['authed' => true,
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)];
+            'event' => $this->sr->getEvent($projectKey)
+        ];
 
         $url = '/adm/import';
         $headers = array(

@@ -75,7 +75,7 @@ class SchedRefsTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<input class=\"btn btn-primary btn-xs \" type=\"submit\"",$view);
-        $this->assertContains("value=\"Edit Assignments\">",$view);
+        $this->assertContains("value=\"Edit Assignments\"",$view);
     }
 
     public function testSchedRefsAsAdmin()
@@ -106,6 +106,6 @@ class SchedRefsTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<input class=\"btn btn-primary btn-xs \" type=\"submit\"",$view);
-        $this->assertContains("value=\"Edit Assignments\">",$view);
+        $this->assertContains("value=\"Edit Assignments\"",$view);
     }
 }

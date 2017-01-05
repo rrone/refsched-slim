@@ -94,7 +94,7 @@ class EditRefTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Assign $user Referees</h3>", $view);
-        $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\"", $view);
+        $this->assertContains("<input class=\"btn btn-primary btn-xs\" type=\"submit\"", $view);
         $this->assertContains("value=\"Update Assignments\">", $view);
 
         // test edit names

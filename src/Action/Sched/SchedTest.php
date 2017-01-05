@@ -221,8 +221,7 @@ class SchedSchedTest extends AppTestCase
         $view = $this->client->get('/sched');
 
         $this->assertContains("<h3 class=\"center\">$user Schedule</h3>", $view);
-        $this->assertContains("For U16, you are assigned to <span style=\"color:#CC0000\">3</span> games with no limit", $view);
-        $this->assertContains("For U19, you are assigned to <span style=\"color:#CC0000\">4</span> games", $view);
+        $this->assertContains("<tr class=\"center\" bgcolor=\"#80ccff\"><th>Game No</th><th>Date</th><th>Time</th><th>Field</th><th>Division</th><th>Pool</th><th>Home</th><th>Away</th><th>Referee Team</th><th>Assign to Area 1P</th></tr>", $view);
     }
 
 }
