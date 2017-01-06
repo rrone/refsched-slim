@@ -819,7 +819,7 @@ class SchedulerRepository
             $arrRef = (array)$ref;
             foreach ($arrRef as $hdr => $val) {
                 switch ($hdr) {
-                    case 'name':
+                    case 'Name':
                         if (!isset($refList[$ref->name])) {
                             $refList[$ref->name] = [];
                         }
@@ -880,7 +880,7 @@ class SchedulerRepository
 
         $refsList = [];
         foreach ($refList as $name => $data) {
-            $ref = ['name' => $name];
+            $ref = ['Name' => $name];
 
             foreach ($data as $k => $item) {
                 $ref[$k] = $item;
@@ -900,7 +900,7 @@ class SchedulerRepository
     {
         usort($refsList, array($this, "firstLastSort"));
 
-        $emptySortList = ['name' => '', 'All' => 0, 'Ref' => 0, 'AR' => 0];
+        $emptySortList = ['Name' => '', 'All' => 0, 'Ref' => 0, 'AR' => 0];
         if( $this->numberOfReferees($projectKey) > 3) {
             $emptySortList['4th'] = 0;
         };
