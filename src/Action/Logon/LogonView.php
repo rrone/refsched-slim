@@ -90,8 +90,8 @@ class LogonView extends AbstractView
             return null;
         }
 
-        $projectKey = isset($enabled[0]) ? $enabled[0]->projectKey : $enabled->projectKey;
-        $users = $this->sr->getUsers($projectKey);
+//        $projectKey = isset($enabled[0]) ? $enabled[0]->projectKey : $enabled->projectKey;
+//        $users = $this->sr->getUsers($projectKey);
 
         $logonPath = $this->getBaseURL('logonPath');
 

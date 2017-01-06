@@ -62,12 +62,7 @@ th {
     line-height: 3rem;
     text-align: center;
 }
-.sched-table, .edit-table {
-    width: 100%;
-    margin: 0 5px;
-    border-collapse: collapse;
-    table-layout: auto;
-}
+
 .sched-table th, .sched-table td {
     border: 1px solid #9c9c9c;
 }
@@ -93,10 +88,7 @@ th {
     vertical-align: top;
     text-align: left;
 }
-.foottext {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: xx-small;
-}
+
 .center {
     text-align: center;
 }
@@ -142,9 +134,7 @@ legend {
     margin-top: 0;
     margin-bottom: 0;
 }
-.panel-default>.panel-masthead {
-    background-color: #ddd;
-}
+
 @media only screen and (max-width: 768px){
     select.form-control, input.form-control {
         width: 90%;
@@ -154,13 +144,3 @@ legend {
 .no-border { border: 0 }
 .border { border: 1px solid #ddd }
 
-.rs-checkbox {
-    padding: 0 !important;
-    float: left !important;
-}
-
-.rs-control-label {
-    float: left;
-    width: calc(100%);
-    text-align: left;
-}

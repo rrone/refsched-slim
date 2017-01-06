@@ -103,8 +103,7 @@ class AdminView extends AbstractView
 
                 foreach ($users as $user) {
                     if ($user->enabled) {
-                        $for_events = serialize($keys);
-                        $this->sr->updateUserEvents($user->id, $for_events);
+                        $this->sr->updateUserEvents($user->id, $keys);
                     }
                 }
 
@@ -114,8 +113,7 @@ class AdminView extends AbstractView
 
                 foreach ($users as $user) {
                     if ($user->enabled) {
-                        $for_events = serialize($keys);
-                        $this->sr->updateUserEvents($user->id, $for_events);
+                        $this->sr->updateUserEvents($user->id, $keys);
                     }
                 }
             } else {

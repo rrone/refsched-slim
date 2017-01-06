@@ -25,10 +25,11 @@ class SchedUnlockDBController extends AbstractController
 
         $this->logStamp($request);
 
-        $request = $request->withAttribute('user', $this->user);
-        $request = $request->withAttribute('event', $this->event);
-        /** @noinspection PhpUndefinedMethodInspection */
-        $request = $request->withAttribute('unlock', true);
+        $request = $request->withAttributes([
+            'user' => $this->user,
+            'event' => $this->event,
+            'unlock' => true
+        ]);
 
         $this->lulView->handler($request, $response);
         $this->lulView->render($response);

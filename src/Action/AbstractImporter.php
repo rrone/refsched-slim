@@ -29,7 +29,7 @@ abstract class AbstractImporter
         $this->format = $format;
         $this->objPHPExcel = new PHPExcel();
 
-        switch($format) {
+        switch ($format) {
             case 'csv':
                 $this->fileExtension = 'csv';
                 $this->contentType = 'text/csv';
@@ -40,24 +40,24 @@ abstract class AbstractImporter
                 break;
         }
     }
+
     public function getFileExtension()
     {
         return $this->fileExtension;
     }
 
-    /**
-     * @param $filename
-     * @return null|array
-     */
     public function import($filename)
     {
         switch ($this->format) {
-            case 'csv': return $this->importCSV ($filename);
-            case 'xls': return $this->importXLSX($filename);
+            case 'csv':
+                return $this->importCSV($filename);
+            case 'xls':
+                return $this->importXLSX($filename);
         }
 
         return null;
     }
+
     public function importCSV($inputFileName)
     {
 //      import a CSV file into a PHPExcel object
@@ -65,6 +65,7 @@ abstract class AbstractImporter
 
         return $this->_import($inputFileName, $inputFileType);
     }
+
     public function importXLSX($inputFileName)
     {
 //      import a XLSX file into a PHPExcel object
@@ -72,6 +73,7 @@ abstract class AbstractImporter
 
         return $this->_import($inputFileName, $inputFileType);
     }
+
     private function _import($inputFileName, $inputFileType)
     {
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
@@ -81,6 +83,7 @@ abstract class AbstractImporter
 
         return $data;
     }
+
     private function readWorksheet(PHPExcel $objPHPExcel)
     {
         $data = null;

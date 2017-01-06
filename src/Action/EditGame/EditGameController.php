@@ -26,8 +26,10 @@ class EditGameController extends AbstractController
 
         $this->logStamp($request);
 
-        $request = $request->withAttribute('user', $this->user);
-        $request = $request->withAttribute('event', $this->event);
+        $request = $request->withAttributes([
+            'user' => $this->user,
+            'event' => $this->event
+        ]);
 
         $this->editGameView->handler($request, $response);
 

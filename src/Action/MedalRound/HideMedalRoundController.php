@@ -25,9 +25,11 @@ class HideMedalRoundController extends AbstractController
 
         $this->logStamp($request);
 
-        $request = $request->withAttribute('user', $this->user);
-        $request = $request->withAttribute('event', $this->event);
-        $request = $request->withAttribute('hide', true);
+        $request = $request->withAttributes([
+            'user' => $this->user,
+            'event' => $this->event,
+            'hide' => true
+        ]);
 
         $this->mrView->handler($request, $response);
         $this->mrView->render($response);

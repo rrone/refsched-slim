@@ -34,9 +34,9 @@
         });
 
         $("#event").change(function () {
-            var label = $("#event option:selected").val().replace(/ /g, '_');
+            var label = $("#event").find("option:selected").val().replace(/ /g, '_');
             console.log (label);
-            $("#user").load("/logon/users?" + label);
+            $("#user").load("{{ users }}?" + label);
         });
 
     </script>

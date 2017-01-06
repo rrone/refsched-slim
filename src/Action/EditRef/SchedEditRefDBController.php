@@ -36,9 +36,11 @@ class SchedEditRefDBController extends AbstractController
         //process edit assignments
         $this->logStamp($request);
 
-        $request = $request->withAttribute('user', $this->user);
-        $request = $request->withAttribute('event', $this->event);
-        $request = $request->withAttribute('game_id', $game_id);
+        $request = $request->withAttributes([
+            'user' => $this->user,
+            'event' => $this->event,
+            'game_id' => $game_id
+        ]);
 
         $this->schedEditRefView->handler($request, $response);
 

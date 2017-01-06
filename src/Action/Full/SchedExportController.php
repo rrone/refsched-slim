@@ -26,8 +26,10 @@ class SchedExportController extends AbstractController
 
         $this->logStamp($request);
 
-        $request = $request->withAttribute('user', $this->user);
-        $request = $request->withAttribute('event', $this->event);
+        $request = $request->withAttributes([
+            'user' => $this->user,
+            'event' => $this->event
+        ]);
 
         $response = $this->exportXl->handler($request, $response);
 

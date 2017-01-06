@@ -11,9 +11,6 @@ use/** @noinspection PhpUndefinedClassInspection */
     Symfony\Component\Console\Output\OutputInterface;
 use/** @noinspection PhpUndefinedClassInspection */
     /** @noinspection PhpUndefinedNamespaceInspection */
-    Symfony\Component\Console\Input\InputArgument;
-use/** @noinspection PhpUndefinedClassInspection */
-    /** @noinspection PhpUndefinedNamespaceInspection */
     Symfony\Component\Console\Input\InputOption;
 
 /** @noinspection PhpUndefinedClassInspection */

@@ -27,7 +27,7 @@ class SchedEditRefView extends AbstractView
         if ($request->isPost()) {
             $data = $request->getParsedBody();
 
-            if (array_key_exists("Update Assignments", array_keys($data))) {
+            if (in_array("Update Assignments", array_values($data))) {
 
                 foreach ($data as $key => &$value) {
                     $value = $this->stdName($value);
@@ -92,7 +92,7 @@ class SchedEditRefView extends AbstractView
                 }
 
                 $numRefs = $this->sr->numberOfReferees($projectKey);
-                $nameRegex = "^('Area')|([A-Z]{1}[a-z]{1,20}[, ]{0,2}[A-Z]{1}[a-z]{1,20}[, ]{0,2}[A-Z]{0,1}[a-z]{0,20}){0,1}";
+                $nameRegex = "^('Area')|([A-Z]{1}[a-zA-Z']{1,20}[, ]{0,2}[A-Z]{1}[a-zA-Z']{1,20}[, ]{0,2}[A-Z]{0,1}[a-zA-Z]{0,20}){0,1}";
                 $nameHint = "First Last or Last, First (Proper case; no initials)";
 
                 if (count($games)) {
@@ -188,9 +188,20 @@ class SchedEditRefView extends AbstractView
         //propercase
         $tempName = explode(' ', strtolower($nameOut));
 
+        $prefixs = ['Mc', 'Mac', 'Von', "O'"];
         $nameOut = '';
         foreach ($tempName as $item) {
-            $nameOut .= ucfirst($item) . ' ';
+            $item = ucfirst($item);
+
+            foreach ($prefixs as $prefix) {
+                $len = strlen($prefix);
+                if (substr($item, 0, $len) == $prefix) {
+                    if (isset($item[$len])) {
+                        $item[$len] = strtoupper($item[$len]);
+                    }
+                }
+            }
+            $nameOut .= $item . ' ';
         }
 
         return trim($nameOut);

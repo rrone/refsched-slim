@@ -43,7 +43,8 @@ class SchedulerRepository
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @param null $key
+     * @return Collection
      */
     public function getUsers($key = null)
     {
@@ -69,7 +70,7 @@ class SchedulerRepository
         $this->db->table('users')
             ->where('id', $id)
             ->update([
-                'for_events' => $keys,
+                'for_events' => $forEvents,
             ]);
 
         return null;
@@ -191,6 +192,7 @@ class SchedulerRepository
 
     /**
      * @param $projectKey
+     * @param bool $asCollection
      * @return null|object
      */
     public function getEvent($projectKey, $asCollection = false)

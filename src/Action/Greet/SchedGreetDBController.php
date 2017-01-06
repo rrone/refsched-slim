@@ -26,8 +26,10 @@ class SchedGreetDBController extends AbstractController
 
         $this->logStamp($request);
 
-        $request = $request->withAttribute('user', $this->user);
-        $request = $request->withAttribute('event', $this->event);
+        $request = $request->withAttributes([
+            'user' => $this->user,
+            'event' => $this->event
+        ]);
 
         $this->greetView->handler($request, $response);
         $this->greetView->render($response);

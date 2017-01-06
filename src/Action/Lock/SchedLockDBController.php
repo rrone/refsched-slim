@@ -25,9 +25,11 @@ class SchedLockDBController extends AbstractController
 
         $this->logStamp($request);
 
-        $request = $request->withAttribute('user', $this->user);
-        $request = $request->withAttribute('event', $this->event);
-        $request = $request->withAttribute('lock', true);
+        $request = $request->withAttributes([
+            'user' => $this->user,
+            'event' => $this->event,
+            'lock' => true
+        ]);
 
         $this->lulView->handler($request, $response);
         $this->lulView->render($response);

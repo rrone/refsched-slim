@@ -44,8 +44,6 @@ const nodeModulesTask = function() {
             path.join(nodeModulesDir,'purecss/build/buttons-min.css'),
             path.join(nodeModulesDir,'purecss/build/pure-nr-min.css'),
             path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.min.css')
-            // path.join(vendorDir,'components/bootstrap/css/bootstrap.min.css'),
-            // path.join(vendorDir,'components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')
         ])
         .pipe(gulp.dest(appWebDir + '/css'));
     //
@@ -53,7 +51,6 @@ const nodeModulesTask = function() {
             path.join(nodeModulesDir,'jquery/dist/jquery.min.js'),
             path.join(nodeModulesDir,'bootstrap/dist/js/bootstrap.min.js'),
             path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.full.js')
-            // path.join(vendorDir,'components/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')
         ])
         .pipe(gulp.dest(appWebDir +'/js'));
     //
