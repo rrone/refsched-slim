@@ -92,8 +92,8 @@ class SchedEditRefView extends AbstractView
                 }
 
                 $numRefs = $this->sr->numberOfReferees($projectKey);
-                $nameRegex = "^('Area')|([A-Z]{1}[a-zA-Z']{1,20}[, ]{0,2}[A-Z]{1}[a-zA-Z']{1,20}[, ]{0,2}[A-Z]{0,1}[a-zA-Z]{0,20}){0,1}";
-                $nameHint = "First Last or Last, First (Proper case; no initials)";
+                $nameRegex = "^('Area')|([a-zA-Z']{2,20}[, ]{0,2}[a-zA-Z']{2,20}[, ]{0,2}[a-zA-Z]{2,20}){0,1}";
+                $nameHint = "First Last or Last, First (No initials)";
 
                 if (count($games)) {
                     foreach ($games as $game) {
@@ -133,8 +133,8 @@ class SchedEditRefView extends AbstractView
                             }
                             $html .= "</tr>\n";
                             $html .= "</table>\n";
+                            $html .= "<input class=\"btn btn-primary btn-xs active right\" type=\"submit\" name=\"$game->id\" value=\"Update Assignments\">\n";
                             $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"cancel\" value=\"Cancel\">\n";
-                            $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"$game->id\" value=\"Update Assignments\">\n";
                             $html .= "<div class='clear-fix'></div>";
                             $html .= "</form>\n";
                         }
