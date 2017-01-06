@@ -495,7 +495,8 @@ class SchedSchedView extends AbstractView
             $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Edit referee assignments</a>&nbsp;-&nbsp;";
         } elseif ($this->showgroup) {
             $html .= "<a href=" . $this->getBaseURL('schedPath') . ">View all $uname games</a>&nbsp;-&nbsp;";
-        } elseif ($this->num_assigned) {
+        }
+        if ($this->num_assigned) {
             $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Edit $uname referee assignments</a>&nbsp;-&nbsp;";
         }
 

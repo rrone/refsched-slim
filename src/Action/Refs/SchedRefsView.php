@@ -50,7 +50,7 @@ class SchedRefsView extends AbstractView
         $html = null;
 
         if (!empty($this->event)) {
-            if(!empty($this->event->infoLink)){
+            if (!empty($this->event->infoLink)) {
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;
                 $eventName = "<a href='$eventLink' target='_blank'>$eventName</a>";
@@ -139,7 +139,7 @@ class SchedRefsView extends AbstractView
                         $html .= "<td>$game->game_number</td>";
                         $html .= "<td>$date</td>";
                         $html .= "<td>$time</td>";
-                        if(is_null($this->event->field_map)){
+                        if (is_null($this->event->field_map)) {
                             $html .= "<td>$game->field</td>";
                         } else {
                             $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$game->field</a></td>";
@@ -170,7 +170,7 @@ class SchedRefsView extends AbstractView
                 $this->bottommenu = $this->menu();
             } else {
                 $html .= "<h2 class=\"center\">You do not currently have any games scheduled.</h2>\n";
-                $this->bottommenu = "<h3 class=\"center\">You should go to the <a href=" . $this->getBaseURL('schedPath') . ">Schedule Page</a></h3>";
+                $this->bottommenu = null;
             }
         }
 

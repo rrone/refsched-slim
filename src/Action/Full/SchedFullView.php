@@ -17,6 +17,7 @@ class SchedFullView extends AbstractView
 
         $this->justOpen = false;
     }
+
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
@@ -25,6 +26,7 @@ class SchedFullView extends AbstractView
 
         return null;
     }
+
     public function render(Response &$response)
     {
         $content = array(
@@ -42,6 +44,7 @@ class SchedFullView extends AbstractView
 
         $this->view->render($response, 'sched.html.twig', $content);
     }
+
     protected function renderView()
     {
         $html = null;
@@ -50,7 +53,7 @@ class SchedFullView extends AbstractView
         if (!empty($this->event)) {
             $projectKey = $this->event->projectKey;
 
-            if(!empty($this->event->infoLink)){
+            if (!empty($this->event->infoLink)) {
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;
                 $eventName = "<a href='$eventLink' target='_blank'>$eventName</a>";
@@ -98,14 +101,13 @@ class SchedFullView extends AbstractView
             $testtime = null;
 
             foreach ($games as $game) {
-                if (!$this->justOpen || ($this->justOpen && (empty($game->cr) || empty($game->ar1) || empty($game->ar2)  || ( $has4th && empty($game->r4th))))) {
+                if (!$this->justOpen || ($this->justOpen && (empty($game->cr) || empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))))) {
                     $date = date('D, d M', strtotime($game->date));
                     $time = date('H:i', strtotime($game->time));
 
-                    if ( !$testtime ) {
+                    if (!$testtime) {
                         $testtime = $time;
-                    }
-                    elseif ( ($testtime != $time && $game->assignor == $this->user->name) || ($testtime != $time && $this->user->admin && !empty($game->assignor))) {
+                    } elseif (($testtime != $time && $game->assignor == $this->user->name) || ($testtime != $time && $this->user->admin && !empty($game->assignor))) {
                         $testtime = $time;
                         switch ($rowColor) {
                             case $this->colorGroup1:
@@ -118,21 +120,19 @@ class SchedFullView extends AbstractView
 
                     if ($game->assignor == $this->user->name) {
                         //no refs
-                        if (empty($game->cr) && empty($game->ar1) && empty($game->ar2) && (!$has4th || $has4th && empty($game->r4th)) ) {
+                        if (empty($game->cr) && empty($game->ar1) && empty($game->ar2) && (!$has4th || $has4th && empty($game->r4th))) {
                             $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
                             //open AR  or 4th slots
-                        }
-                        elseif (empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
+                        } elseif (empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
                             $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
                             //match covered
-                        }
-                        else {
+                        } else {
                             $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                         }
                     } else {
                         $html .= "<tr class=\"center\" bgcolor=\"$this->colorLtGray\">";
                     }
-                    if($this->user->admin){
+                    if ($this->user->admin) {
                         //no assignor
                         if (empty($game->assignor)) {
                             $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
@@ -151,7 +151,7 @@ class SchedFullView extends AbstractView
                     $html .= "<td>$game->game_number</td>";
                     $html .= "<td>$date</td>";
                     $html .= "<td>$time</td>";
-                    if(is_null($this->event->field_map)){
+                    if (is_null($this->event->field_map)) {
                         $html .= "<td>$game->field</td>";
                     } else {
                         $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$game->field</a></td>";
@@ -179,13 +179,14 @@ class SchedFullView extends AbstractView
         return $html;
 
     }
-    private function menu($pos='top')
+
+    private function menu($pos = 'top')
     {
         $html = null;
 
         $html .= "<h3 class=\"center h3-btn\" style=\"margin-top: 20px; line-height: 3em;\">";
 
-        if($pos == 'bottom') {
+        if ($pos == 'bottom') {
             $html .= "<a  href=" . $this->getBaseURL('fullXlsPath') . " class=\"btn btn-primary btn-xs export right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>";
             $html .= "<div class='clear-fix'></div>";
         }
@@ -202,13 +203,13 @@ class SchedFullView extends AbstractView
             $html .= "<a  href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;";
             $html .= "<a  href=" . $this->getBaseURL('refsPath') . ">Edit referee assignments</a>&nbsp;-&nbsp;";
         } else {
-            $html .= "<a  href=" . $this->getBaseURL('schedPath') . ">Go to ". $this->user->name . " schedule</a>&nbsp;-&nbsp;";
-            $html .= "<a  href=" . $this->getBaseURL('refsPath') . ">Edit ". $this->user->name . " referees</a>&nbsp;-&nbsp;";
+            $html .= "<a  href=" . $this->getBaseURL('schedPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;";
+            $html .= "<a  href=" . $this->getBaseURL('refsPath') . ">Edit " . $this->user->name . " referees</a>&nbsp;-&nbsp;";
         }
 
         $html .= "<a  href=" . $this->getBaseURL('endPath') . ">Log off</a><br>";
 
-        if($pos == 'top') {
+        if ($pos == 'top') {
             $html .= "<a  href=" . $this->getBaseURL('fullXlsPath') . " class=\"btn btn-primary btn-xs export right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>";
             $html .= "<div class='clear-fix'></div>";
         }
@@ -216,4 +217,5 @@ class SchedFullView extends AbstractView
         $html .= "</h3>\n";
 
         return $html;
-    }}
+    }
+}
