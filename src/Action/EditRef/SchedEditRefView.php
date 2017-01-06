@@ -133,7 +133,8 @@ class SchedEditRefView extends AbstractView
                             }
                             $html .= "</tr>\n";
                             $html .= "</table>\n";
-                            $html .= "<input class=\"btn btn-primary btn-xs active right\" type=\"submit\" name=\"$game->id\" value=\"Update Assignments\">\n";
+                            $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"$game->id\" value=\"Update Assignments\">\n";
+                            $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"reset\" name=\"reset\" value=\"Reset\">\n";
                             $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"cancel\" value=\"Cancel\">\n";
                             $html .= "<div class='clear-fix'></div>";
                             $html .= "</form>\n";
