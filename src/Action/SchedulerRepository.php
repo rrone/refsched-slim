@@ -350,7 +350,8 @@ class SchedulerRepository
      */
     public function getGames($projectKey = '%', $group = '%', $medalRound = false)
     {
-        $group .= '%';
+
+        $group = '%'. $group . '%';
         $medalRound = $medalRound ? '%' : false;
 
         $games = $this->db->table('games')
