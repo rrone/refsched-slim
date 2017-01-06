@@ -35,7 +35,7 @@
 
         $("#event").change(function () {
             var label = $("#event").find("option:selected").val().replace(/ /g, '_');
-            console.log (label);
+
             $("#user").load("{{ users }}?" + label);
         });
 

@@ -167,7 +167,6 @@ EOD;
         foreach ($users as $user) {
             $options .= "<option>$user->name</option>\n";
         }
-var_dump($options);
 
         return $options;
     }
