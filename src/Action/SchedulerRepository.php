@@ -759,7 +759,7 @@ class SchedulerRepository
     public function getDivisions($projectKey)
     {
         $result = $this->db->table('games')
-            ->selectRaw('SUBSTR(division,1,3) as uDiv')
+            ->selectRaw('SUBSTR(division,LOCATE(\'U\',division),3) as uDiv')
             ->distinct()
             ->where('projectKey', $projectKey)
             ->orderBy('division', 'asc')
@@ -901,6 +901,9 @@ class SchedulerRepository
         usort($refsList, array($this, "firstLastSort"));
 
         $emptySortList = ['name' => '', 'All' => 0, 'Ref' => 0, 'AR' => 0];
+        if( $this->numberOfReferees($projectKey) > 3) {
+            $emptySortList['4th'] = 0;
+        };
 
         $result = $this->getDates($projectKey);
         $arrDates = $result->all();
@@ -910,6 +913,7 @@ class SchedulerRepository
 
         $result = $this->getDivisions($projectKey);
         $arrDivs = $result->all();
+
         foreach ($arrDivs as $div) {
             $emptySortList[$div->uDiv] = 0;
         }
