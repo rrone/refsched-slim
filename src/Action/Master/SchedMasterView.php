@@ -72,7 +72,7 @@ class SchedMasterView extends AbstractView
         if (!empty($event)) {
 
             $select_list = array('');
-            $users = $this->sr->getUsers();
+            $users = $this->sr->getUsers($event->projectKey);
 
             foreach ($users as $user) {
                 $select_list[] = $user->name;
