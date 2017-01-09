@@ -79,7 +79,7 @@ class SchedMasterView extends AbstractView
             }
             $select_list[] = 'To Be Announced';
 
-            if(!empty($this->event->infoLink)){
+            if (!empty($this->event->infoLink)) {
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;
                 $eventName = "<a href='$eventLink' target='_blank'>$eventName</a>";
@@ -143,7 +143,7 @@ class SchedMasterView extends AbstractView
                     $html .= "<td>$game->game_number</td>";
                     $html .= "<td>$date</td>";
                     $html .= "<td>$time</td>";
-                    if(is_null($this->event->field_map)){
+                    if (is_null($this->event->field_map)) {
                         $html .= "<td>$game->field</td>";
                     } else {
                         $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$game->field</a></td>";
