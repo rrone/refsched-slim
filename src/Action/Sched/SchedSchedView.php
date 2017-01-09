@@ -437,7 +437,7 @@ class SchedSchedView extends AbstractView
                         $html .= $this->renderAssignmentByArea($this->user, $kount, $locked, true);
                     }
                 } else {
-                    $users = $this->sr->getUsers();
+                    $users = $this->sr->getUsers($this->event->projectKey);
 
                     foreach ($users as $user) {
                         $html .= $this->renderAssignmentByArea($user, $kount, $locked, false);
