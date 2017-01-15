@@ -819,7 +819,7 @@ class SchedulerRepository
             $arrRef = (array)$ref;
             foreach ($arrRef as $hdr => $val) {
                 switch ($hdr) {
-                    case 'Name':
+                    case 'name':
                         if (!isset($refList[$ref->name])) {
                             $refList[$ref->name] = [];
                         }
@@ -842,22 +842,22 @@ class SchedulerRepository
                         $refList[$ref->name][$div] += 1;
                         break;
                     case 'crCount':
-                        if (!isset($refList[$ref->name]['Ref'])) {
-                            $refList[$ref->name]['Ref'] = [];
-                            $refList[$ref->name]['Ref'] = 0;
+                        if (!isset($refList[$ref->name]['ref'])) {
+                            $refList[$ref->name]['ref'] = [];
+                            $refList[$ref->name]['ref'] = 0;
                         }
                         if ($val) {
-                            $refList[$ref->name]['Ref'] += 1;
+                            $refList[$ref->name]['ref'] += 1;
                         }
                         break;
                     case 'ar1Count':
                     case 'ar2Count':
-                        if (!isset($refList[$ref->name]['AR'])) {
-                            $refList[$ref->name]['AR'] = [];
-                            $refList[$ref->name]['AR'] = 0;
+                        if (!isset($refList[$ref->name]['ar'])) {
+                            $refList[$ref->name]['ar'] = [];
+                            $refList[$ref->name]['ar'] = 0;
                         }
                         if ($val) {
-                            $refList[$ref->name]['AR'] += 1;
+                            $refList[$ref->name]['ar'] += 1;
                         }
                         break;
                     case
@@ -871,16 +871,16 @@ class SchedulerRepository
                         }
                 }
             }
-            $refList[$ref->name]['All'] = $refList[$ref->name]['Ref'];
-            $refList[$ref->name]['All'] += $refList[$ref->name]['AR'];
+            $refList[$ref->name]['all'] = $refList[$ref->name]['ref'];
+            $refList[$ref->name]['all'] += $refList[$ref->name]['ar'];
             if (isset($refList[$ref->name]['4th'])) {
-                $refList[$ref->name]['All'] += $refList[$ref->name]['4th'];
+                $refList[$ref->name]['all'] += $refList[$ref->name]['4th'];
             }
         }
 
         $refsList = [];
         foreach ($refList as $name => $data) {
-            $ref = ['Name' => $name];
+            $ref = ['name' => $name];
 
             foreach ($data as $k => $item) {
                 $ref[$k] = $item;
@@ -900,7 +900,7 @@ class SchedulerRepository
     {
         usort($refsList, array($this, "firstLastSort"));
 
-        $emptySortList = ['Name' => '', 'All' => 0, 'Ref' => 0, 'AR' => 0];
+        $emptySortList = ['name' => '', 'all' => 0, 'ref' => 0, 'ar' => 0];
         if( $this->numberOfReferees($projectKey) > 3) {
             $emptySortList['4th'] = 0;
         };

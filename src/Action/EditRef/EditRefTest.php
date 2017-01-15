@@ -64,7 +64,9 @@ class EditRefTest extends AppTestCase
 
         $user = $this->local['user_test']['user'];
         $projectKey = $this->local['user_test']['projectKey'];
-        $game_id = $this->sr->getGameByKeyAndNumber($projectKey, $this->goodId)->id;
+
+        $game = $this->sr->getGameByKeyAndNumber($projectKey, $this->goodId);
+        $game_id = $game->id;
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -94,7 +96,7 @@ class EditRefTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Assign $user Referees</h3>", $view);
-        $this->assertContains("<input class=\"btn btn-primary btn-xs\" type=\"submit\"", $view);
+        $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"473\" value=\"Update Assignments\">", $view);
         $this->assertContains("value=\"Update Assignments\">", $view);
 
         // test edit names

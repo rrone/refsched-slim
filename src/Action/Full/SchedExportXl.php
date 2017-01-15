@@ -100,7 +100,18 @@ class SchedExportXl extends AbstractExporter
 
                 $labels = [];
                 foreach ($game as $hdr => $val) {
-                    $labels[] = $hdr;
+                    switch ($hdr) {
+                        case 'name':
+                        case 'all':
+                        case 'ref':
+                            $labels[] = ucfirst($hdr);
+                            break;
+                        case 'ar':
+                            $labels[] = strtoupper($hdr);
+                            break;
+                        default:
+                            $labels[] = $hdr;
+                    }
                 }
 
                 $data = array($labels);

@@ -380,7 +380,7 @@ class AdminTest extends AppTestCase
         );
 
         $filePath = PROJECT_ROOT . '/tests/testfiles/';
-        $fileName = 'TestGameSchedule_20161130_135854.csv';
+        $fileName = 'TestGameSchedule.csv';
         $tmpName = tempnam('/tmp', '');
         copy($filePath . $fileName, $tmpName);
 
@@ -432,7 +432,7 @@ class AdminTest extends AppTestCase
         );
 
         $filePath = PROJECT_ROOT . '/tests/testfiles/';
-        $fileName = 'TestGameSchedule_20161130_135854.csv';
+        $fileName = 'TestGameSchedule.csv';
         $tmpName = tempnam('/tmp', '');
         copy($filePath . $fileName, $tmpName);
 
