@@ -189,16 +189,16 @@ class SchedEditRefView extends AbstractView
         //propercase
         $tempName = explode(' ', strtolower($nameOut));
 
-        $prefixs = ['Mc', 'Mac', 'Von', "O'"];
+        $prefixs = ['Mc', 'Mac', 'Von', "O'", '-'];
         $nameOut = '';
         foreach ($tempName as $item) {
             $item = ucfirst($item);
-
             foreach ($prefixs as $prefix) {
-                $len = strlen($prefix);
-                if (substr($item, 0, $len) == $prefix) {
-                    if (isset($item[$len])) {
-                        $item[$len] = strtoupper($item[$len]);
+                $pos = strpos($item, $prefix);
+                if ($pos > -1) {
+                    $pos += strlen($prefix);
+                    if (isset($item[$pos])) {
+                        $item[$pos] = strtoupper($item[$pos]);
                     }
                 }
             }

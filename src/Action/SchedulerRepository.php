@@ -305,7 +305,6 @@ class SchedulerRepository
         $this->db->table('events')
             ->where('projectKey', $key)
             ->update(['show_medal_round' => false]);
-//        print_r('hideMedalRound');die();
 
         return null;
     }
