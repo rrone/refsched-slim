@@ -340,6 +340,21 @@ class SchedulerRepository
         return null;
     }
 
+    public function getEventMessage()
+    {
+        $status = $this->db->table('messages')
+            ->where('enabled', true)
+            ->get();
+
+        $status = $this->getZero($status);
+        if (!is_null($status)) {
+            return $status->message;
+        } else {
+            return null;
+        }
+
+    }
+
     //Games table functions
     /**
      * @param string $projectKey

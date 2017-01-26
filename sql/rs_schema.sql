@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 06, 2017 at 08:32 PM
+-- Generation Time: Jan 26, 2017 at 08:00 PM
 -- Server version: 5.6.33-0ubuntu0.14.04.1
--- PHP Version: 7.0.13-1+deb.sury.org~trusty+1
+-- PHP Version: 7.1.1-1+deb.sury.org~trusty+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -107,6 +107,19 @@ CREATE TABLE `rs_log` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rs_messages`
+--
+
+DROP TABLE IF EXISTS `rs_messages`;
+CREATE TABLE `rs_messages` (
+  `id` int(11) NOT NULL,
+  `message` varchar(4096) CHARACTER SET utf8 DEFAULT NULL,
+  `enabled` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `rs_users`
 --
 
@@ -152,6 +165,12 @@ ALTER TABLE `rs_log`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `rs_messages`
+--
+ALTER TABLE `rs_messages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `rs_users`
 --
 ALTER TABLE `rs_users`
@@ -171,22 +190,27 @@ ALTER TABLE `rs_events`
 -- AUTO_INCREMENT for table `rs_games`
 --
 ALTER TABLE `rs_games`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=737;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=689;
 --
 -- AUTO_INCREMENT for table `rs_limits`
 --
 ALTER TABLE `rs_limits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 --
 -- AUTO_INCREMENT for table `rs_log`
 --
 ALTER TABLE `rs_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1059;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1461;
+--
+-- AUTO_INCREMENT for table `rs_messages`
+--
+ALTER TABLE `rs_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `rs_users`
 --
 ALTER TABLE `rs_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

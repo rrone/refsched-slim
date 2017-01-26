@@ -10,6 +10,8 @@ use App\Action\SchedulerRepository;
 
 class NoEventsView extends AbstractView
 {
+    protected $msg;
+
     public function __construct(Container $container, SchedulerRepository $repository)
     {
         parent::__construct($container, $repository);
@@ -19,13 +21,14 @@ class NoEventsView extends AbstractView
 
     public function handler(Request $request, Response $response)
     {
-        return null;
+        $this->msg = $this->sr->getEventMessage();
     }
 
     public function render(Response &$response)
     {
         $content = array(
             'events' => $this->getCurrentEvents(),
+            'msg' => $this->msg
         );
 
         $this->view->render($response, 'noevents.html.twig', $content);
