@@ -102,17 +102,24 @@ class AdminView extends AbstractView
                 }
 
                 foreach ($users as $user) {
-                    if ($user->enabled) {
-                        $this->sr->updateUserEvents($user->id, $keys);
-                    }
+                    $this->sr->updateUserEvents($user->id, $keys);
                 }
+
+                //Ensure Admin has access to all events
+                $user = $this->sr->getUserByName('Admin');
+                $events = $this->sr->getCurrentEvents();
+                $allKeys = [];
+                foreach ($events as $event) {
+                    $allKeys[] = $event->projectKey;
+                }
+                $this->sr->updateUserEvents($user->id, $allKeys);
 
             } elseif (in_array('btnResetAssignors', array_keys($_POST))) {
                 $keys = [];
                 $users = $this->sr->getAllUsers();
 
                 foreach ($users as $user) {
-                    if ($user->enabled) {
+                    if ($user->name != 'Admin') {
                         $this->sr->updateUserEvents($user->id, $keys);
                     }
                 }
@@ -151,11 +158,8 @@ class AdminView extends AbstractView
 
         $selectOptions = [];
         foreach ($users as $user) {
-            switch ($user->name) {
-                case 'Admin':
-                    break;
-                default:
-                    $selectOptions[] = "$user->name";
+            if ($user->name != 'Admin') {
+                $selectOptions[] = "$user->name";
             }
         }
 
