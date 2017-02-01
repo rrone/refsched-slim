@@ -217,7 +217,7 @@ class SchedSchedView extends AbstractView
                 $limit_list['none'] = 1;
             }
 
-            if(!empty($this->event->infoLink)){
+            if (!empty($this->event->infoLink)) {
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;
                 $eventName = "<a href='$eventLink' target='_blank'>$eventName</a>";
@@ -354,7 +354,7 @@ class SchedSchedView extends AbstractView
                 if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned) || $this->user->admin) {
                     $html .= "<h3 class=\"h3-btn center\" >";
                     $html .= $this->menuLinks();
-                    if(!$this->user->admin) {
+                    if (!$this->user->admin) {
                         $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
                     }
                     $html .= "<div class='clear-fix'></div>\n";
@@ -406,7 +406,7 @@ class SchedSchedView extends AbstractView
                                 $html .= "<td>" . $this->date[$kant] . "</td>";
                                 $html .= "<td>" . $this->time[$kant] . "</td>";
                                 $field = $this->field[$kant];
-                                if(is_null($this->event->field_map)){
+                                if (is_null($this->event->field_map)) {
                                     $html .= "<td>$field</td>";
                                 } else {
                                     $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$field</a></td>";
@@ -447,7 +447,7 @@ class SchedSchedView extends AbstractView
                 if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned) || $this->user->admin) {
                     $html .= "<h3 class=\"h3-btn center\" >";
                     $html .= $this->menuLinks();
-                    if(!$this->user->admin) {
+                    if (!$this->user->admin) {
                         $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
                     }
                     $html .= "<div class='clear-fix'></div>";
@@ -525,7 +525,11 @@ class SchedSchedView extends AbstractView
             }
         }
 
-        $html .= "<h3 class=\"left\">$gameCount $this->showgroup Games assigned to $user->name :</h3>\n";
+        if ($gameCount = 1) {
+            $html .= "<h3 class=\"left\">$gameCount $this->showgroup Game assigned to $user->name :</h3>\n";
+        } else {
+            $html .= "<h3 class=\"left\">$gameCount $this->showgroup Games assigned to $user->name :</h3>\n";
+        }
         $html .= "<div class=\"clear-fix\"></div>\n";
 
         if (empty($kount)) {
@@ -573,7 +577,7 @@ class SchedSchedView extends AbstractView
                     $html .= "<td>" . $this->date[$kant] . "</td>";
                     $html .= "<td>" . $this->time[$kant] . "</td>";
                     $field = $this->field[$kant];
-                    if(is_null($this->event->field_map)){
+                    if (is_null($this->event->field_map)) {
                         $html .= "<td>$field</td>";
                     } else {
                         $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$field</a></td>";
