@@ -525,7 +525,7 @@ class SchedSchedView extends AbstractView
             }
         }
 
-        if ($gameCount = 1) {
+        if ($gameCount == 1) {
             $html .= "<h3 class=\"left\">$gameCount $this->showgroup Game assigned to $user->name :</h3>\n";
         } else {
             $html .= "<h3 class=\"left\">$gameCount $this->showgroup Games assigned to $user->name :</h3>\n";
