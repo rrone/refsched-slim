@@ -517,7 +517,15 @@ class SchedSchedView extends AbstractView
             return $html;
         }
 
-        $html .= "<h3 class=\"left\">$this->showgroup Games assigned to $user->name :</h3>\n";
+        $gameCount = 0;
+
+        for ($kant = 0; $kant < $kount; $kant++) {
+            if ($user->name == $this->ref_team[$kant]) {
+                $gameCount += 1;
+            }
+        }
+
+        $html .= "<h3 class=\"left\">$gameCount $this->showgroup Games assigned to $user->name :</h3>\n";
         $html .= "<div class=\"clear-fix\"></div>\n";
 
         if (empty($kount)) {
