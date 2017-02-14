@@ -195,7 +195,7 @@ class EditRefTest extends AppTestCase
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<td>Cr Admin Last</td><td>Ar1 Admin Last</td><td>Ar2 Admin Last</td>", $view);
+        $this->assertContains("<td>CR Admin Last</td><td>AR1 Admin Last</td><td>AR2 Admin Last</td>", $view);
 
         //clear edit names
         $url = '/editref';

@@ -30,7 +30,7 @@ class SchedEditRefView extends AbstractView
             if (in_array("Update Assignments", array_values($data))) {
 
                 foreach ($data as $key => &$value) {
-                    $value = $this->stdName($value);
+                    $value = $this->user->admin ? $value : $this->stdName($value);
                 }
 
                 $gameNum = $this->sr->gameIdToGameNumber($this->game_id);
@@ -189,7 +189,7 @@ class SchedEditRefView extends AbstractView
         //propercase
         $tempName = explode(' ', strtolower($nameOut));
 
-        $prefixs = ['Mc', 'Mac', 'Von', "O'", '-'];
+        $prefixs = ['Mc', 'Von', "O'", '-'];
         $nameOut = '';
         foreach ($tempName as $item) {
             $item = ucfirst($item);
