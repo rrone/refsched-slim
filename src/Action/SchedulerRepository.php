@@ -828,6 +828,7 @@ class SchedulerRepository
      */
     private function aggregateRefereeAssignments(array $result)
     {
+
         $refList = [];
         $div = null;
         foreach ($result as $ref) {
@@ -837,6 +838,11 @@ class SchedulerRepository
                     case 'name':
                         if (!isset($refList[$ref->name])) {
                             $refList[$ref->name] = [];
+                        }
+                        break;
+                    case 'assignor':
+                        if (!isset($refList[$ref->name][$val])) {
+                            $refList[$ref->name][ucwords($hdr)] = $val;
                         }
                         break;
                     case 'date':
@@ -915,7 +921,7 @@ class SchedulerRepository
     {
         usort($refsList, array($this, "firstLastSort"));
 
-        $emptySortList = ['name' => '', 'all' => 0, 'ref' => 0, 'ar' => 0];
+        $emptySortList = ['name' => '', 'Assignor' => '', 'all' => 0, 'ref' => 0, 'ar' => 0];
         if( $this->numberOfReferees($projectKey) > 3) {
             $emptySortList['4th'] = 0;
         };
@@ -956,7 +962,7 @@ class SchedulerRepository
         $select4th = $has4th ? ', 0 as r4th' : '';
 
         $cr = $this->db->table('games')
-            ->selectRaw('cr as name, date, time, division, COUNT(cr) as crCount, 0 as ar1Count, 0 as ar2Count ' . $select4th)
+            ->selectRaw('cr as name, assignor, date, time, division, COUNT(cr) as crCount, 0 as ar1Count, 0 as ar2Count ' . $select4th)
             ->where([
                 ['projectKey', $projectKey],
                 ['cr', '<>', '']
@@ -964,7 +970,7 @@ class SchedulerRepository
             ->groupBy(['cr', 'date', 'division']);
 
         $ar1 = $this->db->table('games')
-            ->selectRaw('ar1 as name, date, time, division, 0 as crCount, COUNT(ar1) as ar1Count, 0 as ar2Count ' . $select4th)
+            ->selectRaw('ar1 as name, assignor, date, time, division, 0 as crCount, COUNT(ar1) as ar1Count, 0 as ar2Count ' . $select4th)
             ->where([
                 ['projectKey', $projectKey],
                 ['ar1', '<>', '']
@@ -972,7 +978,7 @@ class SchedulerRepository
             ->groupBy(['ar1', 'date', 'division']);
 
         $ar2 = $this->db->table('games')
-            ->selectRaw('ar2 as name, date, time, division, 0 as crCount, 0 as ar1Count, COUNT(ar2) as ar2Count ' . $select4th)
+            ->selectRaw('ar2 as name, assignor, date, time, division, 0 as crCount, 0 as ar1Count, COUNT(ar2) as ar2Count ' . $select4th)
             ->where([
                 ['projectKey', $projectKey],
                 ['ar2', '<>', '']
@@ -985,7 +991,7 @@ class SchedulerRepository
 
         if ($has4th) {
             $r4th = $this->db->table('games')
-                ->selectRaw('r4th as name, date, time, division, 0 as crCount, 0 as ar1Count, 0 as ar2Count, COUNT(r4th) as r4thCount')
+                ->selectRaw('r4th as name, assignor, date, time, division, 0 as crCount, 0 as ar1Count, 0 as ar2Count, COUNT(r4th) as r4thCount')
                 ->where([
                     ['projectKey', $projectKey],
                     ['r4th', '<>', '']
