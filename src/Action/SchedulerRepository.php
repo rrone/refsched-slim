@@ -582,15 +582,6 @@ class SchedulerRepository
 
         $changes = array('adds' => 0, 'updates' => 0, 'errors' => []);
 
-        //convert float to int
-        foreach ($games as &$game) {
-            foreach ($game as $key => &$value) {
-                if (is_float($value)) {
-                    $value = (int)$value;
-                }
-            }
-        }
-
         if (!empty($games)) {
             foreach ($games as &$game) {
                 $nextData = [];
