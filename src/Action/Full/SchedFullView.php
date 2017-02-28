@@ -61,8 +61,6 @@ class SchedFullView extends AbstractView
                 $eventName = $this->event->name;
             }
 
-            var_dump($this->event);
-
             $this->page_title = $eventName;
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
