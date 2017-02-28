@@ -34,7 +34,7 @@ class PDFTest extends AppTestCase
         $this->assertTrue($controller instanceof AbstractController);
     }
 
-    public function testFieldMapAsAnonymous()
+    public function xtestFieldMapAsAnonymous()
     {
         // invoke the controller action and test it
 
@@ -49,7 +49,7 @@ class PDFTest extends AppTestCase
 
     }
 
-    public function testFieldMapAsUser()
+    public function xtestFieldMapAsUser()
     {
         // invoke the controller action and test it
 
@@ -78,7 +78,7 @@ class PDFTest extends AppTestCase
 
     }
 
-    public function testFieldMapAsAdmin()
+    public function xtestFieldMapAsAdmin()
     {
         // invoke the controller action and test it
 
