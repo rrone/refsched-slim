@@ -409,7 +409,7 @@ class SchedSchedView extends AbstractView
                                 if (is_null($this->event->field_map)) {
                                     $html .= "<td>$field</td>";
                                 } else {
-                                    $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$field</a></td>";
+                                    $html .= "<td><a href='" . $this->event->field_map . "' target='_blank'>$field</a></td>";
                                 }
                                 $html .= "<td>" . $this->div[$kant] . "</td>";
                                 $html .= "<td>" . $this->pool[$kant] . "</td>";
@@ -582,7 +582,7 @@ class SchedSchedView extends AbstractView
                     if (is_null($this->event->field_map)) {
                         $html .= "<td>$field</td>";
                     } else {
-                        $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$field</a></td>";
+                        $html .= "<td><a href='" . $this->event->field_map . "' target='_blank'>$field</a></td>";
                     }
                     $html .= "<td>" . $this->div[$kant] . "</td>";
                     $html .= "<td>" . $this->pool[$kant] . "</td>";

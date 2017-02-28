@@ -146,7 +146,7 @@ class SchedMasterView extends AbstractView
                     if (is_null($this->event->field_map)) {
                         $html .= "<td>$game->field</td>";
                     } else {
-                        $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$game->field</a></td>";
+                        $html .= "<td><a href='" . $this->event->field_map . "' target='_blank'>$game->field</a></td>";
                     }
                     $html .= "<td>$game->division</td>";
                     $html .= "<td>$game->pool</td>";
