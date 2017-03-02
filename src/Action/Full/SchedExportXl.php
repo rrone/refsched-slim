@@ -145,7 +145,8 @@ class SchedExportXl extends AbstractExporter
         if (!empty($event)) {
             $projectKey = $event->projectKey;
 
-            $games = $this->sr->getGames($projectKey, '%', $this->user->admin);
+            $show_medal_round = $this->sr->getMedalRound($projectKey);
+            $games = $this->sr->getGames($projectKey, '%', $show_medal_round);
             $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
             //set the header labels
