@@ -7,8 +7,8 @@
     {% block head %}{% endblock %}
 
     <link rel="icon" href="/images/favicon.ico" sizes="16x16">
-    <link href='{{ base_url() }}/css/bootstrap.min.css' rel='stylesheet' type='text/css'/>
-    <link href='{{ base_url() }}/css/app.css' rel='stylesheet' type='text/css'/>
+    <link href='{{ env_uri }}/css/bootstrap.min.css' rel='stylesheet' type='text/css'/>
+    <link href='{{ env_uri }}/css/app.css' rel='stylesheet' type='text/css'/>
 </head>
 
 <body>
@@ -23,7 +23,7 @@
             {% if ( view.admin ) %}
                 <p>Find an issue with the Scheduler? Log it in the <a href="https://github.com/rrone/refsched/issues"
                                                                       target="_blank">issue tracker</a><a
-                            href='{{ base_url() }}/adm'>.</a></p>
+                            href='{{ env_uri }}/adm'>.</a></p>
             {% else %}
                 <p>Find an issue with the Scheduler? Log it in the <a href="https://github.com/rrone/refsched/issues"
                                                                       target="_blank">issue tracker.</a></p>
