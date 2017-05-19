@@ -34,7 +34,7 @@ $settings = require PROJECT_ROOT . '/app/settings.php';
 
 $settings['debug'] = true;
 $settings['displayErrorDetails'] = $settings['debug'];
-$settings['settings']['env_uri'] = 'http://refsched.slim.vhx.host';
+$settings['settings']['env_uri'] = 'https://refsched.slim.vhx.host';
 
 $app = new \Slim\App($settings);
 
