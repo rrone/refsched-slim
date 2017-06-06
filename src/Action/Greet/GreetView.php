@@ -42,9 +42,9 @@ class GreetView extends AbstractView
         if (!empty($this->event)) {
             $projectKey = $this->event->projectKey;
 
-            $used_list = null;
-            $assigned_list = null;
-            $limit_list = null;
+            $used_list = [];
+            $assigned_list = [];
+            $limit_list = [];
 
             $groups = $this->sr->getGroups($projectKey);
             foreach ($groups as $group) {
