@@ -34,7 +34,13 @@ $settings = require PROJECT_ROOT . '/app/settings.php';
 
 $settings['debug'] = true;
 $settings['displayErrorDetails'] = $settings['debug'];
-$settings['settings']['env_uri'] = 'https://refsched.vhx.host';
+
+if ($_SERVER['HTTPS'] == 'on') {
+    $settings['settings']['env_uri'] = 'https://';
+} else {
+    $settings['settings']['env_uri'] = 'http://';
+}
+$settings['settings']['env_uri'] .= $_SERVER['SERVER_NAME'];
 
 $app = new \Slim\App($settings);
 
