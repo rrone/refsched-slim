@@ -2,7 +2,7 @@
 ## Exit immediately if a command exits with a non-zero status.
 set -e
 #set distribution folder alias
-dist="$HOME"/Dropbox/_open/_ayso/s1/web/referee_site/refsched
+dist="$HOME"/Dropbox/_open/_ayso/s1/web/ayso1ref/refsched
 
 ## clear the screen
 #printf "\033c"
