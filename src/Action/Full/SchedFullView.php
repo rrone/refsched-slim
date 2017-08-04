@@ -173,7 +173,7 @@ class SchedFullView extends AbstractView
 
             $html .= "</table>\n";
 
-            $this->menu = $this->menu('bottom');
+            $this->menu = sizeof($games) ? $this->menu('bottom') : null ;
         }
 
         return $html;
