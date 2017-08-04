@@ -107,7 +107,7 @@ class AdminView extends AbstractView
 
                 //Ensure Admin has access to all events
                 $user = $this->sr->getUserByName('Admin');
-                $events = $this->sr->getCurrentEvents();
+                $events = $this->sr->getEnabledEvents();
                 $allKeys = [];
                 foreach ($events as $event) {
                     $allKeys[] = $event->projectKey;
@@ -140,7 +140,7 @@ class AdminView extends AbstractView
             'view' => array(
                 'admin' => $this->user->admin,
                 'users' => $this->renderUsers(),
-                'events' => $this->renderCurrentEvents(),
+                'events' => $this->renderEnabledEvents(),
                 'action' => $adminPath,
                 'message' => $this->msg,
                 'messageStyle' => $this->msgStyle,
@@ -166,9 +166,9 @@ class AdminView extends AbstractView
         return $selectOptions;
     }
 
-    protected function renderCurrentEvents()
+    protected function renderEnabledEvents()
     {
-        $events = $this->sr->getCurrentEvents();
+        $events = $this->sr->getEnabledEvents();
         $eventLabels = [];
 
         foreach ($events as $event) {

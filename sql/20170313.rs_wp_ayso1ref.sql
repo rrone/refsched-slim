@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.6.6
 -- https://www.phpmyadmin.net/
 --
--- Host: pod-100136.wpengine.com:13306
--- Generation Time: Jun 02, 2017 at 10:44 PM
+-- Host: pod-100136.wpengine.com
+-- Generation Time: Mar 13, 2017 at 10:48 PM
 -- Server version: 5.6.35-80.0-log
 -- PHP Version: 5.5.9-1ubuntu4.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -28,12 +26,12 @@ SET time_zone = "+00:00";
 -- Table structure for table `rs_ajax_example`
 --
 
-DROP TABLE IF EXISTS `rs_ajax_example`;
-CREATE TABLE `rs_ajax_example` (
+CREATE TABLE IF NOT EXISTS `rs_ajax_example` (
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `age` int(11) NOT NULL,
   `gender` varchar(1) COLLATE utf8_unicode_ci NOT NULL,
-  `wpm` int(11) NOT NULL
+  `wpm` int(11) NOT NULL,
+  PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -59,9 +57,8 @@ INSERT INTO `rs_ajax_example` (`name`, `age`, `gender`, `wpm`) VALUES
 -- Table structure for table `rs_events`
 --
 
-DROP TABLE IF EXISTS `rs_events`;
-CREATE TABLE `rs_events` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `rs_events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `projectKey` varchar(45) NOT NULL,
   `name` varchar(255) NOT NULL,
   `dates` varchar(255) DEFAULT NULL,
@@ -75,8 +72,10 @@ CREATE TABLE `rs_events` (
   `num_refs` int(11) DEFAULT '3',
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
-  `field_map` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `field_map` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Truncate table before insert `rs_events`
@@ -95,8 +94,8 @@ INSERT INTO `rs_events` (`id`, `projectKey`, `name`, `dates`, `location`, `infoL
 (5, '2016WSC', 'Western States Championships', 'March 19-20, 2016', 'Bullhead City, AZ', 'http://ayso1ref.wpengine.com/2016-wsc/', 1, 0, 0, 0, 'Western States Championships: March 19-20, 2016', 4, '2016-03-19', '2016-03-20', 'http://ayso1ref.wpengine.com/rehosted/wsc/2016_wsc_fields.pdf'),
 (6, '2017ExtraPlayoffs', 'U09-U14 Extra Playoffs', 'March 11-12, 2017', 'Ab Brown Soccer Complex, Riverside', 'https://ayso.bluesombrero.com/Default.aspx?tabid=862961', 1, 0, 0, 1, 'U09-U14 Extra Playoffs', 3, '2017-03-11', '2017-03-12', 'http://ayso1ref.wpengine.com/lib/fieldmap/2017_extra_map.pdf'),
 (7, '2017LeaguePlayoffs', 'U10-U14 League Playoffs', 'February 25-26, 2017', 'Ab Brown Soccer Complex, Riverside', 'https://ayso.bluesombrero.com/Default.aspx?tabid=863118', 1, 1, 0, 1, 'U10-U14 League Playoffs: February 25-26, 2017', 3, '2017-02-25', '2017-02-26', 'https://bsbproduction.s3.amazonaws.com/portals/14057/docs/2017/pdf/ab_brown_field_map.pdf'),
-(8, '2017AllStarExtraPlayoffs', 'U10-U14 All-Star/Extra Playoffs', 'March 11-12, 2017', 'Ab Brown Soccer Complex, Riverside', 'https://ayso.bluesombrero.com/Default.aspx?tabid=863119', 1, 1, 0, 1, 'U10-U14 All-Star/Extra Playoffs: March 11-12, 2017', 3, '2017-03-11', '2017-03-12', 'https://bsbproduction.s3.amazonaws.com/portals/14057/docs/2017/pdf/ab_brown_field_map.pdf'),
-(9, '2017WSC', 'Western States Championships', 'March 25-26, 2017', 'Carson City, NV', 'https://ayso1ref.com/2017-wsc/', 1, 1, 1, 1, 'Western States Championships: March 25-26, 2017', 4, '2017-03-25', '2017-03-26', 'https://bsbproduction.s3.amazonaws.com/portals/14058/images/pete_livermore_field_map.pdf');
+(8, '2017AllStarExtraPlayoffs', 'U10-U14 All-Star/Extra Playoffs', 'March 11-12, 2017', 'Ab Brown Soccer Complex, Riverside', 'https://ayso.bluesombrero.com/Default.aspx?tabid=863119', 1, 1, 1, 1, 'U10-U14 All-Star/Extra Playoffs: March 11-12, 2017', 3, '2017-03-11', '2017-03-12', 'https://bsbproduction.s3.amazonaws.com/portals/14057/docs/2017/pdf/ab_brown_field_map.pdf'),
+(9, '2017WSC', 'Western States Championships', 'March 25-26, 2017', 'Carson City, NV', 'http://www.aysosection2.org/Default.aspx?tabid=864647', 1, 1, 1, 1, 'Western States Championships: March 25-26, 2017', 4, '2017-03-25', '2017-03-26', 'https://bsbproduction.s3.amazonaws.com/portals/14058/images/pete_livermore_field_map.pdf');
 
 -- --------------------------------------------------------
 
@@ -104,9 +103,8 @@ INSERT INTO `rs_events` (`id`, `projectKey`, `name`, `dates`, `location`, `infoL
 -- Table structure for table `rs_games`
 --
 
-DROP TABLE IF EXISTS `rs_games`;
-CREATE TABLE `rs_games` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `rs_games` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `projectKey` varchar(45) NOT NULL,
   `game_number` int(11) NOT NULL,
   `date` date NOT NULL,
@@ -124,8 +122,10 @@ CREATE TABLE `rs_games` (
   `ar2` varchar(45) DEFAULT NULL,
   `r4th` varchar(45) DEFAULT NULL,
   `medalRound` tinyint(1) DEFAULT '0',
-  `locked` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `locked` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
 
 --
 -- Truncate table before insert `rs_games`
@@ -638,14 +638,14 @@ INSERT INTO `rs_games` (`id`, `projectKey`, `game_number`, `date`, `time`, `fiel
 (595, '2017WSC', 3, '2017-03-25', '09:00:00', '2', 'BU12L', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
 (596, '2017WSC', 4, '2017-03-25', '09:00:00', '8', 'BU12L', '', '1', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
 (597, '2017WSC', 5, '2017-03-25', '09:00:00', '9', 'GU11E', '', '1', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
-(598, '2017WSC', 6, '2017-03-25', '09:00:00', '10', 'GU11E', '', '10', '', '2', '', 'Section 1', 'Rick Roberts', 'Manuel Del Rio', 'David Alvarez', 'Scott Davis', 0, 0),
+(598, '2017WSC', 6, '2017-03-25', '09:00:00', '10', 'GU11E', '', '10', '', '2', '', 'Section 1', '', '', '', '', 0, 0),
 (599, '2017WSC', 7, '2017-03-25', '09:00:00', '3', 'BU10L', '', '1', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
-(600, '2017WSC', 8, '2017-03-25', '09:00:00', '6', 'BU10L', '', '10', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
+(600, '2017WSC', 8, '2017-03-25', '09:00:00', '6', 'BU10L', '', '10', '', '2', '', 'Section 2', '', '', '', '', 0, 0),
 (601, '2017WSC', 9, '2017-03-25', '09:00:00', '7N', 'GU09E', '', '1', '', '10', '', 'Section 2', '', '', '', '', 0, 0),
 (602, '2017WSC', 10, '2017-03-25', '09:00:00', '7S', 'GU09E', '', '11', '', '2', '', 'Section 10', '', '', '', '', 0, 0),
-(603, '2017WSC', 11, '2017-03-25', '09:30:00', '1', 'BU14L', '', '2', '', '10', '', 'Section 1', 'Roger Stevenson', 'Amer Hassouneh', 'Joe Small', 'Al Prado', 0, 0),
-(604, '2017WSC', 12, '2017-03-25', '09:30:00', '5', 'BU14L', '', '11', '', '1', '', 'Section 2', '', '', '', '', 0, 0),
-(605, '2017WSC', 13, '2017-03-25', '09:30:00', '4', 'GU13E', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
+(603, '2017WSC', 11, '2017-03-25', '09:30:00', '1', 'BU14L', '', '2', '', '10', '', 'Section 2', '', '', '', '', 0, 0),
+(604, '2017WSC', 12, '2017-03-25', '09:30:00', '5', 'BU14L', '', '11', '', '1', '', 'Section 10', '', '', '', '', 0, 0),
+(605, '2017WSC', 13, '2017-03-25', '09:30:00', '4', 'GU13E', '', '10', '', '11', '', 'Section 11', '', '', '', '', 0, 0),
 (606, '2017WSC', 14, '2017-03-25', '11:00:00', '1', 'GU14L', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
 (607, '2017WSC', 15, '2017-03-25', '11:00:00', '5', 'GU14L', '', '1', '', '2', '', 'Section 10', '', '', '', '', 0, 0),
 (608, '2017WSC', 16, '2017-03-25', '11:00:00', '4', 'GU13E', '', '1', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
@@ -653,82 +653,82 @@ INSERT INTO `rs_games` (`id`, `projectKey`, `game_number`, `date`, `time`, `fiel
 (610, '2017WSC', 18, '2017-03-25', '11:00:00', '8', 'GU12L', '', '11', '', '10', '', 'Section 2', '', '', '', '', 0, 0),
 (611, '2017WSC', 19, '2017-03-25', '11:00:00', '9', 'GU12E', '', '1', '', '10', '', 'Section 2', '', '', '', '', 0, 0),
 (612, '2017WSC', 20, '2017-03-25', '11:00:00', '10', 'GU12E', '', '11', '', '2', '', 'Section 10', '', '', '', '', 0, 0),
-(613, '2017WSC', 21, '2017-03-25', '11:00:00', '3', 'GU10L', '', '11', '', '2', '', 'Section 1', 'Sandee Wilson', 'Scott Davis', 'Tim Reynolds', 'John Mass', 0, 0),
+(613, '2017WSC', 21, '2017-03-25', '11:00:00', '3', 'GU10L', '', '11', '', '2', '', 'Section 1', '', '', '', '', 0, 0),
 (614, '2017WSC', 22, '2017-03-25', '11:00:00', '6', 'GU10L', '', '1', '', '10', '', 'Section 2', '', '', '', '', 0, 0),
-(615, '2017WSC', 23, '2017-03-25', '11:00:00', '7N', 'GU10E', '', '1', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
+(615, '2017WSC', 23, '2017-03-25', '11:00:00', '7N', 'GU10E\n', '', '1', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
 (616, '2017WSC', 24, '2017-03-25', '11:00:00', '7S', 'GU10E', '', '10', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
 (617, '2017WSC', 25, '2017-03-25', '12:30:00', '1', 'GU14E', '', 'W1', '', 'W2', '', '', '', '', '', '', 1, 0),
-(618, '2017WSC', 26, '2017-03-25', '12:30:00', '5', 'GU14E', '', '2', '', '10', '', 'Section 1', 'David Alvarez', 'John Mass', 'Al Prado', 'Joe Small', 1, 0),
+(618, '2017WSC', 26, '2017-03-25', '12:30:00', '5', 'GU14E', '', 'L1', '', 'L2', '', '', '', '', '', '', 1, 0),
 (619, '2017WSC', 27, '2017-03-25', '13:30:00', '2', 'BU12L', '', 'W3', '', 'W4', '', '', '', '', '', '', 1, 0),
 (620, '2017WSC', 28, '2017-03-25', '13:30:00', '8', 'BU12L', '', 'L3', '', 'L4', '', '', '', '', '', '', 1, 0),
 (621, '2017WSC', 29, '2017-03-25', '13:30:00', '9', 'GU11E', '', 'W5', '', 'W6', '', '', '', '', '', '', 1, 0),
 (622, '2017WSC', 30, '2017-03-25', '13:30:00', '10', 'GU11E', '', 'L5', '', 'L6', '', '', '', '', '', '', 1, 0),
 (623, '2017WSC', 31, '2017-03-25', '13:30:00', '3', 'BU10L', '', 'W7', '', 'W8', '', '', '', '', '', '', 1, 0),
-(624, '2017WSC', 32, '2017-03-25', '13:30:00', '6', 'BU10L', '', '2', '', '11', '', 'Section 1', 'Scott Davis', 'Sandee Wilson', 'Roger Stevenson', 'Rick Roberts', 1, 0),
+(624, '2017WSC', 32, '2017-03-25', '13:30:00', '6', 'BU10L', '', 'L7', '', 'L8', '', '', '', '', '', '', 1, 0),
 (625, '2017WSC', 33, '2017-03-25', '13:30:00', '7N', 'GU09E', '', 'W9', '', 'W10', '', '', '', '', '', '', 1, 0),
 (626, '2017WSC', 34, '2017-03-25', '13:30:00', '7S', 'GU09E', '', 'L9', '', 'L10', '', '', '', '', '', '', 1, 0),
 (627, '2017WSC', 35, '2017-03-25', '14:00:00', '1', 'BU14L', '', 'W11', '', 'W12', '', '', '', '', '', '', 1, 0),
 (628, '2017WSC', 36, '2017-03-25', '14:00:00', '5', 'BU14L', '', 'L11', '', 'L12', '', '', '', '', '', '', 1, 0),
 (629, '2017WSC', 37, '2017-03-25', '14:00:00', '4', 'GU13E', '', 'W13', '', 'W16', '', '', '', '', '', '', 1, 0),
 (630, '2017WSC', 38, '2017-03-25', '15:30:00', '1', 'GU14L', '', 'W14', '', 'W15', '', '', '', '', '', '', 1, 0),
-(631, '2017WSC', 39, '2017-03-25', '15:30:00', '5', 'GU14L', '', '10', '', '2', '', 'Section 1', 'Amer Hassouneh', 'Rick Roberts', 'Al Prado', 'Tim Reynolds', 1, 0),
+(631, '2017WSC', 39, '2017-03-25', '15:30:00', '5', 'GU14L', '', 'L14', '', 'L15', '', '', '', '', '', '', 1, 0),
 (632, '2017WSC', 40, '2017-03-25', '15:30:00', '4', 'GU13E', '', 'L15', '', 'L16', '', '', '', '', '', '', 1, 0),
 (633, '2017WSC', 41, '2017-03-25', '15:30:00', '2', 'GU12L', '', 'W17', '', 'W18', '', '', '', '', '', '', 1, 0),
 (634, '2017WSC', 42, '2017-03-25', '15:30:00', '8', 'GU12L', '', 'L17', '', 'L18', '', '', '', '', '', '', 1, 0),
-(635, '2017WSC', 43, '2017-03-25', '15:30:00', '9', 'GU12E', '', '10', '', '11', '', 'Section 1', 'Joe Small', 'Sandee Wilson', 'Manuel Del Rio', 'Roger Stevenson', 1, 0),
-(636, '2017WSC', 44, '2017-03-25', '15:30:00', '10', 'GU12E', '', 'L19', '', 'L20', '', '', '', '', '', '', 1, 0),
+(635, '2017WSC', 43, '2017-03-25', '15:30:00', '9', 'GU12E', '', 'W19', '', 'W20', '', '', '', '', '', '', 1, 0),
+(636, '2017WSC', 44, '2017-03-25', '15:30:00', '10', 'GU12E\n', '', 'L19', '', 'L20', '', '', '', '', '', '', 1, 0),
 (637, '2017WSC', 45, '2017-03-25', '15:30:00', '3', 'GU10L', '', 'W21', '', 'W22', '', '', '', '', '', '', 1, 0),
 (638, '2017WSC', 46, '2017-03-25', '15:30:00', '6', 'GU10L', '', 'L21', '', 'L22', '', '', '', '', '', '', 1, 0),
 (639, '2017WSC', 47, '2017-03-25', '15:30:00', '7N', 'GU10E', '', 'W23', '', 'W24', '', '', '', '', '', '', 1, 0),
 (640, '2017WSC', 48, '2017-03-25', '15:30:00', '7S', 'GU10E', '', 'L23', '', 'L24', '', '', '', '', '', '', 1, 0),
-(641, '2017WSC', 49, '2017-03-26', '08:00:00', '1', 'BU14E', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
-(642, '2017WSC', 50, '2017-03-26', '08:00:00', '5', 'BU14E', '', '1', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
-(643, '2017WSC', 51, '2017-03-26', '09:00:00', '2', 'GU12A', '', '2', '', '10', '', 'Section 1', 'Manuel Del Rio', 'David Alvarez', 'Tim Reynolds', 'Amer Hassouneh', 0, 0),
-(644, '2017WSC', 52, '2017-03-26', '09:00:00', '8', 'GU12A', '', '1', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
-(645, '2017WSC', 53, '2017-03-26', '09:00:00', '9', 'BU11E', '', '2', '', '1', '', 'Section 10', '', '', '', '', 0, 0),
-(646, '2017WSC', 54, '2017-03-26', '09:00:00', '10', 'BU11E', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
-(647, '2017WSC', 55, '2017-03-26', '09:00:00', '3', 'GU10A', '', '2', '', '1', '', 'Section 11', '', '', '', '', 0, 0),
-(648, '2017WSC', 56, '2017-03-26', '09:00:00', '6', 'GU10A', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
-(649, '2017WSC', 57, '2017-03-26', '09:00:00', '7N', 'BU09E', '', '1', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
-(650, '2017WSC', 58, '2017-03-26', '09:00:00', '7S', 'BU09E', '', '10', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
-(651, '2017WSC', 59, '2017-03-26', '09:30:00', '1', 'GU14A', '', '10', '', '2', '', 'Section 1', 'Al Prado', 'Joe Small', 'John Mass', 'Sandee Wilson', 0, 0),
-(652, '2017WSC', 60, '2017-03-26', '09:30:00', '5', 'GU14A', '', '11', '', '1', '', 'Section 2', '', '', '', '', 0, 0),
-(653, '2017WSC', 61, '2017-03-26', '09:30:00', '4', 'BU13E', '', '2', '', '11', '', 'Section 10', '', '', '', '', 0, 0),
-(654, '2017WSC', 62, '2017-03-26', '11:00:00', '1', 'BU14A', '', '1', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
-(655, '2017WSC', 63, '2017-03-26', '11:00:00', '5', 'BU14A', '', '10', '', '11', '', 'Section 1', 'Tim Reynolds', 'Scott Davis', 'Rick Roberts', 'David Alvarez', 0, 0),
-(656, '2017WSC', 64, '2017-03-26', '11:00:00', '4', 'BU13E', '', '10', '', '1', '', 'Section 2', '', '', '', '', 0, 0),
-(657, '2017WSC', 65, '2017-03-26', '11:00:00', '2', 'BU12A', '', '1', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
-(658, '2017WSC', 66, '2017-03-26', '11:00:00', '8', 'BU12A', '', '10', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
-(659, '2017WSC', 67, '2017-03-26', '11:00:00', '9', 'BU12E', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
-(660, '2017WSC', 68, '2017-03-26', '11:00:00', '10', 'BU12E', '', '1', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
-(661, '2017WSC', 69, '2017-03-26', '11:00:00', '3', 'BU10A', '', '2', '', '1', '', 'Section 10', '', '', '', '', 0, 0),
-(662, '2017WSC', 70, '2017-03-26', '11:00:00', '6', 'BU10A', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
-(663, '2017WSC', 71, '2017-03-26', '11:00:00', '7N', 'BU10E', '', '1', '', '10', '', 'Section 2', '', '', '', '', 0, 0),
-(664, '2017WSC', 72, '2017-03-26', '11:00:00', '7S', 'BU10E', '', '11', '', '2', '', 'Section 1', 'John Mass', 'Amer Hassouneh', 'Roger Stevenson', 'Manuel Del Rio', 0, 0),
-(665, '2017WSC', 73, '2017-03-26', '12:30:00', '1', 'BU14E', '', 'W49', '', 'W50', '', '', '', '', '', '', 1, 0),
-(666, '2017WSC', 74, '2017-03-26', '12:30:00', '5', 'BU14E', '', 'L49', '', 'L50', '', '', '', '', '', '', 1, 0),
-(667, '2017WSC', 75, '2017-03-26', '13:30:00', '2', 'GU12A', '', 'W51', '', 'W52', '', '', '', '', '', '', 1, 0),
-(668, '2017WSC', 76, '2017-03-26', '13:30:00', '8', 'GU12A', '', 'L51', '', 'L52', '', '', '', '', '', '', 1, 0),
-(669, '2017WSC', 77, '2017-03-26', '13:30:00', '9', 'BU11E', '', 'W53', '', 'W54', '', '', '', '', '', '', 1, 0),
-(670, '2017WSC', 78, '2017-03-26', '13:30:00', '10', 'BU11E', '', 'L53', '', 'L54', '', '', '', '', '', '', 1, 0),
-(671, '2017WSC', 79, '2017-03-26', '13:30:00', '3', 'GU10A', '', 'W55', '', 'W56', '', '', '', '', '', '', 1, 0),
-(672, '2017WSC', 80, '2017-03-26', '13:30:00', '6', 'GU10A', '', 'L55', '', 'L56', '', '', '', '', '', '', 1, 0),
-(673, '2017WSC', 81, '2017-03-26', '13:30:00', '7N', 'BU09E', '', 'W57', '', 'W58', '', '', '', '', '', '', 1, 0),
-(674, '2017WSC', 82, '2017-03-26', '13:30:00', '7S', 'BU09E', '', 'L57', '', 'L58', '', '', '', '', '', '', 1, 0),
-(675, '2017WSC', 83, '2017-03-26', '14:00:00', '1', 'GU14A', '', 'W59', '', 'W60', '', '', '', '', '', '', 1, 0),
-(676, '2017WSC', 84, '2017-03-26', '14:00:00', '5', 'GU14A', '', 'L59', '', 'L60', '', '', '', '', '', '', 1, 0),
-(677, '2017WSC', 85, '2017-03-26', '14:00:00', '4', 'BU13E', '', 'W61', '', 'W64', '', '', '', '', '', '', 1, 0),
-(678, '2017WSC', 86, '2017-03-26', '15:30:00', '1', 'BU14A', '', 'W62', '', 'W63', '', '', '', '', '', '', 1, 0),
-(679, '2017WSC', 87, '2017-03-26', '15:30:00', '5', 'BU14A', '', 'L62', '', 'L63', '', '', '', '', '', '', 1, 0),
-(680, '2017WSC', 88, '2017-03-26', '15:30:00', '4', 'BU13E', '', 'L61', '', 'L64', '', '', '', '', '', '', 1, 0),
-(681, '2017WSC', 89, '2017-03-26', '15:30:00', '2', 'BU12A', '', 'W65', '', 'W66', '', '', '', '', '', '', 1, 0),
-(682, '2017WSC', 90, '2017-03-26', '15:30:00', '8', 'BU12A', '', 'L65', '', 'L66', '', '', '', '', '', '', 1, 0),
-(683, '2017WSC', 91, '2017-03-26', '15:30:00', '9', 'BU12E', '', 'W67', '', 'W68', '', '', '', '', '', '', 1, 0),
-(684, '2017WSC', 92, '2017-03-26', '15:30:00', '10', 'BU12E', '', 'L67', '', 'L68', '', '', '', '', '', '', 1, 0),
-(685, '2017WSC', 93, '2017-03-26', '15:30:00', '3', 'BU10A', '', 'W69', '', 'W70', '', '', '', '', '', '', 1, 0),
-(686, '2017WSC', 94, '2017-03-26', '15:30:00', '6', 'BU10A', '', 'L69', '', 'L70', '', '', '', '', '', '', 1, 0),
-(687, '2017WSC', 95, '2017-03-26', '15:30:00', '7N', 'BU10E', '', 'W71', '', 'W72', '', '', '', '', '', '', 1, 0),
-(688, '2017WSC', 96, '2017-03-26', '15:30:00', '7S', 'BU10E', '', 'L71', '', 'L72', '', '', '', '', '', '', 1, 0),
+(641, '2017WSC', 49, '2017-03-25', '08:00:00', '1', 'BU14E', '', '10', '', '11', '', 'Section 1', '', '', '', '', 0, 0),
+(642, '2017WSC', 50, '2017-03-25', '08:00:00', '5', 'BU14E', '', '1', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
+(643, '2017WSC', 51, '2017-03-25', '09:00:00', '2', 'GU12A', '', '2', '', '10', '', 'Section 1', '', '', '', '', 0, 0),
+(644, '2017WSC', 52, '2017-03-25', '09:00:00', '8', 'GU12A', '', '1', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
+(645, '2017WSC', 53, '2017-03-25', '09:00:00', '9', 'BU11E', '', '2', '', '1', '', 'Section 10', '', '', '', '', 0, 0),
+(646, '2017WSC', 54, '2017-03-25', '09:00:00', '10', 'BU11E', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
+(647, '2017WSC', 55, '2017-03-25', '09:00:00', '3', 'GU10A', '', '2', '', '1', '', 'Section 11', '', '', '', '', 0, 0),
+(648, '2017WSC', 56, '2017-03-25', '09:00:00', '6', 'GU10A', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
+(649, '2017WSC', 57, '2017-03-25', '09:00:00', '7N', 'BU09E', '', '1', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
+(650, '2017WSC', 58, '2017-03-25', '09:00:00', '7S', 'BU09E', '', '10', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
+(651, '2017WSC', 59, '2017-03-25', '09:30:00', '1', 'GU14A', '', '10', '', '2', '', 'Section 1', '', '', '', '', 0, 0),
+(652, '2017WSC', 60, '2017-03-25', '09:30:00', '5', 'GU14A', '', '11', '', '1', '', 'Section 2', '', '', '', '', 0, 0),
+(653, '2017WSC', 61, '2017-03-25', '09:30:00', '4', 'BU13E', '', '2', '', '11', '', 'Section 10', '', '', '', '', 0, 0),
+(654, '2017WSC', 62, '2017-03-25', '11:00:00', '1', 'BU14A', '', '1', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
+(655, '2017WSC', 63, '2017-03-25', '11:00:00', '5', 'BU14A', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
+(656, '2017WSC', 64, '2017-03-25', '11:00:00', '4', 'BU13E', '', '10', '', '1', '', 'Section 2', '', '', '', '', 0, 0),
+(657, '2017WSC', 65, '2017-03-25', '11:00:00', '2', 'BU12A', '', '1', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
+(658, '2017WSC', 66, '2017-03-25', '11:00:00', '8', 'BU12A', '', '10', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
+(659, '2017WSC', 67, '2017-03-25', '11:00:00', '9', 'BU12E', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
+(660, '2017WSC', 68, '2017-03-25', '11:00:00', '10', 'BU12E', '', '1', '', '2', '', 'Section 11', '', '', '', '', 0, 0),
+(661, '2017WSC', 69, '2017-03-25', '11:00:00', '3', 'BU10A', '', '2', '', '1', '', 'Section 10', '', '', '', '', 0, 0),
+(662, '2017WSC', 70, '2017-03-25', '11:00:00', '6', 'BU10A', '', '10', '', '11', '', 'Section 2', '', '', '', '', 0, 0),
+(663, '2017WSC', 71, '2017-03-25', '11:00:00', '7N', 'BU10E', '', '1', '', '10', '', 'Section 2', '', '', '', '', 0, 0),
+(664, '2017WSC', 72, '2017-03-25', '11:00:00', '7S', 'BU10E', '', '11', '', '2', '', 'Section 1', '', '', '', '', 0, 0),
+(665, '2017WSC', 73, '2017-03-25', '12:30:00', '1', 'BU14E', '', 'W49', '', 'W50', '', '', '', '', '', '', 1, 0),
+(666, '2017WSC', 74, '2017-03-25', '12:30:00', '5', 'BU14E', '', 'L49', '', 'L50', '', '', '', '', '', '', 1, 0),
+(667, '2017WSC', 75, '2017-03-25', '13:30:00', '2', 'GU12A', '', 'W51', '', 'W52', '', '', '', '', '', '', 1, 0),
+(668, '2017WSC', 76, '2017-03-25', '13:30:00', '8', 'GU12A', '', 'L51', '', 'L52', '', '', '', '', '', '', 1, 0),
+(669, '2017WSC', 77, '2017-03-25', '13:30:00', '9', 'BU11E', '', 'W53', '', 'W54', '', '', '', '', '', '', 1, 0),
+(670, '2017WSC', 78, '2017-03-25', '13:30:00', '10', 'BU11E', '', 'L53', '', 'L54', '', '', '', '', '', '', 1, 0),
+(671, '2017WSC', 79, '2017-03-25', '13:30:00', '3', 'GU10A', '', 'W55', '', 'W56', '', '', '', '', '', '', 1, 0),
+(672, '2017WSC', 80, '2017-03-25', '13:30:00', '6', 'GU10A', '', 'L55', '', 'L56', '', '', '', '', '', '', 1, 0),
+(673, '2017WSC', 81, '2017-03-25', '13:30:00', '7N', 'BU09E', '', 'W57', '', 'W58', '', '', '', '', '', '', 1, 0),
+(674, '2017WSC', 82, '2017-03-25', '13:30:00', '7S', 'BU09E', '', 'L57', '', 'L58', '', '', '', '', '', '', 1, 0),
+(675, '2017WSC', 83, '2017-03-25', '14:00:00', '1', 'GU14A', '', 'W59', '', 'W60', '', '', '', '', '', '', 1, 0),
+(676, '2017WSC', 84, '2017-03-25', '14:00:00', '5', 'GU14A', '', 'L59', '', 'L60', '', '', '', '', '', '', 1, 0),
+(677, '2017WSC', 85, '2017-03-25', '14:00:00', '4', 'BU13E', '', 'W61', '', 'W64', '', '', '', '', '', '', 1, 0),
+(678, '2017WSC', 86, '2017-03-25', '15:30:00', '1', 'BU14A', '', 'W62', '', 'W63', '', '', '', '', '', '', 1, 0),
+(679, '2017WSC', 87, '2017-03-25', '15:30:00', '5', 'BU14A', '', 'L62', '', 'L63', '', '', '', '', '', '', 1, 0),
+(680, '2017WSC', 88, '2017-03-25', '15:30:00', '4', 'BU13E', '', 'L61', '', 'L64', '', '', '', '', '', '', 1, 0),
+(681, '2017WSC', 89, '2017-03-25', '15:30:00', '2', 'BU12A', '', 'W65', '', 'W66', '', '', '', '', '', '', 1, 0),
+(682, '2017WSC', 90, '2017-03-25', '15:30:00', '8', 'BU12A', '', 'L65', '', 'L66', '', '', '', '', '', '', 1, 0),
+(683, '2017WSC', 91, '2017-03-25', '15:30:00', '9', 'BU12E', '', 'W67', '', 'W68', '', '', '', '', '', '', 1, 0),
+(684, '2017WSC', 92, '2017-03-25', '15:30:00', '10', 'BU12E', '', 'L67', '', 'L68', '', '', '', '', '', '', 1, 0),
+(685, '2017WSC', 93, '2017-03-25', '15:30:00', '3', 'BU10A', '', 'W69', '', 'W70', '', '', '', '', '', '', 1, 0),
+(686, '2017WSC', 94, '2017-03-25', '15:30:00', '6', 'BU10A', '', 'L69', '', 'L70', '', '', '', '', '', '', 1, 0),
+(687, '2017WSC', 95, '2017-03-25', '15:30:00', '7N', 'BU10E', '', 'W71', '', 'W72', '', '', '', '', '', '', 1, 0),
+(688, '2017WSC', 96, '2017-03-25', '15:30:00', '7S', 'BU10E', '', 'L71', '', 'L72', '', '', '', '', '', '', 1, 0),
 (689, '2017LeaguePlayoffs', 1, '2017-02-25', '08:00:00', 'White 1', 'U14B', '1', 'P2', 'B1', '', '', 'Area 1C', 'Al Prado', 'Steve Hawkins', 'Rob Owen', '', 0, 1),
 (690, '2017LeaguePlayoffs', 2, '2017-02-25', '08:00:00', 'White 2', 'U14B', '1', 'G1', 'U1', '', '', 'Area 1B', 'Jonathan Ellis', 'Greg Olson', 'Wes Evans', '', 0, 1),
 (691, '2017LeaguePlayoffs', 3, '2017-02-25', '08:00:00', 'White 3', 'U14G', '2', 'F1', 'G1', '', '', 'Area 1D', 'Byron Eguchi', 'Scott Jarus', 'Michael Hinz', '', 0, 1),
@@ -744,11 +744,11 @@ INSERT INTO `rs_games` (`id`, `projectKey`, `game_number`, `date`, `time`, `fiel
 (701, '2017LeaguePlayoffs', 13, '2017-02-25', '09:00:00', 'White 1', 'U14G', '1', 'N1', 'R1', '', '', 'Area 1C', 'Rob Owen', 'Al Prado', 'Steve Hawkins', '', 0, 1),
 (702, '2017LeaguePlayoffs', 14, '2017-02-25', '09:00:00', 'White 2', 'U14G', '1', 'C2', 'G2', '', '', 'Area 1B', 'Wes Evans', 'Jonathan Ellis', 'Greg Olson', '', 0, 1),
 (703, '2017LeaguePlayoffs', 15, '2017-02-25', '09:00:00', 'White 3', 'U14G', '4', 'R2', 'U2', '', '', 'Area 1D', 'Scott Jarus', 'Byron Eguchi', 'Michael Hinz', '', 0, 1),
-(704, '2017LeaguePlayoffs', 16, '2017-02-25', '09:00:00', 'White 4', 'U14G', '4', 'H1', 'P1', '', '', 'Area 1G', 'Guy Eisenbrey', 'Lealon Watts', 'Edman Urias', '', 0, 1);
-INSERT INTO `rs_games` (`id`, `projectKey`, `game_number`, `date`, `time`, `field`, `division`, `pool`, `home`, `home_team`, `away`, `away_team`, `assignor`, `cr`, `ar1`, `ar2`, `r4th`, `medalRound`, `locked`) VALUES
+(704, '2017LeaguePlayoffs', 16, '2017-02-25', '09:00:00', 'White 4', 'U14G', '4', 'H1', 'P1', '', '', 'Area 1G', 'Guy Eisenbrey', 'Lealon Watts', 'Edman Urias', '', 0, 1),
 (705, '2017LeaguePlayoffs', 17, '2017-02-25', '09:00:00', 'Murphy 1', 'U14G', '3', 'D1', 'B1', '', '', 'Area 1U', 'Aeby Perez', 'Gil Barron', 'Michael Raycraft', '', 0, 1),
 (706, '2017LeaguePlayoffs', 18, '2017-02-25', '09:00:00', 'Murphy 2', 'U14G', '3', 'H2', 'U1', '', '', 'Area 1R', 'Rick Walsh', 'Jeff Johnson', 'Rickie Polmounter', '', 0, 1),
-(707, '2017LeaguePlayoffs', 19, '2017-02-25', '09:00:00', 'Blue 1', 'U12G', '1', 'H1', 'B1', '', '', 'Area 1C', 'Ed Mosesian', 'Tom Regan', 'Chuy Acosta', '', 0, 1),
+(707, '2017LeaguePlayoffs', 19, '2017-02-25', '09:00:00', 'Blue 1', 'U12G', '1', 'H1', 'B1', '', '', 'Area 1C', 'Ed Mosesian', 'Tom Regan', 'Chuy Acosta', '', 0, 1);
+INSERT INTO `rs_games` (`id`, `projectKey`, `game_number`, `date`, `time`, `field`, `division`, `pool`, `home`, `home_team`, `away`, `away_team`, `assignor`, `cr`, `ar1`, `ar2`, `r4th`, `medalRound`, `locked`) VALUES
 (708, '2017LeaguePlayoffs', 20, '2017-02-25', '09:00:00', 'Blue 2', 'U12G', '1', 'G2', 'N2', '', '', 'Area 1H', 'Adan Cervantes', 'Alan Torres', 'Julio Luna', '', 0, 1),
 (709, '2017LeaguePlayoffs', 21, '2017-02-25', '09:00:00', 'Blue 3', 'U12G', '4', 'G1', 'C1', '', '', 'Area 1U', 'Jose Reyes', 'Luis Urdiales', 'Laura Urdiales', '', 0, 1),
 (710, '2017LeaguePlayoffs', 22, '2017-02-25', '09:00:00', 'Blue 4', 'U12G', '4', 'U1', 'P2', '', '', 'Area 1R', 'Louie Mendoza', 'Lee Lombard', 'Ken Suter', '', 0, 1),
@@ -898,151 +898,151 @@ INSERT INTO `rs_games` (`id`, `projectKey`, `game_number`, `date`, `time`, `fiel
 (854, '2017LeaguePlayoffs', 166, '2017-02-26', '15:00:00', 'Blue 3', 'U12B', 'CON', '0', '0', '', '', 'Area 1H', 'Manuel Del Rio', 'Amer Hassouneh', 'Jose Reyes', '', 1, 1),
 (855, '2017LeaguePlayoffs', 167, '2017-02-26', '15:00:00', 'Green 1', 'U10B', 'FIN', '0', '0', '', '', 'Section 1', 'Craig Breitman', 'Sandee Wilson', 'Roger Stevenson', '', 1, 1),
 (856, '2017LeaguePlayoffs', 168, '2017-02-26', '15:00:00', 'Yellow 1', 'U10B', 'CON', '0', 'D1  R18 Manhattan/Hermosa', '', '', 'Area 1P', 'Andrew Denyer', 'Tim Reynolds', 'Rick Gates', '', 1, 1),
-(857, '2017AllStarExtraPlayoffs', 201, '0003-11-17', '08:00:00', 'White 1', 'U14G', '1', 'P2', '', 'B1', '', 'Area 1U', 'Matt Reese', 'Dan White', 'Greg Grover', '', 0, 1),
-(858, '2017AllStarExtraPlayoffs', 202, '0003-11-17', '08:00:00', 'White 2', 'U14G', '1', 'S1', '', 'C1', '', 'Area 1D', 'Steve Resnick', 'Peter Lindborg', 'Jerry Johnson', '', 0, 1),
-(859, '2017AllStarExtraPlayoffs', 203, '0003-11-17', '08:00:00', 'White 3', 'U14G', '2', 'D1', '', 'P1', '', 'Area 1C', 'Bill Mahoney', 'Bruce Hancock', 'John Mass', '', 0, 1),
-(860, '2017AllStarExtraPlayoffs', 204, '0003-11-17', '08:00:00', 'White 4', 'U14G', '2', 'U1', '', 'B2', '', 'Area 1S', 'Arturo Ledezma', 'Pawan Agrawal', 'Steve Moss', '', 0, 1),
-(861, '2017AllStarExtraPlayoffs', 205, '0003-11-17', '08:00:00', 'Blue 2', 'U12G', '1', 'U1', '', 'P2', '', 'Area 1B', 'Aaron Whitham', 'Darrell Cowgill', 'Alex Villa', '', 0, 1),
-(862, '2017AllStarExtraPlayoffs', 206, '0003-11-17', '08:00:00', 'Blue 3', 'U12G', '1', 'C1', '', 'S1', '', 'Area 1P', 'Rebecca Weinreich', 'Jorge Reyes', 'David Thompson', '', 0, 1),
-(863, '2017AllStarExtraPlayoffs', 207, '0003-11-17', '08:00:00', 'Blue 4', 'U12G', '2', 'D1', '', 'P1', '', 'Area 1C', 'Steve Hawkins', 'Mark Hornish', 'Dave Jones', '', 0, 1),
-(864, '2017AllStarExtraPlayoffs', 208, '0003-11-17', '08:00:00', 'Blue 5', 'U12G', '2', 'U2', '', 'B1', '', 'Area 1D', 'Roberto Escala', 'Brian Jones', 'Michael Grosvenor', '', 0, 1),
-(865, '2017AllStarExtraPlayoffs', 209, '0003-11-17', '08:00:00', 'Green 3', 'U10G', '1', 'P2', '', 'U1', '', 'Area 1S', 'Spencer Dykstra', 'Craig Dykstra', 'Coby Cates', '', 0, 1),
-(866, '2017AllStarExtraPlayoffs', 210, '0003-11-17', '08:00:00', 'Yellow 1', 'U10G', '1', 'B1', '', 'C1', '', 'Area 1R', 'Byron McDermott', 'Mark Ozbun', 'Giovanny Cisneros', '', 0, 1),
-(867, '2017AllStarExtraPlayoffs', 211, '0003-11-17', '08:00:00', 'Yellow 2', 'U10G', '2', 'P1', '', 'U2', '', 'Area 1B', 'Chuy Acosta', 'Tony Koo', 'David Asada', '', 0, 1),
-(868, '2017AllStarExtraPlayoffs', 212, '0003-11-17', '08:00:00', 'Yellow 3', 'U10G', '2', 'S1', '', 'D1', '', 'Area 1P', 'George Wolfberg', 'Keith Fine', 'Cedric Penix', '', 0, 1),
-(869, '2017AllStarExtraPlayoffs', 213, '0003-11-17', '09:00:00', 'White 1', 'U14B', '1', 'D1', '', 'S1', '', 'Area 1U', 'Gil Barron', 'Dan White', 'Oscar Rodriguez', '', 0, 1),
-(870, '2017AllStarExtraPlayoffs', 214, '0003-11-17', '09:00:00', 'White 2', 'U14B', '1', 'U1', '', 'B2', '', 'Area 1D', 'Peter Lindborg', 'Jerry Johnson', 'Steve Resnick', '', 0, 1),
-(871, '2017AllStarExtraPlayoffs', 215, '0003-11-17', '09:00:00', 'White 3', 'U14B', '2', 'D2', '', 'B1', '', 'Area 1C', 'John Mass', 'Bill Mahoney', 'Bruce Hancock', '', 0, 1),
-(872, '2017AllStarExtraPlayoffs', 216, '0003-11-17', '09:00:00', 'White 4', 'U14B', '2', 'P1', '', 'C1', '', 'Area 1S', 'Pawan Agrawal', 'Coby Cates', 'Lisa Cates', '', 0, 1),
-(873, '2017AllStarExtraPlayoffs', 217, '0003-11-17', '09:00:00', 'Blue 2', 'U12B', '1', 'B1', '', 'C1', '', 'Area 1P', 'Jorge Reyes', 'David Thompson', 'Rebecca Weinreich', '', 0, 1),
-(874, '2017AllStarExtraPlayoffs', 218, '0003-11-17', '09:00:00', 'Blue 3', 'U12B', '1', 'P1', '', 'U2', '', 'Area 1B', 'Alex Villa', 'Darrell Cowgill', 'Aaron Whitham', '', 0, 1),
-(875, '2017AllStarExtraPlayoffs', 219, '0003-11-17', '09:00:00', 'Blue 4', 'U12B', '2', 'S1', '', 'D1', '', 'Area 1C', 'Dave Jones', 'Steve Hawkins', 'Mark Hornish', '', 0, 1),
-(876, '2017AllStarExtraPlayoffs', 220, '0003-11-17', '09:00:00', 'Blue 5', 'U12B', '2', 'P2', '', 'U1', '', 'Area 1D', 'Brian Jones', 'Roberto Escala', 'Michael Grosvenor', '', 0, 1),
-(877, '2017AllStarExtraPlayoffs', 221, '0003-11-17', '09:00:00', 'Green 3', 'U10B', '1', 'D2', '', 'C1', '', 'Area 1S', 'Craig Dykstra', 'Spencer Dykstra', 'Logan Dykstra', '', 0, 1),
-(878, '2017AllStarExtraPlayoffs', 222, '0003-11-17', '09:00:00', 'Yellow 1', 'U10B', '1', 'S1', '', 'B1', '', 'Area 1R', 'Byron McDermott', 'Mark Ozbun', 'Giovanny Cisneros', '', 0, 1),
-(879, '2017AllStarExtraPlayoffs', 223, '0003-11-17', '09:00:00', 'Yellow 2', 'U10B', '2', 'U1', '', 'C2', '', 'Area 1P', 'Nichole Wade', 'Andre Caesar', 'George Wolfberg', '', 0, 1),
-(880, '2017AllStarExtraPlayoffs', 224, '0003-11-17', '09:00:00', 'Yellow 3', 'U10B', '2', 'D1', '', 'P1', '', 'Area 1B', 'Sergio Gracia', 'Jerome Romero', 'Thomas Brambila', '', 0, 1),
-(881, '2017AllStarExtraPlayoffs', 225, '0003-11-17', '11:00:00', 'White 1', 'U14G', '1', 'B1', '', 'S1', '', 'Area 1U', 'Mars Ramage', 'Wesley Duque', 'Michael Ramage', '', 0, 1),
-(882, '2017AllStarExtraPlayoffs', 226, '0003-11-17', '11:00:00', 'White 2', 'U14G', '1', 'C1', '', 'P2', '', 'Area 1D', 'Jerry Johnson', 'Steve Resnick', 'Peter Lindborg', '', 0, 1),
-(883, '2017AllStarExtraPlayoffs', 227, '0003-11-17', '11:00:00', 'White 3', 'U14G', '2', 'P1', '', 'U1', '', 'Area 1C', 'Bruce Hancock', 'John Mass', 'Bill Mahoney', '', 0, 1),
-(884, '2017AllStarExtraPlayoffs', 228, '0003-11-17', '11:00:00', 'White 4', 'U14G', '2', 'B2', '', 'D1', '', 'Area 1S', 'Arturo Ledezma', 'Steve Moss', 'Pawan Agrawal', '', 0, 1),
-(885, '2017AllStarExtraPlayoffs', 229, '0003-11-17', '11:00:00', 'Blue 2', 'U12G', '1', 'P2', '', 'C1', '', 'Area 1B', 'Darrell Cowgill', 'Aaron Whitham', 'Alex Villa', '', 0, 1),
-(886, '2017AllStarExtraPlayoffs', 230, '0003-11-17', '11:00:00', 'Blue 3', 'U12G', '1', 'S1', '', 'U1', '', 'Area 1P', 'David Thompson', 'Jorge Reyes', 'Rebecca Weinreich', '', 0, 1),
-(887, '2017AllStarExtraPlayoffs', 231, '0003-11-17', '11:00:00', 'Blue 4', 'U12G', '2', 'P1', '', 'U2', '', 'Area 1D', 'Michael Grosvenor', 'Roberto Escala', 'Brian Jones', '', 0, 1),
-(888, '2017AllStarExtraPlayoffs', 232, '0003-11-17', '11:00:00', 'Blue 5', 'U12G', '2', 'B1', '', 'D1', '', 'Area 1C', 'Rolando Morales', 'Dave Jones', 'Steve Hawkins', '', 0, 1),
-(889, '2017AllStarExtraPlayoffs', 233, '0003-11-17', '11:00:00', 'Green 3', 'U10G', '1', 'U1', '', 'B1', '', 'Area 1S', 'Craig Dykstra', 'Spencer Dykstra', 'Coby Cates', '', 0, 1),
-(890, '2017AllStarExtraPlayoffs', 234, '0003-11-17', '11:00:00', 'Yellow 1', 'U10G', '1', 'C1', '', 'P2', '', 'Area 1R', 'Byron McDermott', 'Mark Ozbun', 'Tony Glover', '', 0, 1),
-(891, '2017AllStarExtraPlayoffs', 235, '0003-11-17', '11:00:00', 'Yellow 2', 'U10G', '2', 'U2', '', 'S1', '', 'Area 1P', 'Cedric Penix', 'Benji Grijalva', 'Keith Fine', '', 0, 1),
-(892, '2017AllStarExtraPlayoffs', 236, '0003-11-17', '11:00:00', 'Yellow 3', 'U10G', '2', 'D1', '', 'P1', '', 'Area 1B', 'Alfred Medina', 'Michael Raycraft', 'Aeby Perez', '', 0, 1),
-(893, '2017AllStarExtraPlayoffs', 237, '0003-11-17', '12:00:00', 'White 1', 'U14B', '1', 'S1', '', 'U1', '', 'Area 1B', 'Terris Wolff', 'Mike Sanchez', 'Joe Tabriski', '', 0, 1),
-(894, '2017AllStarExtraPlayoffs', 238, '0003-11-17', '12:00:00', 'White 2', 'U14B', '1', 'B2', '', 'D1', '', 'Area 1P', 'Rick Gates', 'Nichole Wade', 'Ari Kleiman', '', 0, 1),
-(895, '2017AllStarExtraPlayoffs', 239, '0003-11-17', '12:00:00', 'White 3', 'U14B', '2', 'B1', '', 'P1', '', 'Area 1C', 'Simon Yueh', 'Joel Matthiesen', 'Chuy Acosta', '', 0, 1),
-(896, '2017AllStarExtraPlayoffs', 240, '0003-11-17', '12:00:00', 'White 4', 'U14B', '2', 'C1', '', 'D2', '', 'Area 1F', 'Mike Cassidy', 'Todd Hays', 'Bill Louie', '', 0, 1),
-(897, '2017AllStarExtraPlayoffs', 241, '0003-11-17', '12:00:00', 'Blue 2', 'U12B', '1', 'C1', '', 'P1', '', 'Area 1S', 'Spencer Dykstra', 'Logan Dykstra', 'Craig Dykstra', '', 0, 1),
-(898, '2017AllStarExtraPlayoffs', 242, '0003-11-17', '12:00:00', 'Blue 3', 'U12B', '1', 'U2', '', 'B1', '', 'Area 1P', 'George Wolfberg', 'David Martin', 'Andre Caesar', '', 0, 1),
-(899, '2017AllStarExtraPlayoffs', 243, '0003-11-17', '12:00:00', 'Blue 4', 'U12B', '2', 'D1', '', 'P2', '', 'Area 1U', 'Oscar Covarrubias', 'Andy Cavazos', 'Jose Mata', '', 0, 1),
-(900, '2017AllStarExtraPlayoffs', 244, '0003-11-17', '12:00:00', 'Blue 5', 'U12B', '2', 'U1', '', 'S1', '', 'Area 1D', 'Andrew Lelchuk', 'Scott Jarus', 'Mark Clifford', '', 0, 1),
-(901, '2017AllStarExtraPlayoffs', 245, '0003-11-17', '12:00:00', 'Green 3', 'U10B', '1', 'C1', '', 'S1', '', 'Area 1U', 'Hugo Ferrel', 'Natasha Bernal', 'Hugo Ferrel', '', 0, 1),
-(902, '2017AllStarExtraPlayoffs', 246, '0003-11-17', '12:00:00', 'Yellow 1', 'U10B', '1', 'B1', '', 'D2', '', 'Area 1S', 'Coby Cates', 'Pawan Agrawal', 'Lisa Cates', '', 0, 1),
-(903, '2017AllStarExtraPlayoffs', 247, '0003-11-17', '12:00:00', 'Yellow 2', 'U10B', '2', 'C2', '', 'D1', '', 'Area 1B', 'Mark Howard', 'Sam Sousa', 'Laura Bachar', '', 0, 1),
-(904, '2017AllStarExtraPlayoffs', 248, '0003-11-17', '12:00:00', 'Yellow 3', 'U10B', '2', 'P1', '', 'U1', '', 'Area 1C', 'Scott Davis', 'Darius Simmons', 'Brian Bonham', '', 0, 1),
-(905, '2017AllStarExtraPlayoffs', 249, '0003-11-17', '14:00:00', 'White 1', 'U14G', '1', 'P2', '', 'S1', '', 'Area 1B', 'Joe Tabriski', 'Terris Wolff', 'Jody Kinsey', '', 0, 1),
-(906, '2017AllStarExtraPlayoffs', 250, '0003-11-17', '14:00:00', 'White 2', 'U14G', '1', 'B1', '', 'C1', '', 'Area 1P', 'Ari Kleiman', 'Rick Gates', 'Cedric Penix', '', 0, 1),
-(907, '2017AllStarExtraPlayoffs', 251, '0003-11-17', '14:00:00', 'White 3', 'U14G', '2', 'D1', '', 'U1', '', 'Area 1C', 'Joel Matthiesen', 'Ken McKelvey', 'Simon Yueh', '', 0, 1),
-(908, '2017AllStarExtraPlayoffs', 252, '0003-11-17', '14:00:00', 'White 4', 'U14G', '2', 'P1', '', 'B2', '', 'Area 1F', 'Todd Hays', 'Bill Louie', 'Mike Cassidy', '', 0, 1),
-(909, '2017AllStarExtraPlayoffs', 253, '0003-11-17', '14:00:00', 'Blue 2', 'U12G', '1', 'U1', '', 'C1', '', 'Area 1S', 'Craig Dykstra', 'Spencer Dykstra', 'Pawan Agrawal', '', 0, 1),
-(910, '2017AllStarExtraPlayoffs', 254, '0003-11-17', '14:00:00', 'Blue 3', 'U12G', '1', 'P2', '', 'S1', '', 'Area 1U', 'Anthony Martinez', 'Ulisses Olivares', 'Edgar Yep', '', 0, 1),
-(911, '2017AllStarExtraPlayoffs', 255, '0003-11-17', '14:00:00', 'Blue 4', 'U12G', '2', 'D1', '', 'U2', '', 'Area 1P', 'Benji Grijalva', 'Keith Fine', 'David Martin', '', 0, 1),
-(912, '2017AllStarExtraPlayoffs', 256, '0003-11-17', '14:00:00', 'Blue 5', 'U12G', '2', 'P1', '', 'B1', '', 'Area 1D', 'Byron Eguchi', 'Andrew Lelchuk', 'Scott Jarus', '', 0, 1),
-(913, '2017AllStarExtraPlayoffs', 257, '0003-11-17', '14:00:00', 'Green 3', 'U10G', '1', 'P2', '', 'B1', '', 'Area 1U', 'Carlo Cuento', 'Oscar Sesma', 'Dennis Lee', '', 0, 1),
-(914, '2017AllStarExtraPlayoffs', 258, '0003-11-17', '14:00:00', 'Yellow 1', 'U10G', '1', 'U1', '', 'C1', '', 'Area 1S', 'Arturo Ledezma', 'Coby Cates', 'Lisa Cates', '', 0, 1),
-(915, '2017AllStarExtraPlayoffs', 259, '0003-11-17', '14:00:00', 'Yellow 2', 'U10G', '2', 'P1', '', 'S1', '', 'Area 1B', 'Bruce Campbell', 'Nathaniel Nguyen', 'Sam Sousa', '', 0, 1),
-(916, '2017AllStarExtraPlayoffs', 260, '0003-11-17', '14:00:00', 'Yellow 3', 'U10G', '2', 'U2', '', 'D1', '', 'Area 1C', 'Brian Bonham', 'Scott Davis', 'Al Prado', '', 0, 1),
-(917, '2017AllStarExtraPlayoffs', 261, '0003-11-17', '15:00:00', 'White 1', 'U14B', '1', 'D1', '', 'U1', '', 'Area 1B', 'Tim Martinez', 'Ari Kleiman', 'Terris Wolff', '', 0, 1),
-(918, '2017AllStarExtraPlayoffs', 262, '0003-11-17', '15:00:00', 'White 2', 'U14B', '1', 'S1', '', 'B2', '', 'Area 1P', 'Darius Simmons', 'Nichole Wade', 'David Martin', '', 0, 1),
-(919, '2017AllStarExtraPlayoffs', 263, '0003-11-17', '15:00:00', 'White 3', 'U14B', '2', 'D2', '', 'P1', '', 'Area 1C', 'Ken McKelvey', 'Simon Yueh', 'Joel Matthiesen', '', 0, 1),
-(920, '2017AllStarExtraPlayoffs', 264, '0003-11-17', '15:00:00', 'White 4', 'U14B', '2', 'B1', '', 'C1', '', 'Area 1F', 'Todd Hays', 'Mike Cassidy', 'Aeby Perez', '', 0, 1),
-(921, '2017AllStarExtraPlayoffs', 265, '0003-11-17', '15:00:00', 'Blue 2', 'U12B', '1', 'B1', '', 'P1', '', 'Area 1S', 'Pawan Agrawal', 'Craig Dykstra', 'Coby Cates', '', 0, 1),
-(922, '2017AllStarExtraPlayoffs', 266, '0003-11-17', '15:00:00', 'Blue 3', 'U12B', '1', 'C1', '', 'U2', '', 'Area 1D', 'Mark Clifford', 'Byron Eguchi', 'Andrew Lelchuk', '', 0, 1),
-(923, '2017AllStarExtraPlayoffs', 267, '0003-11-17', '15:00:00', 'Blue 4', 'U12B', '2', 'S1', '', 'P2', '', 'Area 1U', 'Gil Barron', 'Rey Acevado', 'Michael Raycraft', '', 0, 1),
-(924, '2017AllStarExtraPlayoffs', 268, '0003-11-17', '15:00:00', 'Blue 5', 'U12B', '2', 'D1', '', 'U1', '', 'Area 1N', 'Joe Howard', 'Rob Barnard', 'Naomi Caliva', '', 0, 1),
-(925, '2017AllStarExtraPlayoffs', 269, '0003-11-17', '15:00:00', 'Green 3', 'U10B', '1', 'D2', '', 'S1', '', 'Area 1U', 'OSCAR COVARRUBIAS', 'Victor Torres', 'Marla Torres', '', 0, 1),
-(926, '2017AllStarExtraPlayoffs', 270, '0003-11-17', '15:00:00', 'Yellow 1', 'U10B', '1', 'C1', '', 'B1', '', 'Area 1S', 'Spencer Dykstra', 'Coby Cates', 'Logan Dykstra', '', 0, 1),
-(927, '2017AllStarExtraPlayoffs', 271, '0003-11-17', '15:00:00', 'Yellow 2', 'U10B', '2', 'U1', '', 'D1', '', 'Area 1C', 'Al Prado', 'Brian Bonham', 'Scott Davis', '', 0, 1),
-(928, '2017AllStarExtraPlayoffs', 272, '0003-11-17', '15:00:00', 'Yellow 3', 'U10B', '2', 'C2', '', 'P1', '', 'Area 1B', 'Mark Howard', 'Laura Bachar', 'Barry', '', 0, 1),
-(929, '2017AllStarExtraPlayoffs', 273, '0003-12-17', '09:00:00', 'White 1', 'U14G', 'SF', 'C1 R88 Glendale/LaCresenta', '', 'P1 R1031 So. LA/Ladera', '', 'Area 1R', 'Todd Taylor', 'Dean Carmichael', 'Chris Smith', '', 1, 1),
-(930, '2017AllStarExtraPlayoffs', 274, '0003-12-17', '09:00:00', 'White 2', 'U14G', 'SF', 'B2 R67 Chino', '', 'S1 R808 Pahrump', '', 'Area 1C', 'Viggen Garibian', 'Scott Davis', 'Al Prado', '', 1, 1),
-(931, '2017AllStarExtraPlayoffs', 275, '0003-12-17', '09:00:00', 'Blue 2', 'U12G', 'SF', 'C1 R98 Temple City', '', 'D1 R18 Manhattan/Hermosa', '', 'Area 1U', 'Jose Alcaraz', 'Tom West', 'Mars Ramage', '', 1, 1),
-(932, '2017AllStarExtraPlayoffs', 276, '0003-12-17', '09:00:00', 'Blue 3', 'U12G', 'SF', 'P1 R1031 So. LA/Ladera', '', 'U1 R621 Walnut', '', 'Area 1B', 'Jon Ellis', 'Lyle Evans', 'Greg Olson', '', 1, 1),
-(933, '2017AllStarExtraPlayoffs', 277, '0003-12-17', '09:00:00', 'Green 1', 'U10G', 'SF', 'C1 R88 Glendale/LaCresenta', '', 'D1 R18 Manhattan/Hermosa', '', 'Area 1S', 'Craig Dykstra', 'Coby Cates', 'Spencer Dykstra', '', 1, 1),
-(934, '2017AllStarExtraPlayoffs', 278, '0003-12-17', '09:00:00', 'Yellow 1', 'U10G', 'SF', 'P1 R1031 So. LA/Ladera', '', 'U1 R112 Laverne/San Dimas', '', 'Area 1B', 'Phil Ockelmann', 'Mark Rookwood', 'Kiku Annon', '', 1, 1),
-(935, '2017AllStarExtraPlayoffs', 279, '0003-12-17', '11:00:00', 'White 1', 'U14B', 'SF', 'D1 R18 Manhattan/Hermosa', '', 'B1 R661 Phillips Ranch', '', 'Area 1S', 'Pawan Agrawal', 'Spencer Dykstra', 'Craig Dykstra', '', 1, 1),
-(936, '2017AllStarExtraPlayoffs', 280, '0003-12-17', '11:00:00', 'White 2', 'U14B', 'SF', 'P1 R1031 So. LA/Ladera', '', 'U1 R602 Covina', '', 'Area 1D', 'Brian Holt', 'Manny Murillo', 'Mark Rookwood', '', 1, 1),
-(937, '2017AllStarExtraPlayoffs', 281, '0003-12-17', '11:00:00', 'Blue 2', 'U12B', 'SF', 'P1 R1595 Watts', '', 'U1 R602 Covina', '', 'Area 1B', 'Lyle Evans', 'Greg Olson', 'Jon Ellis', '', 1, 1),
-(938, '2017AllStarExtraPlayoffs', 282, '0003-12-17', '11:00:00', 'Blue 3', 'U12B', 'SF', 'D1 R21 Hawthorne', '', 'C1 R13 Pasadena/Altadena', '', 'Area 1U', 'Matt Kooba', 'Richard Espinoza', 'Mike Fidone', '', 1, 1),
-(939, '2017AllStarExtraPlayoffs', 283, '0003-12-17', '11:00:00', 'Green 1', 'U10B', 'SF', 'C1 R13 Pasadena/Altadena', '', 'P1 R1031 So. LA/Ladera', '', 'Area 1U', 'Mars Ramage', 'Chris Smith', 'Dean Carmichael', '', 1, 1),
-(940, '2017AllStarExtraPlayoffs', 284, '0003-12-17', '11:00:00', 'Yellow 1', 'U10B', 'SF', 'D1 R18 Manhattan/Hermosa', '', 'B1 R779 Chino Hills', '', 'Area 1C', 'James May', 'Chuy Acosta', 'Dave Browning', '', 1, 1),
-(941, '2017AllStarExtraPlayoffs', 285, '0003-12-17', '13:00:00', 'White 1', 'U14G', 'FIN', 'C1 R88 Glendale/LaCresenta', '', 'S1 R808 Pahrump', '', 'Area 1P', 'Scott Karlan', 'Robert Osborne', 'Rick Gates', '', 1, 1),
-(942, '2017AllStarExtraPlayoffs', 286, '0003-12-17', '13:00:00', 'White 2', 'U14G', 'CON', 'P1 R1031 So. LA/Ladera', '', 'B2 R67 Chino', '', 'Area 1R', 'Jeff Johnson', 'Jay Kelly', 'Rob Cross', '', 1, 1),
-(943, '2017AllStarExtraPlayoffs', 287, '0003-12-17', '13:00:00', 'Blue 2', 'U12G', 'FIN', 'C1 R98 Temple City', '', 'P1 R1031 So. LA/Ladera', '', 'Area 1D', 'Kiku Annon', 'Bob Hayes', 'Brian Holt', '', 1, 1),
-(944, '2017AllStarExtraPlayoffs', 288, '0003-12-17', '13:00:00', 'Blue 3', 'U12G', 'CON', 'D1 R18 Manhattan/Hermosa', '', 'U1 R621 Walnut', '', 'Area 1B', 'Doug Murray', 'John Eddings', 'Steven Andresen', '', 1, 1),
-(945, '2017AllStarExtraPlayoffs', 289, '0003-12-17', '13:00:00', 'Green 1', 'U10G', 'FIN', 'D1 R18 Manhattan/Hermosa', '', 'P1 R1031 So. LA/Ladera', '', 'Area 1C', 'Chuy Acosta', 'James May', 'Al Prado', '', 1, 1),
-(946, '2017AllStarExtraPlayoffs', 290, '0003-12-17', '13:00:00', 'Yellow 1', 'U10G', 'CON', 'C1 R88 Glendale/LaCresenta', '', 'U1 R112 Laverne/San Dimas', '', 'Section 1', 'Sandee Wilson', 'Bob Foster', 'Craig Breitman', '', 1, 1),
-(947, '2017AllStarExtraPlayoffs', 291, '0003-12-17', '15:00:00', 'White 1', 'U14B', 'FIN', 'D1 R18 Manhattan/Hermosa', '', 'P1 R1031 So. LA/Ladera', '', 'Area 1C', 'Al Prado', 'James May', 'Chuy Acosta', '', 1, 1),
-(948, '2017AllStarExtraPlayoffs', 292, '0003-12-17', '15:00:00', 'White 2', 'U14B', 'CON', 'B1 R661 Phillips Ranch', '', 'U1 R602 Covina', '', 'Section 1', 'Roger Stevenson', 'Craig Breitman', 'Bob Foster', '', 1, 1),
-(949, '2017AllStarExtraPlayoffs', 293, '0003-12-17', '15:00:00', 'Blue 2', 'U12B', 'FIN', 'P1 R1595 Watts', '', 'C1 R13 Pasadena/Altadena', '', 'Area 1B', 'Steve Baker', 'Stephen Andresen', 'Anthony Flores', '', 1, 1),
-(950, '2017AllStarExtraPlayoffs', 294, '0003-12-17', '15:00:00', 'Blue 3', 'U12B', 'CON', 'U1 R602 Covina', '', 'D1 R21 Hawthorne', '', 'Area 1D', 'Bob Hayes', 'Kiku Annon', 'Larry Rosolowski', '', 1, 1),
-(951, '2017AllStarExtraPlayoffs', 295, '0003-12-17', '15:00:00', 'Green 1', 'U10B', 'FIN', 'P1 R1031 So. LA/Ladera', '', 'D1 R18 Manhattan/Hermosa', '', 'Area 1G', 'Jeff Johnson', 'Jay Kelly', 'Alfred Moore', '', 1, 1),
-(952, '2017AllStarExtraPlayoffs', 296, '0003-12-17', '15:00:00', 'Yellow 1', 'U10B', 'CON', 'C1 R13 Pasadena/Altadena', '', 'B1 R779 Chino Hills', '', 'Area 1P', 'Tony Robinson', 'Darius Simmons', 'Tom Andersen', '', 1, 1),
-(953, '2017AllStarExtraPlayoffs', 301, '0003-11-17', '09:00:00', 'Murphy 1', 'U14G', 'SF', 'E-1: U/215', '', 'W-2: F/6', '', 'Area 1R', 'Mark Weber', 'Fritz Rutan', 'Alfred Medina', '', 1, 1),
-(954, '2017AllStarExtraPlayoffs', 302, '0003-11-17', '09:00:00', 'Murphy 2', 'U14G', 'SF', 'W-1: F/10', '', 'E-2: G/32', '', 'Area 1P', 'Michael Feder', 'Tim Martinez', 'Scott Karlan', '', 1, 1),
-(955, '2017AllStarExtraPlayoffs', 303, '0003-11-17', '09:00:00', 'Blue 6', 'U12G', 'SF', 'E-1: R/47', '', 'W-2: D/34', '', 'Area 1F', 'Gary Ramaley', 'Alfredo Padilla', 'Kazz Uchino', '', 1, 1),
-(956, '2017AllStarExtraPlayoffs', 304, '0003-11-17', '09:00:00', 'Blue 1', 'U12G', 'SF', 'W-1: F/14', '', 'E-2: R/187', '', 'Area 1U', 'Steve Kennedy', 'Ron Van Orden', 'Jason Rosales', '', 1, 1),
-(957, '2017AllStarExtraPlayoffs', 305, '0003-11-17', '09:00:00', 'Green 1', 'U10G', 'SF', 'E-1: G/32', '', 'W-2: F/14', '', 'Area 1R', 'Luis Bueno', 'Refugio Mora', 'Chris Avina', '', 1, 1),
-(958, '2017AllStarExtraPlayoffs', 306, '0003-11-17', '09:00:00', 'Green 2', 'U10G', 'SF', 'W-1: F/10', '', 'E-2: N/50', '', 'Area 1D', 'Scott Jarus', 'Byron Eguchi', 'Mark Clifford', '', 1, 1),
-(959, '2017AllStarExtraPlayoffs', 307, '0003-11-17', '11:00:00', 'Murphy 1', 'U14B', 'SF', 'E-1: G/32', '', 'W-2: F/16', '', 'Area 1R', 'Al Prado', 'Gil Barron', 'Mark Weber', '', 1, 1),
-(960, '2017AllStarExtraPlayoffs', 308, '0003-11-17', '11:00:00', 'Murphy 2', 'U14B', 'SF', 'W-1: D/34', '', 'E-2: U/624', '', 'Area 1P', 'Tim Martinez', 'Scott Karlan', 'Michael Feder', '', 1, 1),
-(961, '2017AllStarExtraPlayoffs', 309, '0003-11-17', '11:00:00', 'Blue 6', 'U12B', 'SF', 'E-1: B/67', '', 'W-2: F/16', '', 'Area 1R', 'Silvano Cervantes', 'Rafael Martinez', 'Chris Avina', '', 1, 1),
-(962, '2017AllStarExtraPlayoffs', 310, '0003-11-17', '11:00:00', 'Blue 1', 'U12B', 'SF', 'W-1: F/10', '', 'E-2: G/65', '', 'Area 1U', 'Stacy Montgomery', 'Sergio Miranda', 'Jason Bradley', '', 1, 1),
-(963, '2017AllStarExtraPlayoffs', 311, '0003-11-17', '11:00:00', 'Green 1', 'U10B', 'SF', 'E-1: G/65', '', 'W-2: D/7', '', 'Area 1F', 'Kazz Uchino', 'Gary Ramaley', 'Alfredo Padilla', '', 1, 1),
-(964, '2017AllStarExtraPlayoffs', 312, '0003-11-17', '11:00:00', 'Green 2', 'U10B', 'SF', 'W-1: P/70', '', 'E-2: G/32', '', 'Area 1D', 'Scott Jarus', 'Mark Clifford', 'Byron Eguchi', '', 1, 1),
-(965, '2017AllStarExtraPlayoffs', 313, '0003-11-17', '13:00:00', 'Murphy 1', 'U14G', 'FIN', 'E-1 215 Rowland Heights', '', 'E-2 32 Upland', '', 'Area 1R', 'Ruben Nieto', 'Annesley Ignatius', 'Kazz Uchino', '', 1, 1),
-(966, '2017AllStarExtraPlayoffs', 314, '0003-11-17', '13:00:00', 'Murphy 2', 'U14G', 'CON', 'W-2 6 San Pedro', '', 'W-1 10 Palos Verdes', '', 'Area 1F', 'Gregg Ferguson', 'Doug Young', 'Alan Siegel', '', 1, 1),
-(967, '2017AllStarExtraPlayoffs', 315, '0003-11-17', '13:00:00', 'Blue 6', 'U12G', 'FIN', 'E-1 47 Riverside', '', 'W-1 14 West Torrance', '', 'Area 1N', 'Gabriel Dimas', 'John Togatorop', 'Noe Villalobos', '', 1, 1),
-(968, '2017AllStarExtraPlayoffs', 316, '0003-11-17', '13:00:00', 'Blue 1', 'U12G', 'CON', 'W-2 34 So. Redondo Beach', '', 'E-2 187 Moreno Valley', '', 'Area 1P', 'Bernard Markowitz', 'Jonny Joseph', 'Darius Simmons', '', 1, 1),
-(969, '2017AllStarExtraPlayoffs', 317, '0003-11-17', '13:00:00', 'Green 1', 'U10G', 'FIN', 'W-2 14 West Torrance', '', 'W-1 10 Palos Verdes', '', 'Area 1C', 'Mark Hornish', 'Rolando Morales', 'Mike Rosenberg', '', 1, 1),
-(970, '2017AllStarExtraPlayoffs', 318, '0003-11-17', '13:00:00', 'Green 2', 'U10G', 'CON', 'E-1 32 Upland', '', 'E-2 50 Redlands', '', 'Area 1U', 'Michael Raycraft', 'Alfred Zambrano', 'Nathan Thomas', '', 1, 1),
-(971, '2017AllStarExtraPlayoffs', 319, '0003-11-17', '15:00:00', 'Murphy 1', 'U14B', 'FIN', 'E-1 32 Upland', '', 'W-2 34 So. Redondo Beach', '', 'Area 1F', 'Doug Young', 'Gregg Ferguson', 'Alan Siegel', '', 1, 1),
-(972, '2017AllStarExtraPlayoffs', 320, '0003-11-17', '15:00:00', 'Murphy 2', 'U14B', 'CON', 'W-2 16 North Torrance', '', 'E-2 624 Walnut', '', 'Area 1R', 'Vince Garcia', 'Greg Hood', 'Ruben Nieto', '', 1, 1),
-(973, '2017AllStarExtraPlayoffs', 321, '0003-11-17', '15:00:00', 'Blue 6', 'U12B', 'FIN', 'W-2 16 North Torrance', '', 'E-2 65 Rancho Cucamonga', '', 'Area 1P', 'Jonny Joseph', 'Bernard Markowitz', 'Tom Andersen', '', 1, 1),
-(974, '2017AllStarExtraPlayoffs', 322, '0003-11-17', '15:00:00', 'Blue 1', 'U12B', 'CON', 'E-1 67 Chino', '', 'W-1 10 Palos Verdes', '', 'Area 1P', 'Michael Feder', 'Andre Caesar', 'Rick Gates', '', 1, 1),
-(975, '2017AllStarExtraPlayoffs', 323, '0003-11-17', '15:00:00', 'Green 1', 'U10B', 'FIN', 'W-2 7 Westchester', '', 'E-2 32 Upland', '', 'Area 1U', 'Mars Ramage', 'Bill Louie', 'Michael Ramage', '', 1, 1),
-(976, '2017AllStarExtraPlayoffs', 324, '0003-11-17', '15:00:00', 'Green 2', 'U10B', 'CON', 'E-1 65 Rancho Cucamonga', '', 'W-1 70 West LA', '', 'Area 1C', 'Mike Rosenberg', 'Chuy Acosta', 'Rolando Morales', '', 1, 1),
-(977, '2017AllStarExtraPlayoffs', 325, '0003-12-17', '09:00:00', 'White 3', 'U13G', 'SF', 'E-1: R/187', '', 'W-2: C/2', '', 'Section 1', 'Bob Foster', 'Craig Breitman', 'Roger Stevenson', '', 1, 1);
+(857, '2017AllStarExtraPlayoffs', 201, '2017-03-11', '08:00:00', 'White 1', 'U14G', '1', 'P2', '', 'B1', '', 'Area 1U', 'Matt Reese', 'Dan White', 'Greg Grover', '', 0, 1),
+(858, '2017AllStarExtraPlayoffs', 202, '2017-03-11', '08:00:00', 'White 2', 'U14G', '1', 'S1', '', 'C1', '', 'Area 1D', 'Steve Resnick', 'Peter Lindborg', 'Jerry Johnson', '', 0, 1),
+(859, '2017AllStarExtraPlayoffs', 203, '2017-03-11', '08:00:00', 'White 3', 'U14G', '2', 'D1', '', 'P1', '', 'Area 1C', 'Bill Mahoney', 'Bruce Hancock', 'John Mass', '', 0, 1),
+(860, '2017AllStarExtraPlayoffs', 204, '2017-03-11', '08:00:00', 'White 4', 'U14G', '2', 'U1', '', 'B2', '', 'Area 1S', 'Arturo Ledezma', 'Pawan Agrawal', 'Steve Moss', '', 0, 1),
+(861, '2017AllStarExtraPlayoffs', 205, '2017-03-11', '08:00:00', 'Blue 2', 'U12G', '1', 'U1', '', 'P2', '', 'Area 1B', 'Aaron Whitham', 'Darrell Cowgill', 'Alex Villa', '', 0, 1),
+(862, '2017AllStarExtraPlayoffs', 206, '2017-03-11', '08:00:00', 'Blue 3', 'U12G', '1', 'C1', '', 'S1', '', 'Area 1P', 'Rebecca Weinreich', 'Jorge Reyes', 'David Thompson', '', 0, 1),
+(863, '2017AllStarExtraPlayoffs', 207, '2017-03-11', '08:00:00', 'Blue 4', 'U12G', '2', 'D1', '', 'P1', '', 'Area 1C', 'Steve Hawkins', 'Mark Hornish', 'Dave Jones', '', 0, 1),
+(864, '2017AllStarExtraPlayoffs', 208, '2017-03-11', '08:00:00', 'Blue 5', 'U12G', '2', 'U2', '', 'B1', '', 'Area 1D', 'Roberto Escala', 'Brian Jones', 'Michael Grosvenor', '', 0, 1),
+(865, '2017AllStarExtraPlayoffs', 209, '2017-03-11', '08:00:00', 'Green 3', 'U10G', '1', 'P2', '', 'U1', '', 'Area 1S', 'Spencer Dykstra', 'Craig Dykstra', 'Coby Cates', '', 0, 1),
+(866, '2017AllStarExtraPlayoffs', 210, '2017-03-11', '08:00:00', 'Yellow 1', 'U10G', '1', 'B1', '', 'C1', '', 'Area 1R', 'Byron McDermott', 'Mark Ozbun', 'Giovanny Cisneros', '', 0, 1),
+(867, '2017AllStarExtraPlayoffs', 211, '2017-03-11', '08:00:00', 'Yellow 2', 'U10G', '2', 'P1', '', 'U2', '', 'Area 1B', 'Chuy Acosta', 'Tony Koo', 'David Asada', '', 0, 1),
+(868, '2017AllStarExtraPlayoffs', 212, '2017-03-11', '08:00:00', 'Yellow 3', 'U10G', '2', 'S1', '', 'D1', '', 'Area 1P', 'George Wolfberg', 'Keith Fine', 'Cedric Penix', '', 0, 1),
+(869, '2017AllStarExtraPlayoffs', 213, '2017-03-11', '09:00:00', 'White 1', 'U14B', '1', 'D1', '', 'S1', '', 'Area 1U', 'Gil Barron', 'Dan White', 'Oscar Rodriguez', '', 0, 1),
+(870, '2017AllStarExtraPlayoffs', 214, '2017-03-11', '09:00:00', 'White 2', 'U14B', '1', 'U1', '', 'B2', '', 'Area 1D', 'Peter Lindborg', 'Jerry Johnson', 'Steve Resnick', '', 0, 1),
+(871, '2017AllStarExtraPlayoffs', 215, '2017-03-11', '09:00:00', 'White 3', 'U14B', '2', 'D2', '', 'B1', '', 'Area 1C', 'John Mass', 'Bill Mahoney', 'Bruce Hancock', '', 0, 1),
+(872, '2017AllStarExtraPlayoffs', 216, '2017-03-11', '09:00:00', 'White 4', 'U14B', '2', 'P1', '', 'C1', '', 'Area 1S', 'Pawan Agrawal', 'Coby Cates', 'Lisa Cates', '', 0, 1),
+(873, '2017AllStarExtraPlayoffs', 217, '2017-03-11', '09:00:00', 'Blue 2', 'U12B', '1', 'B1', '', 'C1', '', 'Area 1P', 'Jorge Reyes', 'David Thompson', 'Rebecca Weinreich', '', 0, 1),
+(874, '2017AllStarExtraPlayoffs', 218, '2017-03-11', '09:00:00', 'Blue 3', 'U12B', '1', 'P1', '', 'U2', '', 'Area 1B', 'Alex Villa', 'Darrell Cowgill', 'Aaron Whitham', '', 0, 1),
+(875, '2017AllStarExtraPlayoffs', 219, '2017-03-11', '09:00:00', 'Blue 4', 'U12B', '2', 'S1', '', 'D1', '', 'Area 1C', 'Dave Jones', 'Steve Hawkins', 'Mark Hornish', '', 0, 1),
+(876, '2017AllStarExtraPlayoffs', 220, '2017-03-11', '09:00:00', 'Blue 5', 'U12B', '2', 'P2', '', 'U1', '', 'Area 1D', 'Brian Jones', 'Roberto Escala', 'Michael Grosvenor', '', 0, 1),
+(877, '2017AllStarExtraPlayoffs', 221, '2017-03-11', '09:00:00', 'Green 3', 'U10B', '1', 'D2', '', 'C1', '', 'Area 1S', 'Craig Dykstra', 'Spencer Dykstra', 'Logan Dykstra', '', 0, 1),
+(878, '2017AllStarExtraPlayoffs', 222, '2017-03-11', '09:00:00', 'Yellow 1', 'U10B', '1', 'S1', '', 'B1', '', 'Area 1R', 'Byron McDermott', 'Mark Ozbun', 'Giovanny Cisneros', '', 0, 1),
+(879, '2017AllStarExtraPlayoffs', 223, '2017-03-11', '09:00:00', 'Yellow 2', 'U10B', '2', 'U1', '', 'C2', '', 'Area 1P', 'Nichole Wade', 'Andre Caesar', 'George Wolfberg', '', 0, 1),
+(880, '2017AllStarExtraPlayoffs', 224, '2017-03-11', '09:00:00', 'Yellow 3', 'U10B', '2', 'D1', '', 'P1', '', 'Area 1B', 'Sergio Gracia', 'Jerome Romero', 'Thomas Brambila', '', 0, 1),
+(881, '2017AllStarExtraPlayoffs', 225, '2017-03-11', '11:00:00', 'White 1', 'U14G', '1', 'B1', '', 'S1', '', 'Area 1U', 'Mars Ramage', 'Wesley Duque', 'Michael Ramage', '', 0, 1),
+(882, '2017AllStarExtraPlayoffs', 226, '2017-03-11', '11:00:00', 'White 2', 'U14G', '1', 'C1', '', 'P2', '', 'Area 1D', 'Jerry Johnson', 'Steve Resnick', 'Peter Lindborg', '', 0, 1),
+(883, '2017AllStarExtraPlayoffs', 227, '2017-03-11', '11:00:00', 'White 3', 'U14G', '2', 'P1', '', 'U1', '', 'Area 1C', 'Bruce Hancock', 'John Mass', 'Bill Mahoney', '', 0, 1),
+(884, '2017AllStarExtraPlayoffs', 228, '2017-03-11', '11:00:00', 'White 4', 'U14G', '2', 'B2', '', 'D1', '', 'Area 1S', 'Arturo Ledezma', 'Steve Moss', 'Pawan Agrawal', '', 0, 1),
+(885, '2017AllStarExtraPlayoffs', 229, '2017-03-11', '11:00:00', 'Blue 2', 'U12G', '1', 'P2', '', 'C1', '', 'Area 1B', 'Darrell Cowgill', 'Aaron Whitham', 'Alex Villa', '', 0, 1),
+(886, '2017AllStarExtraPlayoffs', 230, '2017-03-11', '11:00:00', 'Blue 3', 'U12G', '1', 'S1', '', 'U1', '', 'Area 1P', 'David Thompson', 'Jorge Reyes', 'Rebecca Weinreich', '', 0, 1),
+(887, '2017AllStarExtraPlayoffs', 231, '2017-03-11', '11:00:00', 'Blue 4', 'U12G', '2', 'P1', '', 'U2', '', 'Area 1D', 'Michael Grosvenor', 'Roberto Escala', 'Brian Jones', '', 0, 1),
+(888, '2017AllStarExtraPlayoffs', 232, '2017-03-11', '11:00:00', 'Blue 5', 'U12G', '2', 'B1', '', 'D1', '', 'Area 1C', 'Rolando Morales', 'Dave Jones', 'Steve Hawkins', '', 0, 1),
+(889, '2017AllStarExtraPlayoffs', 233, '2017-03-11', '11:00:00', 'Green 3', 'U10G', '1', 'U1', '', 'B1', '', 'Area 1S', 'Craig Dykstra', 'Spencer Dykstra', 'Coby Cates', '', 0, 1),
+(890, '2017AllStarExtraPlayoffs', 234, '2017-03-11', '11:00:00', 'Yellow 1', 'U10G', '1', 'C1', '', 'P2', '', 'Area 1R', 'Byron McDermott', 'Mark Ozbun', 'Tony Glover', '', 0, 1),
+(891, '2017AllStarExtraPlayoffs', 235, '2017-03-11', '11:00:00', 'Yellow 2', 'U10G', '2', 'U2', '', 'S1', '', 'Area 1P', 'Cedric Penix', 'Benji Grijalva', 'Keith Fine', '', 0, 1),
+(892, '2017AllStarExtraPlayoffs', 236, '2017-03-11', '11:00:00', 'Yellow 3', 'U10G', '2', 'D1', '', 'P1', '', 'Area 1B', 'Alfred Medina', 'Michael Raycraft', 'Aeby Perez', '', 0, 1),
+(893, '2017AllStarExtraPlayoffs', 237, '2017-03-11', '12:00:00', 'White 1', 'U14B', '1', 'S1', '', 'U1', '', 'Area 1B', 'Terris Wolff', 'Mike Sanchez', 'Joe Tabriski', '', 0, 1),
+(894, '2017AllStarExtraPlayoffs', 238, '2017-03-11', '12:00:00', 'White 2', 'U14B', '1', 'B2', '', 'D1', '', 'Area 1P', 'Rick Gates', 'Nichole Wade', 'Ari Kleiman', '', 0, 1),
+(895, '2017AllStarExtraPlayoffs', 239, '2017-03-11', '12:00:00', 'White 3', 'U14B', '2', 'B1', '', 'P1', '', 'Area 1C', 'Simon Yueh', 'Joel Matthiesen', 'Chuy Acosta', '', 0, 1),
+(896, '2017AllStarExtraPlayoffs', 240, '2017-03-11', '12:00:00', 'White 4', 'U14B', '2', 'C1', '', 'D2', '', 'Area 1F', 'Mike Cassidy', 'Todd Hays', 'Bill Louie', '', 0, 1),
+(897, '2017AllStarExtraPlayoffs', 241, '2017-03-11', '12:00:00', 'Blue 2', 'U12B', '1', 'C1', '', 'P1', '', 'Area 1S', 'Spencer Dykstra', 'Logan Dykstra', 'Craig Dykstra', '', 0, 1),
+(898, '2017AllStarExtraPlayoffs', 242, '2017-03-11', '12:00:00', 'Blue 3', 'U12B', '1', 'U2', '', 'B1', '', 'Area 1P', 'George Wolfberg', 'David Martin', 'Andre Caesar', '', 0, 1),
+(899, '2017AllStarExtraPlayoffs', 243, '2017-03-11', '12:00:00', 'Blue 4', 'U12B', '2', 'D1', '', 'P2', '', 'Area 1U', 'Oscar Covarrubias', 'Andy Cavazos', 'Jose Mata', '', 0, 1),
+(900, '2017AllStarExtraPlayoffs', 244, '2017-03-11', '12:00:00', 'Blue 5', 'U12B', '2', 'U1', '', 'S1', '', 'Area 1D', 'Andrew Lelchuk', 'Scott Jarus', 'Mark Clifford', '', 0, 1),
+(901, '2017AllStarExtraPlayoffs', 245, '2017-03-11', '12:00:00', 'Green 3', 'U10B', '1', 'C1', '', 'S1', '', 'Area 1U', 'Hugo Ferrel', 'Natasha Bernal', 'Hugo Ferrel', '', 0, 1),
+(902, '2017AllStarExtraPlayoffs', 246, '2017-03-11', '12:00:00', 'Yellow 1', 'U10B', '1', 'B1', '', 'D2', '', 'Area 1S', 'Coby Cates', 'Pawan Agrawal', 'Lisa Cates', '', 0, 1),
+(903, '2017AllStarExtraPlayoffs', 247, '2017-03-11', '12:00:00', 'Yellow 2', 'U10B', '2', 'C2', '', 'D1', '', 'Area 1B', 'Mark Howard', 'Sam Sousa', 'Laura Bachar', '', 0, 1),
+(904, '2017AllStarExtraPlayoffs', 248, '2017-03-11', '12:00:00', 'Yellow 3', 'U10B', '2', 'P1', '', 'U1', '', 'Area 1C', 'Scott Davis', 'Darius Simmons', 'Brian Bonham', '', 0, 1),
+(905, '2017AllStarExtraPlayoffs', 249, '2017-03-11', '14:00:00', 'White 1', 'U14G', '1', 'P2', '', 'S1', '', 'Area 1B', 'Joe Tabriski', 'Terris Wolff', 'Jody Kinsey', '', 0, 1),
+(906, '2017AllStarExtraPlayoffs', 250, '2017-03-11', '14:00:00', 'White 2', 'U14G', '1', 'B1', '', 'C1', '', 'Area 1P', 'Ari Kleiman', 'Rick Gates', 'Cedric Penix', '', 0, 1),
+(907, '2017AllStarExtraPlayoffs', 251, '2017-03-11', '14:00:00', 'White 3', 'U14G', '2', 'D1', '', 'U1', '', 'Area 1C', 'Joel Matthiesen', 'Ken McKelvey', 'Simon Yueh', '', 0, 1),
+(908, '2017AllStarExtraPlayoffs', 252, '2017-03-11', '14:00:00', 'White 4', 'U14G', '2', 'P1', '', 'B2', '', 'Area 1F', 'Todd Hays', 'Bill Louie', 'Mike Cassidy', '', 0, 1),
+(909, '2017AllStarExtraPlayoffs', 253, '2017-03-11', '14:00:00', 'Blue 2', 'U12G', '1', 'U1', '', 'C1', '', 'Area 1S', 'Craig Dykstra', 'Spencer Dykstra', 'Pawan Agrawal', '', 0, 1),
+(910, '2017AllStarExtraPlayoffs', 254, '2017-03-11', '14:00:00', 'Blue 3', 'U12G', '1', 'P2', '', 'S1', '', 'Area 1U', 'Anthony Martinez', 'Ulisses Olivares', 'Edgar Yep', '', 0, 1),
+(911, '2017AllStarExtraPlayoffs', 255, '2017-03-11', '14:00:00', 'Blue 4', 'U12G', '2', 'D1', '', 'U2', '', 'Area 1P', 'Benji Grijalva', 'Keith Fine', 'David Martin', '', 0, 1),
+(912, '2017AllStarExtraPlayoffs', 256, '2017-03-11', '14:00:00', 'Blue 5', 'U12G', '2', 'P1', '', 'B1', '', 'Area 1D', 'Byron Eguchi', 'Andrew Lelchuk', 'Scott Jarus', '', 0, 1),
+(913, '2017AllStarExtraPlayoffs', 257, '2017-03-11', '14:00:00', 'Green 3', 'U10G', '1', 'P2', '', 'B1', '', 'Area 1U', 'Carlo Cuento', 'Oscar Sesma', 'Dennis Lee', '', 0, 1),
+(914, '2017AllStarExtraPlayoffs', 258, '2017-03-11', '14:00:00', 'Yellow 1', 'U10G', '1', 'U1', '', 'C1', '', 'Area 1S', 'Arturo Ledezma', 'Coby Cates', 'Lisa Cates', '', 0, 1),
+(915, '2017AllStarExtraPlayoffs', 259, '2017-03-11', '14:00:00', 'Yellow 2', 'U10G', '2', 'P1', '', 'S1', '', 'Area 1B', 'Bruce Campbell', 'Nathaniel Nguyen', 'Sam Sousa', '', 0, 1),
+(916, '2017AllStarExtraPlayoffs', 260, '2017-03-11', '14:00:00', 'Yellow 3', 'U10G', '2', 'U2', '', 'D1', '', 'Area 1C', 'Brian Bonham', 'Scott Davis', 'Al Prado', '', 0, 1),
+(917, '2017AllStarExtraPlayoffs', 261, '2017-03-11', '15:00:00', 'White 1', 'U14B', '1', 'D1', '', 'U1', '', 'Area 1B', 'Tim Martinez', 'Ari Kleiman', 'Terris Wolff', '', 0, 1),
+(918, '2017AllStarExtraPlayoffs', 262, '2017-03-11', '15:00:00', 'White 2', 'U14B', '1', 'S1', '', 'B2', '', 'Area 1P', 'Darius Simmons', 'Nichole Wade', 'David Martin', '', 0, 1),
+(919, '2017AllStarExtraPlayoffs', 263, '2017-03-11', '15:00:00', 'White 3', 'U14B', '2', 'D2', '', 'P1', '', 'Area 1C', 'Ken McKelvey', 'Simon Yueh', 'Joel Matthiesen', '', 0, 1),
+(920, '2017AllStarExtraPlayoffs', 264, '2017-03-11', '15:00:00', 'White 4', 'U14B', '2', 'B1', '', 'C1', '', 'Area 1F', 'Todd Hays', 'Mike Cassidy', 'Abey Perez', '', 0, 1),
+(921, '2017AllStarExtraPlayoffs', 265, '2017-03-11', '15:00:00', 'Blue 2', 'U12B', '1', 'B1', '', 'P1', '', 'Area 1S', 'Pawan Agrawal', 'Craig Dykstra', 'Coby Cates', '', 0, 1),
+(922, '2017AllStarExtraPlayoffs', 266, '2017-03-11', '15:00:00', 'Blue 3', 'U12B', '1', 'C1', '', 'U2', '', 'Area 1D', 'Mark Clifford', 'Byron Eguchi', 'Andrew Lelchuk', '', 0, 1),
+(923, '2017AllStarExtraPlayoffs', 267, '2017-03-11', '15:00:00', 'Blue 4', 'U12B', '2', 'S1', '', 'P2', '', 'Area 1U', 'Gil Barron', 'Rey Acevado', 'Michael Raycraft', '', 0, 1),
+(924, '2017AllStarExtraPlayoffs', 268, '2017-03-11', '15:00:00', 'Blue 5', 'U12B', '2', 'D1', '', 'U1', '', 'Area 1N', 'Joe Howard', 'Rob Barnard', 'Naomi Caliva', '', 0, 1),
+(925, '2017AllStarExtraPlayoffs', 269, '2017-03-11', '15:00:00', 'Green 3', 'U10B', '1', 'D2', '', 'S1', '', 'Area 1U', 'OSCAR COVARRUBIAS', 'Victor Torres', 'Marla Torres', '', 0, 1),
+(926, '2017AllStarExtraPlayoffs', 270, '2017-03-11', '15:00:00', 'Yellow 1', 'U10B', '1', 'C1', '', 'B1', '', 'Area 1S', 'Spencer Dykstra', 'Coby Cates', 'Logan Dykstra', '', 0, 1),
+(927, '2017AllStarExtraPlayoffs', 271, '2017-03-11', '15:00:00', 'Yellow 2', 'U10B', '2', 'U1', '', 'D1', '', 'Area 1C', 'Al Prado', 'Brian Bonham', 'Scott Davis', '', 0, 1),
+(928, '2017AllStarExtraPlayoffs', 272, '2017-03-11', '15:00:00', 'Yellow 3', 'U10B', '2', 'C2', '', 'P1', '', 'Area 1B', 'Mark Howard', 'Laura Bachar', 'Barry', '', 0, 1),
+(929, '2017AllStarExtraPlayoffs', 273, '2017-03-12', '09:00:00', 'White 1', 'U14G', 'SF', 'C1 R88 Glendale/LaCresenta', '', 'P1 R1031 So. LA/Ladera', '', 'Area 1R', 'Todd Taylor', 'Dean Carmichael', 'Chris Smith', '', 1, 1),
+(930, '2017AllStarExtraPlayoffs', 274, '2017-03-12', '09:00:00', 'White 2', 'U14G', 'SF', 'B2 R67 Chino', '', 'S1 R808 Pahrump', '', 'Area 1C', 'Viggen Garibian', 'Scott Davis', 'Al Prado', '', 1, 1),
+(931, '2017AllStarExtraPlayoffs', 275, '2017-03-12', '09:00:00', 'Blue 2', 'U12G', 'SF', 'C1 R98 Temple City', '', 'D1 R18 Manhattan/Hermosa', '', 'Area 1U', 'Jose Alcaraz', 'Tom West', 'Mars Ramage', '', 1, 1),
+(932, '2017AllStarExtraPlayoffs', 276, '2017-03-12', '09:00:00', 'Blue 3', 'U12G', 'SF', 'P1 R1031 So. LA/Ladera', '', 'U1 R621 Walnut', '', 'Area 1B', 'Jon Ellis', 'Lyle Evans', 'Greg Olson', '', 1, 1),
+(933, '2017AllStarExtraPlayoffs', 277, '2017-03-12', '09:00:00', 'Green 1', 'U10G', 'SF', 'C1 R88 Glendale/LaCresenta', '', 'D1 R18 Manhattan/Hermosa', '', 'Area 1S', 'Craig Dykstra', 'Coby Cates', 'Spencer Dykstra', '', 1, 1),
+(934, '2017AllStarExtraPlayoffs', 278, '2017-03-12', '09:00:00', 'Yellow 1', 'U10G', 'SF', 'P1 R1031 So. LA/Ladera', '', 'U1 R112 Laverne/San Dimas', '', 'Area 1B', 'Phil Ockelmann', 'Mark Rookwood', 'Kiku Annon', '', 1, 1),
+(935, '2017AllStarExtraPlayoffs', 279, '2017-03-12', '11:00:00', 'White 1', 'U14B', 'SF', 'D1 R18 Manhattan/Hermosa', '', 'B1 R661 Phillips Ranch', '', 'Area 1S', 'Pawan Agrawal', 'Spencer Dykstra', 'Craig Dykstra', '', 1, 1),
+(936, '2017AllStarExtraPlayoffs', 280, '2017-03-12', '11:00:00', 'White 2', 'U14B', 'SF', 'P1 R1031 So. LA/Ladera', '', 'U1 R602 Covina', '', 'Area 1D', 'Brian Holt', 'Manny Murillo', 'Mark Rookwood', '', 1, 1),
+(937, '2017AllStarExtraPlayoffs', 281, '2017-03-12', '11:00:00', 'Blue 2', 'U12B', 'SF', 'P1 R1595 Watts', '', 'U1 R602 Covina', '', 'Area 1B', 'Lyle Evans', 'Greg Olson', 'Jon Ellis', '', 1, 1),
+(938, '2017AllStarExtraPlayoffs', 282, '2017-03-12', '11:00:00', 'Blue 3', 'U12B', 'SF', 'D1 R21 Hawthorne', '', 'C1 R13 Pasadena/Altadena', '', 'Area 1U', 'Matt Kooba', 'Richard Espinoza', 'Mike Fidone', '', 1, 1),
+(939, '2017AllStarExtraPlayoffs', 283, '2017-03-12', '11:00:00', 'Green 1', 'U10B', 'SF', 'C1 R13 Pasadena/Altadena', '', 'P1 R1031 So. LA/Ladera', '', 'Area 1U', 'Mars Ramage', 'Chris Smith', 'Dean Carmichael', '', 1, 1),
+(940, '2017AllStarExtraPlayoffs', 284, '2017-03-12', '11:00:00', 'Yellow 1', 'U10B', 'SF', 'D1 R18 Manhattan/Hermosa', '', 'B1 R779 Chino Hills', '', 'Area 1C', 'James May', 'Chuy Acosta', 'Dave Browning', '', 1, 1),
+(941, '2017AllStarExtraPlayoffs', 285, '2017-03-12', '13:00:00', 'White 1', 'U14G', 'FIN', 'C1 R88 Glendale/LaCresenta', '', 'S1 R808 Pahrump', '', 'Area 1P', 'Scott Karlan', 'Robert Osborne', 'Rick Gates', '', 1, 1),
+(942, '2017AllStarExtraPlayoffs', 286, '2017-03-12', '13:00:00', 'White 2', 'U14G', 'CON', 'P1 R1031 So. LA/Ladera', '', 'B2 R67 Chino', '', 'Area 1R', 'Jeff Johnson', 'Jay Kelly', 'Rob Cross', '', 1, 1),
+(943, '2017AllStarExtraPlayoffs', 287, '2017-03-12', '13:00:00', 'Blue 2', 'U12G', 'FIN', 'C1 R98 Temple City', '', 'P1 R1031 So. LA/Ladera', '', 'Area 1D', 'Kiku Annon', 'Bob Hayes', 'Brian Holt', '', 1, 1),
+(944, '2017AllStarExtraPlayoffs', 288, '2017-03-12', '13:00:00', 'Blue 3', 'U12G', 'CON', 'D1 R18 Manhattan/Hermosa', '', 'U1 R621 Walnut', '', 'Area 1B', 'Doug Murray', 'John Eddings', 'Steven Andresen', '', 1, 1),
+(945, '2017AllStarExtraPlayoffs', 289, '2017-03-12', '13:00:00', 'Green 1', 'U10G', 'FIN', 'D1 R18 Manhattan/Hermosa', '', 'P1 R1031 So. LA/Ladera', '', 'Area 1C', 'Chuy Acosta', 'James May', 'Al Prado', '', 1, 1),
+(946, '2017AllStarExtraPlayoffs', 290, '2017-03-12', '13:00:00', 'Yellow 1', 'U10G', 'CON', 'C1 R88 Glendale/LaCresenta', '', 'U1 R112 Laverne/San Dimas', '', 'Section 1', 'Sandee Wilson', 'Bob Foster', 'Craig Breitman', '', 1, 1),
+(947, '2017AllStarExtraPlayoffs', 291, '2017-03-12', '15:00:00', 'White 1', 'U14B', 'FIN', 'D1 R18 Manhattan/Hermosa', '', 'P1 R1031 So. LA/Ladera', '', 'Area 1C', 'Al Prado', 'James May', 'Chuy Acosta', '', 1, 1),
+(948, '2017AllStarExtraPlayoffs', 292, '2017-03-12', '15:00:00', 'White 2', 'U14B', 'CON', 'B1 R661 Phillips Ranch', '', 'U1 R602 Covina', '', 'Section 1', 'Roger Stevenson', 'Craig Breitman', 'Bob Foster', '', 1, 1),
+(949, '2017AllStarExtraPlayoffs', 293, '2017-03-12', '15:00:00', 'Blue 2', 'U12B', 'FIN', 'P1 R1595 Watts', '', 'C1 R13 Pasadena/Altadena', '', 'Area 1B', 'Steve Baker', 'Stephen Andresen', 'Anthony Flores', '', 1, 1),
+(950, '2017AllStarExtraPlayoffs', 294, '2017-03-12', '15:00:00', 'Blue 3', 'U12B', 'CON', 'U1 R602 Covina', '', 'D1 R21 Hawthorne', '', 'Area 1D', 'Bob Hayes', 'Kiku Annon', 'Larry Rosolowski', '', 1, 1),
+(951, '2017AllStarExtraPlayoffs', 295, '2017-03-12', '15:00:00', 'Green 1', 'U10B', 'FIN', 'P1 R1031 So. LA/Ladera', '', 'D1 R18 Manhattan/Hermosa', '', 'Area 1G', 'Jeff Johnson', 'Jay Kelly', 'Alfred Moore', '', 1, 1),
+(952, '2017AllStarExtraPlayoffs', 296, '2017-03-12', '15:00:00', 'Yellow 1', 'U10B', 'CON', 'C1 R13 Pasadena/Altadena', '', 'B1 R779 Chino Hills', '', 'Area 1P', 'Tony Robinson', 'Darius Simmons', 'Tom Andersen', '', 1, 1),
+(953, '2017AllStarExtraPlayoffs', 301, '2017-03-11', '09:00:00', 'Murphy 1', 'U14G', 'SF', 'E-1: U/215', '', 'W-2: F/6', '', 'Area 1R', 'Mark Weber', 'Fritz Rutan', 'Alfred Medina', '', 1, 1),
+(954, '2017AllStarExtraPlayoffs', 302, '2017-03-11', '09:00:00', 'Murphy 2', 'U14G', 'SF', 'W-1: F/10', '', 'E-2: G/32', '', 'Area 1P', 'Michael Feder', 'Tim Martinez', 'Scott Karlan', '', 1, 1),
+(955, '2017AllStarExtraPlayoffs', 303, '2017-03-11', '09:00:00', 'Blue 6', 'U12G', 'SF', 'E-1: R/47', '', 'W-2: D/34', '', 'Area 1F', 'Gary Ramaley', 'Alfredo Padilla', 'Kazz Uchino', '', 1, 1),
+(956, '2017AllStarExtraPlayoffs', 304, '2017-03-11', '09:00:00', 'Blue 1', 'U12G', 'SF', 'W-1: F/14', '', 'E-2: R/187', '', 'Area 1U', 'Steve Kennedy', 'Ron Van Orden', 'Jason Rosales', '', 1, 1),
+(957, '2017AllStarExtraPlayoffs', 305, '2017-03-11', '09:00:00', 'Green 1', 'U10G', 'SF', 'E-1: G/32', '', 'W-2: F/14', '', 'Area 1R', 'Luis Bueno', 'Refugio Mora', 'Chris Avina', '', 1, 1),
+(958, '2017AllStarExtraPlayoffs', 306, '2017-03-11', '09:00:00', 'Green 2', 'U10G', 'SF', 'W-1: F/10', '', 'E-2: N/50', '', 'Area 1D', 'Scott Jarus', 'Byron Eguchi', 'Mark Clifford', '', 1, 1),
+(959, '2017AllStarExtraPlayoffs', 307, '2017-03-11', '11:00:00', 'Murphy 1', 'U14B', 'SF', 'E-1: G/32', '', 'W-2: F/16', '', 'Area 1R', 'Al Prado', 'Gil Barron', 'Mark Weber', '', 1, 1),
+(960, '2017AllStarExtraPlayoffs', 308, '2017-03-11', '11:00:00', 'Murphy 2', 'U14B', 'SF', 'W-1: D/34', '', 'E-2: U/624', '', 'Area 1P', 'Tim Martinez', 'Scott Karlan', 'Michael Feder', '', 1, 1),
+(961, '2017AllStarExtraPlayoffs', 309, '2017-03-11', '11:00:00', 'Blue 6', 'U12B', 'SF', 'E-1: B/67', '', 'W-2: F/16', '', 'Area 1R', 'Silvano Cervantes', 'Rafael Martinez', 'Chris Avina', '', 1, 1),
+(962, '2017AllStarExtraPlayoffs', 310, '2017-03-11', '11:00:00', 'Blue 1', 'U12B', 'SF', 'W-1: F/10', '', 'E-2: G/65', '', 'Area 1U', 'Stacy Montgomery', 'Sergio Miranda', 'Jason Bradley', '', 1, 1),
+(963, '2017AllStarExtraPlayoffs', 311, '2017-03-11', '11:00:00', 'Green 1', 'U10B', 'SF', 'E-1: G/65', '', 'W-2: D/7', '', 'Area 1F', 'Kazz Uchino', 'Gary Ramaley', 'Alfredo Padilla', '', 1, 1),
+(964, '2017AllStarExtraPlayoffs', 312, '2017-03-11', '11:00:00', 'Green 2', 'U10B', 'SF', 'W-1: P/70', '', 'E-2: G/32', '', 'Area 1D', 'Scott Jarus', 'Mark Clifford', 'Byron Eguchi', '', 1, 1),
+(965, '2017AllStarExtraPlayoffs', 313, '2017-03-11', '13:00:00', 'Murphy 1', 'U14G', 'FIN', 'E-1 215 Rowland Heights', '', 'E-2 32 Upland', '', 'Area 1R', 'Ruben Nieto', 'Annesley Ignatius', 'Kazz Uchino', '', 1, 1),
+(966, '2017AllStarExtraPlayoffs', 314, '2017-03-11', '13:00:00', 'Murphy 2', 'U14G', 'CON', 'W-2 6 San Pedro', '', 'W-1 10 Palos Verdes', '', 'Area 1F', 'Gregg Ferguson', 'Doug Young', 'Alan Siegel', '', 1, 1),
+(967, '2017AllStarExtraPlayoffs', 315, '2017-03-11', '13:00:00', 'Blue 6', 'U12G', 'FIN', 'E-1 47 Riverside', '', 'W-1 14 West Torrance', '', 'Area 1N', 'Gabriel Dimas', 'John Togatorop', 'Noe Villalobos', '', 1, 1),
+(968, '2017AllStarExtraPlayoffs', 316, '2017-03-11', '13:00:00', 'Blue 1', 'U12G', 'CON', 'W-2 34 So. Redondo Beach', '', 'E-2 187 Moreno Valley', '', 'Area 1P', 'Bernard Markowitz', 'Jonny Joseph', 'Darius Simmons', '', 1, 1),
+(969, '2017AllStarExtraPlayoffs', 317, '2017-03-11', '13:00:00', 'Green 1', 'U10G', 'FIN', 'W-2 14 West Torrance', '', 'W-1 10 Palos Verdes', '', 'Area 1C', 'Mark Hornish', 'Rolando Morales', 'Mike Rosenberg', '', 1, 1),
+(970, '2017AllStarExtraPlayoffs', 318, '2017-03-11', '13:00:00', 'Green 2', 'U10G', 'CON', 'E-1 32 Upland', '', 'E-2 50 Redlands', '', 'Area 1U', 'Michael Raycraft', 'Alfred Zambrano', 'Nathan Thomas', '', 1, 1),
+(971, '2017AllStarExtraPlayoffs', 319, '2017-03-11', '15:00:00', 'Murphy 1', 'U14B', 'FIN', 'E-1 32 Upland', '', 'W-2 34 So. Redondo Beach', '', 'Area 1F', 'Doug Young', 'Gregg Ferguson', 'Alan Siegel', '', 1, 1),
+(972, '2017AllStarExtraPlayoffs', 320, '2017-03-11', '15:00:00', 'Murphy 2', 'U14B', 'CON', 'W-2 16 North Torrance', '', 'E-2 624 Walnut', '', 'Area 1R', 'Vince Garcia', 'Greg Hood', 'Ruben Nieto', '', 1, 1),
+(973, '2017AllStarExtraPlayoffs', 321, '2017-03-11', '15:00:00', 'Blue 6', 'U12B', 'FIN', 'W-2 16 North Torrance', '', 'E-2 65 Rancho Cucamonga', '', 'Area 1P', 'Jonny Joseph', 'Bernard Markowitz', 'Tom Andersen', '', 1, 1),
+(974, '2017AllStarExtraPlayoffs', 322, '2017-03-11', '15:00:00', 'Blue 1', 'U12B', 'CON', 'E-1 67 Chino', '', 'W-1 10 Palos Verdes', '', 'Area 1P', 'Michael Feder', 'Andre Caesar', 'Rick Gates', '', 1, 1),
+(975, '2017AllStarExtraPlayoffs', 323, '2017-03-11', '15:00:00', 'Green 1', 'U10B', 'FIN', 'W-2 7 Westchester', '', 'E-2 32 Upland', '', 'Area 1U', 'Mars Ramage', 'Bill Louie', 'Michael Ramage', '', 1, 1),
+(976, '2017AllStarExtraPlayoffs', 324, '2017-03-11', '15:00:00', 'Green 2', 'U10B', 'CON', 'E-1 65 Rancho Cucamonga', '', 'W-1 70 West LA', '', 'Area 1C', 'Mike Rosenberg', 'Chuy Acosta', 'Rolando Morales', '', 1, 1),
+(977, '2017AllStarExtraPlayoffs', 325, '2017-03-12', '09:00:00', 'White 3', 'U13G', 'SF', 'E-1: R/187', '', 'W-2: C/2', '', 'Section 1', 'Bob Foster', 'Craig Breitman', 'Roger Stevenson', '', 1, 1),
+(978, '2017AllStarExtraPlayoffs', 326, '2017-03-12', '09:00:00', 'White 4', 'U13G', 'SF', 'W-1: F/16', '', 'E-2: U/112', '', 'Area 1G', 'Lealon Watts', 'Michael Hays', 'Aaron Liefveld', '', 1, 1),
+(979, '2017AllStarExtraPlayoffs', 327, '2017-03-12', '09:00:00', 'Blue 4', 'U11G', 'SF', 'E-1: R/820', '', 'W-2: F/14', '', 'Area 1D', 'Larry Rosolowski', 'Brian Holt', 'Bob Hayes', '', 1, 1),
+(980, '2017AllStarExtraPlayoffs', 328, '2017-03-12', '09:00:00', 'Blue 5', 'U11G', 'SF', 'W-1: C/13', '', 'E-2: R/820', '', 'Area 1F', 'Joe Tabrisky', 'Todd Hays', 'Fred Nayebi', '', 1, 1);
 INSERT INTO `rs_games` (`id`, `projectKey`, `game_number`, `date`, `time`, `field`, `division`, `pool`, `home`, `home_team`, `away`, `away_team`, `assignor`, `cr`, `ar1`, `ar2`, `r4th`, `medalRound`, `locked`) VALUES
-(978, '2017AllStarExtraPlayoffs', 326, '0003-12-17', '09:00:00', 'White 4', 'U13G', 'SF', 'W-1: F/16', '', 'E-2: U/112', '', 'Area 1G', 'Lealon Watts', 'Michael Hays', 'Aaron Liefveld', '', 1, 1),
-(979, '2017AllStarExtraPlayoffs', 327, '0003-12-17', '09:00:00', 'Blue 4', 'U11G', 'SF', 'E-1: U/112', '', 'W-2: F/14', '', 'Area 1D', 'Larry Rosolowski', 'Brian Holt', 'Bob Hayes', '', 1, 1),
-(980, '2017AllStarExtraPlayoffs', 328, '0003-12-17', '09:00:00', 'Blue 5', 'U11G', 'SF', 'W-1: C/13', '', 'E-2: R/820', '', 'Area 1F', 'Joe Tabrisky', 'Todd Hays', 'Fred Nayebi', '', 1, 1),
-(981, '2017AllStarExtraPlayoffs', 329, '0003-12-17', '09:00:00', 'Green 3', 'U09G', 'SF', 'E-1: R/820', '', 'W-2: F/6', '', 'Area 1P', 'Rebecca Weinreich', 'Barry Moser', 'Tony Robinson', '', 1, 1),
-(982, '2017AllStarExtraPlayoffs', 330, '0003-12-17', '09:00:00', 'Yellow 3', 'U09G', 'SF', 'W-1: P/20', '', 'E-2: R/187', '', 'Area 1B', 'Doug Murray', 'Juan Espinoza', 'Mike Ford', '', 1, 1),
-(983, '2017AllStarExtraPlayoffs', 331, '0003-12-17', '11:00:00', 'White 3', 'U13B', 'SF', 'E-1: B/779', '', 'W-2: P/19', '', 'Section 1', 'Craig Breitman', 'Sandee Wilson', 'Roger Stevenson', '', 1, 1),
-(984, '2017AllStarExtraPlayoffs', 332, '0003-12-17', '11:00:00', 'White 4', 'U13B', 'SF', 'W-1: F/10', '', 'E-2: U/624', '', 'Area 1G', 'Michael Hays', 'Aaron Liefveld', 'Lealon Watts', '', 1, 1),
-(985, '2017AllStarExtraPlayoffs', 333, '0003-12-17', '11:00:00', 'Blue 4', 'U11B', 'SF', 'E-1: R/820', '', 'W-2: C/214', '', 'Area 1F', 'Todd Hays', 'Joe Tabrisky', 'James Lee', '', 1, 1),
-(986, '2017AllStarExtraPlayoffs', 334, '0003-12-17', '11:00:00', 'Blue 5', 'U11B', 'SF', 'W-1: F/6', '', 'E-2: R/462', '', 'Area 1D', 'Bob Hayes', 'Phil Ockelmann', 'Larry Rosolowski', '', 1, 1),
-(987, '2017AllStarExtraPlayoffs', 335, '0003-12-17', '11:00:00', 'Green 3', 'U09B', 'SF', 'E-1: R/187', '', 'W-2: C/214', '', 'Area 1P', 'Robert Osborne', 'Andre Caesar', 'Rebecca Weinreich', '', 1, 1),
-(988, '2017AllStarExtraPlayoffs', 336, '0003-12-17', '11:00:00', 'Yellow 3', 'U09B', 'SF', 'W-1: F/10', '', 'W-3: D/34', '', 'Area 1B', 'John Eddings', 'Jorin Andresen', 'Jorin Andresen', '', 1, 1),
-(989, '2017AllStarExtraPlayoffs', 337, '0003-12-17', '13:00:00', 'White 3', 'U13G', 'FIN', 'W-2: C/2', '', 'W-1: F/16', '', 'Area 1G', 'Don Nelson', 'Jeff Johnson', 'Marvin Sundstrom', '', 1, 1),
-(990, '2017AllStarExtraPlayoffs', 338, '0003-12-17', '13:00:00', 'White 4', 'U13G', 'CON', 'E-1: R/187', '', 'E-2: U/112', '', 'Area 1D', 'Manny Murillo', 'Mark Rookwood', 'Cedric Penix', '', 1, 1),
-(991, '2017AllStarExtraPlayoffs', 339, '0003-12-17', '13:00:00', 'Blue 4', 'U11G', 'FIN', 'W-2: F/14', '', 'W-1: C/13', '', 'Area 1G', 'Steven Caro', 'Eric Bernier', 'Moe Alami', '', 1, 1),
-(992, '2017AllStarExtraPlayoffs', 340, '0003-12-17', '13:00:00', 'Blue 5', 'U11G', 'CON', 'E-1: U/112', '', 'E-2: R/820', '', 'Area 1P', 'Tony Robinson', 'Darius Simmons', 'Barry Moser', '', 1, 1),
-(993, '2017AllStarExtraPlayoffs', 341, '0003-12-17', '13:00:00', 'Green 3', 'U09G', 'FIN', 'W-2: F/6', '', 'W-1: P/20', '', 'Area 1C', 'Dave Browning', 'Tom Cornwell', 'Yan Zhou', '', 1, 1),
-(994, '2017AllStarExtraPlayoffs', 342, '0003-12-17', '13:00:00', 'Yellow 3', 'U09G', 'CON', 'E-1: R/820', '', 'E-2: R/187', '', 'Area 1G', 'Misael Ramos', 'Ana Bernier', 'Joe Bernier', '', 1, 1),
-(995, '2017AllStarExtraPlayoffs', 343, '0003-12-17', '15:00:00', 'White 3', 'U13B', 'FIN', 'E-1: B/779', '', 'W-1: F/10', '', 'Area 1G', 'Marvin Sundstrom', 'Mars Ramage', 'Jeff Johnston', '', 1, 1),
-(996, '2017AllStarExtraPlayoffs', 344, '0003-12-17', '15:00:00', 'White 4', 'U13B', 'CON', 'W-2: P/19', '', 'E-2: U/624', '', 'Area 1D', 'Brian Holt', 'Rudolph Charles', 'Manny Murillo', '', 1, 1),
-(997, '2017AllStarExtraPlayoffs', 345, '0003-12-17', '15:00:00', 'Blue 4', 'U11B', 'FIN', 'W-2: C/214', '', 'W-1: F/6', '', 'Area 1P', 'Rick Gates', 'Robert Osborne', 'Scott Karlan', '', 1, 1),
-(998, '2017AllStarExtraPlayoffs', 346, '0003-12-17', '15:00:00', 'Blue 5', 'U11B', 'CON', 'E-1: R/820', '', 'E-2: R/462', '', 'Area 1G', 'Moe Alami', 'Steven Caro', 'Eric Bernier', '', 1, 1),
-(999, '2017AllStarExtraPlayoffs', 347, '0003-12-17', '15:00:00', 'Green 3', 'U09B', 'FIN', 'W-2: C/214', '', 'W-1: F/10', '', 'Area 1G', 'Joe Bernier', 'Lyle Evans', 'Misael Ramos', '', 1, 1),
-(1000, '2017AllStarExtraPlayoffs', 348, '0003-12-17', '15:00:00', 'Yellow 3', 'U09B', 'CON', 'E-1: R/187', '', 'W-3: D/34', '', 'Area 1C', 'Yan Zhou', 'Dave Browning', 'Tom Cornwell', '', 1, 1);
+(981, '2017AllStarExtraPlayoffs', 329, '2017-03-12', '09:00:00', 'Green 3', 'U09G', 'SF', 'E-1: R/820', '', 'W-2: F/6', '', 'Area 1P', 'Rebecca Weinreich', 'Barry Moser', 'Tony Robinson', '', 1, 1),
+(982, '2017AllStarExtraPlayoffs', 330, '2017-03-12', '09:00:00', 'Yellow 3', 'U09G', 'SF', 'W-1: P/20', '', 'E-2: R/187', '', 'Area 1B', 'Doug Murray', 'Juan Espinoza', 'Mike Ford', '', 1, 1),
+(983, '2017AllStarExtraPlayoffs', 331, '2017-03-12', '11:00:00', 'White 3', 'U13B', 'SF', 'E-1: B/779', '', 'W-2: P/19', '', 'Section 1', 'Craig Breitman', 'Sandee Wilson', 'Roger Stevenson', '', 1, 1),
+(984, '2017AllStarExtraPlayoffs', 332, '2017-03-12', '11:00:00', 'White 4', 'U13B', 'SF', 'W-1: F/10', '', 'E-2: U/624', '', 'Area 1G', 'Michael Hays', 'Aaron Liefveld', 'Lealon Watts', '', 1, 1),
+(985, '2017AllStarExtraPlayoffs', 333, '2017-03-12', '11:00:00', 'Blue 4', 'U11B', 'SF', 'E-1: R/820', '', 'W-2: C/214', '', 'Area 1F', 'Todd Hays', 'Joe Tabrisky', 'James Lee', '', 1, 1),
+(986, '2017AllStarExtraPlayoffs', 334, '2017-03-12', '11:00:00', 'Blue 5', 'U11B', 'SF', 'W-1: F/6', '', 'E-2: R/462', '', 'Area 1D', 'Bob Hayes', 'Phil Ockelmann', 'Larry Rosolowski', '', 1, 1),
+(987, '2017AllStarExtraPlayoffs', 335, '2017-03-12', '11:00:00', 'Green 3', 'U09B', 'SF', 'E-1: R/188', '', 'W-2: C/214', '', 'Area 1P', 'Robert Osborne', 'Andre Caesar', 'Rebecca Weinreich', '', 1, 1),
+(988, '2017AllStarExtraPlayoffs', 336, '2017-03-12', '11:00:00', 'Yellow 3', 'U09B', 'SF', 'W-1: F/10', '', 'W-3: D/34', '', 'Area 1B', 'John Eddings', 'Jorin Andresen', 'Jorin Andresen', '', 1, 1),
+(989, '2017AllStarExtraPlayoffs', 337, '2017-03-12', '13:00:00', 'White 3', 'U13G', 'FIN', 'W-2: C/2', '', 'W-1: F/16', '', 'Area 1G', 'Don Nelson', 'Jeff Johnson', 'Marvin Sundstrom', '', 1, 1),
+(990, '2017AllStarExtraPlayoffs', 338, '2017-03-12', '13:00:00', 'White 4', 'U13G', 'CON', 'E-1: R/187', '', 'E-2: U/112', '', 'Area 1D', 'Manny Murillo', 'Mark Rookwood', 'Cedric Penix', '', 1, 1),
+(991, '2017AllStarExtraPlayoffs', 339, '2017-03-12', '13:00:00', 'Blue 4', 'U11G', 'FIN', 'W-2: F/14', '', 'W-1: C/13', '', 'Area 1G', 'Steven Cano', 'Eric Bernier', 'Moe Alami', '', 1, 1),
+(992, '2017AllStarExtraPlayoffs', 340, '2017-03-12', '13:00:00', 'Blue 5', 'U11G', 'CON', 'E-1: R/820', '', 'E-2: R/820', '', 'Area 1P', 'Tony Robinson', 'Darius Simmons', 'Barry Moser', '', 1, 1),
+(993, '2017AllStarExtraPlayoffs', 341, '2017-03-12', '13:00:00', 'Green 3', 'U09G', 'FIN', 'W-2: F/6', '', 'W-1: P/20', '', 'Area 1C', 'Dave Browning', 'Tom Cornwell', 'Yan Zhou', '', 1, 1),
+(994, '2017AllStarExtraPlayoffs', 342, '2017-03-12', '13:00:00', 'Yellow 3', 'U09G', 'CON', 'E-1: R/820', '', 'E-2: R/187', '', 'Area 1G', 'Misael Ramos', 'Ana Bernier', 'Joe Bernier', '', 1, 1),
+(995, '2017AllStarExtraPlayoffs', 343, '2017-03-12', '15:00:00', 'White 3', 'U13B', 'FIN', 'E-1: B/779', '', 'W-1: F/10', '', 'Area 1G', 'Marvin Sundstrom', 'Mars Ramage', 'Jeff Johnston', '', 1, 1),
+(996, '2017AllStarExtraPlayoffs', 344, '2017-03-12', '15:00:00', 'White 4', 'U13B', 'CON', 'W-2: P/19', '', 'E-2: U/624', '', 'Area 1D', 'Brian Holt', 'Rudolph Charles', 'Manny Murillo', '', 1, 1),
+(997, '2017AllStarExtraPlayoffs', 345, '2017-03-12', '15:00:00', 'Blue 4', 'U11B', 'FIN', 'W-2: C/214', '', 'W-1: F/6', '', 'Area 1P', 'Rick Gates', 'Robert Osborne', 'Scott Karlan', '', 1, 1),
+(998, '2017AllStarExtraPlayoffs', 346, '2017-03-12', '15:00:00', 'Blue 5', 'U11B', 'CON', 'E-1: R/820', '', 'E-2: R/462', '', 'Area 1G', 'Moe Alami', 'Steven Caro', 'Eric Bernier', '', 1, 1),
+(999, '2017AllStarExtraPlayoffs', 347, '2017-03-12', '15:00:00', 'Green 3', 'U09B', 'FIN', 'W-2: C/214', '', 'W-1: F/10', '', 'Area 1G', 'Joe Bernier', 'Lyle Evans', 'Misael Ramos', '', 1, 1),
+(1000, '2017AllStarExtraPlayoffs', 348, '2017-03-12', '15:00:00', 'Yellow 3', 'U09B', 'CON', 'E-1: R/188', '', 'W-3: D/34', '', 'Area 1C', 'Yan Zhou', 'Dave Browning', 'Tom Cornwell', '', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1050,13 +1050,14 @@ INSERT INTO `rs_games` (`id`, `projectKey`, `game_number`, `date`, `time`, `fiel
 -- Table structure for table `rs_limits`
 --
 
-DROP TABLE IF EXISTS `rs_limits`;
-CREATE TABLE `rs_limits` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `rs_limits` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `projectKey` varchar(45) NOT NULL,
   `division` varchar(10) NOT NULL,
-  `limit` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `limit` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
 
 --
 -- Truncate table before insert `rs_limits`
@@ -1111,13 +1112,13 @@ INSERT INTO `rs_limits` (`id`, `projectKey`, `division`, `limit`) VALUES
 -- Table structure for table `rs_log`
 --
 
-DROP TABLE IF EXISTS `rs_log`;
-CREATE TABLE `rs_log` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `rs_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `timestamp` datetime NOT NULL,
   `projectKey` varchar(45) CHARACTER SET utf8 NOT NULL,
-  `note` varchar(1024) CHARACTER SET utf8 NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `note` varchar(1024) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5638 DEFAULT CHARSET=latin1;
 
 --
 -- Truncate table before insert `rs_log`
@@ -6745,12 +6746,12 @@ INSERT INTO `rs_log` (`id`, `timestamp`, `projectKey`, `note`) VALUES
 -- Table structure for table `rs_messages`
 --
 
-DROP TABLE IF EXISTS `rs_messages`;
-CREATE TABLE `rs_messages` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `rs_messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `message` varchar(4096) CHARACTER SET utf8 DEFAULT NULL,
-  `enabled` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `enabled` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Truncate table before insert `rs_messages`
@@ -6762,10 +6763,10 @@ TRUNCATE TABLE `rs_messages`;
 --
 
 INSERT INTO `rs_messages` (`id`, `message`, `enabled`) VALUES
-(2, '<h2>Rest easy...there are no events available to schedule.</h2><h2>Go referee some games yourself.</h2>', 1),
+(2, '<h2>Rest easy...there are no events available to schedule.</h2><h2>Go referee some games yourself.</h2>', 0),
 (3, '<h2 style=\"color:red\"><strong><em>26 Jan Update: &nbsp;Columbia Park is closed this weekend due to rains this week<br>\n\nExtra Playoffs will be rescheduled</em></strong></h2>\n\n<div style=\"width: 60%; margin: 0px auto; text-align:justify\">\n<h5>We received notification this morning that, as a result of last week’s unprecedented rainfall, the City of Torrance has closed all the fields at Columbia Park for this weekend. Unfortunately, the EXTRA Playoff matches scheduled for Saturday and Sunday are cancelled.&nbsp;</h5>\n<h5>Please thank your Referees for their service and let them know they are released from their assignments this weekend.</hr> \n<h5>We anticipate rescheduling the games for a later date and will notify the Area Referee Administrators when fields are confirmed.</h5>\n</div>', 0),
 (4, '<h2 style=\"color:red\"><strong><em>26 Jan Update: &nbsp;Columbia Park is closed this weekend due to rains this week<br>\n\nExtra Playoffs have been rescheduled</em></strong></h2>\n\n<div style=\"width: 60%; margin: 0px auto; text-align:justify\">\n<h5>We received notification this morning that, as a result of last week’s unprecedented rainfall, the City of Torrance has closed all the fields at Columbia Park for this weekend. Unfortunately, the EXTRA Playoff matches scheduled for Saturday and Sunday are cancelled.&nbsp;</h5>\n<h5>Please thank your Referees for their service and let them know they are released from their assignments this weekend.</hr> \n<h5>The EXTRA PLAYOFFS have been rescheduled for the weekend of March 11 & 12 at Ab Brown in Riverside.  Updated match schedules & assignments will be posted when available.</h5>\n</div>', 0),
-(5, '<div style=\"width: 60%; margin: 0px auto; text-align:justify\">\n<h5>Area Assignors, watch your email for your assignments at the Section 1 League Playoffs (25-26 Feb).</h5>\n<h5>All-Star/Extra Playoffs coming up 11-12 Mar.\n</div>', 0);
+(5, '<div style=\"width: 60%; margin: 0px auto; text-align:justify\">\n<h5>Area Assignors, watch your email for your assignments at the Section 1 League Playoffs (25-26 Feb).</h5>\n<h5>All-Star/Extra Playoffs coming up 11-12 Mar.\n</div>', 1);
 
 -- --------------------------------------------------------
 
@@ -6773,15 +6774,16 @@ INSERT INTO `rs_messages` (`id`, `message`, `enabled`) VALUES
 -- Table structure for table `rs_users`
 --
 
-DROP TABLE IF EXISTS `rs_users`;
-CREATE TABLE `rs_users` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `rs_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` char(255) NOT NULL,
   `enabled` tinyint(1) DEFAULT '1',
   `for_events` varchar(1024) DEFAULT NULL,
   `hash` varchar(255) DEFAULT NULL,
-  `admin` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `admin` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 --
 -- Truncate table before insert `rs_users`
@@ -6793,108 +6795,23 @@ TRUNCATE TABLE `rs_users`;
 --
 
 INSERT INTO `rs_users` (`id`, `name`, `enabled`, `for_events`, `hash`, `admin`) VALUES
-(1, 'Area 1B', 1, 'a:0:{}', '$2y$10$NeD02z/uz8u8JtyJR/58jeFVWCiU94wytH5E76J5y8NPpZMZvimz2', 0),
-(2, 'Area 1C', 1, 'a:0:{}', '$2y$10$UzypGyBnLT4uzuu/k0Uz.uTwF08Kujp25Xeb24sQzKskFUwCtpH0O', 0),
-(3, 'Area 1D', 1, 'a:0:{}', '$2y$10$fQUU95kCwpkpXIh000JzzumMm2E4nWlp0yNbLU11iSdcufkXg0ChW', 0),
-(4, 'Area 1F', 1, 'a:0:{}', '$2y$10$IJWFZbu3I1l5Kt2FK7mElO2qWFnG4QZfHS5PfWvaw1y/rS59SSOyK', 0),
-(5, 'Area 1G', 1, 'a:0:{}', '$2y$10$kzZfLJ1Ls/ey1VFa62oF5u2SZihG.WnvPUcxUQKIGyf/Gfqwd5awu', 0),
-(6, 'Area 1H', 1, 'a:0:{}', '$2y$10$KzL4b5PRwkulH16spHhOZu2FvXwTQSA7KDHGF.C3xhL5ZBV6WOyGO', 0),
-(7, 'Area 1N', 1, 'a:0:{}', '$2y$10$aSaw9HfijsbzKaAGzJrsv.2f6K5LyFpkD9j9EhzYH2aLzbKQVzqVy', 0),
-(8, 'Area 1P', 1, 'a:0:{}', '$2y$10$Je3X6j5s1lVG6RYMjF1QYOXsP.BApCv98segZNl4UuiB0dHVQk3cq', 0),
-(9, 'Area 1R', 1, 'a:0:{}', '$2y$10$f6kXD2d16RnbT2VYnAeHj..BYGXD0aN7KnCGrH6hq0uBlASJF4cWm', 0),
-(10, 'Area 1S', 1, 'a:0:{}', '$2y$10$.zmtRAh1yycyTv4a4RTHHOoEwXb516Z3owUOyHmxZIQZxM1KtnVY.', 0),
-(11, 'Area 1U', 1, 'a:0:{}', '$2y$10$9pzmAR4RwkOO0Xsc2/SyHuwiY60JDcI5V74pRJZfokSXhu6tlmgJ.', 0),
-(12, 'Section 1', 1, 'a:1:{i:0;s:7:\"2017WSC\";}', '$2y$10$7oDf8IsOAQ93erpZU0ICV.u8yp2MyT0QqvXS/KcNOyN4.Ww7BQuuy', 0),
+(1, 'Area 1B', 0, 'a:1:{i:0;s:24:\"2017AllStarExtraPlayoffs\";}', '$2y$10$NeD02z/uz8u8JtyJR/58jeFVWCiU94wytH5E76J5y8NPpZMZvimz2', 0),
+(2, 'Area 1C', 0, 'a:1:{i:0;s:24:\"2017AllStarExtraPlayoffs\";}', '$2y$10$UzypGyBnLT4uzuu/k0Uz.uTwF08Kujp25Xeb24sQzKskFUwCtpH0O', 0),
+(3, 'Area 1D', 0, 'a:1:{i:0;s:24:\"2017AllStarExtraPlayoffs\";}', '$2y$10$fQUU95kCwpkpXIh000JzzumMm2E4nWlp0yNbLU11iSdcufkXg0ChW', 0),
+(4, 'Area 1F', 0, 'a:1:{i:0;s:24:\"2017AllStarExtraPlayoffs\";}', '$2y$10$IJWFZbu3I1l5Kt2FK7mElO2qWFnG4QZfHS5PfWvaw1y/rS59SSOyK', 0),
+(5, 'Area 1G', 0, 'a:1:{i:0;s:24:\"2017AllStarExtraPlayoffs\";}', '$2y$10$kzZfLJ1Ls/ey1VFa62oF5u2SZihG.WnvPUcxUQKIGyf/Gfqwd5awu', 0),
+(6, 'Area 1H', 0, 'a:1:{i:0;s:24:\"2017AllStarExtraPlayoffs\";}', '$2y$10$KzL4b5PRwkulH16spHhOZu2FvXwTQSA7KDHGF.C3xhL5ZBV6WOyGO', 0),
+(7, 'Area 1N', 0, 'a:1:{i:0;s:24:\"2017AllStarExtraPlayoffs\";}', '$2y$10$aSaw9HfijsbzKaAGzJrsv.2f6K5LyFpkD9j9EhzYH2aLzbKQVzqVy', 0),
+(8, 'Area 1P', 0, 'a:1:{i:0;s:24:\"2017AllStarExtraPlayoffs\";}', '$2y$10$Je3X6j5s1lVG6RYMjF1QYOXsP.BApCv98segZNl4UuiB0dHVQk3cq', 0),
+(9, 'Area 1R', 0, 'a:1:{i:0;s:24:\"2017AllStarExtraPlayoffs\";}', '$2y$10$f6kXD2d16RnbT2VYnAeHj..BYGXD0aN7KnCGrH6hq0uBlASJF4cWm', 0),
+(10, 'Area 1S', 0, 'a:1:{i:0;s:24:\"2017AllStarExtraPlayoffs\";}', '$2y$10$.zmtRAh1yycyTv4a4RTHHOoEwXb516Z3owUOyHmxZIQZxM1KtnVY.', 0),
+(11, 'Area 1U', 0, 'a:1:{i:0;s:24:\"2017AllStarExtraPlayoffs\";}', '$2y$10$9pzmAR4RwkOO0Xsc2/SyHuwiY60JDcI5V74pRJZfokSXhu6tlmgJ.', 0),
+(12, 'Section 1', 1, 'a:2:{i:0;s:24:\"2017AllStarExtraPlayoffs\";i:1;s:7:\"2017WSC\";}', '$2y$10$7oDf8IsOAQ93erpZU0ICV.u8yp2MyT0QqvXS/KcNOyN4.Ww7BQuuy', 0),
 (13, 'Section 2', 1, 'a:1:{i:0;s:7:\"2017WSC\";}', '$2y$10$lQoq3elPgWWmV9NW4MZIduv53oiRF366lZb2icbqgh53KQaHkXdWS', 0),
 (14, 'Section 10', 1, 'a:1:{i:0;s:7:\"2017WSC\";}', '$2y$10$bcIPQntM.Hhn7NKEAkQ2pe2ZX97JQX118xMzCoReVAlasiIvm7Or2', 0),
 (15, 'Section 11', 1, 'a:1:{i:0;s:7:\"2017WSC\";}', '$2y$10$FhJAsQoJMkhYGObrTwYa1.Yq30wHrMrKJWzsfq2MvdY6RKsWPJSTW', 0),
 (16, 'Section 1 Admin', 1, 'a:3:{i:0;s:18:\"2017LeaguePlayoffs\";i:1;s:24:\"2017AllStarExtraPlayoffs\";i:2;s:7:\"2017WSC\";}', '$2y$10$nNfSphBpJ/kloMiB6tChi.VOUcjjqQjRkskpifvcR6SQE4oBQWvCe', 1),
 (17, 'Admin', 0, 'a:4:{i:0;s:15:\"2016U16U19Chino\";i:1;s:18:\"2017LeaguePlayoffs\";i:2;s:24:\"2017AllStarExtraPlayoffs\";i:3;s:7:\"2017WSC\";}', '$2y$10$rkMqCQHA1V9hM1aKmiOttewOc7Sk6nBWmWnir5oXJtlP.KIDXNYFu', 1);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `rs_ajax_example`
---
-ALTER TABLE `rs_ajax_example`
-  ADD PRIMARY KEY (`name`);
-
---
--- Indexes for table `rs_events`
---
-ALTER TABLE `rs_events`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_UNIQUE` (`id`);
-
---
--- Indexes for table `rs_games`
---
-ALTER TABLE `rs_games`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_UNIQUE` (`id`);
-
---
--- Indexes for table `rs_limits`
---
-ALTER TABLE `rs_limits`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_UNIQUE` (`id`);
-
---
--- Indexes for table `rs_log`
---
-ALTER TABLE `rs_log`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `rs_messages`
---
-ALTER TABLE `rs_messages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `rs_users`
---
-ALTER TABLE `rs_users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_UNIQUE` (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `rs_events`
---
-ALTER TABLE `rs_events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
---
--- AUTO_INCREMENT for table `rs_games`
---
-ALTER TABLE `rs_games`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1001;
---
--- AUTO_INCREMENT for table `rs_limits`
---
-ALTER TABLE `rs_limits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
---
--- AUTO_INCREMENT for table `rs_log`
---
-ALTER TABLE `rs_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5638;
---
--- AUTO_INCREMENT for table `rs_messages`
---
-ALTER TABLE `rs_messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT for table `rs_users`
---
-ALTER TABLE `rs_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

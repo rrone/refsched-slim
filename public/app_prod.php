@@ -16,6 +16,14 @@ session_start();
 $settings = require PROJECT_ROOT . '/app/settings.php';
 
 $settings['debug'] = false;
+
+if ($_SERVER['HTTPS'] == 'on') {
+    $settings['settings']['env_uri'] = 'https://';
+} else {
+    $settings['settings']['env_uri'] = 'http://';
+}
+$settings['settings']['env_uri'] .= $_SERVER['SERVER_NAME'] . '/refsched/public/';
+
 ini_set("display_errors", 0);
 ini_set("log_errors", 1);
 

@@ -29,7 +29,7 @@ class SchedEditRefDBController extends AbstractController
         $target_game = $sr->gameIdToGameNumber($game_id);
         $game = $sr->getGameByKeyAndNumber($this->event->projectKey, $target_game);
 
-        if($game->locked){
+        if($game->locked && !$this->user->admin){
             return $response->withRedirect($this->getBaseURL('refsPath'));
         }
 

@@ -12,6 +12,9 @@ $container['view'] = function (\Slim\Container $c) {
     $settings = $c->get('settings');
     $view = new Slim\Views\Twig($settings['view']['template_path'], $settings['view']['twig']);
 
+    //Manage Twig base_url() returns port 80 when used over HTTPS connection
+    $view['env_uri'] = $c->get('settings')['env_uri'];
+
     // Add extensions
     $view->addExtension(new Slim\Views\TwigExtension($c->get('router'), $c->get('request')->getUri()));
     $view->addExtension(new Twig_Extension_Debug());

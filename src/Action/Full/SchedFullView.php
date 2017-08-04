@@ -154,7 +154,7 @@ class SchedFullView extends AbstractView
                     if (is_null($this->event->field_map)) {
                         $html .= "<td>$game->field</td>";
                     } else {
-                        $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$game->field</a></td>";
+                        $html .= "<td><a href='" . $this->event->field_map . "' target='_blank'>$game->field</a></td>";
                     }
                     $html .= "<td>$game->division</td>";
                     $html .= "<td>$game->pool</td>";
@@ -173,7 +173,7 @@ class SchedFullView extends AbstractView
 
             $html .= "</table>\n";
 
-            $this->menu = $this->menu('bottom');
+            $this->menu = sizeof($games) ? $this->menu('bottom') : null ;
         }
 
         return $html;

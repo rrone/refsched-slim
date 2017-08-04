@@ -142,7 +142,7 @@ class SchedRefsView extends AbstractView
                         if (is_null($this->event->field_map)) {
                             $html .= "<td>$game->field</td>";
                         } else {
-                            $html .= "<td><a href='" . $this->getBaseURL('fieldmap') . "' target='_blank'>$game->field</a></td>";
+                            $html .= "<td><a href='" . $this->event->field_map . "' target='_blank'>$game->field</a></td>";
                         }
                         $html .= "<td>$game->division</td>";
                         $html .= "<td>$game->pool</td>";
@@ -155,7 +155,7 @@ class SchedRefsView extends AbstractView
                         if ($has4th) {
                             $html .= "<td>$game->r4th</td>";
                         }
-                        $locked = $game->locked ? 'disabled' : '';
+                        $locked = $game->locked && !$this->user->admin ? 'disabled' : '';
                         if ($game->assignor || $this->user->admin) {
                             $html .= "<td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\" $locked></td>";
                         } else {
