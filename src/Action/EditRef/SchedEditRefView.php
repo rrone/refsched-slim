@@ -151,7 +151,7 @@ class SchedEditRefView extends AbstractView
 
     private function menu()
     {
-        $html = "<h3 class=\"center\">";
+        $html = "<h3 class=\"center h3-btn\">";
 
         $html .= "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
         $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full game schedule</a>&nbsp;-&nbsp\n";

@@ -9,11 +9,16 @@ use Slim\Http\Response;
 
 class EditGameView extends AbstractView
 {
+    protected $menu = null;
+    private $description;
+
+
     public function __construct(Container $container, SchedulerRepository $repository)
     {
         parent::__construct($container, $repository);
 
         $this->sr = $repository;
+        $this->description = 'No games scheduled';
     }
 
     public function handler(Request $request, Response $response)
@@ -49,11 +54,11 @@ class EditGameView extends AbstractView
                 'admin' => $this->user->admin,
                 'content' => $this->renderEditGame(),
                 'topmenu' => $this->menu(),
-                'menu' => $this->menu(),
+                'menu' => $this->menu,
                 'title' => $this->page_title,
                 'dates' => $this->dates,
                 'location' => $this->location,
-                'description' => "Update Games",
+                'description' => $this->description,
             )
         );
 
@@ -65,6 +70,7 @@ class EditGameView extends AbstractView
     protected function renderEditGame()
     {
         $html = null;
+        $this->menu = null;
 
         if (!empty($this->event)) {
             if(!empty($this->event->infoLink)){
@@ -83,6 +89,8 @@ class EditGameView extends AbstractView
             $games = $this->sr->getGames($projectKey, '%', true);
 
             if (count($games)) {
+                $this->description = "Update Games";
+
                 $html .= "<form name=\"editref\" method=\"post\" action=" . $this->getBaseURL('editGamePath') . ">\n";
 
                 $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"action\" value=\"Update Games\">\n";
@@ -123,6 +131,8 @@ class EditGameView extends AbstractView
                 $html .= "<div class='clear-fix'></div>";
                 $html .= "</form>\n";
             }
+
+            $this->menu = sizeof($games) ? $this->menu('bottom') : null;
         }
 
         return $html;
@@ -131,7 +141,7 @@ class EditGameView extends AbstractView
 
     private function menu()
     {
-        $html = "<h3 class=\"center\">";
+        $html = "<h3 class=\"center h3-btn\">";
 
         $html .= "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;";
         $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full game schedule</a>&nbsp;-&nbsp";
