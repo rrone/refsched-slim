@@ -17,15 +17,14 @@ final class SARAction
 
     public function __invoke(Request $request, Response $response)
     {
-//        $portal = $request->getAttribute('portal');
-        if(array_key_exists('portal', $request->getParams()) ){
-            $portalName = $request->getParams();
+        $portal = $request->getAttribute('portal');
 
-            $content = $this->retrieveSAR($portalName['portal']);
+        $content = $this->retrieveSAR($portal);
 
-            echo $content;
+        echo json_encode($content, JSON_UNESCAPED_SLASHES);
 
-        }
+//        echo $content;
+
     }
 
     protected function retrieveSAR($portalName)
@@ -35,7 +34,7 @@ final class SARAction
         if (!empty($sarRec)) {
             $sar = $sarRec->section.'/'.$sarRec->area.'/'.$sarRec->region;
         } else {
-            $sar = null;
+            $sar = 'SAR not found';
         }
 
         return $sar;

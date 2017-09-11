@@ -90,6 +90,8 @@ $app->map(['GET', 'POST'], '/showmr', App\Action\MedalRound\ShowMedalRoundContro
     ->setName('showmr');
 $container['showMRPath'] = $container->get('router')->pathFor('showmr');
 
-$app->map(['GET'], '/sar/{id}', App\Action\SAR\SARAction::class)
+$app->map(['GET'], '/sar', App\Action\SAR\SARAction::class)
     ->setName('sar');
-$container['sarPath'] = $container->get('router')->pathFor('sar');
+
+$app->map(['GET'], '/sar/{portal}', App\Action\SAR\SARAction::class)
+    ->setName('portal');
