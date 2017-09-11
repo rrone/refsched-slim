@@ -21,9 +21,12 @@ final class SARAction
 
         $content = $this->retrieveSAR($portal);
 
-        echo json_encode($content, JSON_UNESCAPED_SLASHES);
+// headers to tell that result is JSON
+        $newResponse = $response->withHeader('Content-type', 'application/json');
 
-//        echo $content;
+        $newResponse = $newResponse->withJson($content, 200,JSON_UNESCAPED_SLASHES);
+
+        return $newResponse;
 
     }
 
