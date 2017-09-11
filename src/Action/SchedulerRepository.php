@@ -1057,4 +1057,20 @@ class SchedulerRepository
     {
         return $this->db->getConnection();
     }
+
+//    SAR function
+
+
+    /**
+     * @param $portal
+     * @return null|object
+     */
+    public function getSARRec($portal)
+    {
+        $sarRec = $this->db->table('sar')
+            ->where('portalName', '=', $portal)
+            ->get();
+
+        return $this->getZero($sarRec);
+    }
 }
