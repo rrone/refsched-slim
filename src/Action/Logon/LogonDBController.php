@@ -21,19 +21,7 @@ class LogonDBController extends AbstractController
 
     public function __invoke(Request $request, Response $response, $args)
     {
-//        $_GET = $request->getParams();
-//
-//        if(isset($_GET['id'])){
-//            switch ($_GET['id']) {
-//                case '':
-//                case 'x':
-//                    unset($_SESSION['param']);
-//                    break;
-//                default:
-//                    $_SESSION['param'] = $_GET['id'];
-//            }
-//        }
-//
+
         $this->logonView->handler($request, $response);
 
         if ($this->isAuthorized()) {
