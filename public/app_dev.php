@@ -36,7 +36,7 @@ $settings['debug'] = true;
 $settings['displayErrorDetails'] = $settings['debug'];
 
 $settings['settings']['env_uri'] = 'http://';
-if ($_SERVER['REQUEST_SCHEME'] == 'https') {
+if (isset($_SERVER['HTTPS'])) {
     $settings['settings']['env_uri'] = 'https://';
 }
 
