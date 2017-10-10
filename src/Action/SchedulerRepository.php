@@ -360,9 +360,10 @@ class SchedulerRepository
      * @param string $projectKey
      * @param string $group
      * @param bool $medalRound
+     * @param string $sortOn
      * @return \Illuminate\Support\Collection
      */
-    public function getGames($projectKey = '%', $group = '%', $medalRound = false)
+    public function getGames($projectKey = '%', $group = '%', $medalRound = false,  $sortOn = 'field')
     {
 
         $group = '%'. $group . '%';
@@ -380,6 +381,9 @@ class SchedulerRepository
                 ['date', '<=', date('Y-m-d')]
 
             ])
+            ->orderBy($sortOn, 'asc')
+            ->orderBy('date', 'asc')
+            ->orderBy('time', 'asc')
             ->get();
 
         return $games;

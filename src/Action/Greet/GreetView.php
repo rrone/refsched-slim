@@ -64,9 +64,14 @@ class GreetView extends AbstractView
 
             $this->games = $this->sr->getGames($projectKey, '%', $show_medal_round);
 
-            if (count($this->games)) {
-                $this->description = "Welcome ". $this->user->name ." Assignor";
+            $this->description = "Welcome ";
+            if ($this->user->admin) {
+                $this->description .= $this->user->name;
+            } else {
+                $this->description .= $this->user->name . " Assignor";
+            }
 
+            if (count($this->games)) {
                 $used_list = [];
                 $assigned_list = [];
                 $limit_list = [];
@@ -215,29 +220,23 @@ class GreetView extends AbstractView
                     ).">View full game schedule</a></h3>";
 
                 if ($this->user->admin) {
-                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('editGamePath').">Edit games</a></h3>";
-                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
-                            'schedPath'
-                        ).">View Match Assignors</a></h3>";
-                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
-                            'masterPath'
-                        ).">Select Match Assignors</a></h3>";
-                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
-                            'refsPath'
-                        ).">Edit Referee Assignments</a></h3>";
+                    if(!$this->event->archived) {
+                        $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('editGamePath').">Edit games</a></h3>";
+                    }
+                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('schedPath').">View Match Assignors</a></h3>";
+                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('masterPath').">Select Match Assignors</a></h3>";
+                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('refsPath').">Edit Referee Assignments</a></h3>";
                 } else {
-                    $html .= "<h3 class=\"center\">Goto $uname Schedule: <a href=".$this->getBaseURL(
-                            'schedPath'
-                        ).">All games</a> - ";
+                    $html .= "<h3 class=\"center\">Goto $uname Schedule: <a href=".$this->getBaseURL('schedPath').">All games</a> - ";
                     foreach ($groups as $group) {
                         $html .= "<a href=\"".$this->getBaseURL('schedPath')."?group=$group\">$group</a>".$delim;
                     }
                     $html = substr($html, 0, strlen($html) - 3)."</h3>";
-                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
-                            'refsPath'
-                        ).">Edit $uname Referee Assignments</a></h3>";
+                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('refsPath').">Edit $uname Referee Assignments</a></h3>";
 
                 }
+            } else {
+                $html .= "<h3 class=\"center\">There are no games to schedule</h3>";
             }
 
             $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('endPath') . ">Log Off</a></h3>";

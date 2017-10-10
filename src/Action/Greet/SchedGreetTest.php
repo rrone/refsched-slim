@@ -93,7 +93,7 @@ class SchedGreetTest extends AppTestCase
         ];
 
         $view = $this->client->get('/greet');
-        $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>",$view);
+        $this->assertContains("<h3 class=\"center\">Welcome $user</h3>",$view);
         $this->assertContains("<h3 class=\"center\"><a href=/editgame>Edit games</a>",$view);
     }
 

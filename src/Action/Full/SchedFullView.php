@@ -9,7 +9,6 @@ use Slim\Http\Response;
 
 class SchedFullView extends AbstractView
 {
-    private $justOpen;
     private $description;
     private $games;
 
@@ -26,7 +25,14 @@ class SchedFullView extends AbstractView
     {
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
-        $this->justOpen = array_key_exists('open', $request->getParams());
+        $params = $request->getParams();
+
+        $this->justOpen = array_key_exists('open', $params);
+        $this->sortOn = array_key_exists('sort', $params) ? $params['sort'] : 'game_number';
+        if(empty($this->sortOn)) {
+            $this->sortOn = 'game_number';
+        }
+        $this->uri = $request->getUri();
 
         return null;
     }
@@ -71,13 +77,18 @@ class SchedFullView extends AbstractView
             $show_medal_round = $this->sr->getMedalRound($projectKey);
 
             if($this->user->admin) {
-                $this->games = $this->sr->getGames($projectKey, '%', true);
+                $this->games = $this->sr->getGames($projectKey, '%', true, $this->sortOn);
             } else {
-                $this->games = $this->sr->getGames($projectKey, '%', $show_medal_round);
+                $this->games = $this->sr->getGames($projectKey, '%', $show_medal_round, $this->sortOn);
             }
 
             if (count($this->games)) {
-                $this->description = "Full Schedule";
+                $this->description = $this->user->name;
+                if($this->justOpen) {
+                    $this->description .= ": Schedule with Open Slots";
+                } else {
+                    $this->description .= ": Full Schedule";
+                }
 
                 $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
@@ -86,15 +97,15 @@ class SchedFullView extends AbstractView
 
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                $html .= "<th>Game#</th>";
-                $html .= "<th>Date</th>";
+                $html .= "<th><a href=" . $this->getUri('fullPath') . ">Game#</a></th>";
+                $html .= "<th><a href=" . $this->getUri('fullPath','date') . ">Date</a></th>";
                 $html .= "<th>Time</th>";
-                $html .= "<th>Field</th>";
-                $html .= "<th>Division</th>";
-                $html .= "<th>Pool</th>";
-                $html .= "<th>Home</th>";
-                $html .= "<th>Away</th>";
-                $html .= "<th>Referee Team</th>";
+                $html .= "<th><a href=" . $this->getUri('fullPath','field') . ">Field</a></th>";
+                $html .= "<th><a href=" . $this->getUri('fullPath','division') . ">Division</a></th>";
+                $html .= "<th><a href=" . $this->getUri('fullPath','pool') . ">Pool</a></th>";
+                $html .= "<th><a href=" . $this->getUri('fullPath','home') . ">Home</a></th>";
+                $html .= "<th><a href=" . $this->getUri('fullPath','away') . ">Away</a></th>";
+                $html .= "<th><a href=" . $this->getUri('fullPath','assignor') . ">Referee Team</a></th>";
                 $html .= "<th>Referee</th>";
                 $html .= "<th>AR1</th>";
                 $html .= "<th>AR2</th>";
@@ -205,8 +216,9 @@ class SchedFullView extends AbstractView
             $html .= "<a href=" . $this->getBaseURL('fullPath') . "?open>View schedule with open slots</a>&nbsp;-&nbsp;";
         }
         if ($this->user->admin) {
-            $html .= "<a href=" . $this->getBaseURL('editGamePath') . ">Edit games</a>&nbsp;-&nbsp;";
-            $html .= "<a  href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;";
+            if(!$this->event->archived) {
+                $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit games</a>&nbsp;-&nbsp;";
+            }            $html .= "<a  href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;";
             $html .= "<a  href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;";
             $html .= "<a  href=" . $this->getBaseURL('refsPath') . ">Edit referee assignments</a>&nbsp;-&nbsp;";
         } else {
@@ -225,4 +237,5 @@ class SchedFullView extends AbstractView
 
         return $html;
     }
+
 }

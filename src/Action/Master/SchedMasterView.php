@@ -18,7 +18,6 @@ class SchedMasterView extends AbstractView
 {
     private $topmenu;
     private $bottommenu;
-    private $justOpen;
     private $description;
     private $games;
 
@@ -95,10 +94,10 @@ class SchedMasterView extends AbstractView
                 $users = $this->sr->getAllUsers($projectKey);
 
                 foreach ($users as $user) {
-                    $select_list[] = $user->name;
+                    if($user->name != 'Admin' & strpos($user->for_events, $projectKey) ) {
+                        $select_list[] = $user->name;
+                    }
                 }
-
-                $select_list[] = 'To Be Announced';
 
                 $html .= "<form name=\"master_sched\" method=\"post\" action=".$this->getBaseURL('masterPath').">\n";
 
@@ -156,17 +155,20 @@ class SchedMasterView extends AbstractView
                         $html .= "<td>$game->pool</td>";
                         $html .= "<td>$game->home</td>";
                         $html .= "<td>$game->away</td>";
-
-                        $html .= "<td><select name=\"$game->id\">\n";
-                        foreach ($select_list as $user) {
-                            if ($user == $game->assignor) {
-                                $html .= "<option selected>$user</option>\n";
-                            } else {
-                                $html .= "<option>$user</option>\n";
+                        if(!$this->event->archived) {
+                            $html .= "<td><select name=\"$game->id\">\n";
+                            foreach ($select_list as $user) {
+                                if ($user == $game->assignor) {
+                                    $html .= "<option selected>$user</option>\n";
+                                } else {
+                                    $html .= "<option>$user</option>\n";
+                                }
                             }
-                        }
 
-                        $html .= "</select></td>";
+                            $html .= "</select></td>";
+                        } else {
+                            $html .= "<td>$game->assignor</td>";
+                        }
                         $html .= "</tr>\n";
                     }
                 }
@@ -193,7 +195,10 @@ class SchedMasterView extends AbstractView
 
         $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a> - ";
 
-        $html .= "<a href=" . $this->getBaseURL('editGamePath') . ">Edit games</a>&nbsp;-&nbsp;";
+        if(!$this->event->archived) {
+            $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit games</a>&nbsp;-&nbsp;";
+        }
+
         if (count($unassigned)) {
             if ($this->justOpen) {
                 $html .= "<a href=" . $this->getBaseURL('masterPath') . ">View all referee teams</a> - ";
@@ -205,7 +210,7 @@ class SchedMasterView extends AbstractView
         $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Edit referee assignments</a> - ";
         $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a>";
 
-        if(count($this->games)) {
+        if(count($this->games) && !$this->event->archived) {
             $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
         }
         $html .= "<div class='clear-fix'></div>";

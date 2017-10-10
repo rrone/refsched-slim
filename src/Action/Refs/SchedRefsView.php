@@ -76,7 +76,7 @@ class SchedRefsView extends AbstractView
             }
 
             if(count($this->games)) {
-                $this->description = $this->user->name . ' Referee Assignments';
+                $this->description = $this->user->name . ': Referee Assignments';
 
                 foreach ($this->games as $game) {
                     if ($game->assignor == $this->user->name || $this->user->admin) {
@@ -101,14 +101,16 @@ class SchedRefsView extends AbstractView
                     $html .= "<th>Pool</th>";
                     $html .= "<th>Home</th>";
                     $html .= "<th>Away</th>";
-                    $html .= "<th>Area</th>";
+                    $html .= "<th>Referee Team</th>";
                     $html .= "<th>CR</th>";
                     $html .= "<th>AR1</th>";
                     $html .= "<th>AR2</th>";
                     if ($has4th) {
                         $html .= "<th>4th</th>";
                     }
-                    $html .= "<th>Edit</th>";
+                    if(!$this->event->archived) {
+                        $html .= "<th>Edit</th>";
+                    }
                     $html .= "</tr>\n";
 
                     $rowColor = $this->colorGroup1;
@@ -163,11 +165,13 @@ class SchedRefsView extends AbstractView
                             if ($has4th) {
                                 $html .= "<td>$game->r4th</td>";
                             }
-                            $locked = $game->locked && !$this->user->admin ? 'disabled' : '';
-                            if ($game->assignor || $this->user->admin) {
-                                $html .= "<td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\" $locked></td>";
-                            } else {
-                                $html .= "<td>&nbsp;</td>\n";
+                            if(!$this->event->archived) {
+                                $locked = $game->locked && !$this->user->admin ? 'disabled' : '';
+                                if ($game->assignor || $this->user->admin) {
+                                    $html .= "<td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\" $locked></td>";
+                                } else {
+                                    $html .= "<td>&nbsp;</td>\n";
+                                }
                             }
                             $html .= "</tr>\n";
                         }
@@ -198,7 +202,9 @@ class SchedRefsView extends AbstractView
         $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a>&nbsp;-&nbsp";
 
         if ($this->user->admin) {
-            $html .= "<a href=" . $this->getBaseURL('editGamePath') . ">Edit games</a>&nbsp;-&nbsp;";
+            if(!$this->event->archived) {
+                $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit games</a>&nbsp;-&nbsp;";
+            }
             $html .= "<a href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;";
             $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;";
         } else {

@@ -89,13 +89,14 @@ class EditGameView extends AbstractView
             $games = $this->sr->getGames($projectKey, '%', true);
 
             if (count($games)) {
-                $this->description = "Update Games";
+                $this->description = $this->user->name . ": Update Games";
 
                 $html .= "<form name=\"editref\" method=\"post\" action=" . $this->getBaseURL('editGamePath') . ">\n";
 
-                $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"action\" value=\"Update Games\">\n";
-                $html .= "<div class='clear-fix'></div>";
-
+                if(!$this->event->archived) {
+                    $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"action\" value=\"Update Games\">\n";
+                    $html .= "<div class='clear-fix'></div>";
+                }
                 $html .= "<table class=\"edit-table sched-table\" width=\"100%\">\n";
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
                 $html .= "<th>Game#</th>";
@@ -111,24 +112,40 @@ class EditGameView extends AbstractView
                 foreach ($games as $game) {
                     $time = date('H:i', strtotime($game->time));
 
-                    $html .= "<tr class=\"center\" bgcolor=\"#00FF88\">";
-                    $html .= "<td>$game->game_number
+                    if(!$this->event->archived) {
+                        $html .= "<tr class=\"center\" bgcolor=\"#00FF88\">";
+                        $html .= "<td>$game->game_number
                         <input type=\"hidden\" name=\"$game->id+projectKey\" value=\"$projectKey\">
                         <input type=\"hidden\" name=\"$game->id+id\" value=\"$game->id\">
                         <input type=\"hidden\" name=\"$game->id+game_number\" value=\"$game->game_number\">
                         </td>";
-                    $html .= "<td><input type=\"text\" name=\"$game->id+date\" value=\"$game->date\" required pattern=\"\d{4})-\d{1,2}-\d{1,2}\" placeholder=\"yyyy-mm-dd\" title=\"Date are in the form yyyy-mm-dd\"></td>";
-                    $html .= "<td><input type=\"text\" name=\"$game->id+time\" value=\"$time\" pattern=\"\d{2}:\d{2}\" placeholder=\"hh:mm\" title=\"Time in the form hh:mm\"></td>";
-                    $html .= "<td><input type=\"text\" name=\"$game->id+field\" value=\"$game->field\"></td>";
-                    $html .= "<td><input type=\"text\" name=\"$game->id+division\" value=\"$game->division\" pattern=\"([U]{1}[0-9]{2}[BG]{1})\" title=\"Divisions are in the form U14G\"></td>";
-                    $html .= "<td><input type=\"text\" name=\"$game->id+pool\" value=\"$game->pool\" pattern=\"(\d{1,2}|SF|FIN|CON)\" title=\"Pools are 1-99, 'SF', 'FIN' or 'CON'\"></td>";
-                    $html .= "<td><input type=\"text\" name=\"$game->id+home\" value=\"$game->home\"></td>";
-                    $html .= "<td><input type=\"text\" name=\"$game->id+away\" value=\"$game->away\"></td>";
-                    $html .= "</tr>\n";
+                        $html .= "<td><input type=\"text\" name=\"$game->id+date\" value=\"$game->date\" required pattern=\"\d{4})-\d{1,2}-\d{1,2}\" placeholder=\"yyyy-mm-dd\" title=\"Date are in the form yyyy-mm-dd\"></td>";
+                        $html .= "<td><input type=\"text\" name=\"$game->id+time\" value=\"$time\" pattern=\"\d{2}:\d{2}\" placeholder=\"hh:mm\" title=\"Time in the form hh:mm\"></td>";
+                        $html .= "<td><input type=\"text\" name=\"$game->id+field\" value=\"$game->field\"></td>";
+                        $html .= "<td><input type=\"text\" name=\"$game->id+division\" value=\"$game->division\" pattern=\"({1}[0-9]{2}[U][BG]{1})\" title=\"Divisions are in the form 14UG\"></td>";
+                        $html .= "<td><input type=\"text\" name=\"$game->id+pool\" value=\"$game->pool\" pattern=\"(\d{1,2}|SF|FIN|CON)\" title=\"Pools are 1-99, 'SF', 'FIN' or 'CON'\"></td>";
+                        $html .= "<td><input type=\"text\" name=\"$game->id+home\" value=\"$game->home\"></td>";
+                        $html .= "<td><input type=\"text\" name=\"$game->id+away\" value=\"$game->away\"></td>";
+                        $html .= "</tr>\n";
+                    } else {
+                        $html .= "<tr class=\"center\" bgcolor=\"#00FF88\">";
+                        $html .= "<td>$game->game_number</td>";
+                        $html .= "<td>$game->date</td>";
+                        $html .= "<td>$game->time</td>";
+                        $html .= "<td>$game->field</td>";
+                        $html .= "<td>$game->division</td>";
+                        $html .= "<td>$game->pool</td>";
+                        $html .= "<td>$game->home</td>";
+                        $html .= "<td>$game->away</td>";
+                        $html .= "</tr>\n";
+
+                    }
                 }
                 $html .= "</table>\n";
-                $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"UpdateGames\" value=\"Update Games\">\n";
-                $html .= "<div class='clear-fix'></div>";
+                if(!$this->event->archived) {
+                    $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"UpdateGames\" value=\"Update Games\">\n";
+                    $html .= "<div class='clear-fix'></div>";
+                }
                 $html .= "</form>\n";
             }
 

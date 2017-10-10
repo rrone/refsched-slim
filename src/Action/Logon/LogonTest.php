@@ -116,7 +116,7 @@ class LogonTest extends AppTestCase
 
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
-        $this->assertContains("<h3 class=\"center\">Welcome $this->userName Assignor</h3>", $view);
+        $this->assertContains("<h3 class=\"center\">Welcome $this->userName</h3>", $view);
 
     }
 
@@ -146,7 +146,7 @@ class LogonTest extends AppTestCase
 
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
-        $this->assertContains("<h3 class=\"center\">Welcome $this->userName Assignor</h3>", $view);
+        $this->assertContains("<h3 class=\"center\">Welcome $this->userName</h3>", $view);
 
     }
 

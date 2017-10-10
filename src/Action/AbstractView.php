@@ -43,6 +43,11 @@ abstract class AbstractView
     protected $colorLtGray = '#D3D3D3';
     protected $colorDarkGray = '#B7B7B7';
 
+    protected $justOpen;
+    protected $sortOn;
+    protected $uri;
+
+
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
         $this->container = $container;
@@ -105,5 +110,30 @@ abstract class AbstractView
         }
 
         return $linkedEvents;
+    }
+
+    protected function getUri($path, $field = 'game_number')
+    {
+        $uri = null;
+
+        switch ($field) {
+            case 'game_number':
+                if (!$this->justOpen) {
+                    $uri = $this->getBaseURL($path) ;
+                }
+                else {
+                    $uri = $this->getBaseURL($path) . "?open";
+                }
+                break;
+            default:
+                if (!$this->justOpen) {
+                    $uri = $this->getBaseURL($path) . "?sort=" . $field;
+                }
+                else {
+                    $uri = $this->getBaseURL($path) . "?open&sort=" . $field;
+                }
+        }
+
+        return $uri;
     }
 }

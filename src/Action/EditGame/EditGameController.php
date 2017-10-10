@@ -24,6 +24,10 @@ class EditGameController extends AbstractController
             return $response->withRedirect($this->getBaseURL('greetPath'));
         };
 
+        if($this->event->archived) {
+            return $response->withRedirect($_SERVER['HTTP_REFERER']);
+        }
+
         $this->logStamp($request);
 
         $request = $request->withAttributes([
