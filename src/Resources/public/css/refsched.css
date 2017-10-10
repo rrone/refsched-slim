@@ -59,8 +59,9 @@ table {
     border: 0;
 }
 th {
-    line-height: 3rem;
     text-align: center;
+    line-height: 1.6rem;
+    padding: 0.5rem 10px;
 }
 
 .sched-table th, .sched-table td {
