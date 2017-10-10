@@ -363,7 +363,7 @@ class SchedulerRepository
      * @param string $sortOn
      * @return \Illuminate\Support\Collection
      */
-    public function getGames($projectKey = '%', $group = '%', $medalRound = false,  $sortOn = 'field')
+    public function getGames($projectKey = '%', $group = '%', $medalRound = false,  $sortOn = 'game_number')
     {
 
         $group = '%'. $group . '%';
@@ -444,7 +444,7 @@ class SchedulerRepository
         $result = [];
         foreach ($groups as $group) {
             $u = stripos($group->division, "U");
-            $group = substr($group->division, $u, 3);
+            $group = substr($group->division, $u-2, 3);
             if (!in_array($group, $result)) {
                 $result[] = $group;
             }
@@ -851,7 +851,7 @@ class SchedulerRepository
                         break;
                     case 'division':
                         $u = stripos($val, "U");
-                        $div = substr($val, $u, 3);
+                        $div = substr($val, $u-2, 3);
                         if (!isset($refList[$ref->name][$div])) {
                             $refList[$ref->name][$div] = 0;
                         }
