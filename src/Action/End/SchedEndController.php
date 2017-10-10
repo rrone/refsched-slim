@@ -18,8 +18,9 @@ class SchedEndController extends AbstractController
 
         $this->logStamp($request);
 
-        $key = isset($_SESSION['param']) ? "?id=" . $_SESSION['param'] : '';
-        $resp = $response->withRedirect($this->getBaseURL('logonPath') . $key);
+//        $key = isset($_SESSION['param']) ? "?id=" . $_SESSION['param'] : '';
+//        $resp = $response->withRedirect($this->getBaseURL('logonPath') . $key);
+        $resp = $response->withRedirect($this->getBaseURL('logonPath'));
 
         session_unset();
 

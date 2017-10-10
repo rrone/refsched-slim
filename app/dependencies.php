@@ -377,3 +377,12 @@ $container[App\Action\MedalRound\HideMedalRoundController::class] = function ($c
 
     return new \App\Action\MedalRound\HideMedalRoundController($c, $v);
 };
+
+
+// -----------------------------------------------------------------------------
+// SAR Function class
+// -----------------------------------------------------------------------------
+$container[App\Action\SAR\SARAction::class] = function ($c) use ($sr) {
+
+    return new \App\Action\SAR\SARAction($c, $sr);
+};

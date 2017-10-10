@@ -21,6 +21,7 @@ $settings = [
                 PROJECT_ROOT . '/src/Action/NoEvents',
                 PROJECT_ROOT . '/src/Action/EditGame',
                 PROJECT_ROOT . '/src/Action/MedalRound',
+                PROJECT_ROOT . '/src/Action/SAR',
             ],
             'twig' => [
                 'cache' => PROJECT_ROOT . '/var/cache/twig',
@@ -38,7 +39,7 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2017.08.04.00'
+            'version' => '2017.10.07.04'
         ]
     ],
 

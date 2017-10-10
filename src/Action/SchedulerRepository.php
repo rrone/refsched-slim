@@ -360,9 +360,10 @@ class SchedulerRepository
      * @param string $projectKey
      * @param string $group
      * @param bool $medalRound
+     * @param string $sortOn
      * @return \Illuminate\Support\Collection
      */
-    public function getGames($projectKey = '%', $group = '%', $medalRound = false)
+    public function getGames($projectKey = '%', $group = '%', $medalRound = false,  $sortOn = 'game_number')
     {
 
         $group = '%'. $group . '%';
@@ -380,6 +381,9 @@ class SchedulerRepository
                 ['date', '<=', date('Y-m-d')]
 
             ])
+            ->orderBy($sortOn, 'asc')
+            ->orderBy('date', 'asc')
+            ->orderBy('time', 'asc')
             ->get();
 
         return $games;
@@ -440,7 +444,7 @@ class SchedulerRepository
         $result = [];
         foreach ($groups as $group) {
             $u = stripos($group->division, "U");
-            $group = substr($group->division, $u, 3);
+            $group = substr($group->division, $u-2, 3);
             if (!in_array($group, $result)) {
                 $result[] = $group;
             }
@@ -847,7 +851,7 @@ class SchedulerRepository
                         break;
                     case 'division':
                         $u = stripos($val, "U");
-                        $div = substr($val, $u, 3);
+                        $div = substr($val, $u-2, 3);
                         if (!isset($refList[$ref->name][$div])) {
                             $refList[$ref->name][$div] = 0;
                         }
@@ -1056,5 +1060,21 @@ class SchedulerRepository
     public function showVariables()
     {
         return $this->db->getConnection();
+    }
+
+//    SAR function
+
+
+    /**
+     * @param $portal
+     * @return null|object
+     */
+    public function getSARRec($portal)
+    {
+        $sarRec = $this->db->table('sar')
+            ->where('portalName', '=', $portal)
+            ->get();
+
+        return $this->getZero($sarRec);
     }
 }

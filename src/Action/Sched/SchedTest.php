@@ -68,7 +68,7 @@ class SchedSchedTest extends AppTestCase
 
         $view = $this->client->get('/sched');
 
-        $this->assertContains("<h3 class=\"center\">$user Schedule</h3>", $view);
+        $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
         $this->assertContains("<a href=/refs>Edit $user referee assignments</a>", $view);
     }
 
@@ -97,7 +97,7 @@ class SchedSchedTest extends AppTestCase
 
         $view = $this->client->get('/sched');
 
-        $this->assertContains("<h3 class=\"center\">$user Schedule</h3>",$view);
+        $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>",$view);
         $this->assertContains("<a href=/refs>Edit referee assignments</a>",$view);
     }
 
@@ -152,7 +152,7 @@ class SchedSchedTest extends AppTestCase
         $response = (object)$this->client->post($url, $body, $headers);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<h3 class=\"center\">$user Schedule</h3>", $view);
+        $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
         $this->assertContains("<input class=\"btn btn-primary btn-xs right \" type=\"submit\"", $view);
         $this->assertContains("value=\"Submit\">", $view);
 
@@ -160,7 +160,7 @@ class SchedSchedTest extends AppTestCase
         $response = (object)$this->client->post($url, $body, $headers);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<h3 class=\"center\">$user Schedule</h3>", $view);
+        $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
         $this->assertContains("<input class=\"btn btn-primary btn-xs right \" type=\"submit\"", $view);
         $this->assertContains("value=\"Submit\">", $view);
     }
@@ -191,7 +191,7 @@ class SchedSchedTest extends AppTestCase
         $params = ['group' => 'U16'];
         $view = $this->client->get('/sched', $params);
 
-        $this->assertContains("<h3 class=\"center\">$user Schedule</h3>", $view);
+        $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
         $this->assertContains("<a href=/sched>View all $user games</a>", $view);
     }
 
@@ -220,7 +220,7 @@ class SchedSchedTest extends AppTestCase
 
         $view = $this->client->get('/sched');
 
-        $this->assertContains("<h3 class=\"center\">$user Schedule</h3>", $view);
+        $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
         $this->assertContains("<tr class=\"center\" bgcolor=\"#80ccff\"><th>Game No</th><th>Date</th><th>Time</th><th>Field</th><th>Division</th><th>Pool</th><th>Home</th><th>Away</th><th>Referee Team</th><th>Assign to Area 1P</th></tr>", $view);
     }
 

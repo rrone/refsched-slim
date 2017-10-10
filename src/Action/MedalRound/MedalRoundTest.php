@@ -56,7 +56,7 @@ class MedalRoundTest extends AppTestCase
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
+        $this->assertContains("<h3 class=\"center\">Welcome $user</h3>", $view);
 //        $this->assertContains("<h3 class=\"center\">The schedule is:&nbsp;<span style=\"color:#CC0000\">Locked</span>&nbsp;-&nbsp;(<a href=/unlock>Unlock</a> the schedule now)", $view);
 
         $response = (object)$this->client->get('/hidemr');
@@ -143,7 +143,7 @@ class MedalRoundTest extends AppTestCase
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
+        $this->assertContains("<h3 class=\"center\">Welcome $user</h3>", $view);
 
         $response = (object)$this->client->get('/unlock');
         $this->assertEquals(302, $response->getStatusCode());

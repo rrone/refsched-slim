@@ -2,7 +2,8 @@
 ## Exit immediately if a command exits with a non-zero status.
 set -e
 #set distribution folder alias
-dist="$HOME"/Dropbox/_open/_ayso/s1/web/ayso1ref/refsched
+dist="$HOME"/GoogleDrive-rick.roberts.9/ayso/s1/web/ayso1ref/refsched
+PHP=/usr/local/etc/php/7.1
 
 ## clear the screen
 #printf "\033c"
@@ -15,9 +16,9 @@ echo "  Build public resources..."
 
 echo "  Purge composer development items..."
 ## Disable xdebug for composer performance
-if [ -e "/usr/local/etc/php/7.0/conf.d/ext-xdebug.ini" ]
+if [ -e $PHP"/conf.d/ext-xdebug.ini" ]
 then
-    mv /usr/local/etc/php/7.1/conf.d/ext-xdebug.ini /usr/local/etc/php/7.1/conf.d/ext-xdebug.~ini
+    mv "$PHP"/conf.d/ext-xdebug.ini "$PHP"/conf.d/ext-xdebug.~ini
 fi
 
 composer install --no-dev
@@ -52,8 +53,11 @@ rm -f -r $dist/config/.git
 find $dist/config -type f -name '.env' -delete
 
 echo "  Restore composer development items..."
-composer update
 ## Restore xdebug
-mv /usr/local/etc/php/7.1/conf.d/ext-xdebug.~ini /usr/local/etc/php/7.1/conf.d/ext-xdebug.ini
+if [ -e $PHP"/conf.d/ext-xdebug.~ini" ]
+then
+    mv "$PHP"/conf.d/ext-xdebug.~ini "$PHP"/conf.d/ext-xdebug.ini
+fi
+composer update
 
 echo "...distribution complete"
