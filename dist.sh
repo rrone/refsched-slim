@@ -53,11 +53,11 @@ rm -f -r $dist/config/.git
 find $dist/config -type f -name '.env' -delete
 
 echo "  Restore composer development items..."
-composer update
 ## Restore xdebug
 if [ -e $PHP"/conf.d/ext-xdebug.~ini" ]
 then
     mv "$PHP"/conf.d/ext-xdebug.~ini "$PHP"/conf.d/ext-xdebug.ini
 fi
+composer update
 
 echo "...distribution complete"
