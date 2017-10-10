@@ -140,6 +140,7 @@ class SchedImport extends AbstractImporter
         $data = $this->getData($file);
 
         $changes = array('adds' => 0, 'updates' => 0);
+        $error = null;
 
         if (!empty($data)) {
             $games['hdr'] = $data[0];
@@ -149,6 +150,8 @@ class SchedImport extends AbstractImporter
             foreach ($data as $key => $game) {
                 if (($key > 0) && in_array($projectKey, $game)) {
                     $games['data'][] = $game;
+                } elseif($key > 0) {
+                    $error = 'Project key not found in import file.';
                 }
             }
 
@@ -157,12 +160,16 @@ class SchedImport extends AbstractImporter
 
         $adds = $changes['adds'];
         $updates = $changes['updates'];
-        if (empty($changes['errors'])) {
-            $this->msg = "Upload complete. \n $adds items added. \n $updates items updated.";
-            $this->msgStyle = "color:#0000FF";
-        } else {
-            $this->msg = "Error in data: " . $changes['errors'];
-            $this->msgStyle = "color:#0000FF";
+        if(!empty($error)) {
+            $changes['errors'] = $error;
+        }
+
+        $this->msg = "Upload complete. \n $adds items added. \n $updates items updated.";
+        $this->msgStyle = "color:#0000FF";
+
+        if (!empty($changes['errors'])) {
+            $this->msg .= nl2br("\r\nError in data: " . $changes['errors']);
+            $this->msgStyle = "color:#FF0000";
         }
 
         return null;

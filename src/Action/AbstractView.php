@@ -65,7 +65,7 @@ abstract class AbstractView
     {
         $u = stripos($div, "U");
 
-        return substr($div, $u, 3);
+        return substr($div, $u-2, 3);
     }
 
     protected function isRepost(Request $request)
