@@ -64,7 +64,11 @@ th, td {
 }
 
 th {
-    padding: 0.5rem 10px;
+    padding: 0.5rem 2px;
+}
+
+td {
+    padding: 0 2px;
 }
 
 .sched-table th, .sched-table td {
