@@ -393,7 +393,7 @@ class SchedSchedView extends AbstractView
                         $html .= "<h3 class=\"center h3-btn\">";
                         $html .= $this->menuLinks();
                         if (!$this->user->admin && !$this->event->archived) {
-                            $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit1\" value=\"Submit\">";
+                            $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
                         }
                         $html .= "<div class='clear-fix'></div>\n";
                         $html .= "</h3>";
@@ -493,7 +493,7 @@ class SchedSchedView extends AbstractView
                         $html .= "<h3 class=\"center h3-btn\">";
                         $html .= $this->menuLinks();
                         if (!$this->user->admin && !$this->event->archived) {
-                            $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit2\" value=\"Submit\">";
+                            $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
                         }
                         $html .= "<div class='clear-fix'></div>";
                         $html .= "</h3>\n";
