@@ -186,6 +186,7 @@ class SchedulerRepository
     {
         return $this->db->table('events')
             ->where('enabled', true)
+            ->orderBy('id', 'asc')
             ->orderBy('start_date', 'asc')
             ->get();
     }
