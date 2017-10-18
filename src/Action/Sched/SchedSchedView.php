@@ -200,6 +200,13 @@ class SchedSchedView extends AbstractView
 
         if (!empty($this->event)) {
             $projectKey = $this->event->projectKey;
+            $users = $this->sr->getUsers($projectKey);
+
+            foreach ($users as $user) {
+                if($user->name != 'Section 1 Admin') {
+                    $assignors[] = $user->name;
+                }
+            }
 
             $allatlimit = true;
             $oneatlimit = false;
@@ -484,7 +491,7 @@ class SchedSchedView extends AbstractView
                     if (!$this->user->admin) {
                         $html .= $this->renderAssignmentByArea($this->user->name, $kount, $locked, true);
                     } else {
-                        foreach ($refTeams as $refTeam) {
+                        foreach ($assignors as $refTeam) {
                             $html .= $this->renderAssignmentByArea($refTeam, $kount, $locked, false);
                         }
                     }
@@ -557,6 +564,9 @@ class SchedSchedView extends AbstractView
         }
 
         switch ($gameCount) {
+            case 0:
+                $html .= "<h3 class=\"left\">$gameCount Games assigned to $refTeam</h3>\n";
+                break;
             case 1:
                 if (empty($refTeam)) {
                     $html .= "<h3 class=\"left\">$gameCount Game Unassigned:</h3>\n";
@@ -573,74 +583,76 @@ class SchedSchedView extends AbstractView
         }
         $html .= "<div class=\"clear-fix\"></div>\n";
 
-        if (empty($kount)) {
-            $html .= "<table class=\"sched-table\" >\n";
-            $html .= "<tr class=\"center\" bgcolor=\"$this->colorHighlight\">";
-            $html .= "<td>$refTeam has no games assigned</td>";
-            $html .= "</tr>\n";
-        } else {
-            $html .= "<table class=\"sched-table\" >\n";
-            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-            $html .= "<th>Game No</th>";
-            $html .= "<th>Date</th>";
-            $html .= "<th>Time</th>";
-            $html .= "<th>Field</th>";
-            $html .= "<th>Division</th>";
-            $html .= "<th>Pool</th>";
-            $html .= "<th>Home</th>";
-            $html .= "<th>Away</th>";
-            $html .= "<th>Referee Team</th>";
-            if ($checkbox && !$this->event->archived) {
-                $html .= "<th>Assigned</th>";
-            }
-            $html .= "</tr>\n";
+        if($gameCount) {
+            if (empty($kount)) {
+                $html .= "<table class=\"sched-table\" >\n";
+                $html .= "<tr class=\"center\" bgcolor=\"$this->colorHighlight\">";
+                $html .= "<td>$refTeam has no games assigned</td>";
+                $html .= "</tr>\n";
+            } else {
+                $html .= "<table class=\"sched-table\" >\n";
+                $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
+                $html .= "<th>Game No</th>";
+                $html .= "<th>Date</th>";
+                $html .= "<th>Time</th>";
+                $html .= "<th>Field</th>";
+                $html .= "<th>Division</th>";
+                $html .= "<th>Pool</th>";
+                $html .= "<th>Home</th>";
+                $html .= "<th>Away</th>";
+                $html .= "<th>Referee Team</th>";
+                if ($checkbox && !$this->event->archived) {
+                    $html .= "<th>Assigned</th>";
+                }
+                $html .= "</tr>\n";
 
-            if ($assigned) {
-                $rowColor = $this->colorGroup1;
+                if ($assigned) {
+                    $rowColor = $this->colorGroup1;
 
-                for ($kant = 0; $kant < $kount; $kant++) {
-                    if ($refTeam == $this->ref_team[$kant]) {
+                    for ($kant = 0; $kant < $kount; $kant++) {
+                        if ($refTeam == $this->ref_team[$kant]) {
 
-                        if (!$testtime) {
-                            $testtime = $this->time[$kant];
-                        } elseif ($testtime != $this->time[$kant]) {
-                            $testtime = $this->time[$kant];
-                            switch ($rowColor) {
-                                case $this->colorGroup1:
-                                    $rowColor = $this->colorGroup2;
-                                    break;
-                                default:
-                                    $rowColor = $this->colorGroup1;
+                            if (!$testtime) {
+                                $testtime = $this->time[$kant];
+                            } elseif ($testtime != $this->time[$kant]) {
+                                $testtime = $this->time[$kant];
+                                switch ($rowColor) {
+                                    case $this->colorGroup1:
+                                        $rowColor = $this->colorGroup2;
+                                        break;
+                                    default:
+                                        $rowColor = $this->colorGroup1;
+                                }
                             }
-                        }
 
-                        $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
-                        $html .= "<td>".$this->game_no[$kant]."</td>";
-                        $html .= "<td>".$this->date[$kant]."</td>";
-                        $html .= "<td>".$this->time[$kant]."</td>";
-                        $field = $this->field[$kant];
-                        if (is_null($this->event->field_map)) {
-                            $html .= "<td>$field</td>";
-                        } else {
-                            $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$field</a></td>";
-                        }
-                        $html .= "<td>".$this->div[$kant]."</td>";
-                        $html .= "<td>".$this->pool[$kant]."</td>";
-                        $html .= "<td>".$this->home[$kant]."</td>";
-                        $html .= "<td>".$this->away[$kant]."</td>";
-                        $html .= "<td>".$this->ref_team[$kant]."</td>";
-                        if ($checkbox && !$this->event->archived) {
-                            if ($locked) {
-                                $html .= "<td>Locked</td>";
+                            $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
+                            $html .= "<td>".$this->game_no[$kant]."</td>";
+                            $html .= "<td>".$this->date[$kant]."</td>";
+                            $html .= "<td>".$this->time[$kant]."</td>";
+                            $field = $this->field[$kant];
+                            if (is_null($this->event->field_map)) {
+                                $html .= "<td>$field</td>";
                             } else {
-                                $html .= "<td><input name=\"games:".$this->game_id[$kant]."\" type=\"checkbox\" value=\"".$this->game_id[$kant]."\" checked></td>";
+                                $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$field</a></td>";
                             }
+                            $html .= "<td>".$this->div[$kant]."</td>";
+                            $html .= "<td>".$this->pool[$kant]."</td>";
+                            $html .= "<td>".$this->home[$kant]."</td>";
+                            $html .= "<td>".$this->away[$kant]."</td>";
+                            $html .= "<td>".$this->ref_team[$kant]."</td>";
+                            if ($checkbox && !$this->event->archived) {
+                                if ($locked) {
+                                    $html .= "<td>Locked</td>";
+                                } else {
+                                    $html .= "<td><input name=\"games:".$this->game_id[$kant]."\" type=\"checkbox\" value=\"".$this->game_id[$kant]."\" checked></td>";
+                                }
+                            }
+                            $html .= "</tr>\n";
                         }
-                        $html .= "</tr>\n";
                     }
                 }
+                $html .= "</table>";
             }
-            $html .= "</table>";
         }
 
         return $html;
