@@ -19,13 +19,13 @@
     <div class="footer clear-fix">
         <hr>
         <div class="center">
-            <p>Questions? Contact the <a href="mailto:jodykinsey23@gmail.com">Section 1 Referee Assignor.</a></p>
+            <p>Questions? Contact the <a href="mailto:{{ assignoremail }}">Section 1 Referee Assignor.</a></p>
             {% if ( view.admin ) %}
-                <p>Find an issue with the Scheduler? Log it in the <a href="https://github.com/rrone/refsched/issues"
+                <p>Find an issue with the Scheduler? Log it in the <a href="{{ issueTracker }}"
                                                                       target="_blank">issue tracker</a><a
                             href='{{ env_uri }}/adm'>.</a></p>
             {% else %}
-                <p>Find an issue with the Scheduler? Log it in the <a href="https://github.com/rrone/refsched/issues"
+                <p>Find an issue with the Scheduler? Log it in the <a href="{{ issueTracker }}"
                                                                       target="_blank">issue tracker.</a></p>
             {% endif %}
             <p>{{ version() }}</p>

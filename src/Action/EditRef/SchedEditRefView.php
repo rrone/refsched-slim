@@ -65,6 +65,10 @@ class SchedEditRefView extends AbstractView
         $html = null;
 
         if (!empty($this->event)) {
+            $projectKey = $this->event->projectKey;
+            //refresh event data
+            $this->event = $this->sr->getEvent($projectKey);
+
             if (!empty($this->event->infoLink)) {
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;
@@ -76,7 +80,6 @@ class SchedEditRefView extends AbstractView
             $this->page_title = $eventName;
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
-            $projectKey = $this->event->projectKey;
             $show_medal_round = $this->sr->getMedalRound($projectKey);
 
             $target_game = $this->sr->gameIdToGameNumber($this->game_id);

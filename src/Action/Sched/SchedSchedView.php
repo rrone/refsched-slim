@@ -9,24 +9,23 @@ use Slim\Http\Response;
 use App\Action\SchedulerRepository;
 use App\Action\AbstractView;
 
+/**
+ * Class SchedSchedView
+ * @package App\Action\Sched
+ */
 class SchedSchedView extends AbstractView
 {
+    private $projectKey;
+
     private $description;
     private $showgroup;
+    private $show_medal_round;
+    private $locked;
 
-    private $num_assigned;
+    private $limit_list = [];
+    private $assigned_list = [];
     private $num_unassigned;
-
-    private $game_id = [];
-    private $game_no = [];
-    private $date = [];
-    private $field = [];
-    private $time = [];
-    private $div = [];
-    private $pool = [];
-    private $home = [];
-    private $away = [];
-    private $ref_team = [];
+    private $atlimit;
 
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -34,6 +33,9 @@ class SchedSchedView extends AbstractView
 
         $this->showgroup = null;
         $this->description = 'No games scheduled';
+
+        $this->atlimit = false;
+
     }
 
     public function handler(Request $request, Response $response)
@@ -41,24 +43,16 @@ class SchedSchedView extends AbstractView
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
 
-        if ($request->isPost() && !$this->isRepost($request)) {
-            $projectKey = $this->event->projectKey;
-            $locked = $this->sr->getLocked($projectKey);
-            $show_medal_round = $this->sr->getMedalRound($projectKey);
+        if ($request->isPost()) {
+
+            $this->projectKey = $this->event->projectKey;
+
+            $this->locked = $this->sr->getLocked($this->projectKey);
+            $this->show_medal_round = $this->sr->getMedalRound($this->projectKey);
+
+            $this->updateLimitLists();
 
             $this->msg = null;
-            $limit_list = [];
-
-            //load limits if any or none
-            $limits = $this->sr->getLimits($projectKey);
-            $no_limit = false;
-            if (!count($limits)) {
-                $no_limit = true;
-            } else {
-                foreach ($limits as $group) {
-                    $limit_list[$group->division] = $group->limit;
-                }
-            }
 
             $_POST = $request->getParsedBody();
             $array_of_keys = array_keys($_POST);
@@ -70,6 +64,7 @@ class SchedSchedView extends AbstractView
             $assign = [];
             $atLimit = [];
             $games_now = [];
+            $div = null;
 
             foreach ($array_of_keys as $key) {
                 $change = explode(':', $key);
@@ -85,9 +80,9 @@ class SchedSchedView extends AbstractView
                 }
             }
 
-            if (!$locked) {
+            if (!$this->locked) {
                 //remove drops if not locked
-                $assigned_games = $this->sr->getGamesByRep($projectKey, $this->user->name, $show_medal_round);
+                $assigned_games = $this->sr->getGamesByRep($this->projectKey, $this->user->name, true);
 
                 if (count($assign) != count($assigned_games)) {
                     $removed = [];
@@ -118,7 +113,7 @@ class SchedSchedView extends AbstractView
             }
 
             //initialize counting groups
-            $assigned_games = $this->sr->getGamesByRep($projectKey, $this->user->name, $show_medal_round);
+            $assigned_games = $this->sr->getGamesByRep($this->projectKey, $this->user->name, true);
             foreach ($assigned_games as $game) {
                 $div = $this->divisionAge($game->division);
                 if (!isset($games_now[$div])) {
@@ -131,7 +126,7 @@ class SchedSchedView extends AbstractView
                 //Update based on add/returned games
                 $added = [];
                 $unavailable = [];
-                $games = $this->sr->getGames($projectKey, '%', $show_medal_round);
+                $games = $this->sr->getGames($this->projectKey, '%', true);
                 foreach ($games as $game) {
                     $date = date('D, d M', strtotime($game->date));
                     $time = date('H:i', strtotime($game->time));
@@ -146,7 +141,7 @@ class SchedSchedView extends AbstractView
                         if (empty($game->assignor)) {
                             //and below the limit if there is one
 
-                            if (!isset($limit_list[$div]) || $games_now[$div] < $limit_list[$div] || $no_limit) {
+                            if (($games_now[$div] < $this->limit_list[$div]) || $this->limit_list[$div] == 'none') {
                                 //make the assignment
                                 $data = [$game->id => $this->user->name];
                                 $this->sr->updateAssignor($data);
@@ -198,41 +193,17 @@ class SchedSchedView extends AbstractView
     {
         $html = null;
 
+        $assignors = [];
+
         if (!empty($this->event)) {
-            $projectKey = $this->event->projectKey;
-            $users = $this->sr->getUsers($projectKey);
+            $this->projectKey = $this->event->projectKey;
+            //refresh event
+            $this->event = $this->sr->getEvent($this->projectKey);
+            $users = $this->sr->getUsers($this->projectKey);
 
-            foreach ($users as $user) {
-                if($user->name != 'Section 1 Admin') {
-                    $assignors[] = $user->name;
-                }
-            }
+            $this->updateLimitLists();
 
-            $allatlimit = true;
-            $oneatlimit = false;
-            $showavailable = false;
-            $a_init = substr($this->user->name, -1);
-            $assigned_list = [];
-            $limit_list = [];
-
-            if (!$this->user->admin) {
-                $groups = $this->sr->getGroups($projectKey);
-                foreach ($groups as $group) {
-                    $assigned_list[$group] = 0;
-                    $limit_list[$group] = 'none';
-                }
-
-                $limits = $this->sr->getLimits($projectKey);
-                foreach ($limits as $group) {
-                    $limit_list[$group->division] = $group->limit;
-                }
-                if (!count($limit_list)) {
-                    $limit_list['none'] = 1;
-                }
-            } else {
-                $limit_list['none'] = 1;
-            }
-
+            //Build header block
             if (!empty($this->event->infoLink)) {
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;
@@ -245,283 +216,55 @@ class SchedSchedView extends AbstractView
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
 
-            $kount = 0;
-            $testtime = null;
+            //initialize page variables / flags
+            $this->locked = $this->sr->getLocked($this->projectKey);
+            $_SESSION['locked'] = $this->locked;
 
-            $locked = $this->sr->getLocked($projectKey);
-            $show_medal_round = $this->sr->getMedalRound($projectKey);
+            $this->show_medal_round = $this->sr->getMedalRound($this->projectKey);
 
-            $_SESSION['locked'] = $locked;
+            $html .= $this->renderUserStatus();
 
-            $games = $this->sr->getGames($projectKey, $this->showgroup, $this->user->admin || $show_medal_round);
+            $submitDisabled = (empty($this->assigned_list['assigned']) && empty($this->assigned_list['unassigned'])) || $this->user->admin || $this->event->archived || $this->atlimit;
 
-            if (count($games)) {
-                $this->description = $this->user->name.': Schedule';
+            $html .= "<form name=\"form1\" method=\"post\" action=".$this->getBaseURL('schedPath').">\n";
 
-                $this->num_assigned = 0;
-                $this->num_unassigned = count($games);
-
-                foreach ($games as $game) {
-                    $this->game_id[] = $game->id;
-                    $this->game_no[] = $game->game_number;
-                    $this->date[] = date('D, d M', strtotime($game->date));
-                    $this->field[] = $game->field;
-                    $this->time[] = date('H:i', strtotime($game->time));
-                    $this->div[] = $game->division;
-                    $this->pool[] = $game->pool;
-                    $this->home[] = $game->home;
-                    $this->away[] = $game->away;
-                    $this->ref_team[] = $game->assignor;
-                    if (!empty($game->assignor)) {
-                        $this->num_unassigned--;
-                    }
-                    if ($game->assignor == $this->user->name) {
-                        $this->num_assigned++;
-                        if (isset($assigned_list[$this->divisionAge($game->division)])) {
-                            $assigned_list[$this->divisionAge($game->division)]++;
-                        } else {
-                            $assigned_list[$this->divisionAge($game->division)] = 1;
-                        }
-                    }
-                    $cr[] = $game->cr;
-                    $ar1[] = $game->ar1;
-                    $ar2[] = $game->ar2;
-                    $r4th[] = $game->r4th;
-
-                    $kount = count($games);
-                }
-                if ($locked && array_key_exists('none', $limit_list)) {
-                    if (!$this->user->admin) {
-                        $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked<br>";
-                        $html .= "You may sign up for games but not unassign yourself";
-                        $html .= "</span></h3>\n";
-                    }
-
-                    $allatlimit = false;
-                    $showavailable = true;
-                } elseif ($locked && array_key_exists(
-                        'all',
-                        $limit_list
-                    ) && $this->num_assigned < $limit_list['all']) {
-                    if (!$this->user->admin) {
-                        $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked<br>";
-                        $html .= "You may sign up for games but not unassign yourself";
-                        $html .= "</span></h3>\n";
-                    }
-
-                    $allatlimit = false;
-                    $showavailable = true;
-                } elseif ($locked && array_key_exists(
-                        'all',
-                        $limit_list
-                    ) && $this->num_assigned == $limit_list['all']) {
-                    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked and you are at your game limit<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe submit button on this page has been disabled and available games are not shown<br>\nYou probably want to <a href=".$$this->getBaseURL(
-                            'greetPath'
-                        ).">Go to the Main Page</a> or <a href=".$this->getBaseURL(
-                            'endPath'
-                        ).">Log Off</a></span></h3>\n";
-                } elseif ($locked && array_key_exists(
-                        'all',
-                        $limit_list
-                    ) && $this->num_assigned > $limit_list['all']) {
-                    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked and you are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nYou will not be able to unassign yourself from games to sign up for others<br>\nThe Submit button has been disabled and available games are not shown<br>\nYou probably want to <a href=".$this->getBaseURL(
-                            'greetPath'
-                        ).">Go to the Main Page</a> or <a href=".$this->getBaseURL(
-                            'endPath'
-                        ).">Log Off</a></span></h3>\n";
-                } elseif (!$locked && array_key_exists(
-                        'all',
-                        $limit_list
-                    ) && $this->num_assigned < $limit_list['all']) {
-                    $tmplimit = $limit_list['all'];
-                    $html .= "<h3 class=\"center\">You are currently assigned to <span style=\"color:$this->colorAlert\">$this->num_assigned</span> of your <span style=\"color:$this->colorAlert\">$tmplimit</span> games</h3>\n";
-                    $showavailable = true;
-                } elseif (!$locked && array_key_exists(
-                        'all',
-                        $limit_list
-                    ) && $this->num_assigned == $limit_list['all']) {
-                    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at your game limit<br>You will have to unassign yourself from games to sign up for others</span></h3>\n";
-                } elseif (!$locked && array_key_exists(
-                        'all',
-                        $limit_list
-                    ) && $this->num_assigned > $limit_list['all']) {
-                    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your game limit<br>\nThe extra games were probably assigned by the Section staff<br>\nIf you continue from here you will not be able to keep all the games you are signed up for and may lose some of the games you already have<br>\nIf you want to keep these games and remain over the game limit it is recommended that you do not hit submit but do something else instead<br>\n<a href=".$this->getBaseURL(
-                            'greetPath'
-                        ).">Go to the Main Page</a></span></h3>\n";
-                } elseif ($locked && count($limit_list)) {
-                    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked<br>";
-                    if ($showavailable) {
-                        $html .= "<br>You can add games to divisions that are below the limit but not unassign your Area from games<br>";
-                    }
-                    $html .= "</span><br>\n";
-                    foreach ($assigned_list as $k => $v) {
-                        $tempassign = $assigned_list[$k];
-                        if (!$this->showgroup || $this->showgroup == $k) {
-                            if (isset($limit_list[$k]) && $limit_list[$k] != 'none') {
-                                $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$limit_list[$k]</span> games<br>\n";
-                            } else {
-                                $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
-                            }
-                        }
-
-                        $showavailable = ($assigned_list[$k] < $limit_list[$k]) || !isset($limit_list[$k]) || $limit_list[$k] == 'none';
-                    }
-
-                    $html .= "</h3>\n";
-                } elseif (!$locked && count($limit_list)) {
-                    $html .= "<h3 class=\"center\">\n";
-                    foreach ($assigned_list as $k => $v) {
-                        $tempassign = $assigned_list[$k];
-                        if (!$this->showgroup || $this->showgroup == $k) {
-                            if (isset($limit_list[$k]) && $limit_list[$k] != 'none') {
-                                $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$limit_list[$k]</span> games<br>\n";
-                                $oneatlimit = ($assigned_list[$k] >= $limit_list[$k]);
-                            } else {
-                                $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>\n";
-                                $oneatlimit = false;
-                            }
-                        }
-                    }
-                    if ($oneatlimit) {
-                        $html .= "<br><span style=\"color:$this->colorAlert\">One or more of your divisions are at or above their limits<br>You will need to unassign games in that division before you can select additional games</span>\n";
-                    }
-                    $html .= "</h3>\n";
-                    $showavailable = true;
-                }
-
-                $rowColor = $this->colorDarkGray;
-
-                if (($showavailable && $this->num_unassigned) || $this->user->admin) {
-                    $submitDisabled = (!$locked && (!$allatlimit && !empty($assigned_list)) || $showavailable) ? '' : ' disabled';
-
-                    $html .= "<form name=\"form1\" method=\"post\" action=".$this->getBaseURL('schedPath').">\n";
-
-                    if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned) || $this->user->admin) {
-                        $html .= "<h3 class=\"center h3-btn\">";
-                        $html .= $this->menuLinks();
-                        if (!$this->user->admin && !$this->event->archived) {
-                            $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
-                        }
-                        $html .= "<div class='clear-fix'></div>\n";
-                        $html .= "</h3>";
-                    }
-
-                    if ($this->num_unassigned) {
-                        $html .= "<h3 class=\"center\"> Shading change indicates different start times</h3>\n";
-
-                        if (!$this->user->admin) {
-                            if ($showavailable && $this->num_unassigned) {
-                                $html .= "<h3 class='left'>Available games :</h3>";
-                            }
-                            $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
-
-                            $html .= "<table class=\"sched-table\" >\n";
-                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                            $html .= "<th>Game No</th>";
-                            $html .= "<th>Date</th>";
-                            $html .= "<th>Time</th>";
-                            $html .= "<th>Field</th>";
-                            $html .= "<th>Division</th>";
-                            $html .= "<th>Pool</th>";
-                            $html .= "<th>Home</th>";
-                            $html .= "<th>Away</th>";
-                            $html .= "<th>Referee Team</th>";
-                            if (!$this->user->admin && !$this->event->archived) {
-                                $html .= "<th>Assign to ".$this->user->name."</th>";
-                            }
-                            $html .= "</tr>\n";
-                            $wasHTML = $html;
-                            for ($kant = 0; $kant < $kount; $kant++) {
-                                if (($this->showgroup && $this->showgroup == $this->divisionAge(
-                                            $this->div[$kant]
-                                        )) || !$this->showgroup) {
-                                    if ($a_init != substr($this->home[$kant], 0, 1) && $a_init != substr(
-                                            $this->away[$kant],
-                                            0,
-                                            1
-                                        ) && !$this->ref_team[$kant] && $showavailable) {
-                                        if (!$testtime) {
-                                            $testtime = $this->time[$kant];
-                                        } elseif ($testtime != $this->time[$kant]) {
-                                            $testtime = $this->time[$kant];
-                                            switch ($rowColor) {
-                                                case $this->colorDarkGray:
-                                                    $rowColor = $this->colorLtGray;
-                                                    break;
-                                                default:
-                                                    $rowColor = $this->colorDarkGray;
-                                            }
-                                        }
-
-                                        $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
-                                        $html .= "<td>".$this->game_no[$kant]."</td>";
-                                        $html .= "<td>".$this->date[$kant]."</td>";
-                                        $html .= "<td>".$this->time[$kant]."</td>";
-                                        $field = $this->field[$kant];
-                                        if (is_null($this->event->field_map)) {
-                                            $html .= "<td>$field</td>";
-                                        } else {
-                                            $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$field</a></td>";
-                                        }
-                                        $html .= "<td>".$this->div[$kant]."</td>";
-                                        $html .= "<td>".$this->pool[$kant]."</td>";
-                                        $html .= "<td>".$this->home[$kant]."</td>";
-                                        $html .= "<td>".$this->away[$kant]."</td>";
-                                        $html .= "<td>&nbsp;</td>";
-                                        if (!$this->user->admin && !$this->event->archived) {
-                                            $html .= "<td><input type=\"checkbox\" name=\"assign:".$this->game_id[$kant]."\" value=\"".$this->game_id[$kant]."\"></td>";
-                                        }
-                                        $html .= "</tr>\n";
-                                    }
-                                }
-                            }
-                            if ($html == $wasHTML) {
-                                $html .= "<tr class=\"center\">";
-                                $html .= "<td colspan=\"10\" > No neutral assignments available. </td>";
-                                $html .= "</tr>\n";
-                            }
-
-                            $html .= "</table>\n";
-                        }
-                    }
-
-                    $refTeams = array_unique($this->ref_team);
-                    sort($refTeams);
-
-                    if (!$this->user->admin) {
-                        $html .= $this->renderAssignmentByArea($this->user->name, $kount, $locked, true);
-                    } else {
-                        foreach ($assignors as $refTeam) {
-                            $html .= $this->renderAssignmentByArea($refTeam, $kount, $locked, false);
-                        }
-                    }
-
-                    if (!$this->user->admin && (($showavailable && $this->num_unassigned) || $this->num_assigned) || ($this->user->admin && $this->num_assigned)) {
-                        $html .= "<h3 class=\"center h3-btn\">";
-                        $html .= $this->menuLinks();
-                        if (!$this->user->admin && !$this->event->archived) {
-                            $html .= "<input class=\"btn btn-primary btn-xs right $submitDisabled\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
-                        }
-                        $html .= "<div class='clear-fix'></div>";
-                        $html .= "</h3>\n";
-                    }
-
-                    $html .= "</form>\n";
-
-                } else {
-//                $html .= "<h3 class=\"center\">You have no games assigned.</h3>\n";
-                    $html .= "<h3 class=\"center h3-btn\">";
-                    $html .= $this->menuLinks();
-                    $html .= "</h3>\n";
-                }
-
-                $_SESSION['locked'] = $locked;
+            $html .= "<h3 class=\"center h3-btn\">";
+            $html .= $this->menuLinks();
+            if (!$submitDisabled) {
+                $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
             }
+            $html .= "<div class='clear-fix'></div>\n";
+            $html .= "</h3>";
+
+            $html .= $this->renderAvailableGames();
+
+            if (!$this->user->admin) {
+                $html .= $this->renderAssignmentByArea($this->user->name);
+            } else {
+                foreach ($users as $user) {
+                    if (!$user->admin) {
+                        $assignors[] = $user->name;
+                    }
+                }
+
+                foreach ($assignors as $refTeam) {
+                    $html .= $this->renderAssignmentByArea($refTeam);
+                }
+            }
+
+            $html .= "<h3 class=\"center h3-btn\">";
+            $html .= $this->menuLinks();
+            if (!$submitDisabled) {
+                $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">";
+            }
+            $html .= "<div class='clear-fix'></div>";
+            $html .= "</h3>\n";
+
+            $html .= "</form>\n";
 
         }
 
         return $html;
-
     }
 
     private function menuLinks()
@@ -540,7 +283,7 @@ class SchedSchedView extends AbstractView
         } elseif ($this->showgroup) {
             $html .= "<a href=".$this->getBaseURL('schedPath').">View all $uname games</a>&nbsp;-&nbsp;";
         }
-        if ($this->num_assigned) {
+        if (!empty($this->assigned_list['assigned'])) {
             $html .= "<a href=".$this->getBaseURL('refsPath').">Edit $uname referee assignments</a>&nbsp;-&nbsp;";
         }
 
@@ -549,112 +292,340 @@ class SchedSchedView extends AbstractView
         return $html;
     }
 
-    private function renderAssignmentByArea($refTeam, $kount, $locked, $checkbox = true)
+
+    private function renderUserStatus()
+    {
+        $html = null;
+
+        $games = $this->sr->getGames($this->projectKey, $this->showgroup, $this->show_medal_round);
+
+        if (count($games)) {
+            $this->description = $this->user->name.': Schedule';
+
+            $this->num_unassigned = count($games);
+
+            $this->assigned_list['assigned'] = [];
+            $this->assigned_list['unassigned'] = [];
+
+            foreach ($games as $game) {
+                if (!empty($game->assignor)) {
+                    $this->num_unassigned--;
+                    if ($game->assignor == $this->user->name) {
+                        if (isset($this->assigned_list[$this->divisionAge($game->division)])) {
+                            $this->assigned_list[$this->divisionAge($game->division)]++;
+                        } else {
+                            $this->assigned_list[$this->divisionAge($game->division)] = 1;
+                        }
+                        $this->assigned_list['assigned'][] = $game;
+                    }
+                } else {
+                    $this->assigned_list['unassigned'][] = $game;
+                }
+            }
+
+            //for all users but Admins
+            if (!$this->user->admin) {
+                if ($this->locked) {
+                    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked</span></h3>\n";
+                }
+                foreach ($this->limit_list as $div => $limit) {
+                    //schedule is locked
+                    if ($this->locked) {
+                            //if limit applies to all
+                            //if below limit
+                            if ($limit != 'none' && $this->assigned_list[$div] < $limit) {
+                                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You may sign up for games but not unassign yourself</span></h3>\n";
+                            }
+                            //if at or above limit
+                            if ($limit != 'none' && $this->assigned_list[$div] >= $limit) {
+                                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at or above your game limit in one or more divisions<br>You need to contact the Section 1 Referee Assignor if you want to change your game assignments</span></h3>\n";
+                                $this->atlimit |= true;
+                            }
+                    } else {  // not locked
+                        //if at limit
+                        if ($limit != 'none' && $this->assigned_list[$div] == $limit) {
+                            $html .= "<h3 class=\"center\">";
+                            $html .= "<span style=\"color:$this->colorAlert\">You are at your game limit in one or more divisions<br>You will have to unassign yourself from $div games to sign up for others</span><br>";
+                            $html .= "</h3>\n";
+                            $this->atlimit &= true;
+                        }
+                        //if above limit
+                        if ($limit != 'none' && $this->assigned_list[$div] > $limit) {
+                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your $div game limit<br>Additional games were likely assigned to you by the Section 1 Referee Assignor</span></h3>\n";
+                            $this->atlimit &= true;
+                        }
+                    }
+                    if ($limit != 'none') {
+                        $html .= "<h3 class=\"center\">\n";
+                        foreach ($this->assigned_list as $k => $v) {
+                            if (!in_array($k, ['assigned', 'unassigned'])) {
+                                $tempassign = $this->assigned_list[$k];
+                                $templimit = $this->limit_list[$k];
+                                if (!$this->showgroup || $this->showgroup == $k) {
+                                    if (isset($this->limit_list[$k]) && $this->limit_list[$k] != 'none') {
+                                        $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$templimit</span> games<br>";
+                                    } else {
+                                        $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>";
+                                    }
+                                }
+                            }
+                        }
+                        $html .= "</h3>\n";
+                    }
+                }
+
+            }
+        }
+
+        return $html;
+    }
+
+    private function renderAvailableGames()
     {
         $html = null;
         $testtime = null;
+        $usr = explode(' ', $this->user->name);
+        switch ($usr[0]) {
+            case 'Area':
+                $usr = substr($this->user->name, -1);
+                break;
+            case 'Section':
+                $pieces = explode(' ', $this->user->name);
+                $usr = array_pop($pieces);
+                break;
+            default:
+                $usr = null;
 
-        $assigned = in_array($refTeam, $this->ref_team);
+        }
+        $rowColor = $this->colorDarkGray;
+
+        $games = $this->sr->getGames($this->projectKey, $this->showgroup);
+
+        if (count($games) == 0) {
+            $html .= "<h3>No available games.</h3>";
+        } else {
+            if ($this->num_unassigned) {
+                $html .= "<h3 class='left'>Available games :</h3>";
+            }
+            $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
+
+            $html .= "<table class=\"sched-table\" >\n";
+            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
+            $html .= "<th>Game No</th>";
+            $html .= "<th>Date</th>";
+            $html .= "<th>Time</th>";
+            $html .= "<th>Field</th>";
+            $html .= "<th>Division</th>";
+            $html .= "<th>Pool</th>";
+            $html .= "<th>Home</th>";
+            $html .= "<th>Away</th>";
+            $html .= "<th>Referee Team</th>";
+
+            if (!$this->user->admin && !$this->event->archived && !$this->locked) {
+                $html .= "<th>Assign to ".$this->user->name."</th>";
+            }
+            $html .= "</tr>\n";
+
+            $this->description = $this->user->name.': Schedule';
+
+            $gameCount = 0;
+            foreach ($this->assigned_list['unassigned'] as $game) {
+                if (($this->showgroup && $this->showgroup == $this->divisionAge(
+                            $game->division
+                        )) || !$this->showgroup) {
+                    if ($this->user->admin || $usr != substr($game->home, 0, 1) && $usr != substr(
+                            $game->away,
+                            0,
+                            1
+                        ) && !$game->assignor) {
+                        $date = date('D, d M', strtotime($game->date));
+                        $time = date('H:i', strtotime($game->time));
+
+                        if (!$testtime) {
+                            $testtime = $time;
+                        } elseif ($testtime != $time) {
+                            $testtime = $time;
+                            switch ($rowColor) {
+                                case $this->colorDarkGray:
+                                    $rowColor = $this->colorLtGray;
+                                    break;
+                                default:
+                                    $rowColor = $this->colorDarkGray;
+                            }
+                        }
+
+                        $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
+                        $html .= "<td>".$game->game_number."</td>";
+                        $html .= "<td>".$date."</td>";
+                        $html .= "<td>".$time."</td>";
+                        $field = $game->field;
+                        if (is_null($this->event->field_map)) {
+                            $html .= "<td>$field</td>";
+                        } else {
+                            $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$field</a></td>";
+                        }
+                        $html .= "<td>".$game->division."</td>";
+                        $html .= "<td>".$game->pool."</td>";
+                        $html .= "<td>".$game->home."</td>";
+                        $html .= "<td>".$game->away."</td>";
+                        $html .= "<td>&nbsp;</td>";
+                        if (!$this->user->admin && !$this->event->archived && !$this->locked) {
+                            $html .= "<td><input type=\"checkbox\" name=\"assign:".$game->id."\" value=\""
+                                .$game->id."\"></td>";
+                        }
+                        $html .= "</tr>\n";
+
+                        $gameCount++;
+                    }
+                }
+            }
+
+            if (empty($this->assigned_list['unassigned'])) {
+                $html .= "<tr class=\"center\">";
+                $html .= "<td colspan=\"10\" > No neutral assignments available. </td>";
+                $html .= "</tr>\n";
+            }
+
+            $html .= "</table>\n";
+        }
+
+        return $html;
+    }
+
+    private function renderAssignmentByArea(
+        $assignor
+    ) {
+        $html = null;
+        $testtime = null;
+
         $gameCount = 0;
 
-        for ($kant = 0; $kant < $kount; $kant++) {
-            if ($refTeam == $this->ref_team[$kant]) {
+        $games = $this->sr->getGames($this->projectKey, $this->showgroup, true);
+
+        foreach ($games as $game) {
+            if ($assignor == $game->assignor) {
                 $gameCount += 1;
             }
         }
 
         switch ($gameCount) {
             case 0:
-                $html .= "<h3 class=\"left\">$gameCount Games assigned to $refTeam</h3>\n";
+                $html .= "<h3 class=\"left\">$gameCount Games assigned to $assignor</h3>\n";
                 break;
             case 1:
-                if (empty($refTeam)) {
+                if (empty($this->assigned_list)) {
                     $html .= "<h3 class=\"left\">$gameCount Game Unassigned:</h3>\n";
                 } else {
-                    $html .= "<h3 class=\"left\">$gameCount Game assigned to $refTeam :</h3>\n";
+                    $html .= "<h3 class=\"left\">$gameCount Game assigned to $assignor :</h3>\n";
                 }
                 break;
             default:
-                if (empty($refTeam)) {
+                if (empty($assignor)) {
                     $html .= "<h3 class=\"left\">$gameCount Games Unassigned:</h3>\n";
                 } else {
-                    $html .= "<h3 class=\"left\">$gameCount Games assigned to $refTeam :</h3>\n";
+                    $html .= "<h3 class=\"left\">$gameCount Games assigned to $assignor :</h3>\n";
                 }
         }
         $html .= "<div class=\"clear-fix\"></div>\n";
 
-        if($gameCount) {
-            if (empty($kount)) {
-                $html .= "<table class=\"sched-table\" >\n";
+        if ($gameCount) {
+            $html .= "<table class=\"sched-table\" >\n";
+            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
+            $html .= "<th>Game No</th>";
+            $html .= "<th>Date</th>";
+            $html .= "<th>Time</th>";
+            $html .= "<th>Field</th>";
+            $html .= "<th>Division</th>";
+            $html .= "<th>Pool</th>";
+            $html .= "<th>Home</th>";
+            $html .= "<th>Away</th>";
+            $html .= "<th>Referee Team</th>";
+            if (empty(count($games))) {
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorHighlight\">";
-                $html .= "<td>$refTeam has no games assigned</td>";
+                $html .= "<td colspan=\"9\">$assignor has no games assigned</td>";
                 $html .= "</tr>\n";
             } else {
-                $html .= "<table class=\"sched-table\" >\n";
-                $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                $html .= "<th>Game No</th>";
-                $html .= "<th>Date</th>";
-                $html .= "<th>Time</th>";
-                $html .= "<th>Field</th>";
-                $html .= "<th>Division</th>";
-                $html .= "<th>Pool</th>";
-                $html .= "<th>Home</th>";
-                $html .= "<th>Away</th>";
-                $html .= "<th>Referee Team</th>";
-                if ($checkbox && !$this->event->archived) {
+
+                if (!$this->user->admin && !$this->event->archived) {
                     $html .= "<th>Assigned</th>";
                 }
                 $html .= "</tr>\n";
 
-                if ($assigned) {
-                    $rowColor = $this->colorGroup1;
+                $rowColor = $this->colorGroup1;
 
-                    for ($kant = 0; $kant < $kount; $kant++) {
-                        if ($refTeam == $this->ref_team[$kant]) {
+                foreach ($games as $game) {
+                    if ($assignor == $game->assignor) {
 
-                            if (!$testtime) {
-                                $testtime = $this->time[$kant];
-                            } elseif ($testtime != $this->time[$kant]) {
-                                $testtime = $this->time[$kant];
-                                switch ($rowColor) {
-                                    case $this->colorGroup1:
-                                        $rowColor = $this->colorGroup2;
-                                        break;
-                                    default:
-                                        $rowColor = $this->colorGroup1;
-                                }
+                        if (!$testtime) {
+                            $testtime = $game->time;
+                        } elseif ($testtime != $game->time) {
+                            $testtime = $game->time;
+                            switch ($rowColor) {
+                                case $this->colorGroup1:
+                                    $rowColor = $this->colorGroup2;
+                                    break;
+                                default:
+                                    $rowColor = $this->colorGroup1;
                             }
-
-                            $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
-                            $html .= "<td>".$this->game_no[$kant]."</td>";
-                            $html .= "<td>".$this->date[$kant]."</td>";
-                            $html .= "<td>".$this->time[$kant]."</td>";
-                            $field = $this->field[$kant];
-                            if (is_null($this->event->field_map)) {
-                                $html .= "<td>$field</td>";
-                            } else {
-                                $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$field</a></td>";
-                            }
-                            $html .= "<td>".$this->div[$kant]."</td>";
-                            $html .= "<td>".$this->pool[$kant]."</td>";
-                            $html .= "<td>".$this->home[$kant]."</td>";
-                            $html .= "<td>".$this->away[$kant]."</td>";
-                            $html .= "<td>".$this->ref_team[$kant]."</td>";
-                            if ($checkbox && !$this->event->archived) {
-                                if ($locked) {
-                                    $html .= "<td>Locked</td>";
-                                } else {
-                                    $html .= "<td><input name=\"games:".$this->game_id[$kant]."\" type=\"checkbox\" value=\"".$this->game_id[$kant]."\" checked></td>";
-                                }
-                            }
-                            $html .= "</tr>\n";
                         }
+                        $date = date('D, d M', strtotime($game->date));
+                        $time = date('H:i', strtotime($game->time));
+
+                        $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
+                        $html .= "<td>".$game->game_number."</td>";
+                        $html .= "<td>".$date."</td>";
+                        $html .= "<td>".$time."</td>";
+                        $field = $game->field;
+                        if (is_null($this->event->field_map)) {
+                            $html .= "<td>$field</td>";
+                        } else {
+                            $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$field</a></td>";
+                        }
+                        $html .= "<td>".$game->division."</td>";
+                        $html .= "<td>".$game->pool."</td>";
+                        $html .= "<td>".$game->home."</td>";
+                        $html .= "<td>".$game->away."</td>";
+                        $html .= "<td>".$game->assignor."</td>";
+                        if (!$this->user->admin) {
+                            if ($this->locked) {
+                                $html .= "<td>Locked</td>";
+                            } elseif (!$this->event->archived) {
+                                $html .= "<td><input name=\"games:".$game->id."\" type=\"checkbox\" value=\""
+                                    .$game->id."\" checked></td>";
+                            }
+                        }
+                        $html .= "</tr>\n";
                     }
                 }
+
                 $html .= "</table>";
             }
         }
 
         return $html;
+    }
+
+    /**
+     * @return null
+     */
+    private function updateLimitLists()
+    {
+        //initialize assigned and limit lists
+        $limits = $this->sr->getLimits($this->projectKey);
+
+        $groups = $this->sr->getGroups($this->projectKey);
+        foreach ($groups as $group) {
+            if (!isset($this->limit_list[$group])) {
+                $this->limit_list[$group] = 'none';
+                $this->assigned_list[$group] = 0;
+            }
+        }
+        foreach ($limits as $limit) {
+            if ($limit->division != 'all') {
+                $this->limit_list[$limit->division] = $limit->limit;
+            }
+        }
+
+        return null;
     }
 }

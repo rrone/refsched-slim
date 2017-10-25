@@ -419,6 +419,8 @@ class SchedulerRepository
      */
     public function getGamesByRep($projectKey, $rep, $medalRound = false)
     {
+        $medalRound = $medalRound ? '%' : false;
+
         $games = $this->db->table('games')
             ->where([
                 ['projectKey', '=', $projectKey],
@@ -1021,9 +1023,11 @@ class SchedulerRepository
      */
     public function getLimits($projectKey)
     {
-        return $this->db->table('limits')
+        $limits = $this->db->table('limits')
             ->where('projectKey', '=', $projectKey)
             ->get();
+
+        return $limits;
     }
 
 //Log writer

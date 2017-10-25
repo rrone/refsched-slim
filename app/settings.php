@@ -39,8 +39,16 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2017.10.18.00'
-        ]
+            'version' => '2017.10.23.00'
+        ],
+
+        'assignor' => [
+            'name' => 'Jody Kinsey',
+            'email' => 'jodykinsey23@gmail.com'
+        ],
+
+        'issueTracker' => 'https://github.com/rrone/refsched/issues'
+
     ],
 
     'settings.test' => false,

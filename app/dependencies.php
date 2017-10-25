@@ -14,6 +14,8 @@ $container['view'] = function (\Slim\Container $c) {
 
     //Manage Twig base_url() returns port 80 when used over HTTPS connection
     $view['env_uri'] = $c->get('settings')['env_uri'];
+    $view['assignoremail'] = $c->get('settings')['assignor']['email'];
+    $view['issueTracker'] = $c->get('settings')['issueTracker'];
 
     // Add extensions
     $view->addExtension(new Slim\Views\TwigExtension($c->get('router'), $c->get('request')->getUri()));
