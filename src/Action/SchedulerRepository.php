@@ -1087,7 +1087,7 @@ class SchedulerRepository
         $ts = $this->db->table('log')
             ->where([
                 ['projectKey', 'like', $projectKey],
-                ['note', 'like', "$userName: Scheduler sched%"]
+                ['note', 'like', "$userName: Scheduler greet%"]
             ])
             ->orderBy('timestamp', 'desc')
             ->limit(1)
