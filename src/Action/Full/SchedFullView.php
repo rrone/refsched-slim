@@ -61,6 +61,10 @@ class SchedFullView extends AbstractView
         $this->menu = null;
 
         if (!empty($this->event)) {
+            $projectKey = $this->event->projectKey;
+            //refresh event data
+            $this->event = $this->sr->getEvent($projectKey);
+
             if(!empty($this->event->infoLink)){
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;
@@ -72,7 +76,6 @@ class SchedFullView extends AbstractView
             $this->page_title = $eventName;
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
-            $projectKey = $this->event->projectKey;
 
             $show_medal_round = $this->sr->getMedalRound($projectKey);
 
@@ -92,7 +95,7 @@ class SchedFullView extends AbstractView
 
                 $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
-                $html .= "<h3 class=\"center\">Green: Assignments covered (Yah!) / Yellow: Open Slots / Red: Needs your attention / Grey: Not yours to cover<br><br>\n";
+                $html .= "<h3 class=\"center\">Green: Assignments covered (Boo-yah!) / Yellow: Open Slots / Red: Needs your attention / Grey: Not yours to cover<br><br>\n";
                 $html .= "Green shading change indicates different start times</h3>\n";
 
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";

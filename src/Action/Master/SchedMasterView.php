@@ -55,8 +55,6 @@ class SchedMasterView extends AbstractView
             'view' => array(
                 'admin' => $this->user->admin,
                 'content' => $this->renderView(),
-                'topmenu' => $this->menu(),
-                'menu' => $this->bottommenu,
                 'title' => $this->page_title,
                 'dates' => $this->dates,
                 'location' => $this->location,
@@ -72,6 +70,10 @@ class SchedMasterView extends AbstractView
         $html = null;
 
         if (!empty($this->event)) {
+            $projectKey = $this->event->projectKey;
+            //refresh event
+            $this->event = $this->sr->getEvent($projectKey);
+
             if (!empty($this->event->infoLink)) {
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;
@@ -83,7 +85,6 @@ class SchedMasterView extends AbstractView
             $this->page_title = $eventName;
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
-            $projectKey = $this->event->projectKey;
 
             $this->games = $this->sr->getGames($projectKey, '%', true);
 
@@ -91,17 +92,18 @@ class SchedMasterView extends AbstractView
                 $this->description = $this->user->name . ': Schedule Referee Teams';
 
                 $select_list = array('');
-                $users = $this->sr->getAllUsers($projectKey);
+                $users = $this->sr->getUsers($projectKey);
 
                 foreach ($users as $user) {
-                    if($user->name != 'Admin' & strpos($user->for_events, $projectKey) ) {
+                    if($user->name != 'Admin' && strpos($user->for_events, $projectKey) ) {
                         $select_list[] = $user->name;
                     }
                 }
 
                 $html .= "<form name=\"master_sched\" method=\"post\" action=".$this->getBaseURL('masterPath').">\n";
 
-                $html .= "<h3 class=\"center\">Green: Assignments made (Yah!) / Red: Needs your attention<br><br>\n";
+                $html .= $this->menu();
+                $html .= "<h3 class=\"center\">Green: Assignments made (Boo-yah!) / Red: Needs your attention<br><br>\n";
                 $html .= "Green shading change indicates different start times</h3>\n";
 
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";
@@ -158,14 +160,17 @@ class SchedMasterView extends AbstractView
                         if(!$this->event->archived) {
                             $html .= "<td><select name=\"$game->id\">\n";
                             foreach ($select_list as $user) {
-                                if ($user == $game->assignor) {
-                                    $html .= "<option selected>$user</option>\n";
-                                } else {
-                                    $html .= "<option>$user</option>\n";
+                                if(!strpos($user, 'Admin')) {
+                                    if ($user == $game->assignor) {
+                                        $html .= "<option selected>$user</option>\n";
+                                    } else {
+                                        $html .= "<option>$user</option>\n";
+                                    }
                                 }
                             }
 
                             $html .= "</select></td>";
+
                         } else {
                             $html .= "<td>$game->assignor</td>";
                         }

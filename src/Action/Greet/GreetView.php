@@ -48,6 +48,9 @@ class GreetView extends AbstractView
 
         if (!empty($this->event)) {
             $projectKey = $this->event->projectKey;
+            //refresh event
+            $this->event = $this->sr->getEvent($projectKey);
+
             if (!empty($this->event->infoLink)) {
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;

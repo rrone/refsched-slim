@@ -43,7 +43,7 @@ class SchedRefsView extends AbstractView
                 'dates' => $this->dates,
                 'location' => $this->location,
                 'description' => $this->description,
-            )
+            ),
         );
 
         $this->view->render($response, 'sched.html.twig', $content);
@@ -55,6 +55,10 @@ class SchedRefsView extends AbstractView
         $html = null;
 
         if (!empty($this->event)) {
+            $projectKey = $this->event->projectKey;
+            //refresh event
+            $this->event = $this->sr->getEvent($projectKey);
+
             if (!empty($this->event->infoLink)) {
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;
@@ -66,7 +70,6 @@ class SchedRefsView extends AbstractView
             $this->page_title = $eventName;
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
-            $projectKey = $this->event->projectKey;
             $show_medal_round = $this->sr->getMedalRound($projectKey);
 
             if ($this->user->admin) {
@@ -75,8 +78,8 @@ class SchedRefsView extends AbstractView
                 $this->games = $this->sr->getGames($projectKey, '%', $show_medal_round);
             }
 
-            if(count($this->games)) {
-                $this->description = $this->user->name . ': Referee Assignments';
+            if (count($this->games)) {
+                $this->description = $this->user->name.': Referee Assignments';
 
                 foreach ($this->games as $game) {
                     if ($game->assignor == $this->user->name || $this->user->admin) {
@@ -87,7 +90,7 @@ class SchedRefsView extends AbstractView
                 $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
                 if ($this->num_assigned) {
-                    $html .= "<h3 class=\"center\">Green: Assignments covered (Yah!) / Yellow: Open Slots / Red: Needs your attention / Grey: Not yours to cover<br><br>\n";
+                    $html .= "<h3 class=\"center\">Green: Assignments covered (Boo-yah!) / Yellow: Open Slots / Red: Needs your attention / Grey: Not yours to cover<br><br>\n";
                     $html .= "Green shading change indicates different start times</h3>\n";
 
                     $html .= "<form name=\"addref\" method=\"post\" action=\"".$this->getBaseURL('refsPath')."\">\n";
@@ -108,7 +111,7 @@ class SchedRefsView extends AbstractView
                     if ($has4th) {
                         $html .= "<th>4th</th>";
                     }
-                    if(!$this->event->archived) {
+                    if (!$this->event->archived) {
                         $html .= "<th>Edit</th>";
                     }
                     $html .= "</tr>\n";
@@ -136,10 +139,12 @@ class SchedRefsView extends AbstractView
                                     }
                                 }
                                 //no refs
-                                if (empty($game->cr) && empty($game->ar1) && empty($game->ar2)) {
+                                if (empty($game->cr) && empty($game->ar1) && empty($game->ar2) && (!$has4th || ($has4th
+                                            && empty($game->r4th)))) {
                                     $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
                                     //open AR  or 4th slots
-                                } elseif (empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
+                                } elseif (empty($game->cr) || empty($game->ar1) || empty($game->ar2) || ($has4th &&
+                                        empty($game->r4th))) {
                                     $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
                                     //match covered
                                 } else {
@@ -165,7 +170,7 @@ class SchedRefsView extends AbstractView
                             if ($has4th) {
                                 $html .= "<td>$game->r4th</td>";
                             }
-                            if(!$this->event->archived) {
+                            if (!$this->event->archived) {
                                 $locked = $game->locked && !$this->user->admin ? 'disabled' : '';
                                 if ($game->assignor || $this->user->admin) {
                                     $html .= "<td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\" $locked></td>";
@@ -197,21 +202,21 @@ class SchedRefsView extends AbstractView
     {
         $html = "<h3 class=\"center h3-btn\">";
 
-        $html .= "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;";
+        $html .= "<a href=".$this->getBaseURL('greetPath').">Home</a>&nbsp;-&nbsp;";
 
-        $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a>&nbsp;-&nbsp";
+        $html .= "<a href=".$this->getBaseURL('fullPath').">View the full schedule</a>&nbsp;-&nbsp";
 
         if ($this->user->admin) {
-            if(!$this->event->archived) {
+            if (!$this->event->archived) {
                 $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit games</a>&nbsp;-&nbsp;";
             }
-            $html .= "<a href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;";
-            $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;";
+            $html .= "<a href=".$this->getBaseURL('schedPath').">View Assignors</a>&nbsp;-&nbsp;";
+            $html .= "<a href=".$this->getBaseURL('masterPath').">Select Assignors</a>&nbsp;-&nbsp;";
         } else {
-            $html .= "<a href=" . $this->getBaseURL('schedPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;";
+            $html .= "<a href=".$this->getBaseURL('schedPath').">Go to ".$this->user->name." schedule</a>&nbsp;-&nbsp;";
         }
 
-        $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a>";
+        $html .= "<a href=".$this->getBaseURL('endPath').">Log off</a>";
 
         $html .= "</h3>\n";
 

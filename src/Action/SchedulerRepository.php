@@ -3,6 +3,8 @@ namespace App\Action;
 
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Support\Collection;
+use DateTime;
+use DateTimeZone;
 
 /**
  * Class SchedulerRepository
@@ -341,6 +343,9 @@ class SchedulerRepository
         return null;
     }
 
+    /**
+     * @return null
+     */
     public function getEventMessage()
     {
         $status = $this->db->table('messages')
@@ -419,6 +424,8 @@ class SchedulerRepository
      */
     public function getGamesByRep($projectKey, $rep, $medalRound = false)
     {
+        $medalRound = $medalRound ? '%' : false;
+
         $games = $this->db->table('games')
             ->where([
                 ['projectKey', '=', $projectKey],
@@ -503,7 +510,7 @@ class SchedulerRepository
 
         $data['r4th'] = isset($data['r4th']) ? $data['r4th'] : null;
         foreach ($data as $id => $value) {
-            if ($value == 'Update Assignments') {
+            if ( in_array($value, ['Update Assignments', 'Clear All'])) {
                 $this->db->table('games')
                     ->where('id', $id)
                     ->update([
@@ -1021,9 +1028,11 @@ class SchedulerRepository
      */
     public function getLimits($projectKey)
     {
-        return $this->db->table('limits')
+        $limits = $this->db->table('limits')
             ->where('projectKey', '=', $projectKey)
             ->get();
+
+        return $limits;
     }
 
 //Log writer
@@ -1063,8 +1072,39 @@ class SchedulerRepository
         return $this->db->getConnection();
     }
 
-//    SAR function
+//Log reader
 
+
+    /**
+     * @param $projectKey
+     * @param $userName
+     * @return null|string
+     */
+    public function getLastLogon($projectKey, $userName)
+    {
+        $timestamp = null;
+
+        $ts = $this->db->table('log')
+            ->where([
+                ['projectKey', 'like', $projectKey],
+                ['note', 'like', "$userName: Scheduler greet%"]
+            ])
+            ->orderBy('timestamp', 'desc')
+            ->limit(1)
+            ->get();
+
+        $ts = $this->getZero($ts);
+
+        if (!empty($ts)){
+            $utc = new DateTime($ts->timestamp, new DateTimeZone('UTC'));
+            $time = $utc->setTimezone(new DateTimeZone('America/Los_Angeles'));
+            $timestamp = $time->format('Y-M-j H:i');
+        }
+
+        return $timestamp;
+    }
+
+//    SAR function
 
     /**
      * @param $portal

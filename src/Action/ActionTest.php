@@ -81,7 +81,7 @@ class ActionTest extends AppTestCase
     {
         $result = $this->mockSR->getEventLabel($this->projectKey);
 
-        $this->assertEquals('November 19-20, 2016:U16/U19 Playoffs', $result);
+        $this->assertEquals('U16/U19 Playoffs: November 19-20, 2016', $result);
     }
 
     public function testGetLockedNull()
@@ -158,7 +158,7 @@ class ActionTest extends AppTestCase
 
     public function testgetGame()
     {
-        $result = $this->mockSR->getGame(1);
+        $result = $this->mockSR->getGame(457);
 
         $this->assertInstanceOf(\stdClass::class, $result);
     }
