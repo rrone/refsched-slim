@@ -95,7 +95,7 @@ class SchedFullView extends AbstractView
 
                 $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
-                $html .= "<h3 class=\"center\">Green: Assignments covered (Yah!) / Yellow: Open Slots / Red: Needs your attention / Grey: Not yours to cover<br><br>\n";
+                $html .= "<h3 class=\"center\">Green: Assignments covered (Boo-yah!) / Yellow: Open Slots / Red: Needs your attention / Grey: Not yours to cover<br><br>\n";
                 $html .= "Green shading change indicates different start times</h3>\n";
 
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";

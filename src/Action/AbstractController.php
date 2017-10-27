@@ -94,6 +94,7 @@ abstract class AbstractController
 
         $_GET = $request->getParams();
         $uri = $request->getUri()->getPath();
+        $uriPath = substr($uri, 1);
         $user = isset($this->user) ? $this->user->name : 'Anonymous';
         $projectKey = isset($this->event) ? $this->event->projectKey : '';
         $post = $request->isPost() ? 'with updated ref assignments' : '';
@@ -112,7 +113,7 @@ abstract class AbstractController
             case $this->getBaseURL('editrefPath'):
             case '/editref':
                 if (!empty($post)) {
-                    $logMsg = "$user: Scheduler $uri dispatched $post";
+                    $logMsg = "$user: Scheduler $uriPath dispatched $post";
                 } else {
                     return null;
                 }
@@ -120,16 +121,16 @@ abstract class AbstractController
             case $this->getBaseURL('fullPath'):
             case '/full':
                 $msg = isset($_GET['open']) ? ' no referees view' : '';
-                $logMsg = "$user: Scheduler $uri$msg dispatched";
+                $logMsg = "$user: Scheduler $uriPath$msg dispatched";
                 break;
             case $this->getBaseURL('schedPath'):
             case '/sched':
                 $showgroup = isset($_GET['group']) ? $_GET['group'] : null;
                 $msg = empty($showgroup) ? '' : " for $showgroup";
-                $logMsg = "$user: Scheduler $uri$msg dispatched";
+                $logMsg = "$user: Scheduler $uriPath$msg dispatched";
                 break;
             default:
-                $logMsg = "$user: Scheduler $uri dispatched";
+                $logMsg = "$user: Scheduler $uriPath dispatched";
                 break;
         }
 

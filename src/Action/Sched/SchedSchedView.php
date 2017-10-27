@@ -331,16 +331,16 @@ class SchedSchedView extends AbstractView
                 foreach ($this->limit_list as $div => $limit) {
                     //schedule is locked
                     if ($this->locked) {
-                            //if limit applies to all
-                            //if below limit
-                            if ($limit != 'none' && $this->assigned_list[$div] < $limit) {
-                                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You may sign up for games but not unassign yourself</span></h3>\n";
-                            }
-                            //if at or above limit
-                            if ($limit != 'none' && $this->assigned_list[$div] >= $limit) {
-                                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at or above your game limit in one or more divisions<br>You need to contact the Section 1 Referee Assignor if you want to change your game assignments</span></h3>\n";
-                                $this->atlimit |= true;
-                            }
+                        //if limit applies to all
+                        //if below limit
+                        if ($limit != 'none' && $this->assigned_list[$div] < $limit) {
+                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You may sign up for games but not unassign yourself</span></h3>\n";
+                        }
+                        //if at or above limit
+                        if ($limit != 'none' && $this->assigned_list[$div] >= $limit) {
+                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at or above your game limit in one or more divisions<br>You need to contact the Section 1 Referee Assignor if you want to change your game assignments</span></h3>\n";
+                            $this->atlimit |= true;
+                        }
                     } else {  // not locked
                         //if at limit
                         if ($limit != 'none' && $this->assigned_list[$div] == $limit) {
@@ -508,22 +508,32 @@ class SchedSchedView extends AbstractView
             }
         }
 
+        $strLastLogon = '';
+        if ($this->user->admin  && $gameCount > 0) {
+            $lastLogon = $this->sr->getLastLogon($this->projectKey, $assignor);
+            if (empty($lastLogon)) {
+                $strLastLogon = " <span style=\"color:$this->colorAlert\">[Last logon: None]</span>";
+            } else {
+                $strLastLogon = " [Last logon: $lastLogon]";
+            }
+        }
+
         switch ($gameCount) {
             case 0:
-                $html .= "<h3 class=\"left\">$gameCount Games assigned to $assignor</h3>\n";
+                $html .= "<h3 class=\"left\">$gameCount Games assigned to $assignor$strLastLogon</h3>\n";
                 break;
             case 1:
                 if (empty($this->assigned_list)) {
                     $html .= "<h3 class=\"left\">$gameCount Game Unassigned:</h3>\n";
                 } else {
-                    $html .= "<h3 class=\"left\">$gameCount Game assigned to $assignor :</h3>\n";
+                    $html .= "<h3 class=\"left\">$gameCount Game assigned to $assignor$strLastLogon:</h3>\n";
                 }
                 break;
             default:
                 if (empty($assignor)) {
                     $html .= "<h3 class=\"left\">$gameCount Games Unassigned:</h3>\n";
                 } else {
-                    $html .= "<h3 class=\"left\">$gameCount Games assigned to $assignor :</h3>\n";
+                    $html .= "<h3 class=\"left\">$gameCount Games assigned to $assignor$strLastLogon:</h3>\n";
                 }
         }
         $html .= "<div class=\"clear-fix\"></div>\n";

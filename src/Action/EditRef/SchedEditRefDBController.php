@@ -44,7 +44,7 @@ class SchedEditRefDBController extends AbstractController
 
         $this->schedEditRefView->handler($request, $response);
 
-        if($request->isPost()) {
+        if($this->schedEditRefView->isPost()) {
             $response =  $response->withRedirect($this->getBaseURL('refsPath'));
         }
         else {

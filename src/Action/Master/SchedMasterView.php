@@ -103,7 +103,7 @@ class SchedMasterView extends AbstractView
                 $html .= "<form name=\"master_sched\" method=\"post\" action=".$this->getBaseURL('masterPath').">\n";
 
                 $html .= $this->menu();
-                $html .= "<h3 class=\"center\">Green: Assignments made (Yah!) / Red: Needs your attention<br><br>\n";
+                $html .= "<h3 class=\"center\">Green: Assignments made (Boo-yah!) / Red: Needs your attention<br><br>\n";
                 $html .= "Green shading change indicates different start times</h3>\n";
 
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";

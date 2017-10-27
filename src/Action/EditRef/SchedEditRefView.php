@@ -10,6 +10,7 @@ use App\Action\AbstractView;
 class SchedEditRefView extends AbstractView
 {
     private $game_id;
+    private $isPost;
 
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -25,12 +26,15 @@ class SchedEditRefView extends AbstractView
         $this->game_id = $request->getAttribute('game_id');
 
         if ($request->isPost()) {
+            $this->isPost = true;
             $data = $request->getParsedBody();
 
             if (in_array("Update Assignments", array_values($data))) {
 
                 foreach ($data as $key => &$value) {
-                    $value = $this->user->admin ? $value : $this->stdName($value);
+                    if(is_string($key)) {
+                        $value = $this->user->admin ? $value : $this->stdName($value);
+                    }
                 }
 
                 $gameNum = $this->sr->gameIdToGameNumber($this->game_id);
@@ -38,6 +42,22 @@ class SchedEditRefView extends AbstractView
 
                 if (!is_null($game) && (($game->assignor == $this->user->name) || $this->user->admin))
                     $this->sr->updateAssignments($data);
+            }
+            if (in_array("Clear All", array_values($data))) {
+
+                foreach ($data as $key => &$value) {
+                    if(is_string($key)) {
+                        $value = null;
+                    }
+                }
+
+                $gameNum = $this->sr->gameIdToGameNumber($this->game_id);
+                $game = $this->sr->getGameByKeyAndNumber($this->event->projectKey, $gameNum);
+
+                if (!is_null($game) && (($game->assignor == $this->user->name) || $this->user->admin))
+                    $this->sr->updateAssignments($data);
+
+                $this->isPost = false;
             }
         }
     }
@@ -58,6 +78,11 @@ class SchedEditRefView extends AbstractView
         );
 
         $this->view->render($response, 'sched.html.twig', $content);
+    }
+
+    public function isPost()
+    {
+        return $this->isPost;
     }
 
     private function renderEditRef()
@@ -138,6 +163,7 @@ class SchedEditRefView extends AbstractView
                             $html .= "</table>\n";
                             $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"$game->id\" value=\"Update Assignments\">\n";
                             $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"reset\" name=\"reset\" value=\"Reset\">\n";
+                            $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"$game->id\" value=\"Clear All\">\n";
                             $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"cancel\" value=\"Cancel\">\n";
                             $html .= "<div class='clear-fix'></div>";
                             $html .= "</form>\n";
