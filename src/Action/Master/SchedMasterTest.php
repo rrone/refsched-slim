@@ -61,8 +61,8 @@ class SchedMasterTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['user_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -91,8 +91,8 @@ class SchedMasterTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['admin_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['admin_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -121,9 +121,9 @@ class SchedMasterTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['admin_test']['user'];
-        $assignor = $this->local['user_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['admin_test']['user'];
+        $assignor = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -137,7 +137,7 @@ class SchedMasterTest extends AppTestCase
             'cache-control' => 'no-cache',
             'content-type' => 'multipart/form-data;'
         );
-        // clear match 457 (game 1 in 2016U16U19Chino)
+        // clear match 457 (match 1 in 2016U16U19Chino)
         $body = array(
             'Submit' => 'Submit',
             457 => ''

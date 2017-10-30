@@ -61,7 +61,7 @@ class LogExport extends AbstractExporter
         $labels = array('Timestamp', 'Project Key', 'User', 'Memo');
         $data = array($labels);
 
-        //set the data : game in each row
+        //set the data : match in each row
         foreach ($log as $item) {
             $msg = explode(':', $item->note);
             if (isset($msg[1])) {

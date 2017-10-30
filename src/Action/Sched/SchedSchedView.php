@@ -32,7 +32,7 @@ class SchedSchedView extends AbstractView
         parent::__construct($container, $schedulerRepository);
 
         $this->showgroup = null;
-        $this->description = 'No games scheduled';
+        $this->description = 'No matches scheduled';
 
         $this->atlimit = false;
 
@@ -72,7 +72,7 @@ class SchedSchedView extends AbstractView
                     case 'assign':
                         $adds[$change[1]] = $this->user->name;
                         break;
-                    case 'games':
+                    case 'matches':
                         $assign[$change[1]] = $this->user->name;
                         break;
                     default:
@@ -103,7 +103,7 @@ class SchedSchedView extends AbstractView
                                 );
 
                                 $this->sr->updateAssignments($data);
-                                $this->msg .= "<p>You have <strong>removed</strong> your referee team from $game->division Game# $game->game_number on $game->date at $game->time on $game->field</p>";
+                                $this->msg .= "<p>You have <strong>removed</strong> your referee team from $game->division Match# $game->game_number on $game->date at $game->time on $game->field</p>";
                             }
                         }
                     }
@@ -123,7 +123,7 @@ class SchedSchedView extends AbstractView
             }
 
             if (count($adds)) {
-                //Update based on add/returned games
+                //Update based on add/returned matches
                 $added = [];
                 $unavailable = [];
                 $games = $this->sr->getGames($this->projectKey, '%', true);
@@ -147,14 +147,14 @@ class SchedSchedView extends AbstractView
                                 $this->sr->updateAssignor($data);
                                 $added[$game->id] = $game;
                                 $games_now[$div]++;
-                                $this->msg .= "<p>You have <strong>scheduled</strong> $game->division Game# $game->game_number on $date on $game->field at $time</p>";
+                                $this->msg .= "<p>You have <strong>scheduled</strong> $game->division Match# $game->game_number on $date on $game->field at $time</p>";
                             } else {
                                 $atLimit[$div]++;
-                                $this->msg .= "<p>You have <strong>not scheduled</strong> $game->division Game# $game->game_number on $date on $game->field at $time because you are at your game limit!</p>";
+                                $this->msg .= "<p>You have <strong>not scheduled</strong> $game->division Match# $game->game_number on $date on $game->field at $time because you are at your match limit!</p>";
                             }
                         } else {
                             $unavailable[$game->id] = $game;
-                            $this->msg = "<p>Sorry, $game->division Game# $game->game_number has been scheduled by $game->assignor</p>";
+                            $this->msg = "<p>Sorry, $game->division Match# $game->game_number has been scheduled by $game->assignor</p>";
                         }
                     }
                 }
@@ -276,15 +276,15 @@ class SchedSchedView extends AbstractView
 
         if ($this->user->admin) {
             if (!$this->event->archived) {
-                $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit games</a>&nbsp;-&nbsp;";
+                $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit matches</a>&nbsp;-&nbsp;";
             }
             $html .= "<a href=".$this->getBaseURL('masterPath').">Select Assignors</a>&nbsp;-&nbsp;";
-            $html .= "<a href=".$this->getBaseURL('refsPath').">Edit referee assignments</a>&nbsp;-&nbsp;";
+            $html .= "<a href=".$this->getBaseURL('refsPath').">Edit Referee Assignments</a>&nbsp;-&nbsp;";
         } elseif ($this->showgroup) {
-            $html .= "<a href=".$this->getBaseURL('schedPath').">View all $uname games</a>&nbsp;-&nbsp;";
+            $html .= "<a href=".$this->getBaseURL('schedPath').">View all $uname matches</a>&nbsp;-&nbsp;";
         }
         if (!empty($this->assigned_list['assigned'])) {
-            $html .= "<a href=".$this->getBaseURL('refsPath').">Edit $uname referee assignments</a>&nbsp;-&nbsp;";
+            $html .= "<a href=".$this->getBaseURL('refsPath').">Edit $uname Referee Assignments</a>&nbsp;-&nbsp;";
         }
 
         $html .= "<a href=".$this->getBaseURL('endPath').">Log off</a>";
@@ -328,49 +328,46 @@ class SchedSchedView extends AbstractView
                 if ($this->locked) {
                     $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked</span></h3>\n";
                 }
+                $html .= "<h3 class=\"center\">\n";
+                foreach ($this->assigned_list as $div => $v) {
+                    if (!in_array($div, ['assigned', 'unassigned'])) {
+                        $tempassign = $this->assigned_list[$div];
+                        $templimit = $this->limit_list[$div];
+                        if (!$this->showgroup || $this->showgroup == $div) {
+                            if (isset($this->limit_list[$div]) && $this->limit_list[$div] != 'none') {
+                                $html .= "For $div, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> matches with a limit of <span style=\"color:$this->colorAlert\">$templimit</span> matches<br>";
+                            } else {
+                                $html .= "For $div, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> matches with no limit<br>";
+                            }
+                        }
+                    }
+                }
+                $html .= "</h3>\n";
+
                 foreach ($this->limit_list as $div => $limit) {
                     //schedule is locked
                     if ($this->locked) {
                         //if limit applies to all
                         //if below limit
                         if ($limit != 'none' && $this->assigned_list[$div] < $limit) {
-                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You may sign up for games but not unassign yourself</span></h3>\n";
+                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You may sign up for $div matches but not unassign yourself</span></h3>\n";
                         }
                         //if at or above limit
                         if ($limit != 'none' && $this->assigned_list[$div] >= $limit) {
-                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at or above your game limit in one or more divisions<br>You need to contact the Section 1 Referee Assignor if you want to change your game assignments</span></h3>\n";
+                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at or above your $div match limit in one or more divisions<br>You need to contact the Section 1 Referee Assignor if you want to change your match assignments</span></h3>\n";
                             $this->atlimit |= true;
                         }
                     } else {  // not locked
                         //if at limit
                         if ($limit != 'none' && $this->assigned_list[$div] == $limit) {
-                            $html .= "<h3 class=\"center\">";
-                            $html .= "<span style=\"color:$this->colorAlert\">You are at your game limit in one or more divisions<br>You will have to unassign yourself from $div games to sign up for others</span><br>";
-                            $html .= "</h3>\n";
+                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at your $div match limit in one or more divisions<br>You will have to unassign yourself from $div matches to sign up for others</span></h3>\n";
                             $this->atlimit &= true;
                         }
                         //if above limit
                         if ($limit != 'none' && $this->assigned_list[$div] > $limit) {
-                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your $div game limit<br>Additional games were likely assigned to you by the Section 1 Referee Assignor</span></h3>\n";
+                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your $div match limit<br>Additional matches were likely assigned to you by the Section 1 Referee Assignor</span></h3>\n";
                             $this->atlimit &= true;
                         }
-                    }
-                    if ($limit != 'none') {
-                        $html .= "<h3 class=\"center\">\n";
-                        foreach ($this->assigned_list as $k => $v) {
-                            if (!in_array($k, ['assigned', 'unassigned'])) {
-                                $tempassign = $this->assigned_list[$k];
-                                $templimit = $this->limit_list[$k];
-                                if (!$this->showgroup || $this->showgroup == $k) {
-                                    if (isset($this->limit_list[$k]) && $this->limit_list[$k] != 'none') {
-                                        $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with a limit of <span style=\"color:$this->colorAlert\">$templimit</span> games<br>";
-                                    } else {
-                                        $html .= "For $k, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> games with no limit<br>";
-                                    }
-                                }
-                            }
-                        }
-                        $html .= "</h3>\n";
                     }
                 }
 
@@ -402,16 +399,16 @@ class SchedSchedView extends AbstractView
         $games = $this->sr->getGames($this->projectKey, $this->showgroup);
 
         if (count($games) == 0) {
-            $html .= "<h3>No available games.</h3>";
+            $html .= "<h3>No available matches.</h3>";
         } else {
             if ($this->num_unassigned) {
-                $html .= "<h3 class='left'>Available games :</h3>";
+                $html .= "<h3 class='left'>Available matches :</h3>";
             }
             $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
 
             $html .= "<table class=\"sched-table\" >\n";
             $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-            $html .= "<th>Game No</th>";
+            $html .= "<th>Match#</th>";
             $html .= "<th>Date</th>";
             $html .= "<th>Time</th>";
             $html .= "<th>Field</th>";
@@ -509,7 +506,7 @@ class SchedSchedView extends AbstractView
         }
 
         $strLastLogon = '';
-        if ($this->user->admin  && $gameCount > 0) {
+        if ($this->user->admin && $gameCount > 0) {
             $lastLogon = $this->sr->getLastLogon($this->projectKey, $assignor);
             if (empty($lastLogon)) {
                 $strLastLogon = " <span style=\"color:$this->colorAlert\">[Last logon: None]</span>";
@@ -520,20 +517,20 @@ class SchedSchedView extends AbstractView
 
         switch ($gameCount) {
             case 0:
-                $html .= "<h3 class=\"left\">$gameCount Games assigned to $assignor$strLastLogon</h3>\n";
+                $html .= "<h3 class=\"left\">$gameCount Matches assigned to $assignor$strLastLogon</h3>\n";
                 break;
             case 1:
                 if (empty($this->assigned_list)) {
-                    $html .= "<h3 class=\"left\">$gameCount Game Unassigned:</h3>\n";
+                    $html .= "<h3 class=\"left\">$gameCount Match Unassigned:</h3>\n";
                 } else {
-                    $html .= "<h3 class=\"left\">$gameCount Game assigned to $assignor$strLastLogon:</h3>\n";
+                    $html .= "<h3 class=\"left\">$gameCount Match assigned to $assignor$strLastLogon:</h3>\n";
                 }
                 break;
             default:
                 if (empty($assignor)) {
-                    $html .= "<h3 class=\"left\">$gameCount Games Unassigned:</h3>\n";
+                    $html .= "<h3 class=\"left\">$gameCount Matches Unassigned:</h3>\n";
                 } else {
-                    $html .= "<h3 class=\"left\">$gameCount Games assigned to $assignor$strLastLogon:</h3>\n";
+                    $html .= "<h3 class=\"left\">$gameCount Matches assigned to $assignor$strLastLogon:</h3>\n";
                 }
         }
         $html .= "<div class=\"clear-fix\"></div>\n";
@@ -541,7 +538,7 @@ class SchedSchedView extends AbstractView
         if ($gameCount) {
             $html .= "<table class=\"sched-table\" >\n";
             $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-            $html .= "<th>Game No</th>";
+            $html .= "<th>Match#</th>";
             $html .= "<th>Date</th>";
             $html .= "<th>Time</th>";
             $html .= "<th>Field</th>";
@@ -552,7 +549,7 @@ class SchedSchedView extends AbstractView
             $html .= "<th>Referee Team</th>";
             if (empty(count($games))) {
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorHighlight\">";
-                $html .= "<td colspan=\"9\">$assignor has no games assigned</td>";
+                $html .= "<td colspan=\"9\">$assignor has no matches assigned</td>";
                 $html .= "</tr>\n";
             } else {
 
@@ -620,16 +617,20 @@ class SchedSchedView extends AbstractView
      */
     private function updateLimitLists()
     {
+        $this->assigned_list = [];
+        $this->limit_list = [];
+
         //initialize assigned and limit lists
         $limits = $this->sr->getLimits($this->projectKey);
 
         $groups = $this->sr->getGroups($this->projectKey);
+
         foreach ($groups as $group) {
             if (!isset($this->limit_list[$group])) {
-                $this->limit_list[$group] = 'none';
                 $this->assigned_list[$group] = 0;
             }
         }
+
         foreach ($limits as $limit) {
             if ($limit->division != 'all') {
                 $this->limit_list[$limit->division] = $limit->limit;

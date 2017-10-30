@@ -73,7 +73,7 @@ class SchedTemplateExport extends AbstractExporter
             'view' => array(
                 'admin' => $this->user->admin,
                 'action' => $this->baseURL,
-                'message' => "There are no games in the database for the event: $msg",
+                'message' => "There are no matches in the database for the event: $msg",
             )
         );
 

@@ -97,7 +97,9 @@ class LogonView extends AbstractView
 
         if (count($enabled) > 0) {
 
-            $html = <<<EOD
+            $html = null;
+
+            $html .= <<<EOD
                       <form name="form1" method="post" action="$logonPath">
         <div class="center">
 			<table>
@@ -142,7 +144,7 @@ EOD;
         } else {
             $html = "<div class=\"center no-content\">
                 <h2>Rest easy...there are no events available to schedule.</h2>
-                <h2>Go referee some games yourself.</h2>
+                <h2>Go referee some matches yourself.</h2>
                 </div>";
         }
 

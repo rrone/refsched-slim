@@ -94,7 +94,7 @@ abstract class AbstractController
 
         $_GET = $request->getParams();
         $uri = $request->getUri()->getPath();
-        $uriPath = substr($uri, 1);
+        $uriPath = $uri == '/' ? 'logon' : str_replace('/', '', $uri);
         $user = isset($this->user) ? $this->user->name : 'Anonymous';
         $projectKey = isset($this->event) ? $this->event->projectKey : '';
         $post = $request->isPost() ? 'with updated ref assignments' : '';

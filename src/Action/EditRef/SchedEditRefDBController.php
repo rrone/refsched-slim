@@ -23,7 +23,7 @@ class SchedEditRefDBController extends AbstractController
             return $response->withRedirect($this->getBaseURL('logonPath'));
         };
 
-        //check for game locked
+        //check for match locked
         $game_id = isset($_SESSION['game_id']) ? $_SESSION['game_id'] : null;
         $sr = $this->container['sr'];
         $target_game = $sr->gameIdToGameNumber($game_id);

@@ -17,6 +17,9 @@ $settings = require PROJECT_ROOT . '/app/settings.php';
 
 $settings['debug'] = false;
 
+$settings['settings']['banner'] = null;
+$settings['settings']['db'] = $config['server'];
+
 $settings['settings']['env_uri'] = 'http://';
 if (isset($_SERVER['HTTPS'])) {
     $settings['settings']['env_uri'] = 'https://';

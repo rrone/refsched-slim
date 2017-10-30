@@ -24,7 +24,7 @@ class ActionTest extends AppTestCase
 
         $this->mockSR = new SchedulerRepository($db);
 
-        $this->userName = $this->local['user_test']['user'];
+        $this->userName = $this->config['user_test']['user'];
         $this->user = $this->mockSR->getUserByName($this->userName);
 
     }
@@ -81,7 +81,7 @@ class ActionTest extends AppTestCase
     {
         $result = $this->mockSR->getEventLabel($this->projectKey);
 
-        $this->assertEquals('U16/U19 Playoffs: November 19-20, 2016', $result);
+        $this->assertEquals('16U/19U Playoffs: November 19-20, 2016', $result);
     }
 
     public function testGetLockedNull()

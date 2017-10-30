@@ -36,8 +36,8 @@ class EditGameTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['user_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -66,8 +66,8 @@ class EditGameTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['admin_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['admin_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -79,7 +79,7 @@ class EditGameTest extends AppTestCase
         $response = (object)$this->client->get('/editgame');
         $view = (string)$response->getBody();
 
-        $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"action\" value=\"Update Games\">", $view);
+        $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"action\" value=\"Update Matches\">", $view);
     }
 
     public function testGamePostAsAdmin()
@@ -96,8 +96,8 @@ class EditGameTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['admin_test']['user'];
-        $projectKey = $this->local['admin_test']['projectKey'];
+        $user = $this->config['admin_test']['user'];
+        $projectKey = $this->config['admin_test']['projectKey'];
         $event = $this->sr->getEvent($projectKey);
 
         $this->client->app->getContainer()['session'] = [
@@ -114,7 +114,7 @@ class EditGameTest extends AppTestCase
             'content-type' => 'multipart/form-data;'
         );
         $body = array(
-            0 => 'Update Games',
+            0 => 'Update Matches',
             '457+projectKey' => $projectKey,
             '457+id' => '457',
             '457+game_number' => '1',
@@ -127,7 +127,7 @@ class EditGameTest extends AppTestCase
 
         // reset edit names
         $body = array(
-            0 => 'Update Games',
+            0 => 'Update Matches',
             '457+projectKey' => $projectKey,
             '457+id' => '457',
             '457+game_number' => '1',

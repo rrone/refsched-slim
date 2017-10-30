@@ -39,7 +39,7 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2017.10.27.01'
+            'version' => '2017.10.29.00'
         ],
 
         'assignor' => [
@@ -55,16 +55,6 @@ $settings = [
 
 ];
 
-$local = include(PROJECT_ROOT . '/config/local.php');
-
-$settings['settings']['db'] = $local['db'];
-
-$settings['test']['user'] = $local['user_test'];
-
-$settings['test']['admin'] = $local['admin_test'];
-
-$settings['test']['empty'] = $local['empty_test'];
-
-$settings['test']['dev'] = $local['dev_test'];
+$config = include(PROJECT_ROOT . '/config/config.php');
 
 return $settings;

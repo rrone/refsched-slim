@@ -361,7 +361,7 @@ class SchedulerRepository
 
     }
 
-    //Games table functions
+    //Matches table functions
     /**
      * @param string $projectKey
      * @param string $group
@@ -450,9 +450,10 @@ class SchedulerRepository
             ->get();
 
         $result = [];
+
         foreach ($groups as $group) {
             $u = stripos($group->division, "U");
-            $group = substr($group->division, $u-2, 3);
+            $group = substr($group->division, 1, 3);
             if (!in_array($group, $result)) {
                 $result[] = $group;
             }
@@ -635,7 +636,7 @@ class SchedulerRepository
                     $changes['adds'] += $result['adds'];
                     $changes['updates'] += $result['updates'];
                 } else {
-                    $changes['errors'][] = 'Missing projectKey, unable to add game';
+                    $changes['errors'][] = 'Missing projectKey, unable to add match';
                 }
             }
         }

@@ -57,8 +57,8 @@ class SchedGreetTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['user_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -83,8 +83,8 @@ class SchedGreetTest extends AppTestCase
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
-        $user = $this->local['admin_test']['user'];
-        $projectKey = $this->local['admin_test']['projectKey'];
+        $user = $this->config['admin_test']['user'];
+        $projectKey = $this->config['admin_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -94,7 +94,7 @@ class SchedGreetTest extends AppTestCase
 
         $view = $this->client->get('/greet');
         $this->assertContains("<h3 class=\"center\">Welcome $user</h3>",$view);
-        $this->assertContains("<h3 class=\"center\"><a href=/editgame>Edit games</a>",$view);
+        $this->assertContains("<h3 class=\"center\"><a href=/editgame>Edit matches</a>",$view);
     }
 
 }

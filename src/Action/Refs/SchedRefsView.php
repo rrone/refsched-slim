@@ -19,7 +19,7 @@ class SchedRefsView extends AbstractView
     {
         parent::__construct($container, $schedulerRepository);
 
-        $this->description = 'No games scheduled';
+        $this->description = 'No matches scheduled';
         $this->games = null;
     }
 
@@ -96,7 +96,7 @@ class SchedRefsView extends AbstractView
                     $html .= "<form name=\"addref\" method=\"post\" action=\"".$this->getBaseURL('refsPath')."\">\n";
                     $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                     $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                    $html .= "<th>Game#</th>";
+                    $html .= "<th>Match#</th>";
                     $html .= "<th>Date</th>";
                     $html .= "<th>Time</th>";
                     $html .= "<th>Field</th>";
@@ -187,7 +187,7 @@ class SchedRefsView extends AbstractView
                     $this->bottommenu = $this->menu();
                 } else {
                     if (count($this->games)) {
-                        $html .= "<h2 class=\"center\">You do not currently have any games scheduled.</h2>\n";
+                        $html .= "<h2 class=\"center\">You do not currently have any matches scheduled.</h2>\n";
                     }
                     $this->bottommenu = null;
                 }
@@ -208,7 +208,7 @@ class SchedRefsView extends AbstractView
 
         if ($this->user->admin) {
             if (!$this->event->archived) {
-                $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit games</a>&nbsp;-&nbsp;";
+                $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit matches</a>&nbsp;-&nbsp;";
             }
             $html .= "<a href=".$this->getBaseURL('schedPath').">View Assignors</a>&nbsp;-&nbsp;";
             $html .= "<a href=".$this->getBaseURL('masterPath').">Select Assignors</a>&nbsp;-&nbsp;";
