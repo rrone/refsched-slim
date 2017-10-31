@@ -31,9 +31,15 @@ final class SARAction
     protected function retrieveSAR($portalName)
     {
         $sarRec = $this->sr->getSARRec($portalName);
-
+        $sar = null;
         if (!empty($sarRec)) {
-            $sar = $sarRec->section.'/'.$sarRec->area.'/'.$sarRec->region;
+            if(!empty($sarRec->region)) {
+                $sar = $sarRec->section.'/'.$sarRec->area.'/'.$sarRec->region;
+            } elseif(!empty($sarRec->area)) {
+                $sar = $sarRec->section.'/'.$sarRec->area;
+            } elseif(!empty($sarRec->area)) {
+                $sar = $sarRec->section;
+            }
         } else {
             $sar = 'SAR not found';
         }
