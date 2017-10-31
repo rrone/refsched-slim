@@ -96,7 +96,15 @@ td {
     vertical-align: top;
     text-align: left;
 }
-
+.banner {
+    width: 100%;
+    line-height: 3rem;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #537fb7;
+    color: white;
+    margin-top: 0;
+}
 .center {
     text-align: center;
 }

@@ -131,7 +131,7 @@ class SchedEditRefView extends AbstractView
                             $html .= "<form name=\"editref\" method=\"post\" action=" . $this->getBaseURL('editrefPath') . ">\n";
                             $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                             $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                            $html .= "<th>Game#</th>";
+                            $html .= "<th>Match#</th>";
                             $html .= "<th>Date</th>";
                             $html .= "<th>Time</th>";
                             $html .= "<th>Field</th>";
@@ -171,7 +171,7 @@ class SchedEditRefView extends AbstractView
                     }
                 }
             } else {
-                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The matching game was not found or your Area was not assigned to it.<br>You might want to check the schedule and try again.</span></h3>\n";
+                $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The matching match was not found or your Area was not assigned to it.<br>You might want to check the schedule and try again.</span></h3>\n";
             }
         }
 
@@ -183,10 +183,10 @@ class SchedEditRefView extends AbstractView
         $html = "<h3 class=\"center h3-btn\">";
 
         $html .= "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
-        $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full game schedule</a>&nbsp;-&nbsp\n";
+        $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a>&nbsp;-&nbsp\n";
         if ($this->user->admin) {
             if(!$this->event->archived) {
-                $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit games</a>&nbsp;-&nbsp;\n";
+                $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit matches</a>&nbsp;-&nbsp;\n";
             }
             $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
         } else {

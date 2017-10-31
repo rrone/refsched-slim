@@ -1,65 +1,65 @@
 id,projectKey,game_number,date,time,field,division,pool,home,home_team,away,away_team,assignor,cr,ar1,ar2,r4th,medalRound
-,2016U16U19Chino,1,11/19/16,8:00,Ayala 7,U19G,1,R1,,C2,,Area 1B,Joe Turnbaugh,Patrick Cary,Douglas Murray,,0
-,2016U16U19Chino,2,11/19/16,8:00,Ayala 8,U19G,2,N1,,B2,,Area 1F,Herb Countee,Michael Feder,Won Song,,0
-,2016U16U19Chino,3,11/19/16,8:00,Ayala 9,U19G,3,B1,,D1,,Area 1H,Chris Salmon,Jose Macias,Alfred Medina,,0
-,2016U16U19Chino,4,11/19/16,8:00,Ayala 10,U19G,4,G1,,P1,,Area 1D,Craig Breitman,Merit Shoucri,Scott Jarus,,0
-,2016U16U19Chino,5,11/19/16,8:00,Ayala 11,U16G,1,D1,,U1,,Area 1C,Lincoln Wallen,Kareem Badaruddin,Will Hardy,,0
-,2016U16U19Chino,6,11/19/16,8:00,Ayala 12,U16G,2,P1,,N1,,Area 1R,Ramon Guzman,Joseph Marconi,Lee Lombard,,0
-,2016U16U19Chino,7,11/19/16,8:00,Ayala 13,U16G,3,B1,,N2,,Area 1P,John Burgee,Chris Nevil,Scott Karlan,,0
-,2016U16U19Chino,8,11/19/16,8:00,Ayala 14,U16G,4,H1,,R2,,Area 1G,Glenn Schwartzberg,Sandy Wright,Michael Sanchez,,0
-,2016U16U19Chino,9,11/19/16,9:20,Ayala 7,U19B,1,G2,,R1,,Area 1B,John Meehan,Pat Cary,Eloy Loera,,0
-,2016U16U19Chino,10,11/19/16,9:20,Ayala 8,U19B,2,N1,,H1,,Area 1F,Michael Feder,Herb Countee,Won Song,,0
-,2016U16U19Chino,11,11/19/16,9:20,Ayala 9,U19B,3,C1,,B1,,Area 1H,Jose Macias,Chris Salmon,Alfred Medina,,0
-,2016U16U19Chino,12,11/19/16,9:20,Ayala 10,U19B,4,U1,,G1,,Area 1D,Merit Shoucri,Craig Breitman,Scott Jarus,,0
-,2016U16U19Chino,13,11/19/16,9:20,Ayala 11,U16B,1,R1,,H2,,Area 1C,Will Hardy,Lincoln Wallen,Kareem Badaruddin,,0
-,2016U16U19Chino,14,11/19/16,9:20,Ayala 12,U16B,2,G1,,U1,,Area 1R,Stefan Larson,Joseph Marconi,James Affinito,,0
-,2016U16U19Chino,15,11/19/16,9:20,Ayala 13,U16B,3,B1,,C1,,Area 1P,Chris Nevil,Scott Karlan,John Burgee,,0
-,2016U16U19Chino,16,11/19/16,9:20,Ayala 14,U16B,4,H1,,N1,,,,,,,0
-,2016U16U19Chino,17,11/19/16,10:40,Ayala 7,U19G,1,D2,,R1,,Area 1B,Douglas Murray,Eloy Loera,Joe Turnbaugh,,0
-,2016U16U19Chino,18,11/19/16,10:40,Ayala 8,U19G,2,C1,,N1,,Area 1G,Jeff Johnston,Lealon Watts,Michael Hays,,0
-,2016U16U19Chino,19,11/19/16,10:40,Ayala 9,U19G,3,F1,,B1,,Area 1R,Steven Chandler,Lee Lombard,Joseph Marconi,,0
-,2016U16U19Chino,20,11/19/16,10:40,Ayala 10,U19G,4,U1,,G1,,Area 1D,Scott Jarus,Merit Shoucri,Craig Breitman,,0
-,2016U16U19Chino,21,11/19/16,10:40,Ayala 11,U16G,1,F1,,D1,,Area 1N,Matt Hurlbert,Gilberto Maldonado,Jon Swasey,,0
-,2016U16U19Chino,22,11/19/16,10:40,Ayala 12,U16G,2,R1,,P1,,Area 1U,Javier Chagolla,Mars Ramage,Rob Owen,,0
-,2016U16U19Chino,23,11/19/16,10:40,Ayala 13,U16G,3,G1,,B1,,Area 1R,Ed Williams,Dawn Hlavac,James Affinito,,0
-,2016U16U19Chino,24,11/19/16,10:40,Ayala 14,U16G,4,C1,,H1,,Area 1G,Joe Bernier,Ramon Guzman,Steven Caro,,0
-,2016U16U19Chino,25,11/19/16,12:00,Ayala 7,U19B,1,F2,,G2,,Area 1P,Scott Karlan,John Burgee,Chris Nevil,,0
-,2016U16U19Chino,26,11/19/16,12:00,Ayala 8,U19B,2,D1,,N1,,Area 1G,Lealon Watts,Jeff Johnston,Michael Hays,,0
-,2016U16U19Chino,27,11/19/16,12:00,Ayala 9,U19B,3,F1,,C1,,Area 1R,James Hodge,Stefan Larson,Steven Chandler,,0
-,2016U16U19Chino,28,11/19/16,12:00,Ayala 10,U19B,4,P1,,U1,,Area 1C,John Mass,Al Prado,Scott Davis,,0
-,2016U16U19Chino,29,11/19/16,12:00,Ayala 11,U16B,1,D1,,R1,,Area 1N,Gilberto Maldonado,Joe Bernier,Jon Swasey,,0
-,2016U16U19Chino,30,11/19/16,12:00,Ayala 12,U16B,2,F1,,G1,,Area 1H,Manuel Del Rio,John Hampson,Jose Macias,,0
-,2016U16U19Chino,31,11/19/16,12:00,Ayala 13,U16B,3,P1,,B1,,Area 1U,Rob Owen,Mars Ramage,Javier Chagolla,,0
-,2016U16U19Chino,32,11/19/16,12:00,Ayala 14,U16B,4,C2,,H1,,Area 1F,Alan Siegel,Gregg Ferguson,Michael Wolff,,0
-,2016U16U19Chino,33,11/19/16,13:20,Ayala 7,U19G,1,C2,,D2,,Area 1P,Michael Feder,Robert Osborne,Tim Reynolds,,0
-,2016U16U19Chino,34,11/19/16,13:20,Ayala 8,U19G,2,B2,,C1,,Area 1N,Chris Call,Forrest Pitts,Rob Hurt,,0
-,2016U16U19Chino,35,11/19/16,13:20,Ayala 9,U19G,3,D1,,F1,,Area 1U,Mike Rodewald,Steve Manriquez,Ramon Villar,,0
-,2016U16U19Chino,36,11/19/16,13:20,Ayala 10,U19G,4,P1,,U1,,Area 1C,Scott Davis,John Mass,Al Prado,,0
-,2016U16U19Chino,37,11/19/16,13:20,Ayala 11,U16G,1,U1,,F1,,Area 1B,Michel Larcheveque,Greg Olsen,Chris Koh,,0
-,2016U16U19Chino,38,11/19/16,13:20,Ayala 12,U16G,2,N1,,R1,,Area 1H,Albert Blanco,John Hampson,Manuel Del Rio,,0
-,2016U16U19Chino,39,11/19/16,13:20,Ayala 13,U16G,3,N2,,G1,,Area 1D,Jamie Stewart,Peter Lindborg,Greg Power,,0
-,2016U16U19Chino,40,11/19/16,13:20,Ayala 14,U16G,4,R2,,C1,,Area 1F,Michael Wolff,Gregg Ferguson,Alan Siegel,,0
-,2016U16U19Chino,41,11/19/16,14:40,Ayala 7,U19B,1,R1,,F2,,Area 1P,Robert Osborne,Tim Reynolds,Michael Feder,,0
-,2016U16U19Chino,42,11/19/16,14:40,Ayala 8,U19B,2,H1,,D1,,Area 1N,Chris Call,Forrest Pitts,Rob Hurt,,0
-,2016U16U19Chino,43,11/19/16,14:40,Ayala 9,U19B,3,B1,,F1,,Area 1U,Ramon Villar,Steve Manriquez,Mike Rodewald,,0
-,2016U16U19Chino,44,11/19/16,14:40,Ayala 10,U19B,4,G1,,P1,,Area 1C,Al Prado,Scott Davis,John Mass,,0
-,2016U16U19Chino,45,11/19/16,14:40,Ayala 11,U16B,1,H2,,D1,,,,,,,0
-,2016U16U19Chino,46,11/19/16,14:40,Ayala 12,U16B,2,U1,,F1,,Area 1H,John Hampson,Manuel Del Rio,Albert Blanco,,0
-,2016U16U19Chino,47,11/19/16,14:40,Ayala 13,U16B,3,C1,,P1,,Area 1D,Peter Lindborg,Jamie Stewart,Greg Power,,0
-,2016U16U19Chino,48,11/19/16,14:40,Ayala 14,U16B,4,N1,,C2,,Area 1F,Gregg Ferguson,Michael Wolff,Alan Siegel,,0
-,2016U16U19Chino,49,11/20/16,8:30,Ayala 7,U16G,SF,F1 16 North Torrance,,P1 1031 So. Los Angeles,,,,,,,1
-,2016U16U19Chino,50,11/20/16,8:30,Ayala 8,U16G,SF,B1 31 Diamond Bar,,C1 98 Temple City,,Area 1R,Steven Chandler,Ed Williams,James Hodge,,1
-,2016U16U19Chino,51,11/20/16,8:30,Ayala 9,U16B,SF,D1 21 Hawthorne,,G1 65 Rancho Cucamonga,,,,,,,1
-,2016U16U19Chino,52,11/20/16,8:30,Ayala 10,U16B,SF,P1 1031 So Los Angeles,,N1 641 Pass Area,,Area 1D,Phil Ockelmann,Craig Breitman,Merit Shoucri,,1
-,2016U16U19Chino,53,11/20/16,10:30,Ayala 7,U19G,SF,D2 18 Manhattan/Hermosa,,C1 2 Arcadia,,Area 1B,Mike Sanchez,John Meehan,Brian Brady,,1
-,2016U16U19Chino,54,11/20/16,10:30,Ayala 8,U19G,SF,F1 16 North Torrance,,P1 20 Santa Monica,,Area 1D,Merit Shoucri,Craig Breitman,Phil Ockelmann,,1
-,2016U16U19Chino,55,11/20/16,10:30,Ayala 9,U19B,SF,F2 16 No Torrance,,D1 18 Manhattan/Hermosa,,Area 1G,Lealon Watts,Greg Hood,Jeff Johnston,,1
-,2016U16U19Chino,56,11/20/16,10:30,Ayala 10,U19B,SF,B1 31 Diamond Bar,,G1 65 Rancho Cucamonga,,Area 1R,Ed Williams,James Hodge,Steven Chandler,,1
-,2016U16U19Chino,57,11/20/16,12:30,Ayala 7,U16G,FIN,F1 16 North Torrance,,C1 98 Temple City,,Area 1H,Patrick Alles,Manuel Del Rio,Amer Hassouneh,,1
-,2016U16U19Chino,58,11/20/16,12:30,Ayala 8,U16G,CON,P1 1031 So. Los Angeles,,B1 31 Diamond Bar,,Area 1C,Scott Davis,Al Prado,Steve Hawkins,,1
-,2016U16U19Chino,59,11/20/16,12:30,Ayala 9,U16B,FIN,D1 21 Hawthorne,,P1 1031 So Los Angeles,,Area 1F,Michael Feder,Herb Countee,Tim Reynolds,,1
-,2016U16U19Chino,60,11/20/16,12:30,Ayala 10,U16B,CON,G1 65 Rancho Cucamonga,,N1 641 Pass Area,,Area 1P,Achikam Shapira,Howard Chait,Tony Robinson,,1
-,2016U16U19Chino,61,11/20/16,14:30,Ayala 7,U19G,FIN,D2 18 Manhattan/Hermosa,,F1 16 North Torrance,,Area 1P,Howard Chait,Achikam Shapira,Tony Robinson,,1
-,2016U16U19Chino,62,11/20/16,14:30,Ayala 8,U19G,CON,C1 2 Arcadia,,P1 20 Santa Monica,,Area 1F,Herb Countee,David,Michael Feder,,1
-,2016U16U19Chino,63,11/20/16,14:30,Ayala 9,U19B,FIN,D1 18 Manhattan/Hermosa,,G1 65 Rancho Cucamonga,,Area 1C,Al Prado,Scott Davis,Steve Hawkins,,1
-,2016U16U19Chino,64,11/20/16,14:30,Ayala 10,U19B,CON,F2 16 No Torrance,,B1 31 Diamond Bar,,Area 1H,Manuel Del Rio,Patrick Alles,Amer Hassouneh,,1
+,2016U16U19Chino,1,2016-11-19,8:00,Ayala 7,G19U,1,R1,,C2,,Area 1B,Joe Turnbaugh,Patrick Cary,Douglas Murray,,0
+,2016U16U19Chino,2,2016-11-19,8:00,Ayala 8,G19U,2,N1,,B2,,Area 1F,Herb Countee,Michael Feder,Won Song,,0
+,2016U16U19Chino,3,2016-11-19,8:00,Ayala 9,G19U,3,B1,,D1,,Area 1H,Chris Salmon,Jose Macias,Alfred Medina,,0
+,2016U16U19Chino,4,2016-11-19,8:00,Ayala 10,G19U,4,G1,,P1,,Area 1D,Craig Breitman,Merit Shoucri,Scott Jarus,,0
+,2016U16U19Chino,5,2016-11-19,8:00,Ayala 11,G16U,1,D1,,U1,,Area 1C,Lincoln Wallen,Kareem Badaruddin,Will Hardy,,0
+,2016U16U19Chino,6,2016-11-19,8:00,Ayala 12,G16U,2,P1,,N1,,Area 1R,Ramon Guzman,Joseph Marconi,Lee Lombard,,0
+,2016U16U19Chino,7,2016-11-19,8:00,Ayala 13,G16U,3,B1,,N2,,Area 1P,John Burgee,Chris Nevil,Scott Karlan,,0
+,2016U16U19Chino,8,2016-11-19,8:00,Ayala 14,G16U,4,H1,,R2,,Area 1G,Glenn Schwartzberg,Sandy Wright,Michael Sanchez,,0
+,2016U16U19Chino,9,2016-11-19,9:20,Ayala 7,B19U,1,G2,,R1,,Area 1B,John Meehan,Pat Cary,Eloy Loera,,0
+,2016U16U19Chino,10,2016-11-19,9:20,Ayala 8,B19U,2,N1,,H1,,Area 1F,Michael Feder,Herb Countee,Won Song,,0
+,2016U16U19Chino,11,2016-11-19,9:20,Ayala 9,B19U,3,C1,,B1,,Area 1H,Jose Macias,Chris Salmon,Alfred Medina,,0
+,2016U16U19Chino,12,2016-11-19,9:20,Ayala 10,B19U,4,U1,,G1,,Area 1D,Merit Shoucri,Craig Breitman,Scott Jarus,,0
+,2016U16U19Chino,13,2016-11-19,9:20,Ayala 11,B16U,1,R1,,H2,,Area 1C,Will Hardy,Lincoln Wallen,Kareem Badaruddin,,0
+,2016U16U19Chino,14,2016-11-19,9:20,Ayala 12,B16U,2,G1,,U1,,Area 1R,Stefan Larson,Joseph Marconi,James Affinito,,0
+,2016U16U19Chino,15,2016-11-19,9:20,Ayala 13,B16U,3,B1,,C1,,Area 1P,Chris Nevil,Scott Karlan,John Burgee,,0
+,2016U16U19Chino,16,2016-11-19,9:20,Ayala 14,B16U,4,H1,,N1,,,,,,,0
+,2016U16U19Chino,17,2016-11-19,10:40,Ayala 7,G19U,1,D2,,R1,,Area 1B,Douglas Murray,Eloy Loera,Joe Turnbaugh,,0
+,2016U16U19Chino,18,2016-11-19,10:40,Ayala 8,G19U,2,C1,,N1,,Area 1G,Jeff Johnston,Lealon Watts,Michael Hays,,0
+,2016U16U19Chino,19,2016-11-19,10:40,Ayala 9,G19U,3,F1,,B1,,Area 1R,Steven Chandler,Lee Lombard,Joseph Marconi,,0
+,2016U16U19Chino,20,2016-11-19,10:40,Ayala 10,G19U,4,U1,,G1,,Area 1D,Scott Jarus,Merit Shoucri,Craig Breitman,,0
+,2016U16U19Chino,21,2016-11-19,10:40,Ayala 11,G16U,1,F1,,D1,,Area 1N,Matt Hurlbert,Gilberto Maldonado,Jon Swasey,,0
+,2016U16U19Chino,22,2016-11-19,10:40,Ayala 12,G16U,2,R1,,P1,,Area 1U,Javier Chagolla,Mars Ramage,Rob Owen,,0
+,2016U16U19Chino,23,2016-11-19,10:40,Ayala 13,G16U,3,G1,,B1,,Area 1R,Ed Williams,Dawn Hlavac,James Affinito,,0
+,2016U16U19Chino,24,2016-11-19,10:40,Ayala 14,G16U,4,C1,,H1,,Area 1G,Joe Bernier,Ramon Guzman,Steven Caro,,0
+,2016U16U19Chino,25,2016-11-19,12:00,Ayala 7,B19U,1,F2,,G2,,Area 1P,Scott Karlan,John Burgee,Chris Nevil,,0
+,2016U16U19Chino,26,2016-11-19,12:00,Ayala 8,B19U,2,D1,,N1,,Area 1G,Lealon Watts,Jeff Johnston,Michael Hays,,0
+,2016U16U19Chino,27,2016-11-19,12:00,Ayala 9,B19U,3,F1,,C1,,Area 1R,James Hodge,Stefan Larson,Steven Chandler,,0
+,2016U16U19Chino,28,2016-11-19,12:00,Ayala 10,B19U,4,P1,,U1,,Area 1C,John Mass,Al Prado,Scott Davis,,0
+,2016U16U19Chino,29,2016-11-19,12:00,Ayala 11,B16U,1,D1,,R1,,Area 1N,Gilberto Maldonado,Joe Bernier,Jon Swasey,,0
+,2016U16U19Chino,30,2016-11-19,12:00,Ayala 12,B16U,2,F1,,G1,,Area 1H,Manuel Del Rio,John Hampson,Jose Macias,,0
+,2016U16U19Chino,31,2016-11-19,12:00,Ayala 13,B16U,3,P1,,B1,,Area 1U,Rob Owen,Mars Ramage,Javier Chagolla,,0
+,2016U16U19Chino,32,2016-11-19,12:00,Ayala 14,B16U,4,C2,,H1,,Area 1F,Alan Siegel,Gregg Ferguson,Michael Wolff,,0
+,2016U16U19Chino,33,2016-11-19,13:20,Ayala 7,G19U,1,C2,,D2,,Area 1P,Michael Feder,Robert Osborne,Tim Reynolds,,0
+,2016U16U19Chino,34,2016-11-19,13:20,Ayala 8,G19U,2,B2,,C1,,Area 1N,Chris Call,Forrest Pitts,Rob Hurt,,0
+,2016U16U19Chino,35,2016-11-19,13:20,Ayala 9,G19U,3,D1,,F1,,Area 1U,Mike Rodewald,Steve Manriquez,Ramon Villar,,0
+,2016U16U19Chino,36,2016-11-19,13:20,Ayala 10,G19U,4,P1,,U1,,Area 1C,Scott Davis,John Mass,Al Prado,,0
+,2016U16U19Chino,37,2016-11-19,13:20,Ayala 11,G16U,1,U1,,F1,,Area 1B,Michel Larcheveque,Greg Olsen,Chris Koh,,0
+,2016U16U19Chino,38,2016-11-19,13:20,Ayala 12,G16U,2,N1,,R1,,Area 1H,Albert Blanco,John Hampson,Manuel Del Rio,,0
+,2016U16U19Chino,39,2016-11-19,13:20,Ayala 13,G16U,3,N2,,G1,,Area 1D,Jamie Stewart,Peter Lindborg,Greg Power,,0
+,2016U16U19Chino,40,2016-11-19,13:20,Ayala 14,G16U,4,R2,,C1,,Area 1F,Michael Wolff,Gregg Ferguson,Alan Siegel,,0
+,2016U16U19Chino,41,2016-11-19,14:40,Ayala 7,B19U,1,R1,,F2,,Area 1P,Robert Osborne,Tim Reynolds,Michael Feder,,0
+,2016U16U19Chino,42,2016-11-19,14:40,Ayala 8,B19U,2,H1,,D1,,Area 1N,Chris Call,Forrest Pitts,Rob Hurt,,0
+,2016U16U19Chino,43,2016-11-19,14:40,Ayala 9,B19U,3,B1,,F1,,Area 1U,Ramon Villar,Steve Manriquez,Mike Rodewald,,0
+,2016U16U19Chino,44,2016-11-19,14:40,Ayala 10,B19U,4,G1,,P1,,Area 1C,Al Prado,Scott Davis,John Mass,,0
+,2016U16U19Chino,45,2016-11-19,14:40,Ayala 11,B16U,1,H2,,D1,,,,,,,0
+,2016U16U19Chino,46,2016-11-19,14:40,Ayala 12,B16U,2,U1,,F1,,Area 1H,John Hampson,Manuel Del Rio,Albert Blanco,,0
+,2016U16U19Chino,47,2016-11-19,14:40,Ayala 13,B16U,3,C1,,P1,,Area 1D,Peter Lindborg,Jamie Stewart,Greg Power,,0
+,2016U16U19Chino,48,2016-11-19,14:40,Ayala 14,B16U,4,N1,,C2,,Area 1F,Gregg Ferguson,Michael Wolff,Alan Siegel,,0
+,2016U16U19Chino,49,2016-11-20,8:30,Ayala 7,G16U,SF,F1 16 North Torrance,,P1 1031 So. Los Angeles,,,,,,,1
+,2016U16U19Chino,50,2016-11-20,8:30,Ayala 8,G16U,SF,B1 31 Diamond Bar,,C1 98 Temple City,,Area 1R,Steven Chandler,Ed Williams,James Hodge,,1
+,2016U16U19Chino,51,2016-11-20,8:30,Ayala 9,B16U,SF,D1 21 Hawthorne,,G1 65 Rancho Cucamonga,,,,,,,1
+,2016U16U19Chino,52,2016-11-20,8:30,Ayala 10,B16U,SF,P1 1031 So Los Angeles,,N1 641 Pass Area,,Area 1D,Phil Ockelmann,Craig Breitman,Merit Shoucri,,1
+,2016U16U19Chino,53,2016-11-20,10:30,Ayala 7,G19U,SF,D2 18 Manhattan/Hermosa,,C1 2 Arcadia,,Area 1B,Mike Sanchez,John Meehan,Brian Brady,,1
+,2016U16U19Chino,54,2016-11-20,10:30,Ayala 8,G19U,SF,F1 16 North Torrance,,P1 20 Santa Monica,,Area 1D,Merit Shoucri,Craig Breitman,Phil Ockelmann,,1
+,2016U16U19Chino,55,2016-11-20,10:30,Ayala 9,B19U,SF,F2 16 No Torrance,,D1 18 Manhattan/Hermosa,,Area 1G,Lealon Watts,Greg Hood,Jeff Johnston,,1
+,2016U16U19Chino,56,2016-11-20,10:30,Ayala 10,B19U,SF,B1 31 Diamond Bar,,G1 65 Rancho Cucamonga,,Area 1R,Ed Williams,James Hodge,Steven Chandler,,1
+,2016U16U19Chino,57,2016-11-20,12:30,Ayala 7,G16U,FIN,F1 16 North Torrance,,C1 98 Temple City,,Area 1H,Patrick Alles,Manuel Del Rio,Amer Hassouneh,,1
+,2016U16U19Chino,58,2016-11-20,12:30,Ayala 8,G16U,CON,P1 1031 So. Los Angeles,,B1 31 Diamond Bar,,Area 1C,Scott Davis,Al Prado,Steve Hawkins,,1
+,2016U16U19Chino,59,2016-11-20,12:30,Ayala 9,B16U,FIN,D1 21 Hawthorne,,P1 1031 So Los Angeles,,Area 1F,Michael Feder,Herb Countee,Tim Reynolds,,1
+,2016U16U19Chino,60,2016-11-20,12:30,Ayala 10,B16U,CON,G1 65 Rancho Cucamonga,,N1 641 Pass Area,,Area 1P,Achikam Shapira,Howard Chait,Tony Robinson,,1
+,2016U16U19Chino,61,2016-11-20,14:30,Ayala 7,G19U,FIN,D2 18 Manhattan/Hermosa,,F1 16 North Torrance,,Area 1P,Howard Chait,Achikam Shapira,Tony Robinson,,1
+,2016U16U19Chino,62,2016-11-20,14:30,Ayala 8,G19U,CON,C1 2 Arcadia,,P1 20 Santa Monica,,Area 1F,Herb Countee,David,Michael Feder,,1
+,2016U16U19Chino,63,2016-11-20,14:30,Ayala 9,B19U,FIN,D1 18 Manhattan/Hermosa,,G1 65 Rancho Cucamonga,,Area 1C,Al Prado,Scott Davis,Steve Hawkins,,1
+,2016U16U19Chino,64,2016-11-20,14:30,Ayala 10,B19U,CON,F2 16 No Torrance,,B1 31 Diamond Bar,,Area 1H,Manuel Del Rio,Patrick Alles,Amer Hassouneh,,1

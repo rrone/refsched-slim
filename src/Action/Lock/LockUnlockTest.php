@@ -37,8 +37,8 @@ class LockUnlockTest extends AppTestCase
         ];
 
         // invoke the lock controller action as admin and test it
-        $user = $this->local['admin_test']['user'];
-        $projectKey = $this->local['admin_test']['projectKey'];
+        $user = $this->config['admin_test']['user'];
+        $projectKey = $this->config['admin_test']['projectKey'];
 
         $this->app->getContainer()['session'] = [
             'authed' => true,
@@ -84,8 +84,8 @@ class LockUnlockTest extends AppTestCase
         ];
 
         // invoke the lock controller action as user and test it
-        $user = $this->local['user_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
         $this->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
@@ -125,8 +125,8 @@ class LockUnlockTest extends AppTestCase
         ];
 
         // invoke the lock controller action as user and test it
-        $user = $this->local['admin_test']['user'];
-        $projectKey = $this->local['admin_test']['projectKey'];
+        $user = $this->config['admin_test']['user'];
+        $projectKey = $this->config['admin_test']['projectKey'];
 
         $this->app->getContainer()['session'] = [
             'authed' => true,
@@ -165,8 +165,8 @@ class LockUnlockTest extends AppTestCase
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the lock controller action as authorized user and test it
-        $user = $this->local['user_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
 
         $this->app->getContainer()['session'] = [
             'authed' => true,

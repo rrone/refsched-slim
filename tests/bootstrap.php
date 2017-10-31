@@ -25,7 +25,7 @@ require_once PROJECT_ROOT . '/vendor/autoload.php';
 // Initialize our own copy of the slim application
 class AppTestCase extends WebTestCase
 {
-    protected $local;
+    protected $config;
 
     /**
      * @var SchedulerRepository
@@ -44,12 +44,18 @@ class AppTestCase extends WebTestCase
 
     public function getSlimInstance() {
 
-        $this->local = include(PROJECT_ROOT . '/config/local.php');
+        $this->config = include(PROJECT_ROOT . '/config/config.php');
 
 // Instantiate the app
         $settings = require PROJECT_ROOT . '/app/settings.php';
         $settings['debug'] = true;
-        $settings['settings']['db'] = $this->local['db_test'];
+
+        $settings['settings']['db'] = $this->config['db_test'];
+        $settings['test']['user'] = $this->config['user_test'];
+        $settings['test']['admin'] = $this->config['admin_test'];
+        $settings['test']['empty'] = $this->config['empty_test'];
+        $settings['test']['dev'] = $this->config['dev_test'];
+
 //Define where the log goes: syslog
 
         $app = new App($settings);

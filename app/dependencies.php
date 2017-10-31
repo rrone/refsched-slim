@@ -16,6 +16,7 @@ $container['view'] = function (\Slim\Container $c) {
     $view['env_uri'] = $c->get('settings')['env_uri'];
     $view['assignoremail'] = $c->get('settings')['assignor']['email'];
     $view['issueTracker'] = $c->get('settings')['issueTracker'];
+    $view['banner'] = $c->get('settings')['banner'];
 
     // Add extensions
     $view->addExtension(new Slim\Views\TwigExtension($c->get('router'), $c->get('request')->getUri()));

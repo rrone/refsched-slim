@@ -18,7 +18,7 @@ class EditGameView extends AbstractView
         parent::__construct($container, $repository);
 
         $this->sr = $repository;
-        $this->description = 'No games scheduled';
+        $this->description = 'No matches scheduled';
     }
 
     public function handler(Request $request, Response $response)
@@ -28,7 +28,7 @@ class EditGameView extends AbstractView
 
         if ($request->isPost()) {
             $_POST = $request->getParsedBody();
-            if (in_array('Update Games', array_values($_POST))) {
+            if (in_array('Update Matches', array_values($_POST))) {
                 $formData = [];
 
                 foreach ($_POST as $key => $value) {
@@ -92,17 +92,17 @@ class EditGameView extends AbstractView
             $games = $this->sr->getGames($projectKey, '%', true);
 
             if (count($games)) {
-                $this->description = $this->user->name . ": Update Games";
+                $this->description = $this->user->name . ": Update Matches";
 
                 $html .= "<form name=\"editref\" method=\"post\" action=" . $this->getBaseURL('editGamePath') . ">\n";
 
                 if(!$this->event->archived) {
-                    $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"action\" value=\"Update Games\">\n";
+                    $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"action\" value=\"Update Matches\">\n";
                     $html .= "<div class='clear-fix'></div>";
                 }
                 $html .= "<table class=\"edit-table sched-table\" width=\"100%\">\n";
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                $html .= "<th>Game#</th>";
+                $html .= "<th>Match#</th>";
                 $html .= "<th>Date</th>";
                 $html .= "<th>Time</th>";
                 $html .= "<th>Field</th>";
@@ -146,7 +146,7 @@ class EditGameView extends AbstractView
                 }
                 $html .= "</table>\n";
                 if(!$this->event->archived) {
-                    $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"UpdateGames\" value=\"Update Games\">\n";
+                    $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"UpdateGames\" value=\"Update Matches\">\n";
                     $html .= "<div class='clear-fix'></div>";
                 }
                 $html .= "</form>\n";
@@ -164,10 +164,10 @@ class EditGameView extends AbstractView
         $html = "<h3 class=\"center h3-btn\">";
 
         $html .= "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;";
-        $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full game schedule</a>&nbsp;-&nbsp";
+        $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a>&nbsp;-&nbsp";
         $html .= "<a href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;";
         $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;";
-        $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Edit referee assignments</a>&nbsp;-&nbsp";
+        $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Edit Referee Assignments</a>&nbsp;-&nbsp";
         $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a>";
 
         $html .= "</h3>\n";

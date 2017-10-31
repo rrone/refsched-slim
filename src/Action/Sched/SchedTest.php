@@ -57,8 +57,8 @@ class SchedSchedTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['user_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -69,7 +69,7 @@ class SchedSchedTest extends AppTestCase
         $view = $this->client->get('/sched');
 
         $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
-        $this->assertContains("<a href=/refs>Edit $user referee assignments</a>", $view);
+        $this->assertContains("<a href=/refs>Edit $user Referee Assignments</a>", $view);
     }
 
     public function testSchedAsAdmin()
@@ -86,8 +86,8 @@ class SchedSchedTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['admin_test']['user'];
-        $projectKey = $this->local['admin_test']['projectKey'];
+        $user = $this->config['admin_test']['user'];
+        $projectKey = $this->config['admin_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -98,7 +98,38 @@ class SchedSchedTest extends AppTestCase
         $view = $this->client->get('/sched');
 
         $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>",$view);
-        $this->assertContains("<a href=/refs>Edit referee assignments</a>",$view);
+        $this->assertContains("<a href=/refs>Edit Referee Assignments</a>",$view);
+    }
+
+
+    public function testSchedGroup16UAsUser()
+    {
+        // instantiate the view and test it
+
+        $view = new SchedSchedView($this->c, $this->sr);
+        $this->assertTrue($view instanceof AbstractView);
+
+        // instantiate the controller
+
+        $controller = new SchedSchedDBController($this->c, $view);
+        $this->assertTrue($controller instanceof AbstractController);
+
+        // invoke the controller action and test it
+
+        $user = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
+
+        $this->client->app->getContainer()['session'] = [
+            'authed' => true,
+            'user' => $this->sr->getUserByName($user),
+            'event' => $this->sr->getEvent($projectKey)
+        ];
+
+        $params = ['group' => '16U'];
+        $view = $this->client->get('/sched', $params);
+
+        $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
+        $this->assertContains("<a href=/sched>View all $user matches</a>", $view);
     }
 
     public function testRepostSchedAsAdmin()
@@ -115,8 +146,8 @@ class SchedSchedTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['user_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
         $show_medal_round = $this->sr->getMedalRound($projectKey);
 
         $this->client->app->getContainer()['session'] = [
@@ -129,7 +160,7 @@ class SchedSchedTest extends AppTestCase
         $games = $this->sr->getGamesByRep($projectKey, $user, $show_medal_round);
 
         $this->sr->updateAssignor([501=>'']);
-        $unassignedGames = $this->sr->getUnassignedGames($projectKey, 'U16');
+        $unassignedGames = $this->sr->getUnassignedGames($projectKey, '16U');
 
         $url = '/sched';
         $headers = array(
@@ -141,10 +172,12 @@ class SchedSchedTest extends AppTestCase
             'group' => '',
         );
 
-        $body['assign:'. $unassignedGames[0]->id] = $unassignedGames[0]->id;
-        foreach ($games as $k => $game) {
-            if ($k > 0) {
-                $body['games:' . $game->id] = $game->id;
+        if(isset($unassignedGames[0])) {
+            $body['assign:'.$unassignedGames[0]->id] = $unassignedGames[0]->id;
+            foreach ($games as $k => $game) {
+                if ($k > 0) {
+                    $body['matches:'.$game->id] = $game->id;
+                }
             }
         }
 
@@ -161,36 +194,6 @@ class SchedSchedTest extends AppTestCase
         $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
     }
 
-    public function testSchedGroupU16AsUser()
-    {
-        // instantiate the view and test it
-
-        $view = new SchedSchedView($this->c, $this->sr);
-        $this->assertTrue($view instanceof AbstractView);
-
-        // instantiate the controller
-
-        $controller = new SchedSchedDBController($this->c, $view);
-        $this->assertTrue($controller instanceof AbstractController);
-
-        // invoke the controller action and test it
-
-        $user = $this->local['user_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
-
-        $this->client->app->getContainer()['session'] = [
-            'authed' => true,
-            'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)
-        ];
-
-        $params = ['group' => 'U16'];
-        $view = $this->client->get('/sched', $params);
-
-        $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
-        $this->assertContains("<a href=/sched>View all $user games</a>", $view);
-    }
-
     public function testNoGamesAsUser()
     {
         // instantiate the view and test it
@@ -205,8 +208,8 @@ class SchedSchedTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['empty_test']['user'];
-        $projectKey = $this->local['empty_test']['projectKey'];
+        $user = $this->config['empty_test']['user'];
+        $projectKey = $this->config['empty_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -217,7 +220,7 @@ class SchedSchedTest extends AppTestCase
         $view = $this->client->get('/sched');
 
         $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
-        $this->assertContains("<tr class=\"center\" bgcolor=\"#80ccff\"><th>Game No</th><th>Date</th><th>Time</th><th>Field</th><th>Division</th><th>Pool</th><th>Home</th><th>Away</th><th>Referee Team</th><th>Assign to Area 1P</th></tr>", $view);
+        $this->assertContains("<tr class=\"center\" bgcolor=\"#80ccff\"><th>Match#</th><th>Date</th><th>Time</th><th>Field</th><th>Division</th><th>Pool</th><th>Home</th><th>Away</th><th>Referee Team</th><th>Assign to Area 1P</th></tr>", $view);
     }
 
 }

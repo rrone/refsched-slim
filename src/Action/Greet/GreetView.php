@@ -18,7 +18,7 @@ class GreetView extends AbstractView
         parent::__construct($container, $schedulerRepository);
 
         $this->games = null;
-        $this->description = 'No games scheduled';
+        $this->description = 'No matches scheduled';
     }
     public function handler(Request $request, Response $response)
     {
@@ -147,70 +147,68 @@ class GreetView extends AbstractView
 
                     //get the grammar right
                     if ($num_assigned == 1 && $num_unassigned == 1) {
-                        $html .= "<span style=\"color:#008800\">$num_assigned</span> game is assigned and <span style=\"color:$this->colorAlert\">$num_unassigned</span> is unassigned<br>\n";
+                        $html .= "<span style=\"color:#008800\">$num_assigned</span> match is assigned and <span style=\"color:$this->colorAlert\">$num_unassigned</span> is unassigned<br>\n";
                     } elseif ($num_assigned > 1 && $num_unassigned == 1) {
-                        $html .= "<span style=\"color:#008800\">$num_assigned</span> games are assigned and <span style=\"color:$this->colorAlert\">$num_unassigned</span> is unassigned<br>\n";
+                        $html .= "<span style=\"color:#008800\">$num_assigned</span> matches are assigned and <span style=\"color:$this->colorAlert\">$num_unassigned</span> is unassigned<br>\n";
                     } elseif ($num_assigned == 1 && $num_unassigned > 1) {
-                        $html .= "<span style=\"color:#008800\">$num_assigned</span> game is assigned and <span style=\"color:$this->colorAlert\">$num_unassigned</span> are unassigned<br>\n";
+                        $html .= "<span style=\"color:#008800\">$num_assigned</span> match is assigned and <span style=\"color:$this->colorAlert\">$num_unassigned</span> are unassigned<br>\n";
                     } else {
-                        $html .= "<span style=\"color:#008800\">$num_assigned</span> games are assigned and <span style=\"color:$this->colorAlert\">$num_unassigned</span> are unassigned<br>\n";
+                        $html .= "<span style=\"color:#008800\">$num_assigned</span> matches are assigned and <span style=\"color:$this->colorAlert\">$num_unassigned</span> are unassigned<br>\n";
                     }
 
                     if (count($limit_list) == 0) {
-                        $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time<br>\n";
+                        $html .= "There is <span style=\"color:$this->colorWarning\">no</span> match limit at this time<br>\n";
                     } else {
                         if (array_key_exists('all', $limit_list)) {
                             $tmplimit = $limit_list['all'];
                             if ($tmplimit != 'none') {
-                                $html .= "There is a <span style=\"color:$this->colorWarning\">$tmplimit</span> game limit in all divisions<br>\n";
+                                $html .= "There is a <span style=\"color:$this->colorWarning\">$tmplimit</span> match limit in all divisions<br>\n";
                             } else {
-                                $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time<br>\n";
+                                $html .= "There is <span style=\"color:$this->colorWarning\">no</span> match limit at this time<br>\n";
                             }
                         }
                     }
                 } else {
                     if ($num_area == 0) {
-                        $html .= "$uname is not currently assigned to any games.<br>";
+                        $html .= "$uname is not currently assigned to any matches.<br>";
                     } elseif ($num_area == 1) {
-                        $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> game.<br><br>";
+                        $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> match.<br><br>";
                     } else {
-                        $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> games.<br><br>";
+                        $html .= "$uname is currently assigned to <span style=\"color:$this->colorSuccess\">$num_area</span> matches.<br><br>";
                     }
 
                     if (count($limit_list) == 0) {
-                        $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit at this time<br>\n";
+                        $html .= "There is <span style=\"color:$this->colorWarning\">no</span> match limit at this time<br>\n";
                     } else {
                         if (array_key_exists('all', $limit_list)) {
                             $tmplimit = $limit_list['all'];
-                            if ($tmplimit != 'none') {
-                                $html .= "There is a limit of <span style=\"color:$this->colorWarning\">$tmplimit</span> Area assigned games in all divisions at this time<br>\n";
-                            } else {
-                                $html .= "There is <span style=\"color:$this->colorWarning\">no</span> limit of Area assigned games at this time<br>\n";
+                            if (in_array($tmplimit, ['999', 'none'])) {
+                                $html .= "There is <span style=\"color:$this->colorWarning\">no</span> limit of Area assigned matches at this time<br>\n";
                             }
                         } else {
                             foreach ($limit_list as $k => $v) {
                                 $tmpassigned = $assigned_list[$k];
                                 if ($used_list[$k]) {
                                     if ($limit_list[$k] == 'none') {
-                                        $html .= "You have assigned <span style=\"color:$this->colorWarning\">$tmpassigned</span> $k matches.  There is <span style=\"color:$this->colorWarning\">no</span> game limit for $k.<br>\n";
+                                        $html .= "You have taken <span style=\"color:$this->colorWarning\">$tmpassigned</span> $k matches.  There is <span style=\"color:$this->colorWarning\">no</span> match limit for $k.<br>\n";
                                         $allatlimit = false;
                                     } else {
-                                        $html .= "You have assigned <span style=\"color:$this->colorWarning\">$tmpassigned</span> of your <span style=\"color:$this->colorWarning\">$v</span> game limit for $k<br>\n";
+                                        $html .= "You have taken <span style=\"color:$this->colorWarning\">$tmpassigned</span> matches of your <span style=\"color:$this->colorWarning\">$v</span> match limit for $k<br>\n";
                                         $allatlimit &= $tmpassigned >= $v;
                                     }
                                 }
                             }
                             if (count($assigned_list) < count($used_list)) {
-                                $html .= "There is <span style=\"color:$this->colorWarning\">no</span> game limit for all other divisions<br>\n";
+                                $html .= "There is <span style=\"color:$this->colorWarning\">no</span> match limit for all other divisions<br>\n";
                             }
                         }
                     }
 
                     if ($locked && !array_key_exists('none', $limit_list)) {
                         if (!$allatlimit) {
-                            $html .= "<br>You may sign ".$this->user->name." teams up for games but you may not remove them</h3>\n";
+                            $html .= "<br>You may sign ".$this->user->name." teams up for matches but you may not remove them</h3>\n";
                         } else {
-                            $html .= "<br>Since ".$this->user->name." is at or above your limit, you will not be able to sign teams up for games</h3>\n";
+                            $html .= "<br>Since ".$this->user->name." is at or above your limit, you will not be able to sign teams up for matches</h3>\n";
                         }
                     }
                 }
@@ -220,17 +218,17 @@ class GreetView extends AbstractView
                 $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">ACTIONS</h3>\n";
                 $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
                         'fullPath'
-                    ).">View full game schedule</a></h3>";
+                    ).">View full schedule</a></h3>";
 
                 if ($this->user->admin) {
                     if(!$this->event->archived) {
-                        $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('editGamePath').">Edit games</a></h3>";
+                        $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('editGamePath').">Edit matches</a></h3>";
                     }
                     $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('schedPath').">View Match Assignors</a></h3>";
                     $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('masterPath').">Select Match Assignors</a></h3>";
                     $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('refsPath').">Edit Referee Assignments</a></h3>";
                 } else {
-                    $html .= "<h3 class=\"center\">Goto $uname Schedule: <a href=".$this->getBaseURL('schedPath').">All games</a> - ";
+                    $html .= "<h3 class=\"center\">Goto $uname Schedule: <a href=".$this->getBaseURL('schedPath').">All matches</a> - ";
                     foreach ($groups as $group) {
                         $html .= "<a href=\"".$this->getBaseURL('schedPath')."?group=$group\">$group</a>".$delim;
                     }
@@ -239,7 +237,7 @@ class GreetView extends AbstractView
 
                 }
             } else {
-                $html .= "<h3 class=\"center\">There are no games to schedule</h3>";
+                $html .= "<h3 class=\"center\">There are no matches to schedule</h3>";
             }
 
             $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('endPath') . ">Log Off</a></h3>";

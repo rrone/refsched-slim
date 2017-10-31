@@ -38,9 +38,9 @@ class LogonTest extends AppTestCase
 
     public function testLogonAsUser()
     {
-        $this->eventLabel = $this->local['user_test']['event'];
-        $this->userName = $this->local['user_test']['user'];
-        $this->passwd = $this->local['user_test']['passwd'];
+        $this->eventLabel = $this->config['user_test']['event'];
+        $this->userName = $this->config['user_test']['user'];
+        $this->passwd = $this->config['user_test']['passwd'];
 
         $url = '/';
         $headers = array(
@@ -67,8 +67,8 @@ class LogonTest extends AppTestCase
 
     public function testLogonAsUserWithBadPW()
     {
-        $this->eventLabel = $this->local['user_test']['event'];
-        $this->userName = $this->local['user_test']['user'];
+        $this->eventLabel = $this->config['user_test']['event'];
+        $this->userName = $this->config['user_test']['user'];
 
         $url = '/';
         $headers = array(
@@ -92,9 +92,9 @@ class LogonTest extends AppTestCase
 
     public function testLogonAsAdmin()
     {
-        $this->eventLabel = $this->local['admin_test']['event'];
-        $this->userName = $this->local['admin_test']['user'];
-        $this->passwd = $this->local['admin_test']['passwd'];
+        $this->eventLabel = $this->config['admin_test']['event'];
+        $this->userName = $this->config['admin_test']['user'];
+        $this->passwd = $this->config['admin_test']['passwd'];
 
         $url = '/';
         $headers = array(
@@ -122,9 +122,9 @@ class LogonTest extends AppTestCase
 
     public function testLogonAsDeveloper()
     {
-        $this->eventLabel = $this->local['dev_test']['event'];
-        $this->userName = $this->local['dev_test']['user'];
-        $this->passwd = $this->local['dev_test']['passwd'];
+        $this->eventLabel = $this->config['dev_test']['event'];
+        $this->userName = $this->config['dev_test']['user'];
+        $this->passwd = $this->config['dev_test']['passwd'];
 
         $url = '/';
         $headers = array(

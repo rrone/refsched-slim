@@ -62,8 +62,8 @@ class EditRefTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['user_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
 
         $game = $this->sr->getGameByKeyAndNumber($projectKey, $this->goodId);
         $game_id = $game->id;
@@ -144,8 +144,8 @@ class EditRefTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['admin_test']['user'];
-        $projectKey = $this->local['admin_test']['projectKey'];
+        $user = $this->config['admin_test']['user'];
+        $projectKey = $this->config['admin_test']['projectKey'];
         $game_id = $this->sr->getGameByKeyAndNumber($projectKey, $this->goodId)->id;
 
         $this->client->app->getContainer()['session'] = [
@@ -223,8 +223,8 @@ class EditRefTest extends AppTestCase
 
         // invoke the controller action and test it
 
-        $user = $this->local['user_test']['user'];
-        $projectKey = $this->local['user_test']['projectKey'];
+        $user = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
         $game_id = $this->badId;
 
         $this->client->app->getContainer()['session'] = [
@@ -255,7 +255,7 @@ class EditRefTest extends AppTestCase
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
 
-        $this->assertContains("The matching game was not found or your Area was not assigned to it.<br>You might want to check the schedule and try again.</span></h3>", $view);
+        $this->assertContains("The matching match was not found or your Area was not assigned to it.<br>You might want to check the schedule and try again.</span></h3>", $view);
 
     }
 }

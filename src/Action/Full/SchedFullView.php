@@ -17,7 +17,7 @@ class SchedFullView extends AbstractView
         parent::__construct($container, $schedulerRepository);
 
         $this->justOpen = false;
-        $this->description = 'No games scheduled';
+        $this->description = 'No matches scheduled';
         $this->games = null;
     }
 
@@ -100,7 +100,7 @@ class SchedFullView extends AbstractView
 
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                $html .= "<th><a href=" . $this->getUri('fullPath') . ">Game#</a></th>";
+                $html .= "<th><a href=" . $this->getUri('fullPath') . ">Match#</a></th>";
                 $html .= "<th><a href=" . $this->getUri('fullPath','date') . ">Date</a></th>";
                 $html .= "<th>Time</th>";
                 $html .= "<th><a href=" . $this->getUri('fullPath','field') . ">Field</a></th>";
@@ -220,10 +220,10 @@ class SchedFullView extends AbstractView
         }
         if ($this->user->admin) {
             if(!$this->event->archived) {
-                $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit games</a>&nbsp;-&nbsp;";
+                $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit matches</a>&nbsp;-&nbsp;";
             }            $html .= "<a  href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;";
             $html .= "<a  href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;";
-            $html .= "<a  href=" . $this->getBaseURL('refsPath') . ">Edit referee assignments</a>&nbsp;-&nbsp;";
+            $html .= "<a  href=" . $this->getBaseURL('refsPath') . ">Edit Referee Assignments</a>&nbsp;-&nbsp;";
         } else {
             $html .= "<a  href=" . $this->getBaseURL('schedPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;";
             $html .= "<a  href=" . $this->getBaseURL('refsPath') . ">Edit " . $this->user->name . " referees</a>&nbsp;-&nbsp;";

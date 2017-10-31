@@ -60,11 +60,11 @@ class SchedExportXl extends AbstractExporter
 //            $counts = $this->sr->getGameCounts($projectKey);
 //
 //            //set the header labels
-//            $labels = array('Assignor', 'Date', 'Division', 'Game Count');
+//            $labels = array('Assignor', 'Date', 'Division', 'Match Count');
 //
 //            $data = array($labels);
 //
-//            //set the data : game in each row
+//            //set the data : match in each row
 //            foreach ($counts as $count) {
 //                $date = date('D, d M Y', strtotime($count->date));
 //                $row = array(
@@ -116,7 +116,7 @@ class SchedExportXl extends AbstractExporter
 
                 $data = array($labels);
 
-                //set the data : game in each row
+                //set the data : match in each row
                 foreach ($games as $game) {
                     $row = [];
                     if (!empty($game)) {
@@ -129,9 +129,9 @@ class SchedExportXl extends AbstractExporter
 
             }
             if(!empty($data)) {
-                $content['Referee Game Count']['data'] = $data;
-                $content['Referee Game Count']['options']['freezePane'] = 'A2';
-                $content['Referee Game Count']['options']['horizontalAlignment'] = ['B1:M' => 'center'];
+                $content['Referee Match Count']['data'] = $data;
+                $content['Referee Match Count']['options']['freezePane'] = 'A2';
+                $content['Referee Match Count']['options']['horizontalAlignment'] = ['B1:M' => 'center'];
             }
         }
 
@@ -150,13 +150,13 @@ class SchedExportXl extends AbstractExporter
             $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
             //set the header labels
-            $labels = array('Game', 'Date', 'Time', 'Field', 'Division', 'Pool', 'Home', 'Away', 'Referee Team', 'Referee', 'AR1', 'AR2');
+            $labels = array('Match', 'Date', 'Time', 'Field', 'Division', 'Pool', 'Home', 'Away', 'Referee Team', 'Referee', 'AR1', 'AR2');
             if ($has4th) {
                 $labels[] = '4th';
             }
             $data = array($labels);
 
-            //set the data : game in each row
+            //set the data : match in each row
             foreach ($games as $game) {
                 $time = date('H:i', strtotime($game->time));
                 $row = array(
