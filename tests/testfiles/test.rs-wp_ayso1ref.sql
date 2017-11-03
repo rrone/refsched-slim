@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 10.0.2.2:3307
--- Generation Time: Oct 30, 2017 at 09:21 PM
+-- Generation Time: Nov 02, 2017 at 02:40 AM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.11-1+ubuntu14.04.1+deb.sury.org+1
 
@@ -98,7 +98,7 @@ TRUNCATE TABLE `rs_games`;
 --
 
 INSERT INTO `rs_games` (`id`, `projectKey`, `game_number`, `date`, `time`, `field`, `division`, `pool`, `home`, `home_team`, `away`, `away_team`, `assignor`, `cr`, `ar1`, `ar2`, `r4th`, `medalRound`, `locked`) VALUES
-(457, '2016U16U19Chino', 1, '2016-11-19', '08:00:00', 'Ayala 7', 'U19G', '1', 'R1', '', 'C2', '', 'Area 1B', '', '', '', '', 0, 1),
+(457, '2016U16U19Chino', 1, '2016-11-19', '08:00:00', 'Ayala 7', 'U19G', '1', 'R1', '', 'C2', '', 'Area 1B', 'Joe Turnbaugh', 'Patrick Cary', 'Douglas Murray', '', 0, 1),
 (458, '2016U16U19Chino', 2, '2016-11-19', '08:00:00', 'Ayala 8', 'U19G', '2', 'N1', '', 'B2', '', 'Area 1F', 'Herb Countee', 'Michael Feder', 'Won Song', '', 0, 1),
 (459, '2016U16U19Chino', 3, '2016-11-19', '08:00:00', 'Ayala 9', 'U19G', '3', 'B1', '', 'D1', '', 'Area 1H', 'Chris Salmon', 'Jose Macias', 'Alfred Medina', '', 0, 1),
 (460, '2016U16U19Chino', 4, '2016-11-19', '08:00:00', 'Ayala 10', 'U19G', '4', 'G1', '', 'P1', '', 'Area 1D', 'Craig Breitman', 'Merit Shoucri', 'Scott Jarus', '', 0, 1),
@@ -106,7 +106,7 @@ INSERT INTO `rs_games` (`id`, `projectKey`, `game_number`, `date`, `time`, `fiel
 (462, '2016U16U19Chino', 6, '2016-11-19', '08:00:00', 'Ayala 12', 'U16G', '2', 'P1', '', 'N1', '', 'Area 1R', 'Ramon Guzman', 'Joseph Marconi', 'Lee Lombard', '', 0, 1),
 (463, '2016U16U19Chino', 7, '2016-11-19', '08:00:00', 'Ayala 13', 'U16G', '3', 'B1', '', 'N2', '', 'Area 1P', 'John Burgee', 'Chris Nevil', 'Scott Karlan', '', 0, 1),
 (464, '2016U16U19Chino', 8, '2016-11-19', '08:00:00', 'Ayala 14', 'U16G', '4', 'H1', '', 'R2', '', 'Area 1G', 'Glenn Schwartzberg', 'Sandy Wright', 'Michael Sanchez', '', 0, 1),
-(465, '2016U16U19Chino', 9, '2016-11-19', '09:20:00', 'Ayala 7', 'U19B', '1', 'G2', '', 'R1', '', 'Area 1B', '', '', '', '', 0, 1),
+(465, '2016U16U19Chino', 9, '2016-11-19', '09:20:00', 'Ayala 7', 'U19B', '1', 'G2', '', 'R1', '', 'Area 1B', 'John Meehan', 'Pat Cary', 'Eloy Loera', '', 0, 1),
 (466, '2016U16U19Chino', 10, '2016-11-19', '09:20:00', 'Ayala 8', 'U19B', '2', 'N1', '', 'H1', '', 'Area 1F', 'Michael Feder', 'Herb Countee', 'Won Song', '', 0, 1),
 (467, '2016U16U19Chino', 11, '2016-11-19', '09:20:00', 'Ayala 9', 'U19B', '3', 'C1', '', 'B1', '', 'Area 1H', 'Jose Macias', 'Chris Salmon', 'Alfred Medina', '', 0, 1),
 (468, '2016U16U19Chino', 12, '2016-11-19', '09:20:00', 'Ayala 10', 'U19B', '4', 'U1', '', 'G1', '', 'Area 1D', 'Merit Shoucri', 'Craig Breitman', 'Scott Jarus', '', 0, 1),
@@ -114,7 +114,7 @@ INSERT INTO `rs_games` (`id`, `projectKey`, `game_number`, `date`, `time`, `fiel
 (470, '2016U16U19Chino', 14, '2016-11-19', '09:20:00', 'Ayala 12', 'U16B', '2', 'G1', '', 'U1', '', 'Area 1R', 'Stefan Larson', 'Joseph Marconi', 'James Affinito', '', 0, 1),
 (471, '2016U16U19Chino', 15, '2016-11-19', '09:20:00', 'Ayala 13', 'U16B', '3', 'B1', '', 'C1', '', 'Area 1P', 'Chris Nevil', 'Scott Karlan', 'John Burgee', '', 0, 1),
 (472, '2016U16U19Chino', 16, '2016-11-19', '09:20:00', 'Ayala 14', 'U16B', '4', 'H1', '', 'N1', '', 'Area 1B', '', '', '', '', 0, 1),
-(473, '2016U16U19Chino', 17, '2016-11-19', '10:40:00', 'Ayala 7', 'U19G', '1', 'D2', '', 'R1', '', 'Area 1B', '', '', '', '', 0, 0),
+(473, '2016U16U19Chino', 17, '2016-11-19', '10:40:00', 'Ayala 7', 'U19G', '1', 'D2', '', 'R1', '', 'Area 1B', 'Douglas Murray', 'Eloy Loera', 'Joe Turnbaugh', '', 0, 0),
 (474, '2016U16U19Chino', 18, '2016-11-19', '10:40:00', 'Ayala 8', 'U19G', '2', 'C1', '', 'N1', '', 'Area 1G', 'Jeff Johnston', 'Lealon Watts', 'Michael Hays', '', 0, 1),
 (475, '2016U16U19Chino', 19, '2016-11-19', '10:40:00', 'Ayala 9', 'U19G', '3', 'F1', '', 'B1', '', 'Area 1R', 'Steven Chandler', 'Lee Lombard', 'Joseph Marconi', '', 0, 1),
 (476, '2016U16U19Chino', 20, '2016-11-19', '10:40:00', 'Ayala 10', 'U19G', '4', 'U1', '', 'G1', '', 'Area 1D', 'Scott Jarus', 'Merit Shoucri', 'Craig Breitman', '', 0, 1),
