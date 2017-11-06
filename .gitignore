@@ -13,4 +13,5 @@ config
 .idea
 *.zip
 src/Model
-public/fonts
+public/fonts/
+/tests/testfiles/

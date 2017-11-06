@@ -89,7 +89,7 @@ $container['logger'] = function (\Slim\Container $c) {
 $container['db'] = function ($c) {
     $capsule = new Illuminate\Database\Capsule\Manager;
 
-    $capsule->addConnection($c['settings']['db']);
+    $capsule->addConnection($c['settings']['dbConfig']);
 
     $capsule->setAsGlobal();
     $capsule->bootEloquent();
