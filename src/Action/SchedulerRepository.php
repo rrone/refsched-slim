@@ -452,7 +452,7 @@ class SchedulerRepository
         $result = [];
 
         foreach ($groups as $group) {
-            $u = stripos($group->division, "U");
+//            $u = stripos($group->division, "U");
             $group = substr($group->division, 1, 3);
             if (!in_array($group, $result)) {
                 $result[] = $group;
@@ -778,7 +778,7 @@ class SchedulerRepository
     public function getDivisions($projectKey)
     {
         $result = $this->db->table('games')
-            ->selectRaw('SUBSTR(division,LOCATE(\'U\',division),3) as uDiv')
+            ->selectRaw('division as uDiv')
             ->distinct()
             ->where('projectKey', $projectKey)
             ->orderBy('division', 'asc')
@@ -859,8 +859,7 @@ class SchedulerRepository
                         }
                         break;
                     case 'division':
-                        $u = stripos($val, "U");
-                        $div = substr($val, $u-2, 3);
+                        $div = $val;
                         if (!isset($refList[$ref->name][$div])) {
                             $refList[$ref->name][$div] = 0;
                         }
@@ -944,6 +943,7 @@ class SchedulerRepository
         }
 
         $sortedRefsList = [];
+
         foreach (array_values($refsList) as $item) {
             $sortedList = $emptySortList;
             foreach ($item as $k => $v) {
