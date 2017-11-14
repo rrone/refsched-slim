@@ -57,9 +57,9 @@ class AdminView extends AbstractView
 
                 return 'Update';
 
-            } elseif (in_array('btnCancel', array_keys($_POST))) {
+            } elseif (in_array('btnDone', array_keys($_POST))) {
 
-                return 'Cancel';
+                return 'Done';
 
             } elseif (in_array('btnExport', array_keys($_POST))) {
 
