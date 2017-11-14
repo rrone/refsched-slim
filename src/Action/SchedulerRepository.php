@@ -965,54 +965,21 @@ class SchedulerRepository
 
         $select4th = $has4th ? ', 0 as r4th' : '';
 
-        $cr = $this->db->table('games')
-            ->selectRaw('cr as name, assignor, date, time, division, COUNT(cr) as crCount, 0 as ar1Count, 0 as ar2Count ' . $select4th)
-            ->where([
-                ['projectKey', $projectKey],
-                ['cr', '<>', '']
-            ])
-            ->groupBy(['cr', 'date', 'division']);
+        $cr = $this->db::select('call rs_crAssignmentMap(?,?)', [$projectKey, $select4th]);
 
-        $ar1 = $this->db->table('games')
-            ->selectRaw('ar1 as name, assignor, date, time, division, 0 as crCount, COUNT(ar1) as ar1Count, 0 as ar2Count ' . $select4th)
-            ->where([
-                ['projectKey', $projectKey],
-                ['ar1', '<>', '']
-            ])
-            ->groupBy(['ar1', 'date', 'division']);
+        $ar1 = $this->db::select('call rs_ar1AssignmentMap(?,?)', [$projectKey, $select4th]);
 
-        $ar2 = $this->db->table('games')
-            ->selectRaw('ar2 as name, assignor, date, time, division, 0 as crCount, 0 as ar1Count, COUNT(ar2) as ar2Count ' . $select4th)
-            ->where([
-                ['projectKey', $projectKey],
-                ['ar2', '<>', '']
-            ])
-            ->groupBy(['ar2', 'date', 'division']);
+        $ar2 = $this->db::select('call rs_ar2AssignmentMap(?,?)', [$projectKey, $select4th]);
 
-        $refs = $cr
-            ->union($ar1)
-            ->union($ar2);
+        $refs = array_merge ($cr, $ar1, $ar2);
 
         if ($has4th) {
-            $r4th = $this->db->table('games')
-                ->selectRaw('r4th as name, assignor, date, time, division, 0 as crCount, 0 as ar1Count, 0 as ar2Count, COUNT(r4th) as r4thCount')
-                ->where([
-                    ['projectKey', $projectKey],
-                    ['r4th', '<>', '']
-                ])
-                ->groupBy(['r4th', 'date', 'division']);
+            $r4th = $this->db::select('call rs_r4thAssignmentMap(?,?)', [$projectKey, $select4th]);
 
-            $refs = $refs
-                ->union($r4th);
+            $refs = array_merge($refs, $r4th);
         }
 
-        $result = $refs
-            ->orderBy('name', 'asc')
-            ->orderBy('date', 'asc')
-            ->orderBy('time', 'asc')
-            ->orderBy('division', 'asc')
-            ->get();
-        $arrResult = $result->all();
+        $arrResult = $refs;
 
         $refsList = $this->aggregateRefereeAssignments($arrResult);
 
