@@ -120,7 +120,7 @@ class SchedEditRefView extends AbstractView
                 }
 
                 $numRefs = $this->sr->numberOfReferees($projectKey);
-                $nameRegex = "^(?!Area|area)([A-z\\-]{2,20}[,\\s]{1,2}[A-z\\-]{1,20}[,\\s]{0,1}[A-z\\-]{1,20}[,\\s]{0,1})$";
+                $nameRegex = "^(?!Area|area)([A-z\\-\\']{2,20}[,\\s]{1,2}[A-z\\-]{1,20}[,\\s]{0,1}[A-z\\-\\']{1,20}[,\\s]{0,1})$";
                 $nameHint = "First Last or Last, First (No initials)";
 
                 if (count($games)) {
