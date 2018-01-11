@@ -59,7 +59,7 @@ if [ -e $PHP"/conf.d/ext-xdebug.~ini" ]
 then
     mv "$PHP"/conf.d/ext-xdebug.~ini "$PHP"/conf.d/ext-xdebug.ini
 fi
-composer update
+composer install
 
 echo "...distribution complete"
 echo
