@@ -616,6 +616,9 @@ class SchedulerRepository
                             case 'medalRound':
                                 $value = 0;
                                 break;
+                            case 'locked':
+                                $value = 0;
+                                break;
                             default:
                                 $value = '';
                         }
