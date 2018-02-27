@@ -467,13 +467,15 @@ class SchedSchedView extends AbstractView
                             }
                             $html .= "<td>$game->division</td>";
                             $html .= "<td>".$game->pool."</td>";
+                            $html .= "<td>".$game->home."</td>";
+                            $html .= "<td>".$game->away."</td>";
                         } else {
                             $html .= "<td></td>";
                             $html .= "<td></td>";
                             $html .= "<td></td>";
+                            $html .= "<td></td>";
+                            $html .= "<td></td>";
                         }
-                        $html .= "<td>".$game->home."</td>";
-                        $html .= "<td>".$game->away."</td>";
                         $html .= "<td>&nbsp;</td>";
                         if (!$this->user->admin && !$this->event->archived && !$this->locked) {
                             $html .= "<td><input type=\"checkbox\" name=\"assign:".$game->id."\" value=\""

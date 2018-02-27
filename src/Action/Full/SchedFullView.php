@@ -180,13 +180,15 @@ class SchedFullView extends AbstractView
                             }
                             $html .= "<td>$game->division</td>";
                             $html .= "<td>$game->pool</td>";
+                            $html .= "<td>$game->home</td>";
+                            $html .= "<td>$game->away</td>";
                         } else {
                             $html .= "<td></td>";
                             $html .= "<td></td>";
                             $html .= "<td></td>";
+                            $html .= "<td></td>";
+                            $html .= "<td></td>";
                         }
-                        $html .= "<td>$game->home</td>";
-                        $html .= "<td>$game->away</td>";
                         $html .= "<td>$game->assignor</td>";
                         $html .= "<td>$game->cr</td>";
                         $html .= "<td>$game->ar1</td>";
