@@ -107,10 +107,10 @@ $container['sr'] = function (\Slim\Container $c) {
 // -----------------------------------------------------------------------------
 // Action dependency Injection
 // -----------------------------------------------------------------------------
-$db = $container->get('db');
+$db = $container['db'];
 $sr = $container['sr'];
-$view = $container->get('view');
-$uploadPath = $container->get('settings')['upload_path'];
+$view = $container['view'];
+$uploadPath = $container['settings']['upload_path'];
 
 $container[App\Action\SchedulerRepository::class] = function ($db) {
 
@@ -314,7 +314,7 @@ $container[App\Action\Admin\LogExportController::class] = function ($c) use ($sr
 // -----------------------------------------------------------------------------
 // SchedEnd class
 // -----------------------------------------------------------------------------
-$container[App\Action\End\SchedEndController::class] = function ($c) use ($sr) {
+$container[App\Action\End\SchedEndController::class] = function ($c) {
 
     return new \App\Action\End\SchedEndController($c);
 };
@@ -381,6 +381,18 @@ $container[App\Action\MedalRound\HideMedalRoundController::class] = function ($c
     return new \App\Action\MedalRound\HideMedalRoundController($c, $v);
 };
 
+$container[App\Action\MedalRound\ShowMedalRoundDivisionsController::class] = function ($c) use ($sr) {
+    $v = new \App\Action\MedalRound\MedalRoundDivisionsView($c, $sr);
+
+    $dv = new \App\Action\MedalRound\ShowMedalRoundDivisionsController($c, $v);
+    return $dv;
+};
+
+$container[App\Action\MedalRound\HideMedalRoundDivisionsController::class] = function ($c) use ($sr) {
+    $v = new \App\Action\MedalRound\MedalRoundDivisionsView($c, $sr);
+
+    return new \App\Action\MedalRound\HideMedalRoundDivisionsController($c, $v);
+};
 
 // -----------------------------------------------------------------------------
 // SAR Function class

@@ -131,7 +131,7 @@ class SchedEditRefView extends AbstractView
                             $html .= "<form name=\"editref\" method=\"post\" action=" . $this->getBaseURL('editrefPath') . ">\n";
                             $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                             $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                            $html .= "<th>Match#</th>";
+                            $html .= "<th>Match #</th>";
                             $html .= "<th>Date</th>";
                             $html .= "<th>Time</th>";
                             $html .= "<th>Field</th>";

@@ -64,6 +64,7 @@ class GreetView extends AbstractView
             $this->location = $this->event->location;
 
             $show_medal_round = $this->sr->getMedalRound($projectKey);
+            $show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
 
             $this->games = $this->sr->getGames($projectKey, '%', $show_medal_round);
 
@@ -80,6 +81,7 @@ class GreetView extends AbstractView
                 $limit_list = [];
 
                 $groups = $this->sr->getGroups($projectKey);
+
                 foreach ($groups as $group) {
                     $used_list[$group] = 0;
                     $assigned_list[$group] = 0;
@@ -134,6 +136,15 @@ class GreetView extends AbstractView
                         $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
                                 'showMRPath'
                             ).">Show Medal Round Assignments</a> to users)<br><br>\n";
+                    }
+                    if ($show_medal_round_divisions) {
+                        $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                                'hideMRDivPath'
+                            ).">Hide Medal Round Divisions</a> from users)<br><br>\n";
+                    } else {
+                        $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                                'showMRDivPath'
+                            ).">Show Medal Round Divisions</a> to users)<br><br>\n";
                     }
                 } else {
                     if ($locked) {

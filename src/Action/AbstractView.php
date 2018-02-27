@@ -65,7 +65,16 @@ abstract class AbstractView
     {
         $u = stripos($div, "U");
 
-        $div = substr($div, $u-2, 3);;
+        switch ($u) {
+            case 1:
+                $div = substr($div, $u, 3);;
+                break;
+            case 2:
+                $div = substr($div, $u - 1, 3);;
+                break;
+            default:
+                $div = substr($div, $u - 2, 3);;
+        }
 
         return $div;
     }

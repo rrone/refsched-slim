@@ -78,6 +78,7 @@ class SchedFullView extends AbstractView
             $this->location = $this->event->location;
 
             $show_medal_round = $this->sr->getMedalRound($projectKey);
+            $show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
 
             if($this->user->admin) {
                 $this->games = $this->sr->getGames($projectKey, '%', true, $this->sortOn);
@@ -100,7 +101,7 @@ class SchedFullView extends AbstractView
 
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                $html .= "<th><a href=" . $this->getUri('fullPath') . ">Match#</a></th>";
+                $html .= "<th><a href=" . $this->getUri('fullPath') . ">Match #</a></th>";
                 $html .= "<th><a href=" . $this->getUri('fullPath','date') . ">Date</a></th>";
                 $html .= "<th>Time</th>";
                 $html .= "<th><a href=" . $this->getUri('fullPath','field') . ">Field</a></th>";
@@ -171,13 +172,19 @@ class SchedFullView extends AbstractView
                         $html .= "<td>$game->game_number</td>";
                         $html .= "<td>$date</td>";
                         $html .= "<td>$time</td>";
-                        if (is_null($this->event->field_map)) {
-                            $html .= "<td>$game->field</td>";
+                        if ($show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                            if (is_null($this->event->field_map)) {
+                                $html .= "<td>$game->field</td>";
+                            } else {
+                                $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$game->field</a></td>";
+                            }
+                            $html .= "<td>$game->division</td>";
+                            $html .= "<td>$game->pool</td>";
                         } else {
-                            $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$game->field</a></td>";
+                            $html .= "<td></td>";
+                            $html .= "<td></td>";
+                            $html .= "<td></td>";
                         }
-                        $html .= "<td>$game->division</td>";
-                        $html .= "<td>$game->pool</td>";
                         $html .= "<td>$game->home</td>";
                         $html .= "<td>$game->away</td>";
                         $html .= "<td>$game->assignor</td>";

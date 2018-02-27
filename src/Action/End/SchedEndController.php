@@ -22,9 +22,11 @@ class SchedEndController extends AbstractController
 //        $resp = $response->withRedirect($this->getBaseURL('logonPath') . $key);
         $resp = $response->withRedirect($this->getBaseURL('logonPath'));
 
-        session_unset();
+        if(isset($_SESSION)) {
+            session_unset();
 
-        session_destroy();
+            session_destroy();
+        }
 
         return $resp;
     }

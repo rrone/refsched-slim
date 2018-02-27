@@ -24,7 +24,7 @@ class SARActionTest extends AppTestCase
 
     }
 
-    public function testSchedRefsAsAnonymous()
+    public function testSARAsAnonymous()
     {
         // instantiate the action
 
@@ -34,13 +34,12 @@ class SARActionTest extends AppTestCase
         // invoke the controller action and test it
 
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get($this->testUri);
-        $sar = (string)$response->getBody();
+        $this->client->get($this->testUri);
 
-        $this->assertContains('1/D/92', $sar);
+        $this->expectOutputString('1/D/92');
     }
 
-    public function testSchedRefsAsUser()
+    public function testSSARAsUser()
     {
         // instantiate the action
 
@@ -59,13 +58,12 @@ class SARActionTest extends AppTestCase
         // invoke the controller action and test it
 
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get($this->testUri);
-        $sar = (string)$response->getBody();
+        $this->client->get($this->testUri);
 
-        $this->assertContains('1/D/92', $sar);
+        $this->expectOutputString('1/D/92');
     }
 
-    public function testSchedRefsAsAdmin()
+    public function testSARAsAdmin()
     {
         // instantiate the action
 
@@ -84,9 +82,8 @@ class SARActionTest extends AppTestCase
         // invoke the controller action and test it
 
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get($this->testUri);
-        $sar = (string)$response->getBody();
+        $this->client->get($this->testUri);
 
-        $this->assertContains('1/D/92', $sar);
+        $this->expectOutputString('1/D/92');
     }
 }

@@ -33,7 +33,7 @@ class SchedTemplateExport extends AbstractExporter
         $this->sr = $schedulerRepository;
         $this->view = $container->get('view');
 
-        $this->outFileName = 'GameScheduleTemplate_' . date('Ymd_His') . '.' . $this->getFileExtension();
+        $this->outFileName = 'ScheduleImportTemplate_' . date('Ymd_His') . '.' . $this->getFileExtension();
     }
 
     public function handler(Request $request, Response $response)

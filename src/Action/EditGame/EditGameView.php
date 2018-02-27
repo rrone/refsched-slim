@@ -102,7 +102,7 @@ class EditGameView extends AbstractView
                 }
                 $html .= "<table class=\"edit-table sched-table\" width=\"100%\">\n";
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                $html .= "<th>Match#</th>";
+                $html .= "<th>Match #</th>";
                 $html .= "<th>Date</th>";
                 $html .= "<th>Time</th>";
                 $html .= "<th>Field</th>";

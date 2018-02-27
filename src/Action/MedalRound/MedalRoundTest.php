@@ -4,8 +4,10 @@ namespace Tests;
 use App\Action\AbstractController;
 use App\Action\AbstractView;
 use App\Action\MedalRound\HideMedalRoundController;
+use App\Action\MedalRound\MedalRoundDivisionsView;
 use App\Action\MedalRound\ShowMedalRoundController;
 use App\Action\MedalRound\MedalRoundView;
+use App\Action\MedalRound\ShowMedalRoundDivisionsController;
 
 class MedalRoundTest extends AppTestCase
 {
@@ -47,6 +49,19 @@ class MedalRoundTest extends AppTestCase
         ];
 
         $this->client->returnAsResponseObject(true);
+
+        $response = (object)$this->client->get('/unlock');
+        $url = implode($response->getHeader('Location'));
+
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/greet', $url);
+
+        $response = (object)$this->client->get($url);
+        $view = (string)$response->getBody();
+
+        $this->assertContains("<h3 class=\"center\">Welcome $user</h3>", $view);
+        $this->assertContains("<h3 class=\"center\">The schedule is:&nbsp;<span style=\"color:#02C902\">Unlocked</span>&nbsp;-&nbsp;(<a href=/lock>Lock</a> the schedule now)", $view);
+
         $response = (object)$this->client->get('/lock');
         $url = implode($response->getHeader('Location'));
 
@@ -57,14 +72,66 @@ class MedalRoundTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user</h3>", $view);
-//        $this->assertContains("<h3 class=\"center\">The schedule is:&nbsp;<span style=\"color:#CC0000\">Locked</span>&nbsp;-&nbsp;(<a href=/unlock>Unlock</a> the schedule now)", $view);
+        $this->assertContains("<h3 class=\"center\">The schedule is:&nbsp;<span style=\"color:#CC0000\">Locked</span>&nbsp;-&nbsp;(<a href=/unlock>Unlock</a> the schedule now)", $view);
 
-        $response = (object)$this->client->get('/hidemr');
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('/greet', $url);
     }
 
-    public function testShowMRAsUser()
+    public function testLockAsUser()
+    {
+        // instantiate the view
+
+        $view = new MedalRoundView($this->c, $this->sr);
+
+        // instantiate the ShowMedalRound controller & test it
+
+        $controller = new HideMedalRoundController($this->c, $view);
+        $this->assertTrue($controller instanceof AbstractController);
+
+        // invoke the show medalround controller action as unauthorized and test it
+        $this->app->getContainer()['session'] = [
+            'authed' => false,
+            'user' => null,
+            'event' => null
+        ];
+
+        // invoke the lock controller action as admin and test it
+        $user = $this->config['user_test']['user'];
+        $projectKey = $this->config['user_test']['projectKey'];
+
+        $this->app->getContainer()['session'] = [
+            'authed' => true,
+            'user' => $this->sr->getUserByName($user),
+            'event' => $this->sr->getEvent($projectKey)
+        ];
+
+        $this->client->returnAsResponseObject(true);
+
+        $response = (object)$this->client->get('/unlock');
+        $url = implode($response->getHeader('Location'));
+
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/greet', $url);
+
+        $response = (object)$this->client->get($url);
+        $view = (string)$response->getBody();
+
+        $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
+        $this->assertContains("<h3 class=\"center\"><h3 class=\"center\">The schedule is presently <span style=\"color:#CC0000\">locked</span><br><br>", $view);
+
+        $response = (object)$this->client->get('/lock');
+        $url = implode($response->getHeader('Location'));
+
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/greet', $url);
+
+        $response = (object)$this->client->get($url);
+        $view = (string)$response->getBody();
+
+        $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
+        $this->assertContains("<h3 class=\"center\"><h3 class=\"center\">The schedule is presently <span style=\"color:#CC0000\">locked</span><br><br>", $view);
+    }
+
+     public function testShowMRAsAdmin()
     {
         // instantiate the view
 
@@ -84,8 +151,8 @@ class MedalRoundTest extends AppTestCase
         ];
 
         // invoke the lock controller action as user and test it
-        $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $user = $this->config['admin_test']['user'];
+        $projectKey = $this->config['admin_test']['projectKey'];
         $this->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
@@ -93,6 +160,19 @@ class MedalRoundTest extends AppTestCase
         ];
 
         $this->client->returnAsResponseObject(true);
+
+        $response = (object)$this->client->get('/hidemr');
+        $url = implode($response->getHeader('Location'));
+
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/greet', $url);
+
+        $response = (object)$this->client->get($url);
+        $view = (string)$response->getBody();
+
+        $this->assertContains("<h3 class=\"center\">Welcome $user</h3>", $view);
+        $this->assertContains("Medal round assignments are:&nbsp;<span style=\"color:#CC0000\">Not Viewable</span>&nbsp;-&nbsp;(<a href=/showmr>Show Medal Round Assignments</a> to users)", $view);
+
         $response = (object)$this->client->get('/showmr');
         $url = implode($response->getHeader('Location'));
 
@@ -102,18 +182,19 @@ class MedalRoundTest extends AppTestCase
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
+        $this->assertContains("<h3 class=\"center\">Welcome $user</h3>", $view);
+        $this->assertContains("Medal round assignments are:&nbsp;<span style=\"color:#02C902\">Viewable</span>&nbsp;-&nbsp;(<a href=/hidemr>Hide Medal Round Assignments</a> from users)", $view);
     }
 
-    public function testShowMRAsAdmin()
+    public function testShowMRDAsAdmin()
     {
         // instantiate the view
 
-        $view = new MedalRoundView($this->c, $this->sr);
+        $view = new MedalRoundDivisionsView($this->c, $this->sr);
 
         // instantiate the Unlock controller & test it
 
-        $controller = new ShowMedalRoundController($this->c, $view);
+        $controller = new ShowMedalRoundDivisionsController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the unlock controller action as authorized admin and test it
@@ -134,7 +215,8 @@ class MedalRoundTest extends AppTestCase
         ];
 
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/unlock');
+
+        $response = (object)$this->client->get('/hidemrd');
         $url = implode($response->getHeader('Location'));
 
         $this->assertEquals(302, $response->getStatusCode());
@@ -144,13 +226,22 @@ class MedalRoundTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user</h3>", $view);
+        $this->assertContains("Medal round divisions are:&nbsp;<span style=\"color:#CC0000\">Not Viewable</span>&nbsp;-&nbsp;(<a href=/showmrd>Show Medal Round Divisions</a> to users)", $view);
 
-        $response = (object)$this->client->get('/unlock');
+        $response = (object)$this->client->get('/showmrd');
+        $url = implode($response->getHeader('Location'));
+
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals('/greet', $url);
+
+        $response = (object)$this->client->get($url);
+        $view = (string)$response->getBody();
+
+        $this->assertContains("<h3 class=\"center\">Welcome $user</h3>", $view);
+        $this->assertContains("Medal round divisions are:&nbsp;<span style=\"color:#02C902\">Viewable</span>&nbsp;-&nbsp;(<a href=/hidemrd>Hide Medal Round Divisions</a> from users)", $view);
     }
 
-    public function testHideMRAsUser()
+    public function xtestHideMRAsUser()
     {
         // instantiate the view
 
@@ -173,7 +264,18 @@ class MedalRoundTest extends AppTestCase
         ];
 
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/unlock');
+
+        $response = (object)$this->client->get('/showmr');
+        $url = implode($response->getHeader('Location'));
+
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('/greet', $url);
+
+        $response = (object)$this->client->get($url);
+        $view = (string)$response->getBody();
+
+        $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
+        $response = (object)$this->client->get('/showmr');
         $url = implode($response->getHeader('Location'));
 
         $this->assertEquals(302, $response->getStatusCode());
@@ -185,7 +287,7 @@ class MedalRoundTest extends AppTestCase
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
     }
 
-    public function testHideAsAnonymous()
+    public function xtestHideAsAnonymous()
     {
         // instantiate the view
 
@@ -218,7 +320,7 @@ class MedalRoundTest extends AppTestCase
         $this->assertEquals('/', $url);
     }
 
-    public function testShowAsAnonymous()
+    public function xtestShowAsAnonymous()
     {
         // instantiate the view
 
