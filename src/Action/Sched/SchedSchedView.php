@@ -49,8 +49,6 @@ class SchedSchedView extends AbstractView
             $this->projectKey = $this->event->projectKey;
 
             $this->locked = $this->sr->getLocked($this->projectKey);
-            $this->show_medal_round = $this->sr->getMedalRound($this->projectKey);
-            $show_medal_round_divisions = $this->sr->getMedalRoundDivisions($this->projectKey);
 
             $this->updateLimitLists();
 
@@ -103,7 +101,6 @@ class SchedSchedView extends AbstractView
                                     'r4th' => '',
                                     $game->id => 'Update Assignments',
                                 );
-
                                 $this->sr->updateAssignments($data);
                                 $this->msg .= "<p>You have <strong>removed</strong> your referee team from $game->division Match # $game->game_number on $game->date at $game->time on $game->field</p>";
                             }
@@ -300,7 +297,7 @@ class SchedSchedView extends AbstractView
     {
         $html = null;
 
-        $games = $this->sr->getGames($this->projectKey, $this->showgroup, $this->show_medal_round);
+        $games = $this->sr->getGames($this->projectKey, $this->showgroup, true);
 
         if (count($games)) {
             $this->description = $this->user->name.': Schedule';
@@ -399,7 +396,7 @@ class SchedSchedView extends AbstractView
         }
         $rowColor = $this->colorDarkGray;
 
-        $games = $this->sr->getGames($this->projectKey, $this->showgroup);
+        $games = $this->sr->getGames($this->projectKey, $this->showgroup, true);
 
         if (count($games) == 0) {
             $html .= "<h3>No available matches.</h3>";
@@ -427,12 +424,9 @@ class SchedSchedView extends AbstractView
             $html .= "</tr>\n";
 
             $this->description = $this->user->name.': Schedule';
-
             $gameCount = 0;
             foreach ($this->assigned_list['unassigned'] as $game) {
-                if (($this->showgroup && $this->showgroup == $this->divisionAge(
-                            $game->division
-                        )) || !$this->showgroup) {
+                if (($this->showgroup && $this->showgroup == $this->divisionAge($game->division)) || !$this->showgroup) {
                     if ($this->user->admin || $usr != substr($game->home, 0, 1) && $usr != substr(
                             $game->away,
                             0,
@@ -455,7 +449,11 @@ class SchedSchedView extends AbstractView
                         }
 
                         $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
-                        $html .= "<td>".$game->game_number."</td>";
+                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                            $html .= "<td>".$game->game_number."</td>";
+                        } else {
+                            $html .= "<td></td>";
+                        }
                         $html .= "<td>".$date."</td>";
                         $html .= "<td>".$time."</td>";
                         $field = $game->field;
@@ -590,25 +588,37 @@ class SchedSchedView extends AbstractView
                         $time = date('H:i', strtotime($game->time));
 
                         $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
-                        $html .= "<td>".$game->game_number."</td>";
+                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                            $html .= "<td>".$game->game_number."</td>";
+                        } else {
+                            $html .= "<td></td>";
+                        }
                         $html .= "<td>".$date."</td>";
                         $html .= "<td>".$time."</td>";
                         $field = $game->field;
-                        if (is_null($this->event->field_map)) {
-                            $html .= "<td>$field</td>";
+                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                            if (is_null($this->event->field_map)) {
+                                $html .= "<td>$field</td>";
+                            } else {
+                                $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$field</a></td>";
+                            }
+                            $html .= "<td>$game->division</td>";
+                            $html .= "<td>".$game->pool."</td>";
+                            $html .= "<td>".$game->home."</td>";
+                            $html .= "<td>".$game->away."</td>";
                         } else {
-                            $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$field</a></td>";
+                            $html .= "<td></td>";
+                            $html .= "<td></td>";
+                            $html .= "<td></td>";
+                            $html .= "<td></td>";
+                            $html .= "<td></td>";
                         }
-                        $html .= "<td>".$game->division."</td>";
-                        $html .= "<td>".$game->pool."</td>";
-                        $html .= "<td>".$game->home."</td>";
-                        $html .= "<td>".$game->away."</td>";
                         $html .= "<td>".$game->assignor."</td>";
                         if (!$this->user->admin) {
                             if ($this->locked) {
                                 $html .= "<td>Locked</td>";
                             } elseif (!$this->event->archived) {
-                                $html .= "<td><input name=\"games:".$game->id."\" type=\"checkbox\" value=\""
+                                $html .= "<td><input name=\"matches:".$game->id."\" type=\"checkbox\" value=\""
                                     .$game->id."\" checked></td>";
                             }
                         }

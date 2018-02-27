@@ -11,6 +11,8 @@ class SchedFullView extends AbstractView
 {
     private $description;
     private $games;
+    private $show_medal_round;
+    private $show_medal_round_divisions;
 
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -77,13 +79,13 @@ class SchedFullView extends AbstractView
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
 
-            $show_medal_round = $this->sr->getMedalRound($projectKey);
-            $show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
+            $this->show_medal_round = $this->sr->getMedalRound($projectKey);
+            $this->show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
 
             if($this->user->admin) {
                 $this->games = $this->sr->getGames($projectKey, '%', true, $this->sortOn);
             } else {
-                $this->games = $this->sr->getGames($projectKey, '%', $show_medal_round, $this->sortOn);
+                $this->games = $this->sr->getGames($projectKey, '%', $this->show_medal_round, $this->sortOn);
             }
 
             if (count($this->games)) {
@@ -169,10 +171,14 @@ class SchedFullView extends AbstractView
                             }
                         }
 
-                        $html .= "<td>$game->game_number</td>";
+                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                            $html .= "<td>$game->game_number</td>";
+                        } else {
+                            $html .= "<td></td>";
+                        }
                         $html .= "<td>$date</td>";
                         $html .= "<td>$time</td>";
-                        if ($show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
                             if (is_null($this->event->field_map)) {
                                 $html .= "<td>$game->field</td>";
                             } else {
