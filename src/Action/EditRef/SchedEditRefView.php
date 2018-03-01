@@ -11,6 +11,8 @@ class SchedEditRefView extends AbstractView
 {
     private $game_id;
     private $isPost;
+    private $show_medal_round;
+    private $show_medal_round_divisions;
 
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -105,7 +107,8 @@ class SchedEditRefView extends AbstractView
             $this->page_title = $eventName;
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
-            $show_medal_round = $this->sr->getMedalRound($projectKey);
+            $this->show_medal_round = $this->sr->getMedalRound($projectKey);
+            $this->show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
 
             $target_game = $this->sr->gameIdToGameNumber($this->game_id);
             $game = $this->sr->getGameByKeyAndNumber($projectKey, $target_game);
@@ -116,7 +119,7 @@ class SchedEditRefView extends AbstractView
                 if ($this->user->admin) {
                     $games = $this->sr->getGames($projectKey, '%', true);
                 } else {
-                    $games = $this->sr->getGames($projectKey, '%', $show_medal_round);
+                    $games = $this->sr->getGames($projectKey, '%', $this->show_medal_round);
                 }
 
                 $numRefs = $this->sr->numberOfReferees($projectKey);
@@ -136,7 +139,7 @@ class SchedEditRefView extends AbstractView
                             $html .= "<th>Time</th>";
                             $html .= "<th>Field</th>";
                             $html .= "<th>Division</th>";
-                            $html .= "<th>pool</th>";
+                            $html .= "<th>Pool</th>";
                             $html .= "<th>Referee Team</th>";
                             $html .= "<th>Center</th>";
                             $html .= "<th>AR1</th>";
@@ -146,12 +149,22 @@ class SchedEditRefView extends AbstractView
                             }
                             $html .= "</tr>\n";
                             $html .= "<tr class=\"center\" bgcolor=\"#00FF88\">";
-                            $html .= "<td>$game->game_number</td>";
+                            if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                                $html .= "<td>$game->game_number</td>";
+                            } else {
+                                $html .= "<td></td>";
+                            }
                             $html .= "<td>$date</td>";
                             $html .= "<td>$time</td>";
-                            $html .= "<td>$game->field</td>";
-                            $html .= "<td>$game->division</td>";
-                            $html .= "<td>$game->pool</td>";
+                            if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                                $html .= "<td>$game->field</td>";
+                                $html .= "<td>$game->division</td>";
+                                $html .= "<td>$game->pool</td>";
+                            } else {
+                                $html .= "<td></td>";
+                                $html .= "<td></td>";
+                                $html .= "<td></td>";
+                            }
                             $html .= "<td>$game->assignor</td>";
                             $html .= "<td><input type=\"text\" name=\"cr\" value=\"$game->cr\" placeholder=\"First Last\" pattern=\"$nameRegex\" title=\"$nameHint\"></td>";
                             $html .= "<td><input type=\"text\" name=\"ar1\" value=\"$game->ar1\" placeholder=\"First Last\" pattern=\"$nameRegex\" title=\"$nameHint\"></td>";

@@ -14,6 +14,9 @@ class SchedRefsView extends AbstractView
     private $bottommenu;
     private $description;
     private $games;
+    private $show_medal_round;
+    private $show_medal_round_divisions;
+
 
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -70,12 +73,13 @@ class SchedRefsView extends AbstractView
             $this->page_title = $eventName;
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
-            $show_medal_round = $this->sr->getMedalRound($projectKey);
+            $this->show_medal_round = $this->sr->getMedalRound($projectKey);
+            $this->show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
 
             if ($this->user->admin) {
                 $this->games = $this->sr->getGames($projectKey, '%', true);
             } else {
-                $this->games = $this->sr->getGames($projectKey, '%', $show_medal_round);
+                $this->games = $this->sr->getGames($projectKey, '%', $this->show_medal_round);
             }
 
             if (count($this->games)) {
@@ -151,18 +155,30 @@ class SchedRefsView extends AbstractView
                                     $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                                 }
                             }
-                            $html .= "<td>$game->game_number</td>";
+                            if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                                $html .= "<td>$game->game_number</td>";
+                            } else {
+                                $html .= "<td></td>";
+                            }
                             $html .= "<td>$date</td>";
                             $html .= "<td>$time</td>";
-                            if (is_null($this->event->field_map)) {
-                                $html .= "<td>$game->field</td>";
+                            if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                                if (is_null($this->event->field_map)) {
+                                    $html .= "<td>$game->field</td>";
+                                } else {
+                                    $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$game->field</a></td>";
+                                }
+                                $html .= "<td>$game->division</td>";
+                                $html .= "<td>$game->pool</td>";
+                                $html .= "<td>$game->home</td>";
+                                $html .= "<td>$game->away</td>";
                             } else {
-                                $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$game->field</a></td>";
+                                $html .= "<td></td>";
+                                $html .= "<td></td>";
+                                $html .= "<td></td>";
+                                $html .= "<td></td>";
+                                $html .= "<td></td>";
                             }
-                            $html .= "<td>$game->division</td>";
-                            $html .= "<td>$game->pool</td>";
-                            $html .= "<td>$game->home</td>";
-                            $html .= "<td>$game->away</td>";
                             $html .= "<td>$game->assignor</td>";
                             $html .= "<td>$game->cr</td>";
                             $html .= "<td>$game->ar1</td>";
