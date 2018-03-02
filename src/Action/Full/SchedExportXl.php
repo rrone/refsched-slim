@@ -17,12 +17,14 @@ class SchedExportXl extends AbstractExporter
     private $user;
     private $event;
 
+    private $show_medal_round_divisions;
+
     public function __construct(SchedulerRepository $schedulerRepository)
     {
         parent::__construct('xls');
 
         $this->sr = $schedulerRepository;
-        $this->outFileName = 'GameSchedule_' . date('Ymd_His') . '.' . $this->getFileExtension();
+        $this->outFileName = 'GameSchedule_'.date('Ymd_His').'.'.$this->getFileExtension();
     }
 
     public function handler(Request $request, Response $response)
@@ -32,7 +34,7 @@ class SchedExportXl extends AbstractExporter
 
         // generate the response
         $response = $response->withHeader('Content-Type', $this->contentType);
-        $response = $response->withHeader('Content-Disposition', 'attachment; filename=' . $this->outFileName);
+        $response = $response->withHeader('Content-Disposition', 'attachment; filename='.$this->outFileName);
 
         $content = null;
 
@@ -120,15 +122,16 @@ class SchedExportXl extends AbstractExporter
                 foreach ($games as $game) {
                     $row = [];
                     if (!empty($game)) {
-                        foreach ($game as $ref)
+                        foreach ($game as $ref) {
                             $row[] = $ref;
+                        }
                     }
 
                     $data[] = $row;
                 }
 
             }
-            if(!empty($data)) {
+            if (!empty($data)) {
                 $content['Referee Match Count']['data'] = $data;
                 $content['Referee Match Count']['options']['freezePane'] = 'A2';
                 $content['Referee Match Count']['options']['horizontalAlignment'] = ['B1:M' => 'center'];
@@ -146,11 +149,26 @@ class SchedExportXl extends AbstractExporter
             $projectKey = $event->projectKey;
 
             $show_medal_round = $this->sr->getMedalRound($projectKey);
+            $this->show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
+
             $games = $this->sr->getGames($projectKey, '%', $show_medal_round || $this->user->admin);
             $has4th = $this->sr->numberOfReferees($projectKey) > 3;
 
             //set the header labels
-            $labels = array('Match', 'Date', 'Time', 'Field', 'Division', 'Pool', 'Home', 'Away', 'Referee Team', 'Referee', 'AR1', 'AR2');
+            $labels = array(
+                'Match',
+                'Date',
+                'Time',
+                'Field',
+                'Division',
+                'Pool',
+                'Home',
+                'Away',
+                'Referee Team',
+                'Referee',
+                'AR1',
+                'AR2',
+            );
             if ($has4th) {
                 $labels[] = '4th';
             }
@@ -159,15 +177,34 @@ class SchedExportXl extends AbstractExporter
             //set the data : match in each row
             foreach ($games as $game) {
                 $time = date('H:i', strtotime($game->time));
+
+                if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                    if (is_null($this->event->field_map)) {
+                        $field = $game->field;
+                    } else {
+                        $field = $game->field;
+                    }
+                    $division = $game->division;
+                    $pool = $game->pool;
+                    $home = $game->home;
+                    $away = $game->away;
+                } else {
+                    $field = "";
+                    $division = "";
+                    $pool = "";
+                    $home = "";
+                    $away = "";
+                }
+
                 $row = array(
                     $game->game_number,
                     $game->date,
                     $time,
-                    $game->field,
-                    $game->division,
-                    $game->pool,
-                    $game->home,
-                    $game->away,
+                    $field,
+                    $division,
+                    $pool,
+                    $home,
+                    $away,
                     $game->assignor,
                     $game->cr,
                     $game->ar1,
