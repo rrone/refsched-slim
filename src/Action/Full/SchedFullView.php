@@ -179,7 +179,7 @@ class SchedFullView extends AbstractView
                         $html .= "<td>$date</td>";
                         $html .= "<td>$time</td>";
                         if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
-                            if (is_null($this->event->field_map)) {
+                            if (empty($this->event->field_map)) {
                                 $html .= "<td>$game->field</td>";
                             } else {
                                 $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$game->field</a></td>";
