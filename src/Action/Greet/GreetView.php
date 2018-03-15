@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Action\Greet;
 
 use Slim\Container;
@@ -20,11 +21,13 @@ class GreetView extends AbstractView
         $this->games = null;
         $this->description = 'No matches scheduled';
     }
+
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
     }
+
     public function render(Response &$response)
     {
         $html = $this->renderView();
@@ -37,11 +40,12 @@ class GreetView extends AbstractView
                 'dates' => $this->dates,
                 'location' => $this->location,
                 'description' => $this->description,
-            )
+            ),
         );
 
         $this->view->render($response, 'sched.html.twig', $content);
     }
+
     protected function renderView()
     {
         $html = null;
@@ -66,13 +70,48 @@ class GreetView extends AbstractView
             $show_medal_round = $this->sr->getMedalRound($projectKey);
             $show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
 
+            $locked = $this->sr->getLocked($projectKey);
+
             $this->games = $this->sr->getGames($projectKey, '%', $show_medal_round);
 
             $this->description = "Welcome ";
             if ($this->user->admin) {
                 $this->description .= $this->user->name;
             } else {
-                $this->description .= $this->user->name . " Assignor";
+                $this->description .= $this->user->name." Assignor";
+            }
+
+            $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">CURRENT STATUS</h3>\n<h3 class=\"center\">";
+            $html .= "<h3 class=\"center\">";
+
+            if ($this->user->admin) {
+                if ($locked) {
+                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                            'unlockPath'
+                        ).">Unlock</a> the schedule now)<br><br>\n";
+                } else {
+                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                            'lockPath'
+                        ).">Lock</a> the schedule now)<br><br>\n";
+                }
+                if ($show_medal_round) {
+                    $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                            'hideMRPath'
+                        ).">Hide Medal Round Assignments</a> from users)<br><br>\n";
+                } else {
+                    $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                            'showMRPath'
+                        ).">Show Medal Round Assignments</a> to users)<br><br>\n";
+                }
+                if ($show_medal_round_divisions) {
+                    $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                            'hideMRDivPath'
+                        ).">Hide Medal Round Divisions</a> from users)<br><br>\n";
+                } else {
+                    $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                            'showMRDivPath'
+                        ).">Show Medal Round Divisions</a> to users)<br><br>\n";
+                }
             }
 
             if (count($this->games)) {
@@ -95,8 +134,6 @@ class GreetView extends AbstractView
                     }
                 }
 
-                $locked = $this->sr->getLocked($projectKey);
-
                 $delim = ' - ';
                 $num_assigned = 0;
                 $num_area = 0;
@@ -115,38 +152,8 @@ class GreetView extends AbstractView
 
                 $uname = $this->user->name;
 
-                $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">CURRENT STATUS</h3>\n<h3 class=\"center\">";
-                $html .= "<h3 class=\"center\">";
+                if (!$this->user->admin) {
 
-                if ($this->user->admin) {
-                    if ($locked) {
-                        $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
-                                'unlockPath'
-                            ).">Unlock</a> the schedule now)<br><br>\n";
-                    } else {
-                        $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
-                                'lockPath'
-                            ).">Lock</a> the schedule now)<br><br>\n";
-                    }
-                    if ($show_medal_round) {
-                        $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
-                                'hideMRPath'
-                            ).">Hide Medal Round Assignments</a> from users)<br><br>\n";
-                    } else {
-                        $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
-                                'showMRPath'
-                            ).">Show Medal Round Assignments</a> to users)<br><br>\n";
-                    }
-                    if ($show_medal_round_divisions) {
-                        $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
-                                'hideMRDivPath'
-                            ).">Hide Medal Round Divisions</a> from users)<br><br>\n";
-                    } else {
-                        $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
-                                'showMRDivPath'
-                            ).">Show Medal Round Divisions</a> to users)<br><br>\n";
-                    }
-                } else {
                     if ($locked) {
                         $html .= "The schedule is presently <span style=\"color:$this->colorAlert\">locked</span><br><br>\n";
                     } else {
@@ -232,26 +239,38 @@ class GreetView extends AbstractView
                     ).">View full schedule</a></h3>";
 
                 if ($this->user->admin) {
-                    if(!$this->event->archived) {
-                        $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('editGamePath').">Edit matches</a></h3>";
+                    if (!$this->event->archived) {
+                        $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
+                                'editGamePath'
+                            ).">Edit matches</a></h3>";
                     }
-                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('schedPath').">View Match Assignors</a></h3>";
-                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('masterPath').">Select Match Assignors</a></h3>";
-                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('refsPath').">Edit Referee Assignments</a></h3>";
+                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
+                            'schedPath'
+                        ).">View Match Assignors</a></h3>";
+                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
+                            'masterPath'
+                        ).">Select Match Assignors</a></h3>";
+                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
+                            'refsPath'
+                        ).">Edit Referee Assignments</a></h3>";
                 } else {
-                    $html .= "<h3 class=\"center\">Goto $uname Schedule: <a href=".$this->getBaseURL('schedPath').">All matches</a> - ";
+                    $html .= "<h3 class=\"center\">Goto $uname Schedule: <a href=".$this->getBaseURL(
+                            'schedPath'
+                        ).">All matches</a> - ";
                     foreach ($groups as $group) {
                         $html .= "<a href=\"".$this->getBaseURL('schedPath')."?group=$group\">$group</a>".$delim;
                     }
                     $html = substr($html, 0, strlen($html) - 3)."</h3>";
-                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('refsPath').">Edit $uname Referee Assignments</a></h3>";
+                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
+                            'refsPath'
+                        ).">Edit $uname Referee Assignments</a></h3>";
 
                 }
             } else {
                 $html .= "<h3 class=\"center\">There are no matches to schedule</h3>";
             }
 
-            $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('endPath') . ">Log Off</a></h3>";
+            $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('endPath').">Log Off</a></h3>";
 
         }
 
