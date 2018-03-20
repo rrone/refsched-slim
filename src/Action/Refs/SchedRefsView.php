@@ -109,7 +109,7 @@ class SchedRefsView extends AbstractView
                     $html .= "<th>Home</th>";
                     $html .= "<th>Away</th>";
                     $html .= "<th>Referee Team</th>";
-                    $html .= "<th>CR</th>";
+                    $html .= "<th>Referee</th>";
                     $html .= "<th>AR1</th>";
                     $html .= "<th>AR2</th>";
                     if ($has4th) {

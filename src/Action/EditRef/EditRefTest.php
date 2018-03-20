@@ -182,7 +182,7 @@ class EditRefTest extends AppTestCase
         // test edit names
         $url = '/editref';
         $body = array(
-            'cr' => 'CR Admin Last',
+            'cr' => 'Referee Admin Last',
             'ar1' => 'AR1 Admin Last',
             'ar2' => 'AR2 Admin Last',
             $game_id => 'Update Assignments'
@@ -195,7 +195,7 @@ class EditRefTest extends AppTestCase
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<td>CR Admin Last</td><td>AR1 Admin Last</td><td>AR2 Admin Last</td>", $view);
+        $this->assertContains("<td>Referee Admin Last</td><td>AR1 Admin Last</td><td>AR2 Admin Last</td>", $view);
 
         //clear edit names
         $url = '/editref';

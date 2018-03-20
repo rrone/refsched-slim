@@ -108,7 +108,10 @@ $container['sr'] = function (\Slim\Container $c) {
 // Action dependency Injection
 // -----------------------------------------------------------------------------
 $db = $container['db'];
+
+/* @var App\Action\SchedulerRepository $sr */
 $sr = $container['sr'];
+
 $view = $container['view'];
 $uploadPath = $container['settings']['upload_path'];
 
