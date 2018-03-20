@@ -22,6 +22,8 @@ define('PROJECT_ROOT', realpath(__DIR__ . '/..'));
 
 require_once PROJECT_ROOT . '/vendor/autoload.php';
 
+session_start();
+
 // Initialize our own copy of the slim application
 class AppTestCase extends WebTestCase
 {

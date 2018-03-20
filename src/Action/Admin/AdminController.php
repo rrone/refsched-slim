@@ -35,7 +35,7 @@ class AdminController extends AbstractController
         $result = $this->adminView->handler($request, $response);
 
         switch ($result) {
-             case 'Cancel':
+             case 'Done':
 
                  return $response->withRedirect($this->getBaseURL('greetPath'));
 

@@ -77,7 +77,7 @@ class SchedImport extends AbstractImporter
                         $this->importFile($upload);
                     }
                     break;
-                case 'done':
+                case 'btnDone':
                     $files = glob($this->uploadPath . '*'); // get all file names
 
                     foreach ($files as $file) { // iterate files

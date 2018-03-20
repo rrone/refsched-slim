@@ -15,3 +15,4 @@ config
 src/Model
 public/fonts/
 /tests/testfiles/
+sql

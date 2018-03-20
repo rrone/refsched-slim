@@ -246,7 +246,7 @@ class AdminTest extends AppTestCase
         $this->assertEquals($cType, $contentType);
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
-        $this->assertContains('attachment; filename=GameScheduleTemplate', $contentDisposition);
+        $this->assertContains('attachment; filename=ScheduleImportTemplate', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Action;
 
 use Illuminate\Database\Capsule\Manager;
@@ -35,6 +36,7 @@ class SchedulerRepository
     }
 
     //User table functions
+
     /**
      * @return \Illuminate\Support\Collection
      */
@@ -51,10 +53,12 @@ class SchedulerRepository
     public function getUsers($key = null)
     {
         $users = $this->db->table('users')
-            ->where([
-                ['enabled', true],
-                ['for_events', 'like', "%$key%"]
-            ])
+            ->where(
+                [
+                    ['enabled', true],
+                    ['for_events', 'like', "%$key%"],
+                ]
+            )
             ->get();
 
         return $users;
@@ -71,9 +75,11 @@ class SchedulerRepository
 
         $this->db->table('users')
             ->where('id', $id)
-            ->update([
-                'for_events' => $forEvents,
-            ]);
+            ->update(
+                [
+                    'for_events' => $forEvents,
+                ]
+            );
 
         return null;
     }
@@ -144,9 +150,11 @@ class SchedulerRepository
 
             $this->db->table('users')
                 ->where('id', $u->id)
-                ->update([
-                    'hash' => $hash,
-                ]);
+                ->update(
+                    [
+                        'hash' => $hash,
+                    ]
+                );
 
             return $u->id;
         }
@@ -170,6 +178,7 @@ class SchedulerRepository
         return $id;
     }
     //Events table functions
+
     /**
      * @return \Illuminate\Support\Collection
      */
@@ -313,6 +322,32 @@ class SchedulerRepository
     }
 
     /**
+     * @param $key
+     * @return null
+     */
+    public function showMedalRoundDivisions($key)
+    {
+        $this->db->table('events')
+            ->where('projectKey', $key)
+            ->update(['show_medal_round_divisions' => true]);
+
+        return null;
+    }
+
+    /**
+     * @param $key
+     * @return null
+     */
+    public function hideMedalRoundDivisions($key)
+    {
+        $this->db->table('events')
+            ->where('projectKey', $key)
+            ->update(['show_medal_round_divisions' => false]);
+
+        return null;
+    }
+
+    /**
      * @param $projectKey
      * @return mixed
      */
@@ -325,6 +360,24 @@ class SchedulerRepository
         $status = $this->getZero($status);
         if (!is_null($status)) {
             return $status->show_medal_round;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param $projectKey
+     * @return mixed
+     */
+    public function getMedalRoundDivisions($projectKey)
+    {
+        $status = $this->db->table('events')
+            ->where('projectKey', '=', $projectKey)
+            ->get();
+
+        $status = $this->getZero($status);
+        if (!is_null($status)) {
+            return $status->show_medal_round_divisions;
         } else {
             return null;
         }
@@ -362,6 +415,7 @@ class SchedulerRepository
     }
 
     //Matches table functions
+
     /**
      * @param string $projectKey
      * @param string $group
@@ -369,24 +423,28 @@ class SchedulerRepository
      * @param string $sortOn
      * @return \Illuminate\Support\Collection
      */
-    public function getGames($projectKey = '%', $group = '%', $medalRound = false,  $sortOn = 'game_number')
+    public function getGames($projectKey = '%', $group = '%', $medalRound = false, $sortOn = 'game_number')
     {
 
-        $group = '%'. $group . '%';
+        $group = '%'.$group.'%';
         $medalRound = $medalRound ? '%' : false;
 
         $games = $this->db->table('games')
-            ->where([
-                ['projectKey', '=', $projectKey],
-                ['division', 'like', $group],
-                ['medalRound', 'like', $medalRound],
-            ])
-            ->orWhere([
-                ['projectKey', 'like', $projectKey],
-                ['division', 'like', $group],
-                ['date', '<=', date('Y-m-d')]
+            ->where(
+                [
+                    ['projectKey', '=', $projectKey],
+                    ['division', 'like', $group],
+                    ['medalRound', 'like', $medalRound],
+                ]
+            )
+            ->orWhere(
+                [
+                    ['projectKey', 'like', $projectKey],
+                    ['division', 'like', $group],
+                    ['date', '<=', date('Y-m-d')],
 
-            ])
+                ]
+            )
             ->orderBy($sortOn, 'asc')
             ->orderBy('date', 'asc')
             ->orderBy('time', 'asc')
@@ -407,12 +465,14 @@ class SchedulerRepository
         $medalRound = $medalRound ? '%' : false;
 
         return $this->db->table('games')
-            ->where([
-                ['projectKey', 'like', $projectKey],
-                ['division', 'like', $group],
-                ['medalRound', 'like', $medalRound],
-                ['assignor', 'like', '']
-            ])
+            ->where(
+                [
+                    ['projectKey', 'like', $projectKey],
+                    ['division', 'like', $group],
+                    ['medalRound', 'like', $medalRound],
+                    ['assignor', 'like', ''],
+                ]
+            )
             ->get();
     }
 
@@ -427,11 +487,13 @@ class SchedulerRepository
         $medalRound = $medalRound ? '%' : false;
 
         $games = $this->db->table('games')
-            ->where([
-                ['projectKey', '=', $projectKey],
-                ['medalRound', 'like', $medalRound],
-                ['assignor', '=', $rep],
-            ])
+            ->where(
+                [
+                    ['projectKey', '=', $projectKey],
+                    ['medalRound', 'like', $medalRound],
+                    ['assignor', '=', $rep],
+                ]
+            )
             ->get();
 
         return $games;
@@ -453,9 +515,19 @@ class SchedulerRepository
 
         foreach ($groups as $group) {
             $u = stripos($group->division, "U");
-            $group = substr($group->division, 1, 3);
-            if (!in_array($group, $result)) {
-                $result[] = $group;
+
+            switch ($u) {
+                case 1:
+                    $div = substr($group->division, $u, 3);;
+                    break;
+                case 2:
+                    $div = substr($group->division, $u - 1, 3);;
+                    break;
+                default:
+                    $div = substr($group->division, $u - 2, 3);;
+            }
+            if (!in_array($div, $result)) {
+                $result[] = $div;
             }
         }
         asort($result);
@@ -470,10 +542,12 @@ class SchedulerRepository
     public function clearAssignor($projectKey, $rep)
     {
         $this->db->table('games')
-            ->where([
-                ['assignor', $rep],
-                ['projectKey', '=', $projectKey]
-            ])
+            ->where(
+                [
+                    ['assignor', $rep],
+                    ['projectKey', '=', $projectKey],
+                ]
+            )
             ->update(['assignor' => '']);
     }
 
@@ -511,15 +585,17 @@ class SchedulerRepository
 
         $data['r4th'] = isset($data['r4th']) ? $data['r4th'] : null;
         foreach ($data as $id => $value) {
-            if ( in_array($value, ['Update Assignments', 'Clear All'])) {
+            if (in_array($value, ['Update Assignments', 'Clear All'])) {
                 $this->db->table('games')
                     ->where('id', $id)
-                    ->update([
-                        'cr' => trim($data['cr']),
-                        'ar1' => trim($data['ar1']),
-                        'ar2' => trim($data['ar2']),
-                        'r4th' => trim($data['r4th'])
-                    ]);
+                    ->update(
+                        [
+                            'cr' => trim($data['cr']),
+                            'ar1' => trim($data['ar1']),
+                            'ar2' => trim($data['ar2']),
+                            'r4th' => trim($data['r4th']),
+                        ]
+                    );
             }
         }
 
@@ -616,6 +692,9 @@ class SchedulerRepository
                             case 'medalRound':
                                 $value = 0;
                                 break;
+                            case 'locked':
+                                $value = 0;
+                                break;
                             default:
                                 $value = '';
                         }
@@ -653,10 +732,12 @@ class SchedulerRepository
     public function getGameByKeyAndNumber($projectKey, $game_number)
     {
         $game = $this->db->table('games')
-            ->where([
-                ['projectKey', '=', $projectKey],
-                ['game_number', '=', $game_number]
-            ])
+            ->where(
+                [
+                    ['projectKey', '=', $projectKey],
+                    ['game_number', '=', $game_number],
+                ]
+            )
             ->get();
 
         return $this->getZero($game);
@@ -696,16 +777,20 @@ class SchedulerRepository
         unset($game->id);
         unset($data['id']);
 
-        $data['time'] = date('H:i:s', strtotime($data['time']));
+        if(isset($data['time'])){
+            $data['time'] = date('H:i:s', strtotime($data['time']));
+        }
 
         $dif = array_diff_assoc($data, (array)$game);
 
         if (!empty($dif)) {
             $this->db->table('games')
-                ->where([
-                    ['projectKey', $key],
-                    ['game_number', $num]
-                ])
+                ->where(
+                    [
+                        ['projectKey', $key],
+                        ['game_number', $num],
+                    ]
+                )
                 ->update($data);
 
             $changes['updates']++;
@@ -778,7 +863,7 @@ class SchedulerRepository
     public function getDivisions($projectKey)
     {
         $result = $this->db->table('games')
-            ->selectRaw('SUBSTR(division,LOCATE(\'U\',division),3) as uDiv')
+            ->selectRaw('division as uDiv')
             ->distinct()
             ->where('projectKey', $projectKey)
             ->orderBy('division', 'asc')
@@ -859,8 +944,7 @@ class SchedulerRepository
                         }
                         break;
                     case 'division':
-                        $u = stripos($val, "U");
-                        $div = substr($val, $u-2, 3);
+                        $div = $val;
                         if (!isset($refList[$ref->name][$div])) {
                             $refList[$ref->name][$div] = 0;
                         }
@@ -926,7 +1010,7 @@ class SchedulerRepository
         usort($refsList, array($this, "firstLastSort"));
 
         $emptySortList = ['name' => '', 'Assignor' => '', 'all' => 0, 'ref' => 0, 'ar' => 0];
-        if( $this->numberOfReferees($projectKey) > 3) {
+        if ($this->numberOfReferees($projectKey) > 3) {
             $emptySortList['4th'] = 0;
         };
 
@@ -944,6 +1028,7 @@ class SchedulerRepository
         }
 
         $sortedRefsList = [];
+
         foreach (array_values($refsList) as $item) {
             $sortedList = $emptySortList;
             foreach ($item as $k => $v) {
@@ -965,54 +1050,21 @@ class SchedulerRepository
 
         $select4th = $has4th ? ', 0 as r4th' : '';
 
-        $cr = $this->db->table('games')
-            ->selectRaw('cr as name, assignor, date, time, division, COUNT(cr) as crCount, 0 as ar1Count, 0 as ar2Count ' . $select4th)
-            ->where([
-                ['projectKey', $projectKey],
-                ['cr', '<>', '']
-            ])
-            ->groupBy(['cr', 'date', 'division']);
+        $cr = $this->db::select('call rs_crAssignmentMap(?,?)', [$projectKey, $select4th]);
 
-        $ar1 = $this->db->table('games')
-            ->selectRaw('ar1 as name, assignor, date, time, division, 0 as crCount, COUNT(ar1) as ar1Count, 0 as ar2Count ' . $select4th)
-            ->where([
-                ['projectKey', $projectKey],
-                ['ar1', '<>', '']
-            ])
-            ->groupBy(['ar1', 'date', 'division']);
+        $ar1 = $this->db::select('call rs_ar1AssignmentMap(?,?)', [$projectKey, $select4th]);
 
-        $ar2 = $this->db->table('games')
-            ->selectRaw('ar2 as name, assignor, date, time, division, 0 as crCount, 0 as ar1Count, COUNT(ar2) as ar2Count ' . $select4th)
-            ->where([
-                ['projectKey', $projectKey],
-                ['ar2', '<>', '']
-            ])
-            ->groupBy(['ar2', 'date', 'division']);
+        $ar2 = $this->db::select('call rs_ar2AssignmentMap(?,?)', [$projectKey, $select4th]);
 
-        $refs = $cr
-            ->union($ar1)
-            ->union($ar2);
+        $refs = array_merge($cr, $ar1, $ar2);
 
         if ($has4th) {
-            $r4th = $this->db->table('games')
-                ->selectRaw('r4th as name, assignor, date, time, division, 0 as crCount, 0 as ar1Count, 0 as ar2Count, COUNT(r4th) as r4thCount')
-                ->where([
-                    ['projectKey', $projectKey],
-                    ['r4th', '<>', '']
-                ])
-                ->groupBy(['r4th', 'date', 'division']);
+            $r4th = $this->db::select('call rs_r4thAssignmentMap(?,?)', [$projectKey, $select4th]);
 
-            $refs = $refs
-                ->union($r4th);
+            $refs = array_merge($refs, $r4th);
         }
 
-        $result = $refs
-            ->orderBy('name', 'asc')
-            ->orderBy('date', 'asc')
-            ->orderBy('time', 'asc')
-            ->orderBy('division', 'asc')
-            ->get();
-        $arrResult = $result->all();
+        $arrResult = $refs;
 
         $refsList = $this->aggregateRefereeAssignments($arrResult);
 
@@ -1023,6 +1075,7 @@ class SchedulerRepository
     }
 
 //Limits table functions
+
     /**
      * @param $projectKey
      * @return \Illuminate\Support\Collection
@@ -1037,6 +1090,7 @@ class SchedulerRepository
     }
 
 //Log writer
+
     /**
      * @param $projectKey
      * @param $msg
@@ -1047,7 +1101,7 @@ class SchedulerRepository
         $data = [
             'timestamp' => date('Y-m-d H:i:s'),
             'projectKey' => $projectKey,
-            'note' => $msg
+            'note' => $msg,
         ];
 
         $this->db->table('log')
@@ -1086,17 +1140,19 @@ class SchedulerRepository
         $timestamp = null;
 
         $ts = $this->db->table('log')
-            ->where([
-                ['projectKey', 'like', $projectKey],
-                ['note', 'like', "$userName: Scheduler greet%"]
-            ])
+            ->where(
+                [
+                    ['projectKey', 'like', $projectKey],
+                    ['note', 'like', "$userName: Scheduler greet%"],
+                ]
+            )
             ->orderBy('timestamp', 'desc')
             ->limit(1)
             ->get();
 
         $ts = $this->getZero($ts);
 
-        if (!empty($ts)){
+        if (!empty($ts)) {
             $utc = new DateTime($ts->timestamp, new DateTimeZone('UTC'));
             $time = $utc->setTimezone(new DateTimeZone('America/Los_Angeles'));
             $timestamp = $time->format('Y-M-j H:i');
