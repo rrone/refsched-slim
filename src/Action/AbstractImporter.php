@@ -2,8 +2,8 @@
 
 namespace App\Action;
 
-use PHPExcel;
-use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 /*
     // Sample array of data to publish
@@ -19,15 +19,19 @@ use PHPExcel_IOFactory;
 abstract class AbstractImporter
 {
     private $format;
-    private $objPHPExcel;
+    private $objSpreadsheet;
 
     public $fileExtension;
     public $contentType;
 
+    /**
+     * AbstractImporter constructor.
+     * @param $format
+     */
     public function __construct($format)
     {
         $this->format = $format;
-        $this->objPHPExcel = new PHPExcel();
+        $this->objSpreadsheet = new Spreadsheet();
 
         switch ($format) {
             case 'csv':
@@ -41,11 +45,19 @@ abstract class AbstractImporter
         }
     }
 
+    /**
+     * @return string
+     */
     public function getFileExtension()
     {
         return $this->fileExtension;
     }
 
+    /**
+     * @param $filename
+     * @return array|null
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function import($filename)
     {
         switch ($this->format) {
@@ -58,6 +70,11 @@ abstract class AbstractImporter
         return null;
     }
 
+    /**
+     * @param $inputFileName
+     * @return array|null
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function importCSV($inputFileName)
     {
 //      import a CSV file into a PHPExcel object
@@ -66,30 +83,46 @@ abstract class AbstractImporter
         return $this->_import($inputFileName, $inputFileType);
     }
 
+    /**
+     * @param $inputFileName
+     * @return array|null
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function importXLSX($inputFileName)
     {
 //      import a XLSX file into a PHPExcel object
-        $inputFileType = 'Excel2007';
+        $inputFileType = 'Xlsx';
 
         return $this->_import($inputFileName, $inputFileType);
     }
 
+    /**
+     * @param $inputFileName
+     * @param $inputFileType
+     * @return array|null
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     private function _import($inputFileName, $inputFileType)
     {
-        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
-        $objPHPExcel = $objReader->load($inputFileName);
+        $objReader = IOFactory::createReader($inputFileType);
+        $objSpreadsheet = $objReader->load($inputFileName);
 
-        $data = $this->readWorksheet($objPHPExcel);
+        $data = $this->readWorksheet($objSpreadsheet);
 
         return $data;
     }
 
-    private function readWorksheet(PHPExcel $objPHPExcel)
+    /**
+     * @param Spreadsheet $objSpreadsheet
+     * @return array|null
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    private function readWorksheet(Spreadsheet $objSpreadsheet)
     {
         $data = null;
 //      read through the rows and cells
 
-        $worksheet = $objPHPExcel->getActiveSheet();
+        $worksheet = $objSpreadsheet->getActiveSheet();
         foreach ($worksheet->getRowIterator() as $row) {
             $rowData = [];
 

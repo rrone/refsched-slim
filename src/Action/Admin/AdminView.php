@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Action\Admin;
 
 use App\Action\AbstractView;
@@ -83,7 +84,7 @@ class AdminView extends AbstractView
 
                 if (!empty($_POST['logNote'])) {
                     $projectKey = !is_null($event) ? $event->projectKey : '';
-                    $msg = $this->user->name . ': ' . $_POST['logNote'];
+                    $msg = $this->user->name.': '.$_POST['logNote'];
                     $this->sr->logInfo($projectKey, $msg);
                 }
             } elseif (in_array('btnUpdateAssignors', array_keys($_POST))) {
@@ -107,7 +108,7 @@ class AdminView extends AbstractView
 
                 //Ensure Admin has access to all events
                 $user = $this->sr->getUserByName('Admin');
-                $events = $this->sr->getEnabledEvents();
+                $events = $this->sr->getAllEvents();
                 $allKeys = [];
                 foreach ($events as $event) {
                     $allKeys[] = $event->projectKey;
@@ -123,6 +124,16 @@ class AdminView extends AbstractView
                         $this->sr->updateUserEvents($user->id, $keys);
                     }
                 }
+
+                //Ensure Admin has access to all events
+                $user = $this->sr->getUserByName('Admin');
+                $events = $this->sr->getAllEvents();
+                $allKeys = [];
+                foreach ($events as $event) {
+                    $allKeys[] = $event->projectKey;
+                }
+                $this->sr->updateUserEvents($user->id, $allKeys);
+
             } else {
                 $this->msg = null;
             }
@@ -144,7 +155,7 @@ class AdminView extends AbstractView
                 'action' => $adminPath,
                 'message' => $this->msg,
                 'messageStyle' => $this->msgStyle,
-            )
+            ),
         );
 
         $this->view->render($response, 'admin.html.twig', $content);
