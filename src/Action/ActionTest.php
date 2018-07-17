@@ -11,11 +11,15 @@ class ActionTest extends AppTestCase
      */
     protected $c;
 
+    /* @var SchedulerRepository */
     private $mockSR;
     private $projectKey = '2016U16U19Chino';
     private $userName;
     private $user;
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function setUp()
     {
         $this->app = $this->getSlimInstance();
@@ -172,7 +176,7 @@ class ActionTest extends AppTestCase
 
     public function testShowVariables()
     {
-        $result = $this->mockSR->showVariables(null);
+        $result = $this->mockSR->showVariables();
 
         $this->assertNotEmpty($result);
 

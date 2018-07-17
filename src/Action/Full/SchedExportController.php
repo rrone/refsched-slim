@@ -18,6 +18,14 @@ class SchedExportController extends AbstractController
         $this->exportXl = $exportXl;
         
     }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return SchedExportXl|Response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized()) {

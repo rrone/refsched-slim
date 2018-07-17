@@ -2,10 +2,9 @@
 
 namespace App\Action;
 
-use PHPExcel;
-use PHPExcel_IOFactory;
-use PHPExcel_Style_Protection;
-use PHPExcel_Style_Alignment;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style;
 
 /*
     // Sample array of data to publish
@@ -21,18 +20,23 @@ use PHPExcel_Style_Alignment;
 abstract class AbstractExporter
 {
     private $format;
-    private $objPHPExcel;
+    private $objSpreadsheet;
 
     public $fileExtension;
     public $contentType;
 
+    /**
+     * AbstractExporter constructor.
+     * @param $format
+     */
     public function __construct($format)
     {
         $this->format = $format;
-        $this->objPHPExcel = new PHPExcel();
+        $this->objSpreadsheet = new Spreadsheet();
 
         switch ($format) {
             case 'xls':
+            case 'xlsx':
                 $this->fileExtension = 'xlsx';
                 $this->contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
                 break;
@@ -42,6 +46,9 @@ abstract class AbstractExporter
         }
     }
 
+    /**
+     * @return string
+     */
     public function getFileExtension()
     {
         return $this->fileExtension;
@@ -50,11 +57,13 @@ abstract class AbstractExporter
     /**
      * @param $content
      * @return null|string
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function export($content)
     {
         switch ($this->format) {
             case 'xls':
+            case 'xlsx':
                 return $this->exportXLSX($content);
             default:
                 return null;
@@ -62,13 +71,9 @@ abstract class AbstractExporter
     }
     //public function exportPdf($content, $padlen = 18)
     //{
-    //    $rendererName = PHPExcel_Settings::PDF_RENDERER_DOMPDF;
-    //    $rendererLibrary = 'domPDF0.6.0beta3';
-    //    $rendererLibraryPath = dirname(__FILE__). 'libs/classes/dompdf' . $rendererLibrary;
-    //
     //    $this->writeWorksheet($content);
     //
-    //    $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'PDF');
+    //    $objWriter = IOFactory::createWriter($this->objSpreadsheet, 'Mpdf');
     //
     //    ob_start();
     //    $objWriter->save('php://output'); // Instead of file name
@@ -78,13 +83,12 @@ abstract class AbstractExporter
     //}
 //    public function exportCSV($content)
 //    {
-//
 //        //for csv type, only export first sheet
 //        $content = array_values($content);
 //
 //        $this->writeWorksheet($content[0]);
 //
-//        $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'CSV');
+//        $objWriter = IOFactory::createWriter($this->objSpreadsheet, 'CSV');
 //
 //        ob_start();
 //        $objWriter->save('php://output'); // Instead of file name
@@ -93,6 +97,10 @@ abstract class AbstractExporter
 //
 //    }
 
+    /**
+     * @param $a
+     * @return bool
+     */
     public function is_asso($a)
     {
         foreach (array_keys($a) as $key)
@@ -101,9 +109,16 @@ abstract class AbstractExporter
         return false;
     }
 
+    /**
+     * @param $content
+     * @param string $sheetName
+     * @return string
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
     public function exportXLSX($content, $sheetName = 'Sheet')
     {
-        $xl = $this->objPHPExcel;
+        $xl = $this->objSpreadsheet;
 
         //check for sheet names as keys
         $isAssoc = $this->is_asso($content);
@@ -124,7 +139,7 @@ abstract class AbstractExporter
         $xl->removeSheetByIndex(0);
 
         //write to application output buffer
-        $objWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel2007');
+        $objWriter = IOFactory::createWriter($xl, 'Xlsx');
 
         ob_start();
         $objWriter->save('php://output'); // Instead of file name
@@ -133,6 +148,10 @@ abstract class AbstractExporter
 
     }
 
+    /**
+     * @param $rng
+     * @return string
+     */
     private function pregMatch($rng)
     {
         preg_match('/(.+[a-zA-Z])/', $rng, $matches);
@@ -140,6 +159,12 @@ abstract class AbstractExporter
         return strtoupper($matches[0]);
     }
 
+    /**
+     * @param $content
+     * @param string $shName
+     * @return null|void
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function writeWorksheet($content, $shName = "Sheet")
     {
         //check for data
@@ -151,7 +176,7 @@ abstract class AbstractExporter
         $options = isset($content['options']) ? $content['options'] : null;
 
         //select active sheet
-        $ws = $this->objPHPExcel->getActiveSheet();
+        $ws = $this->objSpreadsheet->getActiveSheet();
 
         //load data into sheet
         $ws->fromArray($data, NULL, 'A1');
@@ -208,19 +233,19 @@ abstract class AbstractExporter
 
                 switch ($format) {
                     case 'center':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_CENTER);
                         break;
                     case 'general':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_GENERAL);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_GENERAL);
                         break;
                     case 'justify':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_JUSTIFY);
                         break;
                     case 'left':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_LEFT);
                         break;
                     case 'right':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(Style\Alignment::HORIZONTAL_RIGHT);
                         break;
                 }
             }
@@ -240,14 +265,14 @@ abstract class AbstractExporter
 
             //now unprotect requested range
             foreach ($range as $cells) {
-                $ws->getStyle($cells)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+                $ws->getStyle($cells)->getProtection()->setLocked(Style\Protection::PROTECTION_UNPROTECTED);
             }
         }
 
         //ensure sheet name is unique
         $inc = 1;
         $name = $shName;
-        while (!is_null($this->objPHPExcel->getSheetByName($name))) {
+        while (!is_null($this->objSpreadsheet->getSheetByName($name))) {
             $name = $shName . $inc;
             $inc += 1;
         }

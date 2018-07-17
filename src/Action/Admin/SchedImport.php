@@ -9,6 +9,10 @@ use Slim\Http\Response;
 use Slim\Http\UploadedFile;
 
 
+/**
+ * Class SchedImport
+ * @package App\Action\Admin
+ */
 class SchedImport extends AbstractImporter
 {
     /* @ Container */
@@ -25,6 +29,13 @@ class SchedImport extends AbstractImporter
     private $msg;
     private $msgStyle;
 
+    /**
+     * SchedImport constructor.
+     * @param Container $container
+     * @param SchedulerRepository $schedulerRepository
+     * @param $uploadPath
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository, $uploadPath)
     {
         parent::__construct('csv');
@@ -36,6 +47,12 @@ class SchedImport extends AbstractImporter
         $this->view = $container->get('view');
     }
 
+    /**
+     * @param Request $request
+     * @return null|string
+     * @throws \Interop\Container\Exception\ContainerException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function handler(Request $request)
     {
         $this->user = $request->getAttribute('user');
@@ -93,6 +110,10 @@ class SchedImport extends AbstractImporter
         return null;
     }
 
+    /**
+     * @param Response $response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function render(Response &$response)
     {
         $content = array(
@@ -108,6 +129,11 @@ class SchedImport extends AbstractImporter
 
     }
 
+    /**
+     * @param UploadedFile $file
+     * @return array|null
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     protected function getData(UploadedFile $file)
     {
         $path = $this->uploadPath . $file->getClientFilename();
@@ -120,6 +146,11 @@ class SchedImport extends AbstractImporter
 
     }
 
+    /**
+     * @param $file
+     * @return bool|null
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     protected function testFile($file)
     {
         $result = null;
@@ -135,6 +166,11 @@ class SchedImport extends AbstractImporter
 
     }
 
+    /**
+     * @param $file
+     * @return null
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     protected function importFile($file)
     {
         $data = $this->getData($file);
@@ -175,6 +211,9 @@ class SchedImport extends AbstractImporter
         return null;
     }
 
+    /**
+     * @return array|null
+     */
     protected function validHeader()
     {
         $event = $this->event;
@@ -190,6 +229,11 @@ class SchedImport extends AbstractImporter
 
     }
 
+    /**
+     * @param $path
+     * @return string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     protected function getBaseURL($path)
     {
         $request = $this->container->get('request');

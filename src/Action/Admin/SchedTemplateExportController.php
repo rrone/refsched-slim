@@ -10,12 +10,26 @@ class SchedTemplateExportController extends AbstractController
 {
 	private $exportXl;
 
-	public function __construct(Container $container, SchedTemplateExport $exportXl)
+    /**
+     * SchedTemplateExportController constructor.
+     * @param Container $container
+     * @param SchedTemplateExport $exportXl
+     */
+    public function __construct(Container $container, SchedTemplateExport $exportXl)
     {
 		parent::__construct($container);
 
 		$this->exportXl = $exportXl;
     }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return null|Response
+     * @throws \Interop\Container\Exception\ContainerException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized()) {

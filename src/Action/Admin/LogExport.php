@@ -2,7 +2,7 @@
 namespace App\Action\Admin;
 
 use Slim\Container;
-use Slim\Views\Twig;;
+use Slim\Views\Twig;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\SchedulerRepository;
@@ -23,6 +23,12 @@ class LogExport extends AbstractExporter
     private $user;
     private $event;
 
+    /**
+     * LogExport constructor.
+     * @param Container $container
+     * @param SchedulerRepository $schedulerRepository
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
         parent::__construct('xls');
@@ -34,6 +40,12 @@ class LogExport extends AbstractExporter
         $this->outFileName = 'Access_Log_' . date('Ymd_His') . '.' . $this->getFileExtension();
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
@@ -53,6 +65,10 @@ class LogExport extends AbstractExporter
         return $response;
     }
 
+    /**
+     * @param $content
+     * @return mixed
+     */
     public function generateAccessLogData(&$content)
     {
         $log = $this->sr->getAccessLog();

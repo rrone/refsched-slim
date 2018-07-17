@@ -168,6 +168,10 @@ class SchedSchedView extends AbstractView
         return null;
     }
 
+    /**
+     * @param Response $response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function render(Response &$response)
     {
         $content = array(
@@ -188,6 +192,10 @@ class SchedSchedView extends AbstractView
 
     }
 
+    /**
+     * @return null|string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     private function renderView()
     {
         $html = null;
@@ -267,6 +275,10 @@ class SchedSchedView extends AbstractView
         return $html;
     }
 
+    /**
+     * @return string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     private function menuLinks()
     {
         $uname = $this->user->name;

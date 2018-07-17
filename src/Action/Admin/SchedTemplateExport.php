@@ -25,6 +25,12 @@ class SchedTemplateExport extends AbstractExporter
 
     private $baseURL;
 
+    /**
+     * SchedTemplateExport constructor.
+     * @param Container $container
+     * @param SchedulerRepository $schedulerRepository
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
         parent::__construct('xls');
@@ -36,6 +42,13 @@ class SchedTemplateExport extends AbstractExporter
         $this->outFileName = 'ScheduleImportTemplate_' . date('Ymd_His') . '.' . $this->getFileExtension();
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return null|Response
+     * @throws \Interop\Container\Exception\ContainerException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
@@ -66,6 +79,9 @@ class SchedTemplateExport extends AbstractExporter
         return null;
     }
 
+    /**
+     * @param Response $response
+     */
     protected function render(Response &$response)
     {
         $msg = $this->event->name . ' at ' . $this->event->location . ' on ' . $this->event->dates;
@@ -80,6 +96,9 @@ class SchedTemplateExport extends AbstractExporter
         $this->view->render($response, 'modal.html.twig', $content);
     }
 
+    /**
+     * @return array|null
+     */
     protected function renderFile()
     {
         $content = null;

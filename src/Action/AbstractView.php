@@ -48,6 +48,12 @@ abstract class AbstractView
     protected $uri;
 
 
+    /**
+     * AbstractView constructor.
+     * @param Container $container
+     * @param SchedulerRepository $schedulerRepository
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
         $this->container = $container;
@@ -99,6 +105,11 @@ abstract class AbstractView
         return false;
     }
 
+    /**
+     * @param $path
+     * @return string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     protected function getBaseURL($path)
     {
         $request = $this->container->get('request');
@@ -123,6 +134,12 @@ abstract class AbstractView
         return $linkedEvents;
     }
 
+    /**
+     * @param $path
+     * @param string $field
+     * @return null|string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     protected function getUri($path, $field = 'game_number')
     {
         $uri = null;

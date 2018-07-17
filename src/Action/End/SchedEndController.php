@@ -12,6 +12,14 @@ class SchedEndController extends AbstractController
 
         parent::__construct($container);
     }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return Response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->isAuthorized();

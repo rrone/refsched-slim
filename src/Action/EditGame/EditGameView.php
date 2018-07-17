@@ -152,7 +152,7 @@ class EditGameView extends AbstractView
                 $html .= "</form>\n";
             }
 
-            $this->menu = sizeof($games) ? $this->menu('bottom') : null;
+            $this->menu = sizeof($games) ? $this->menu() : null;
         }
 
         return $html;

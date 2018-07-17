@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: rick
- * Date: 11/6/16
- * Time: 8:59 AM
- */
-
 namespace App\Action\Logon;
 
 use Slim\Container;
@@ -44,6 +37,9 @@ class LogonView extends AbstractView
             } else {
                 //try master password
                 $user = $this->sr->getUserByName('Admin');
+                if(is_null($_SESSION['user'])){
+                    $_SESSION['user'] = $user;
+                }
                 $hash = isset($user) ? $user->hash : null;
                 $authed = password_verify($pass, $hash);
 

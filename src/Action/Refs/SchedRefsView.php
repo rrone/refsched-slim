@@ -34,6 +34,10 @@ class SchedRefsView extends AbstractView
         return null;
     }
 
+    /**
+     * @param Response $response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function render(Response &$response)
     {
         $content = array(
@@ -53,6 +57,10 @@ class SchedRefsView extends AbstractView
 
     }
 
+    /**
+     * @return null|string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     private function renderRefs()
     {
         $html = null;
@@ -214,6 +222,10 @@ class SchedRefsView extends AbstractView
 
     }
 
+    /**
+     * @return string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     private function menu()
     {
         $html = "<h3 class=\"center h3-btn\">";

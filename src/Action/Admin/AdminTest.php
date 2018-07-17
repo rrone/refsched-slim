@@ -449,17 +449,17 @@ class AdminTest extends AppTestCase
 
     }
 
-    public function testPOSTPWChange()
+    public function xtestPOSTPWChange()
     {
         /* TODO: Add POST Test for PW change */
     }
 
-    public function testPOSTLogMemo()
+    public function xtestPOSTLogMemo()
     {
         /* TODO: Add POST Test for Log memo */
     }
 
-    public function testDoneButton()
+    public function xtestDoneButton()
     {
         /* TODO: Add POST Test for Done button */
     }
