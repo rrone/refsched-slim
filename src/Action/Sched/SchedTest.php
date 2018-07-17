@@ -22,6 +22,9 @@ class SchedSchedTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedAsAnonymous()
     {
         // instantiate the view and test it
@@ -43,6 +46,9 @@ class SchedSchedTest extends AppTestCase
         $this->assertEquals('/', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedAsUser()
     {
         // instantiate the view and test it
@@ -72,6 +78,9 @@ class SchedSchedTest extends AppTestCase
         $this->assertContains("<a href=/refs>Edit $user Referee Assignments</a>", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedAsAdmin()
     {
         // instantiate the view and test it
@@ -102,6 +111,9 @@ class SchedSchedTest extends AppTestCase
     }
 
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedGroup16UAsUser()
     {
         // instantiate the view and test it
@@ -132,6 +144,9 @@ class SchedSchedTest extends AppTestCase
         $this->assertContains("<a href=/sched>View all $user matches</a>", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function xtestRepostSchedAsAdmin()
     {
         // instantiate the view and test it
@@ -194,6 +209,9 @@ class SchedSchedTest extends AppTestCase
         $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testNoGamesAsUser()
     {
         // instantiate the view and test it

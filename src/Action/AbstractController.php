@@ -28,11 +28,19 @@ abstract class AbstractController
         $this->root = __DIR__ . '/../../var';
     }
 
+    /**
+     * @return mixed
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     private function isTest()
     {
         return $this->container->get('settings.test');
     }
 
+    /**
+     * @return bool|null
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     protected function isAuthorized()
     {
         if ($this->isTest() && isset($this->container['session'])) {
@@ -63,6 +71,9 @@ abstract class AbstractController
         return true;
     }
 
+    /**
+     * @param $event
+     */
     protected function getParams($event)
     {
         if (!is_null($event)) {
@@ -76,6 +87,11 @@ abstract class AbstractController
         }
     }
 
+    /**
+     * @param Request $request
+     * @return null
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     protected function logStamp(Request $request)
     {
 //        if($this->isTest()){
@@ -142,6 +158,11 @@ abstract class AbstractController
 
     }
 
+    /**
+     * @param $path
+     * @return string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     protected function getBaseURL($path)
     {
         $request = $this->container->get('request');

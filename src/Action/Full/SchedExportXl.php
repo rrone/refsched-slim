@@ -27,6 +27,12 @@ class SchedExportXl extends AbstractExporter
         $this->outFileName = 'GameSchedule_'.date('Ymd_His').'.'.$this->getFileExtension();
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
@@ -86,6 +92,10 @@ class SchedExportXl extends AbstractExporter
 //        return $content;
 //    }
 
+    /**
+     * @param $content
+     * @return mixed
+     */
     private function generateAssignmentsByRefereeData(&$content)
     {
         $event = $this->event;
@@ -141,6 +151,10 @@ class SchedExportXl extends AbstractExporter
         return $content;
     }
 
+    /**
+     * @param $content
+     * @return mixed
+     */
     private function generateScheduleData(&$content)
     {
         $event = $this->event;
@@ -227,6 +241,10 @@ class SchedExportXl extends AbstractExporter
 
     }
 
+    /**
+     * @param $content
+     * @return mixed
+     */
     private function generateSummaryCountDateDivision(&$content)
     {
         $event = $this->event;
@@ -283,6 +301,11 @@ class SchedExportXl extends AbstractExporter
         return $content;
     }
 
+    /**
+     * @param $a
+     * @param $b
+     * @return int
+     */
     static function sortOnRep($a, $b)
     {
         if ($a == $b) {

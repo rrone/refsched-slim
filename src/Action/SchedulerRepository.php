@@ -23,7 +23,6 @@ class SchedulerRepository
     public function __construct(Manager $db)
     {
         $this->db = $db;
-
     }
 
     /**
@@ -1062,17 +1061,18 @@ class SchedulerRepository
         $has4th = $this->numberOfReferees($projectKey) > 3;
 
         $select4th = $has4th ? ', 0 as r4th' : '';
+        $db = $this->db->getDatabaseManager();
 
-        $cr = $this->db::select('call rs_crAssignmentMap(?,?)', [$projectKey, $select4th]);
+        $cr = $db->select('call rs_crAssignmentMap(?,?)', [$projectKey, $select4th]);
 
-        $ar1 = $this->db::select('call rs_ar1AssignmentMap(?,?)', [$projectKey, $select4th]);
+        $ar1 = $db->select('call rs_ar1AssignmentMap(?,?)', [$projectKey, $select4th]);
 
-        $ar2 = $this->db::select('call rs_ar2AssignmentMap(?,?)', [$projectKey, $select4th]);
+        $ar2 = $db->select('call rs_ar2AssignmentMap(?,?)', [$projectKey, $select4th]);
 
         $refs = array_merge($cr, $ar1, $ar2);
 
         if ($has4th) {
-            $r4th = $this->db::select('call rs_r4thAssignmentMap(?,?)', [$projectKey, $select4th]);
+            $r4th = $db->select('call rs_r4thAssignmentMap(?,?)', [$projectKey, $select4th]);
 
             $refs = array_merge($refs, $r4th);
         }

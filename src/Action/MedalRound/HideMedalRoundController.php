@@ -17,6 +17,13 @@ class HideMedalRoundController extends AbstractController
         $this->mrView = $medalroundView;
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return Response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized() || !$this->user->admin) {
