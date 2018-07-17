@@ -16,6 +16,15 @@ class SchedImportController extends AbstractController
 
         $this->importer = $importer;
     }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return Response
+     * @throws \Interop\Container\Exception\ContainerException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized()) {

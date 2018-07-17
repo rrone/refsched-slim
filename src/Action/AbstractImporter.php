@@ -78,7 +78,7 @@ abstract class AbstractImporter
     public function importCSV($inputFileName)
     {
 //      import a CSV file into a PHPExcel object
-        $inputFileType = 'CSV';
+        $inputFileType = 'Csv';
 
         return $this->_import($inputFileName, $inputFileType);
     }

@@ -39,7 +39,7 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2018.07.16.00'
+            'version' => '2018.07.16.01'
         ],
 
         'assignor' => [
