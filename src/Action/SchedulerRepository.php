@@ -193,6 +193,17 @@ class SchedulerRepository
     /**
      * @return \Illuminate\Support\Collection
      */
+    public function getAllEvents()
+    {
+        return $this->db->table('events')
+            ->orderBy('id', 'asc')
+            ->orderBy('start_date', 'asc')
+            ->get();
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function getEnabledEvents()
     {
         return $this->db->table('events')
@@ -923,6 +934,8 @@ class SchedulerRepository
         foreach ($result as $ref) {
             $arrRef = (array)$ref;
             foreach ($arrRef as $hdr => $val) {
+                $gameCount = $ref->crCount+$ref->ar1Count+$ref->ar2Count;
+                if(isset($ref->r4thCount)) $gameCount += $ref->r4thCount;
                 switch ($hdr) {
                     case 'name':
                         if (!isset($refList[$ref->name])) {
@@ -940,7 +953,7 @@ class SchedulerRepository
                             $refList[$ref->name][$val] = 0;
                         }
                         if ($val) {
-                            $refList[$ref->name][$val] += 1;
+                            $refList[$ref->name][$val] += $gameCount;
                         }
                         break;
                     case 'division':
@@ -948,7 +961,7 @@ class SchedulerRepository
                         if (!isset($refList[$ref->name][$div])) {
                             $refList[$ref->name][$div] = 0;
                         }
-                        $refList[$ref->name][$div] += 1;
+                        $refList[$ref->name][$div] += $gameCount;
                         break;
                     case 'crCount':
                         if (!isset($refList[$ref->name]['ref'])) {
@@ -956,7 +969,7 @@ class SchedulerRepository
                             $refList[$ref->name]['ref'] = 0;
                         }
                         if ($val) {
-                            $refList[$ref->name]['ref'] += 1;
+                            $refList[$ref->name]['ref'] += $val;
                         }
                         break;
                     case 'ar1Count':
@@ -966,17 +979,17 @@ class SchedulerRepository
                             $refList[$ref->name]['ar'] = 0;
                         }
                         if ($val) {
-                            $refList[$ref->name]['ar'] += 1;
+                            $refList[$ref->name]['ar'] += $val;
                         }
                         break;
                     case
-                    'r4th':
+                    'r4thCount':
                         if (!isset($refList[$ref->name]['4th'])) {
                             $refList[$ref->name]['4th'] = [];
                             $refList[$ref->name]['4th'] = 0;
                         }
                         if ($val) {
-                            $refList[$ref->name]['4th'] += 1;
+                            $refList[$ref->name]['4th'] += $val;
                         }
                 }
             }
