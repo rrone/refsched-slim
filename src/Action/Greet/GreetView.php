@@ -22,12 +22,20 @@ class GreetView extends AbstractView
         $this->description = 'No matches scheduled';
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
     }
 
+    /**
+     * @param Response $response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function render(Response &$response)
     {
         $html = $this->renderView();
@@ -46,6 +54,10 @@ class GreetView extends AbstractView
         $this->view->render($response, 'sched.html.twig', $content);
     }
 
+    /**
+     * @return null|string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     protected function renderView()
     {
         $html = null;
@@ -268,6 +280,7 @@ class GreetView extends AbstractView
                 }
             } else {
                 $html .= "<h3 class=\"center\">There are no matches to schedule</h3>";
+//                $html .= "<br><p><a class='info' id='Rick Roberts' href='#'>Rick Roberts</a>";
             }
 
             $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL('endPath').">Log Off</a></h3>";

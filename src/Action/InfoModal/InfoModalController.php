@@ -2,6 +2,7 @@
 namespace App\Action\InfoModal;
 
 use App\Action\AbstractController;
+use App\Action\SchedulerRepository;
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -17,12 +18,21 @@ class InfoModalController extends AbstractController
         $this->modalView = $view;
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function __invoke(Request $request, Response $response)
     {
+        if(!$this->isAuthorized()) {
+            return $response->withRedirect($this->getBaseURL('greetPath'));
+        };
+
         $this->modalView->handler($request, $response);
 
-        $this->modalView->render($response);
+        echo $this->modalView->render($response);
 
-        return $response;
     }
 }

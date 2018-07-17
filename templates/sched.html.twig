@@ -16,5 +16,52 @@
     {{ view.content | raw }}
 
     {{ view.menu | raw }}
-        
+
+    <!-- Modal -->
+    <div class="modal fade" id="infoModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="text-align:center">Referee Information</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- info goes here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- end Modal -->
+
 {% endblock %}
+
+{% block script %}
+    <script>
+        $('.info').click(function(e){
+            e.preventDefault();
+
+            var id = e.target.id; // Extract info from data-* attributes
+            var modal = $('#infoModal');
+            var url = '/info/' + id;
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: null,
+                cache: false,
+                success: function (data) {
+                    console.log(data);
+                    modal.find('.modal-body').html(data);
+                    modal.modal('show');
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        });
+    </script>{% endblock %}

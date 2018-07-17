@@ -39,6 +39,10 @@ class SchedFullView extends AbstractView
         return null;
     }
 
+    /**
+     * @param Response $response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function render(Response &$response)
     {
         $content = array(
@@ -57,6 +61,9 @@ class SchedFullView extends AbstractView
         $this->view->render($response, 'sched.html.twig', $content);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     protected function renderView()
     {
         $html = null;
@@ -196,11 +203,28 @@ class SchedFullView extends AbstractView
                             $html .= "<td></td>";
                         }
                         $html .= "<td>$game->assignor</td>";
-                        $html .= "<td>$game->cr</td>";
-                        $html .= "<td>$game->ar1</td>";
-                        $html .= "<td>$game->ar2</td>";
+
+                        if(!is_null($this->sr->getPersonInfo($game->cr))) {
+                            $html .= "<td><a class='info' id='$game->cr' href='#'>$game->cr</a></td>";
+                        } else {
+                            $html .= "<td>$game->cr</td>";
+                        }
+                        if(!is_null($this->sr->getPersonInfo($game->ar1))) {
+                            $html .= "<td><a class='info' id='$game->ar1' href='#'>$game->ar1</a></td>";
+                        } else {
+                            $html .= "<td>$game->ar1</td>";
+                        }
+                        if(!is_null($this->sr->getPersonInfo($game->ar2))) {
+                            $html .= "<td><a class='info' id='$game->ar2' href='#'>$game->ar2</a></td>";
+                        } else {
+                            $html .= "<td>$game->ar2</td>";
+                        }
                         if ($has4th) {
-                            $html .= "<td>$game->r4th</td>";
+                            if(!is_null($this->sr->getPersonInfo($game->r4th))) {
+                                $html .= "<td><a class='info' id='$game->r4th' href='#'>$game->r4th</a></td>";
+                            } else {
+                                $html .= "<td>$game->r4th</td>";
+                            }
                         }
                         $html .= "</tr>\n";
                     }
@@ -216,6 +240,11 @@ class SchedFullView extends AbstractView
 
     }
 
+    /**
+     * @param string $pos
+     * @return null|string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     private function menu($pos = 'top')
     {
         $html = null;

@@ -404,3 +404,12 @@ $container[App\Action\SAR\SARAction::class] = function ($c) use ($sr) {
 
     return new \App\Action\SAR\SARAction($c, $sr);
 };
+
+// -----------------------------------------------------------------------------
+// InfoModal class
+// -----------------------------------------------------------------------------
+$container[App\Action\InfoModal\InfoModalController::class] = function ($c) use ($sr) {
+    $v = new \App\Action\InfoModal\InfoModalView($c, $sr);
+
+    return new App\Action\InfoModal\InfoModalController($c, $v);
+};

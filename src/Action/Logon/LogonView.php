@@ -58,6 +58,11 @@ class LogonView extends AbstractView
         return null;
     }
 
+    /**
+     * @param Response $response
+     * @return Response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function render(Response &$response)
     {
         $key = isset($_SESSION['param']) ? $_SESSION['param'] : null;
@@ -74,6 +79,11 @@ class LogonView extends AbstractView
         return $response;
     }
 
+    /**
+     * @param null $key
+     * @return null|string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     protected function renderView($key = null)
     {
         if (is_null($key)) {
@@ -132,7 +142,7 @@ EOD;
 				</tr>
 			</table>
 			<p>
-            <input type="submit" type="button" class="btn btn-primary btn-xs active" name="Submit" value="Logon">      
+            <input type="submit" class="btn btn-primary btn-xs active" name="Submit" value="Logon">      
 			</p>
         </div>
       </form>
@@ -147,6 +157,10 @@ EOD;
         return $html;
     }
 
+    /**
+     * @param $e
+     * @return null|string
+     */
     public function selectedUsers($e)
     {
         if(empty($e)) {

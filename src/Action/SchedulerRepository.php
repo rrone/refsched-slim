@@ -1188,4 +1188,23 @@ class SchedulerRepository
 
         return $this->getZero($sarRec);
     }
+
+    public function getPersonInfo($name)
+    {
+        $personRec = $this->db->table('s1_refs')
+            ->where('name', 'like', "%$name%")
+            ->get();
+
+        if(count($personRec)) {
+            return $this->createArray($personRec);
+        }
+
+        return null;
+    }
+
+    protected function createArray($obj){
+        $arr = $array = json_decode(json_encode($obj), true);;
+
+        return $arr;
+    }
 }

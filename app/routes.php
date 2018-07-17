@@ -103,3 +103,10 @@ $app->map(['GET'], '/sar', App\Action\SAR\SARAction::class)
 
 $app->map(['GET'], '/sar/{portal}', App\Action\SAR\SARAction::class)
     ->setName('portal');
+
+$app->map(['GET'], '/info', App\Action\InfoModal\InfoModalController::class)
+    ->setName('info');
+$container['infoPath'] = $container->get('router')->pathFor('info');
+
+$app->map(['GET'], '/info/{id}', App\Action\InfoModal\InfoModalController::class)
+    ->setName('infoId');
