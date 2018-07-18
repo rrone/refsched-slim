@@ -22,6 +22,9 @@ class SchedGreetTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testGreetAsAnonymous()
     {
         // instantiate the view and test it
@@ -43,6 +46,9 @@ class SchedGreetTest extends AppTestCase
         $this->assertEquals('/', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testGreetAsUser()
     {
         // instantiate the view and test it
@@ -70,6 +76,9 @@ class SchedGreetTest extends AppTestCase
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>",$view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testGreetAsAdmin()
     {
         // instantiate the view and test it
@@ -94,7 +103,7 @@ class SchedGreetTest extends AppTestCase
 
         $view = $this->client->get('/greet');
         $this->assertContains("<h3 class=\"center\">Welcome $user</h3>",$view);
-        $this->assertContains("<h3 class=\"center\"><a href=/editgame>Edit matches</a>",$view);
+        $this->assertContains("<h3 class=\"center\"><a href=/full>View full schedule</a></h3>",$view);
     }
 
 }

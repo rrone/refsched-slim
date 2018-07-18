@@ -39,7 +39,7 @@ class NoEventsTest extends AppTestCase
 
         $view = $this->client->get('/na');
 
-        $this->assertContains("<h2>Rest easy...there are no events available to schedule.</h2>",$view);
+        $this->assertContains("<h1>Section 1 Event Schedule</h1>",$view);
     }
 
 

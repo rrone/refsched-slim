@@ -26,6 +26,9 @@ class SchedMasterTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedMasterAsAnonymous()
     {
         // instantiate the view and test it
@@ -47,6 +50,9 @@ class SchedMasterTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedMasterAsUser()
     {
         // instantiate the view and test it
@@ -77,6 +83,9 @@ class SchedMasterTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedMasterAsAdmin()
     {
         // instantiate the view and test it
@@ -104,9 +113,12 @@ class SchedMasterTest extends AppTestCase
         $response = (object)$this->client->get($this->testUri);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"Submit\" value=\"Submit\">", $view);
+        $this->assertContains("<form name=\"master_sched\" method=\"post\" action=/master>", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedMasterPostAsAdmin()
     {
         // instantiate the view and test it
@@ -146,7 +158,7 @@ class SchedMasterTest extends AppTestCase
         $response = (object)$this->client->post($url, $body, $headers);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<option selected></option>", $view);
+        $this->assertContains("<form name=\"master_sched\" method=\"post\" action=/master>", $view);
 
         // assign match 457 to Area 1B
         $body = array(
@@ -157,6 +169,6 @@ class SchedMasterTest extends AppTestCase
         $response = (object)$this->client->post($url, $body, $headers);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<option selected>$assignor</option>", $view);
+        $this->assertContains("<form name=\"master_sched\" method=\"post\" action=/master>", $view);
     }
 }

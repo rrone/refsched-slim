@@ -26,6 +26,9 @@ class SchedRefsTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedRefsAsAnonymous()
     {
         // instantiate the view and test it
@@ -47,6 +50,9 @@ class SchedRefsTest extends AppTestCase
         $this->assertEquals('/', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedRefsAsUser()
     {
         // instantiate the view and test it
@@ -74,10 +80,12 @@ class SchedRefsTest extends AppTestCase
         $response = (object)$this->client->get($this->testUri);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<input class=\"btn btn-primary btn-xs \" type=\"submit\"",$view);
-        $this->assertContains("value=\"Edit Assignments\"",$view);
+        $this->assertContains("<form name=\"addref\" method=\"post\" action=\"/refs\">",$view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedRefsAsAdmin()
     {
         // instantiate the view and test it
@@ -105,7 +113,6 @@ class SchedRefsTest extends AppTestCase
         $response = (object)$this->client->get($this->testUri);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<input class=\"btn btn-primary btn-xs \" type=\"submit\"",$view);
-        $this->assertContains("value=\"Edit Assignments\"",$view);
+        $this->assertContains("<table class=\"sched-table\" width=\"100%\">",$view);
     }
 }

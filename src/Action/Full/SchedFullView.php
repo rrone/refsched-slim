@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Action\Full;
 
 use App\Action\AbstractView;
@@ -31,7 +32,7 @@ class SchedFullView extends AbstractView
 
         $this->justOpen = array_key_exists('open', $params);
         $this->sortOn = array_key_exists('sort', $params) ? $params['sort'] : 'game_number';
-        if(empty($this->sortOn)) {
+        if (empty($this->sortOn)) {
             $this->sortOn = 'game_number';
         }
         $this->uri = $request->getUri();
@@ -55,7 +56,7 @@ class SchedFullView extends AbstractView
                 'dates' => $this->dates,
                 'location' => $this->location,
                 'description' => $this->description,
-            )
+            ),
         );
 
         $this->view->render($response, 'sched.html.twig', $content);
@@ -74,7 +75,7 @@ class SchedFullView extends AbstractView
             //refresh event data
             $this->event = $this->sr->getEvent($projectKey);
 
-            if(!empty($this->event->infoLink)){
+            if (!empty($this->event->infoLink)) {
                 $eventLink = $this->event->infoLink;
                 $eventName = $this->event->name;
                 $eventName = "<a href='$eventLink' target='_blank'>$eventName</a>";
@@ -89,15 +90,23 @@ class SchedFullView extends AbstractView
             $this->show_medal_round = $this->sr->getMedalRound($projectKey);
             $this->show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
 
-            if($this->user->admin) {
+            if ($this->user->admin) {
                 $this->games = $this->sr->getGames($projectKey, '%', true, $this->sortOn);
             } else {
                 $this->games = $this->sr->getGames($projectKey, '%', $this->show_medal_round, $this->sortOn);
             }
 
+            $refNames = [];
+            if ($this->user->admin) {
+                $refs = $this->sr->getPersonInfo('%');
+                foreach ($refs as $ref) {
+                    $refNames[] = $ref['Nickname'];
+                }
+            }
+
             if (count($this->games)) {
                 $this->description = $this->user->name;
-                if($this->justOpen) {
+                if ($this->justOpen) {
                     $this->description .= ": Schedule with Open Slots";
                 } else {
                     $this->description .= ": Full Schedule";
@@ -110,15 +119,15 @@ class SchedFullView extends AbstractView
 
                 $html .= "<table class=\"sched-table\" width=\"100%\">\n";
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
-                $html .= "<th><a href=" . $this->getUri('fullPath') . ">Match #</a></th>";
-                $html .= "<th><a href=" . $this->getUri('fullPath','date') . ">Date</a></th>";
+                $html .= "<th><a href=".$this->getUri('fullPath').">Match #</a></th>";
+                $html .= "<th><a href=".$this->getUri('fullPath', 'date').">Date</a></th>";
                 $html .= "<th>Time</th>";
-                $html .= "<th><a href=" . $this->getUri('fullPath','field') . ">Field</a></th>";
-                $html .= "<th><a href=" . $this->getUri('fullPath','division') . ">Division</a></th>";
-                $html .= "<th><a href=" . $this->getUri('fullPath','pool') . ">Pool</a></th>";
-                $html .= "<th><a href=" . $this->getUri('fullPath','home') . ">Home</a></th>";
-                $html .= "<th><a href=" . $this->getUri('fullPath','away') . ">Away</a></th>";
-                $html .= "<th><a href=" . $this->getUri('fullPath','assignor') . ">Referee Team</a></th>";
+                $html .= "<th><a href=".$this->getUri('fullPath', 'field').">Field</a></th>";
+                $html .= "<th><a href=".$this->getUri('fullPath', 'division').">Division</a></th>";
+                $html .= "<th><a href=".$this->getUri('fullPath', 'pool').">Pool</a></th>";
+                $html .= "<th><a href=".$this->getUri('fullPath', 'home').">Home</a></th>";
+                $html .= "<th><a href=".$this->getUri('fullPath', 'away').">Away</a></th>";
+                $html .= "<th><a href=".$this->getUri('fullPath', 'assignor').">Referee Team</a></th>";
                 $html .= "<th>Referee</th>";
                 $html .= "<th>AR1</th>";
                 $html .= "<th>AR2</th>";
@@ -204,23 +213,23 @@ class SchedFullView extends AbstractView
                         }
                         $html .= "<td>$game->assignor</td>";
 
-                        if(!is_null($this->sr->getPersonInfo($game->cr))) {
+                        if ($this->user->admin && count(preg_grep ("/$game->cr/", $refNames))) {
                             $html .= "<td><a class='info' id='$game->cr' href='#'>$game->cr</a></td>";
                         } else {
                             $html .= "<td>$game->cr</td>";
                         }
-                        if(!is_null($this->sr->getPersonInfo($game->ar1))) {
+                        if ($this->user->admin && count(preg_grep ("/$game->ar1/", $refNames))) {
                             $html .= "<td><a class='info' id='$game->ar1' href='#'>$game->ar1</a></td>";
                         } else {
                             $html .= "<td>$game->ar1</td>";
                         }
-                        if(!is_null($this->sr->getPersonInfo($game->ar2))) {
+                        if ($this->user->admin && count(preg_grep ("/$game->ar2/", $refNames))) {
                             $html .= "<td><a class='info' id='$game->ar2' href='#'>$game->ar2</a></td>";
                         } else {
                             $html .= "<td>$game->ar2</td>";
                         }
                         if ($has4th) {
-                            if(!is_null($this->sr->getPersonInfo($game->r4th))) {
+                            if ($this->user->admin && count(preg_grep ("/$game->r4th/", $refNames))) {
                                 $html .= "<td><a class='info' id='$game->r4th' href='#'>$game->r4th</a></td>";
                             } else {
                                 $html .= "<td>$game->r4th</td>";
@@ -233,7 +242,7 @@ class SchedFullView extends AbstractView
                 $html .= "</table>\n";
             }
 
-            $this->menu = count($this->games) ? $this->menu('bottom') : null ;
+            $this->menu = count($this->games) ? $this->menu('bottom') : null;
         }
 
         return $html;
@@ -252,31 +261,38 @@ class SchedFullView extends AbstractView
         $html .= "<h3 class=\"center h3-btn\">";
 
         if ($pos == 'bottom') {
-            $html .= "<a  href=" . $this->getBaseURL('fullXlsPath') . " class=\"btn btn-primary btn-xs export right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>";
+            $html .= "<a  href=".$this->getBaseURL(
+                    'fullXlsPath'
+                )." class=\"btn btn-primary btn-xs export right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>";
             $html .= "<div class='clear-fix'></div>";
         }
 
-        $html .= "<a  href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;";
+        $html .= "<a  href=".$this->getBaseURL('greetPath').">Home</a>&nbsp;-&nbsp;";
         if ($this->justOpen) {
-            $html .= "<a  href=" . $this->getBaseURL('fullPath') . ">View full schedule</a>&nbsp;-&nbsp;";
+            $html .= "<a  href=".$this->getBaseURL('fullPath').">View full schedule</a>&nbsp;-&nbsp;";
         } else {
-            $html .= "<a href=" . $this->getBaseURL('fullPath') . "?open>View schedule with open slots</a>&nbsp;-&nbsp;";
+            $html .= "<a href=".$this->getBaseURL('fullPath')."?open>View schedule with open slots</a>&nbsp;-&nbsp;";
         }
         if ($this->user->admin) {
-            if(!$this->event->archived) {
+            if (!$this->event->archived) {
                 $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit matches</a>&nbsp;-&nbsp;";
-            }            $html .= "<a  href=" . $this->getBaseURL('schedPath') . ">View Assignors</a>&nbsp;-&nbsp;";
-            $html .= "<a  href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;";
-            $html .= "<a  href=" . $this->getBaseURL('refsPath') . ">Edit Referee Assignments</a>&nbsp;-&nbsp;";
+            }
+            $html .= "<a  href=".$this->getBaseURL('schedPath').">View Assignors</a>&nbsp;-&nbsp;";
+            $html .= "<a  href=".$this->getBaseURL('masterPath').">Select Assignors</a>&nbsp;-&nbsp;";
+            $html .= "<a  href=".$this->getBaseURL('refsPath').">Edit Referee Assignments</a>&nbsp;-&nbsp;";
         } else {
-            $html .= "<a  href=" . $this->getBaseURL('schedPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;";
-            $html .= "<a  href=" . $this->getBaseURL('refsPath') . ">Edit " . $this->user->name . " referees</a>&nbsp;-&nbsp;";
+            $html .= "<a  href=".$this->getBaseURL(
+                    'schedPath'
+                ).">Go to ".$this->user->name." schedule</a>&nbsp;-&nbsp;";
+            $html .= "<a  href=".$this->getBaseURL('refsPath').">Edit ".$this->user->name." referees</a>&nbsp;-&nbsp;";
         }
 
-        $html .= "<a  href=" . $this->getBaseURL('endPath') . ">Log off</a><br>";
+        $html .= "<a  href=".$this->getBaseURL('endPath').">Log off</a><br>";
 
         if ($pos == 'top' and count($this->games)) {
-            $html .= "<a  href=" . $this->getBaseURL('fullXlsPath') . " class=\"btn btn-primary btn-xs export right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>";
+            $html .= "<a  href=".$this->getBaseURL(
+                    'fullXlsPath'
+                )." class=\"btn btn-primary btn-xs export right\" style=\"margin-right: 0\">Export to Excel<i class=\"icon-white icon-circle-arrow-down\"></i></a>";
             $html .= "<div class='clear-fix'></div>";
         }
 

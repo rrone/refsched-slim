@@ -787,7 +787,7 @@ class SchedulerRepository
         unset($game->id);
         unset($data['id']);
 
-        if(isset($data['time'])){
+        if (isset($data['time'])) {
             $data['time'] = date('H:i:s', strtotime($data['time']));
         }
 
@@ -933,8 +933,10 @@ class SchedulerRepository
         foreach ($result as $ref) {
             $arrRef = (array)$ref;
             foreach ($arrRef as $hdr => $val) {
-                $gameCount = $ref->crCount+$ref->ar1Count+$ref->ar2Count;
-                if(isset($ref->r4thCount)) $gameCount += $ref->r4thCount;
+                $gameCount = $ref->crCount + $ref->ar1Count + $ref->ar2Count;
+                if (isset($ref->r4thCount)) {
+                    $gameCount += $ref->r4thCount;
+                }
                 switch ($hdr) {
                     case 'name':
                         if (!isset($refList[$ref->name])) {
@@ -1191,18 +1193,29 @@ class SchedulerRepository
 
     public function getPersonInfo($name)
     {
+        $list = explode(' ', $name);
+        $lastName = end($list);
+
         $personRec = $this->db->table('s1_refs')
-            ->where('name', 'like', "%$name%")
+            ->select('s1_refs.*', 'refNickNames.Nickname')
+            ->join('refNickNames', 'refNickNames.AYSOID', '=', 's1_refs.AYSOID')
+            ->where(
+                [
+                    ['nickname', 'like', "%$name%"],
+                    ['s1_refs.name', 'like', "%$lastName"],
+                ]
+            )
             ->get();
 
-        if(count($personRec)) {
+        if (count($personRec)) {
             return $this->createArray($personRec);
         }
 
         return null;
     }
 
-    protected function createArray($obj){
+    protected function createArray($obj)
+    {
         $arr = $array = json_decode(json_encode($obj), true);;
 
         return $arr;

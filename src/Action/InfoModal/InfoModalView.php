@@ -68,11 +68,11 @@ class InfoModalView extends AbstractView
         }
         $html = <<<EOT
 <div>        
-<p>Name: {$rec['Name']}</p>  
-<p>S/A/R: {$rec['SAR']}</p>  
-<p>Level: {$rec['CertificationDesc']}</p>  
-<p>Cell Phone: {$rec['Cell Phone']}</p>  
-<p>eMail: <a href='mailto:{$rec['Email']}'>{$rec['Email']}</a></p>  
+<p><b>Name:</b> {$rec['Nickname']}</p>  
+<p><b>S/A/R:</b> {$rec['SAR']}</p>  
+<p><b>Level:</b> {$rec['CertificationDesc']}</p>  
+<p><b>Cell Phone:</b> {$rec['Cell Phone']}</p>  
+<p><b>eMail:</b> <a href='mailto:{$rec['Email']}'>{$rec['Email']}</a></p>  
 </div>
 EOT;
 
