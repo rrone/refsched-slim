@@ -16,3 +16,4 @@ src/Model
 public/fonts/
 /tests/testfiles/
 sql
+npm-debug.log

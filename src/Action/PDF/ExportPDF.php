@@ -15,7 +15,7 @@ class ExportPDF
         $response = $response->withHeader('Content-Type','application/pdf');
         $response = $response->withHeader('Content-Disposition', "inline; filename=$field_map");
 
-        $content = file_get_contents(__DIR__ . "/$field_map");
+        $content = file_get_contents($field_map);
 
         /** @noinspection PhpUndefinedMethodInspection */
         $body = $response->getBody();

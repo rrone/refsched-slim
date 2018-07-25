@@ -1193,30 +1193,22 @@ class SchedulerRepository
 
     public function getPersonInfo($name)
     {
-        $list = explode(' ', $name);
-        $lastName = end($list);
-
         $personRec = $this->db->table('s1_refs')
             ->select('s1_refs.*', 'refNickNames.Nickname')
             ->join('refNickNames', 'refNickNames.AYSOID', '=', 's1_refs.AYSOID')
-            ->where(
-                [
-                    ['nickname', 'like', "%$name%"],
-                    ['s1_refs.name', 'like', "%$lastName"],
-                ]
-            )
+            ->where('nickname', 'like', "%\"$name\"%")
             ->get();
 
         if (count($personRec)) {
             return $this->createArray($personRec);
         }
 
-        return null;
+        return array();
     }
 
     protected function createArray($obj)
     {
-        $arr = $array = json_decode(json_encode($obj), true);;
+        $arr = $array = json_decode(json_encode($obj), true);
 
         return $arr;
     }

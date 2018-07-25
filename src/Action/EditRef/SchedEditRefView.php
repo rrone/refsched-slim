@@ -233,7 +233,7 @@ class SchedEditRefView extends AbstractView
         //propercase
         $tempName = explode(' ', strtolower($nameOut));
 
-        $prefixs = ['Mc', 'Von', "O'", '-', 'Di'];
+        $prefixs = ['Mc', 'Von', "O'", '-', 'Di', "D'"];
         $nameOut = '';
         foreach ($tempName as $item) {
             $item = ucfirst($item);

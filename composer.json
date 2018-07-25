@@ -16,7 +16,7 @@
             "App\\": "src",
             "Upload\\": "vendor/codeguy/upload/src",
             "Tests\\": "tests",
-            "App\\Command": "src/commands",
+            "App\\Command\\": "src/commands"
         }
     },
     "require-dev": {
