@@ -163,10 +163,6 @@ legend {
 .no-border { border: 0 }
 .border { border: 1px solid #ddd }
 
-.btn {
-    font-size: 0.75rem;
-}
-
 .modal-title {
     margin-left: auto;
     margin-right: auto;
