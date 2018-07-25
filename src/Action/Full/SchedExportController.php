@@ -23,8 +23,9 @@ class SchedExportController extends AbstractController
      * @param Request $request
      * @param Response $response
      * @param $args
-     * @return SchedExportXl|Response
+     * @return Response
      * @throws \Interop\Container\Exception\ContainerException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function __invoke(Request $request, Response $response, $args)
     {

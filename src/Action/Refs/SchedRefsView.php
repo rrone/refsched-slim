@@ -197,23 +197,24 @@ class SchedRefsView extends AbstractView
                             }
                             $html .= "<td>$game->assignor</td>";
                             if ($this->user->admin && count(preg_grep ("/$game->cr/", $refNames))) {
-                                $html .= '<td><a class="info" id="'.$game->cr.'" href="#">'.$game->cr.'</a></td>';
+                                $html .= '<td><button type="button" class="info btn btn-link" id="'.$game->cr.'">'.$game->cr.'</button></td>';
                             } else {
                                 $html .= "<td>$game->cr</td>";
                             }
                             if ($this->user->admin && count(preg_grep ("/$game->ar1/", $refNames))) {
-                                $html .= '<td><a class="info" id="'.$game->ar1.'" href="#">'.$game->ar1.'</a></td>';
+                                $html .= '<td><button type="button" class="info btn btn-link" id="'.$game->ar1.'">'.$game->ar1.'</button></td>';
                             } else {
                                 $html .= "<td>$game->ar1</td>";
                             }
                             if ($this->user->admin && count(preg_grep ("/$game->ar2/", $refNames))) {
-                                $html .= '<td><a class="info" id="'.$game->ar2.'" href="#">'.$game->ar2.'</a></td>';
+                                $html .= '<td><button type="button" class="info btn btn-link" id="'.$game->ar2.'">'.$game->ar2.'</button></td>';
                             } else {
                                 $html .= "<td>$game->ar2</td>";
                             }
                             if ($has4th) {
                                 if ($this->user->admin && count(preg_grep ("/$game->r4th/", $refNames))) {
-                                    $html .= '<td><a class="info" id="'.$game->r4th.'" href="#">'.$game->r4th.'</a></td>';
+                                    $html .= '<td><button type="button" class="info btn btn-link" id="'.$game->r4th
+                                        .'">'.$game->r4th.'</button></td>';
                                 } else {
                                     $html .= "<td>$game->r4th</td>";
                                 }

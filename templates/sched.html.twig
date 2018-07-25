@@ -47,7 +47,7 @@
 
             var id = e.target.id; // Extract info from data-* attributes
             var modal = $('#infoModal');
-            var url = '/info/' + id;
+            var url = '{{ env_uri }}/info/' + id;
 
             $.ajax({
                 type: "GET",
