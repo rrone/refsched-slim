@@ -117,7 +117,7 @@ class SchedFullView extends AbstractView
                 $html .= "<h3 class=\"center\">Green: Assignments covered (Boo-yah!) / Yellow: Open Slots / Red: Needs your attention / Grey: Not yours to cover<br><br>\n";
                 $html .= "Green shading change indicates different start times</h3>\n";
 
-                $html .= "<table class=\"sched-table\" width=\"100%\">\n";
+                $html .= "<table class=\"sched-table\">\n";
                 $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
                 $html .= "<th><a href=".$this->getUri('fullPath').">Match #</a></th>";
                 $html .= "<th><a href=".$this->getUri('fullPath', 'date').">Date</a></th>";

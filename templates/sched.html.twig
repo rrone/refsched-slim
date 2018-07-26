@@ -1,16 +1,16 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    
+
     <h2 class="center">
         {{ view.title | raw }}<br>
         {{ view.location | raw }}<br>
         {{ view.dates | raw }}
     </h2>
     <h3 class="center">{{ view.description | raw }}</h3>
-    
+
     <span class="center" style="color: #FF0000">{{ view.message | raw }}</span>
-    
+
     {{ view.topmenu | raw }}
 
     {{ view.content | raw }}
@@ -18,20 +18,25 @@
     {{ view.menu | raw }}
 
     <!-- Modal -->
-    <div class="modal fade" id="infoModal" role="dialog">
+    <div class="modal" id="infoModal" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     <h4 class="modal-title text-center">Referee Information</h4>
                 </div>
                 <div class="modal-body">
                     <!-- info goes here -->
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-xs active btn-default" data-dismiss="modal">Close</button>
-                </div>
+                {#<div class="modal-footer">#}
+                    {#<button type="button" class="btn btn-primary btn-xs active btn-default" data-dismiss="modal">#}
+                        {#Close#}
+                    {#</button>#}
+                {#</div>#}
             </div>
 
         </div>
@@ -42,12 +47,12 @@
 
 {% block script %}
     <script>
-        $('.info').click(function(e){
+        $('.info').click(function (e) {
             e.preventDefault();
 
-            var id = e.target.id; // Extract info from data-* attributes
-            var modal = $('#infoModal');
-            var url = '{{ env_uri }}/info/' + id;
+            let id = e.target.id; // Extract info from data-* attributes
+            let modal = $('#infoModal');
+            let url = '{{ env_uri }}/info/' + id;
 
             $.ajax({
                 type: "GET",
@@ -59,7 +64,7 @@
                     modal.find('.modal-body').html(data);
                     modal.modal('show');
                 },
-                error: function(err) {
+                error: function (err) {
                     console.log(err);
                 }
             });
