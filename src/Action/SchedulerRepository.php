@@ -1194,8 +1194,8 @@ class SchedulerRepository
     public function getPersonInfo($name)
     {
         $personRec = $this->db->table('s1_refs')
-            ->select('s1_refs.*', 'refNickNames.Nickname')
-            ->join('refNickNames', 'refNickNames.AYSOID', '=', 's1_refs.AYSOID')
+            ->select('s1_refs.*', 'refNicknames.Nickname')
+            ->join('refNicknames', 'refNicknames.AYSOID', '=', 's1_refs.AYSOID')
             ->where('nickname', 'like', "%\"$name\"%")
             ->get();
 
