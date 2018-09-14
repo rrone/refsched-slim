@@ -31,7 +31,7 @@ if (isset($_SERVER['HTTPS'])) {
     $settings['settings']['env_uri'] = 'https://';
 }
 
-$settings['settings']['env_uri'] .= $_SERVER['SERVER_NAME'] . '/services/refsched/public';
+$settings['settings']['env_uri'] .= $_SERVER['SERVER_NAME'] . '/services/rs/public';
 
 $app = new \Slim\App($settings);
 

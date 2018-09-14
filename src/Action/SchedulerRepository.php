@@ -1196,7 +1196,7 @@ class SchedulerRepository
         $personRec = $this->db->table('s1_refs')
             ->select('s1_refs.*', 'refNicknames.Nickname')
             ->join('refNicknames', 'refNicknames.AYSOID', '=', 's1_refs.AYSOID')
-            ->where('nickname', 'like', "%\"$name\"%")
+            ->where('Nickname', 'like', "%$name%")
             ->get();
 
         if (count($personRec)) {

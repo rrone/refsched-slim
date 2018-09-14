@@ -17,3 +17,7 @@ public/fonts/
 /tests/testfiles/
 sql
 npm-debug.log
+
+###> phpunit/phpunit ###
+/phpunit.xml
+###< phpunit/phpunit ###

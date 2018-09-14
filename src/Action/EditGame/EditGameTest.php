@@ -8,6 +8,9 @@ use App\Action\AbstractView;
 
 class EditGameTest extends AppTestCase
 {
+    /**
+     *
+     */
     public function setUp()
     {
 //     Setup App controller
@@ -22,6 +25,9 @@ class EditGameTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testEditGameAsUser()
     {
         // instantiate the view and test it
@@ -52,6 +58,9 @@ class EditGameTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testEditGameAsAdmin()
     {
         // instantiate the view and test it
@@ -82,6 +91,9 @@ class EditGameTest extends AppTestCase
         $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"action\" value=\"Update Matches\">", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testGamePostAsAdmin()
     {
         // instantiate the view and test it

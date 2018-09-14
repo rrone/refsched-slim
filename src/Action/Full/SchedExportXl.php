@@ -50,9 +50,7 @@ class SchedExportXl extends AbstractExporter
             $this->generateSummaryCountDateDivision($content);
             $this->generateAssignmentsByRefereeData($content);
         }
-        /** @noinspection PhpUndefinedMethodInspection */
         $body = $response->getBody();
-        /** @noinspection PhpUndefinedMethodInspection */
         $body->write($this->export($content));
 
         return $response;

@@ -103,8 +103,11 @@ abstract class AbstractExporter
      */
     public function is_asso($a)
     {
-        foreach (array_keys($a) as $key)
-            if (!is_int($key)) return true;
+        foreach (array_keys($a) as $key) {
+            if (!is_int($key)) {
+                return true;
+            }
+        }
 
         return false;
     }
@@ -168,7 +171,9 @@ abstract class AbstractExporter
     public function writeWorksheet($content, $shName = "Sheet")
     {
         //check for data
-        if (!isset($content['data'])) return null;
+        if (!isset($content['data'])) {
+            return null;
+        }
 
         //get data
         $data = $content['data'];
@@ -179,7 +184,7 @@ abstract class AbstractExporter
         $ws = $this->objSpreadsheet->getActiveSheet();
 
         //load data into sheet
-        $ws->fromArray($data, NULL, 'A1');
+        $ws->fromArray($data, null, 'A1');
 
         //auto-size columns
         foreach (range('A', $ws->getHighestDataColumn()) as $col) {
@@ -191,7 +196,7 @@ abstract class AbstractExporter
             // Hide sheet columns.
             $cols = $options['hideCols'];
             foreach ($cols as $col) {
-                $ws->getColumnDimension($col)->setVisible(FALSE);
+                $ws->getColumnDimension($col)->setVisible(false);
             }
         }
 
@@ -273,7 +278,7 @@ abstract class AbstractExporter
         $inc = 1;
         $name = $shName;
         while (!is_null($this->objSpreadsheet->getSheetByName($name))) {
-            $name = $shName . $inc;
+            $name = $shName.$inc;
             $inc += 1;
         }
 
