@@ -31,7 +31,7 @@ class LogExport extends AbstractExporter
      */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
-        parent::__construct('xls');
+        parent::__construct('xlsx');
 
         $this->container = $container;
         $this->sr = $schedulerRepository;

@@ -21,7 +21,7 @@ class SchedExportXl extends AbstractExporter
 
     public function __construct(SchedulerRepository $schedulerRepository)
     {
-        parent::__construct('xls');
+        parent::__construct('xlsx');
 
         $this->sr = $schedulerRepository;
         $this->outFileName = 'GameSchedule_'.date('Ymd_His').'.'.$this->getFileExtension();

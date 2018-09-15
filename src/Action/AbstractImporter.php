@@ -42,6 +42,10 @@ abstract class AbstractImporter
                 $this->fileExtension = 'xlsx';
                 $this->contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 break;
+            case 'xlsx':
+                $this->fileExtension = 'xlsx';
+                $this->contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                break;
         }
     }
 
@@ -64,6 +68,7 @@ abstract class AbstractImporter
             case 'csv':
                 return $this->importCSV($filename);
             case 'xls':
+            case 'xlsx':
                 return $this->importXLSX($filename);
         }
 
