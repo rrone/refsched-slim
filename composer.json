@@ -42,6 +42,7 @@
         "ircmaxell/password-compat": "^1.0",
         "phpoffice/phpspreadsheet": "^1.4",
         "symfony/console": "^4.1",
-        "ext-json": "^1.6"
+        "ext-json": "^1.6",
+        "ext-PDO": "^7.2"
     }
 }
