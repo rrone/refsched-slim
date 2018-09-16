@@ -23,6 +23,8 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
 
 define('PROJECT_ROOT', realpath(__DIR__ . '/..'));
 
+ini_set('max_input_vars', 5001);
+
 require PROJECT_ROOT . '/vendor/autoload.php';
 
 Debug::enable();

@@ -14,6 +14,8 @@ ini_set("log_errors", 1);
 //Define where the log goes: syslog
 ini_set("error_log", "syslog");
 
+ini_set('max_input_vars', 5001);
+
 require PROJECT_ROOT . '/vendor/autoload.php';
 
 session_start();
