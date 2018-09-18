@@ -823,6 +823,10 @@ class SchedulerRepository
 
         $id = isset($data['id']) ? $data['id'] : null;
 
+        if(is_null($id)) {
+            array_shift($data);
+        }
+
         $game = $this->getGame($id);
 
         if (is_null($game)) {
