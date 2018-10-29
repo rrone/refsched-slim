@@ -142,7 +142,7 @@ class SchedExportXl extends AbstractExporter
             if (!empty($data)) {
                 $content['Referee Match Count']['data'] = $data;
                 $content['Referee Match Count']['options']['freezePane'] = 'A2';
-                $content['Referee Match Count']['options']['horizontalAlignment'] = ['B1:M' => 'center'];
+                $content['Referee Match Count']['options']['horizontalAlignment'] = ['B1:Z' => 'center'];
             }
         }
 
