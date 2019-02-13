@@ -101,6 +101,9 @@
     "symfony/browser-kit": {
         "version": "v3.4.15"
     },
+    "symfony/css-selector": {
+        "version": "v4.2.3"
+    },
     "symfony/debug": {
         "version": "v3.4.15"
     },

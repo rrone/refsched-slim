@@ -76,7 +76,7 @@ class EditGameTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['admin_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,

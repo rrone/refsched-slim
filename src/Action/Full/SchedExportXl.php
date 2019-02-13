@@ -8,23 +8,47 @@ use App\Action\SchedulerRepository;
 use Slim\Http\Response;
 use Slim\Http\Request;
 
+define("CERT_URL", "https://national.ayso.org/Volunteers/ViewCertification?UserName=");
+
 class SchedExportXl extends AbstractExporter
 {
     /* @var SchedulerRepository */
     private $sr;
 
+    private $isUnique;
+
     private $outFileName;
     private $user;
     private $event;
 
+    private $mtCerts;
     private $show_medal_round_divisions;
 
+
+    /**
+     * SchedExportXl constructor.
+     * @param SchedulerRepository $schedulerRepository
+     */
     public function __construct(SchedulerRepository $schedulerRepository)
     {
         parent::__construct('xlsx');
 
         $this->sr = $schedulerRepository;
+
         $this->outFileName = 'GameSchedule_'.date('Ymd_His').'.'.$this->getFileExtension();
+
+        $this->mtCerts = array(
+            'AYSOID' => '',
+            'MY' => '',
+            'SAR' => '',
+            'SafeHavenDate' => '',
+            'CDCDate' => '',
+            'RefCertDesc' => '',
+            'RefCertDate' => '',
+            'eAYSOName' => ''
+        );
+
+        set_time_limit(0);
     }
 
     /**
@@ -97,7 +121,6 @@ class SchedExportXl extends AbstractExporter
     private function generateAssignmentsByRefereeData(&$content)
     {
         $event = $this->event;
-        $data = [];
 
         if (!empty($event)) {
             $projectKey = $event->projectKey;
@@ -108,7 +131,21 @@ class SchedExportXl extends AbstractExporter
             if (!empty($games)) {
                 $game = (array)$games[0];
 
+                $adminLabels = array(
+                    'AYSOID',
+                    'MY',
+                    'SAR',
+                    'Safe Haven Date',
+                    'CDC Date',
+                    'Ref Cert Desc',
+                    'Ref Cert Date',
+                    'eAYSO Name'
+                );
+
                 $labels = [];
+                if ($this->user->admin) {
+                    $labels = $adminLabels;
+                }
                 foreach ($game as $hdr => $val) {
                     switch ($hdr) {
                         case 'name':
@@ -124,29 +161,106 @@ class SchedExportXl extends AbstractExporter
                     }
                 }
 
+                $mtArray = [];
+                for ($i = 0; $i < count($adminLabels); $i++) {
+                    $mtArray[] = '';
+                }
+
                 $data = array($labels);
 
                 //set the data : match in each row
                 foreach ($games as $game) {
-                    $row = [];
                     if (!empty($game)) {
-                        foreach ($game as $ref) {
-                            $row[] = $ref;
+                        $arrGame = json_decode(json_encode($game), true);
+                        if ($this->user->admin) {
+                            $personRec = $this->sr->getPersonInfo($game->name);
+                            $id = 0;
+                            $this->isUnique = count($personRec) == 1;
+                            if ($this->isUnique) {
+                                $id = $personRec[0]['AYSOID'];
+                            } else {
+                                $assignor = explode(' ', $game->Assignor);
+                                if (strlen(end($assignor)) > 1) {
+                                    $assignor = $assignor[1][0].'/'.$assignor[1][1];
+                                } else {
+                                    $assignor = end($assignor);
+                                }
+
+                                foreach ($personRec as $rec) {
+                                    if (strpos($rec['SAR'], $assignor) > -1) {
+                                        $id = $rec['AYSOID'];
+                                        continue;
+                                    }
+                                }
+                            }
+                            $certs = $this->getCerts($id);
+
+                            $data[] = array_merge(
+                                $certs,
+                                $arrGame
+                            );
+
+                        } else {
+                            $data[] = $arrGame;
                         }
                     }
-
-                    $data[] = $row;
                 }
 
-            }
-            if (!empty($data)) {
-                $content['Referee Match Count']['data'] = $data;
-                $content['Referee Match Count']['options']['freezePane'] = 'A2';
-                $content['Referee Match Count']['options']['horizontalAlignment'] = ['B1:Z' => 'center'];
+
+                if (!empty($data)) {
+                    $content['Referee Match Count']['data'] = $data;
+                    if ($this->user->admin) {
+                        $content['Referee Match Count']['options']['freezePane'] = 'J2';
+                        $content['Referee Match Count']['options']['horizontalAlignment'] = ['J1:ZZ' => 'center'];
+                    } else {
+                        $content['Referee Match Count']['options']['freezePane'] = 'B2';
+                        $content['Referee Match Count']['options']['horizontalAlignment'] = ['B1:ZZ' => 'center'];
+                    }
+                }
             }
         }
 
         return $content;
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    private function getCerts($id)
+    {
+        $json = $this->curl_get("https://vc.ayso1ref.com/$id");
+        $cert = json_decode($json);
+
+        if(empty($cert)) {
+            return $this->mtCerts;
+        }
+
+        if (strpos($cert->FullName, 'Not Found') == false) {
+
+            $aysoID = $cert->AYSOID;
+            $url = CERT_URL . $aysoID;
+
+            if ($this->isUnique) {
+                $aysoID = "=HYPERLINK(\"$url\", \"$aysoID\")";
+            } else {
+                $aysoID = "=HYPERLINK(\"$url\", \"$aysoID**\")";
+            }
+            $certs = array(
+                'AYSOID' => $aysoID,
+                'MY' => $cert->MY,
+                'SAR' => $cert->SAR,
+                'SafeHavenDate' => $cert->SafeHavenDate,
+                'CDCDate' => $cert->CDCDate,
+                'RefCertDesc' => $cert->RefCertDesc,
+                'RefCertDate' => $cert->RefCertDate,
+                'eAYSOName' => $cert->FullName
+            );
+        } else {
+            $certs = $this->mtCerts;
+        }
+
+        return $certs;
     }
 
     /**
@@ -228,7 +342,7 @@ class SchedExportXl extends AbstractExporter
                 $data[] = $row;
             }
 
-            if(!empty($data)) {
+            if (!empty($data)) {
                 $content['FullSchedule']['data'] = $data;
                 $content['FullSchedule']['options']['freezePane'] = 'A2';
                 $content['FullSchedule']['options']['horizontalAlignment'] = ['WS' => 'left'];
@@ -259,7 +373,7 @@ class SchedExportXl extends AbstractExporter
             foreach ($dateDivisions as $dateDivision) {
                 $date = $dateDivision->date;
                 $div = $dateDivision->division;
-                $key = $date . " / " . $div;
+                $key = $date." / ".$div;
 
                 if (!in_array($key, $labels)) {
                     $labels[] = $key;
@@ -274,7 +388,7 @@ class SchedExportXl extends AbstractExporter
                     if (!isset($rows[$assignor])) {
                         $rows[$assignor]['Assignor'] = $assignor;
                     }
-                    $key = $count->date . " / " . $count->division;
+                    $key = $count->date." / ".$count->division;
                     if ($key == $v) {
                         $rows[$assignor][$v] = $count->game_count;
                     } elseif (!isset($rows[$assignor][$v])) {
@@ -289,7 +403,7 @@ class SchedExportXl extends AbstractExporter
 
             usort($data, array($this, "sortOnRep"));
 
-            if(!empty($data)) {
+            if (!empty($data)) {
                 $content['Summary by Date Division']['data'] = $data;
                 $content['Summary by Date Division']['options']['freezePane'] = 'A2';
                 $content['Summary by Date Division']['options']['horizontalAlignment'] = ['WS' => 'center'];
@@ -319,6 +433,33 @@ class SchedExportXl extends AbstractExporter
         }
 
         return ($a[0] < $b[0]) ? -1 : 1;
+    }
+
+
+//    private function curl_get($url, array $get = array(), array $options = array())
+    /**
+     * @param string $url
+     * @param array $options
+     * @return bool|string
+     */
+    private function curl_get($url, array $options = array())
+    {
+        $defaults = array(
+//            CURLOPT_URL => $url.(strpos($url, '?') === false ? '?' : '').http_build_query($get),
+            CURLOPT_URL => $url,
+            CURLOPT_HEADER => 0,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 4
+        );
+
+        $ch = curl_init();
+        curl_setopt_array($ch, ($options + $defaults));
+        if (!$result = curl_exec($ch)) {
+            trigger_error(curl_error($ch));
+        }
+        curl_close($ch);
+
+        return $result;
     }
 
 }

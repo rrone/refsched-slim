@@ -1152,7 +1152,8 @@ class SchedulerRepository
     /**
      * @param $projectKey
      * @param $userName
-     * @return null|string
+     * @return string|null
+     * @throws \Exception
      */
     public function getLastLogon($projectKey, $userName)
     {
@@ -1195,6 +1196,10 @@ class SchedulerRepository
         return $this->getZero($sarRec);
     }
 
+    /**
+     * @param $name
+     * @return array|mixed
+     */
     public function getPersonInfo($name)
     {
         $personRec = $this->db->table('s1_refs')
@@ -1210,6 +1215,10 @@ class SchedulerRepository
         return array();
     }
 
+    /**
+     * @param $obj
+     * @return mixed
+     */
     protected function createArray($obj)
     {
         $arr = $array = json_decode(json_encode($obj), true);

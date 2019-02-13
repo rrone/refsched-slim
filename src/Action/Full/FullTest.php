@@ -8,6 +8,9 @@ use App\Action\Full\SchedFullView;
 
 class FullTest extends AppTestCase
 {
+    /**
+     *
+     */
     public function setUp()
     {
 //     Setup App controller
@@ -22,6 +25,9 @@ class FullTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testFullAsAnonymous()
     {
         // instantiate the view and test it
@@ -53,6 +59,9 @@ class FullTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testFullAsUser()
     {
         // instantiate the view and test it
@@ -88,6 +97,9 @@ class FullTest extends AppTestCase
         $this->assertContains("<a  href=/sched>Go to $user schedule</a>",$view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testFullAsAdmin()
     {
         // instantiate the view and test it
@@ -125,6 +137,9 @@ class FullTest extends AppTestCase
         $this->assertContains("<a  href=/sched>View Assignors</a>",$view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testFullExportAsAnonymous()
     {
         // instantiate the view and test it
@@ -148,6 +163,9 @@ class FullTest extends AppTestCase
         $this->assertEquals('/full', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testFullExportAsUser()
     {
         // instantiate the view and test it
@@ -183,6 +201,9 @@ class FullTest extends AppTestCase
         $this->assertContains('.xlsx', $contentDisposition);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testFullExportAsAdmin()
     {
         // instantiate the view and test it

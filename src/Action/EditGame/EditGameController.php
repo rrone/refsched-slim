@@ -32,7 +32,11 @@ class EditGameController extends AbstractController
         };
 
         if($this->event->archived) {
-            return $response->withRedirect($_SERVER['HTTP_REFERER']);
+            if(isset($_SERVER['HTTP_REFERER'])) {
+                return $response->withRedirect($_SERVER['HTTP_REFERER']);
+            } else {
+                return $response->withRedirect($this->getBaseURL('greetPath'));
+            }
         }
 
         $this->logStamp($request);

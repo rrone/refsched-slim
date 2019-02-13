@@ -6,6 +6,9 @@ use App\Action\AbstractView;
 use App\Action\Refs\SchedRefsDBController;
 use App\Action\Refs\SchedRefsView;
 
+
+ini_set('memory_limit', '1G');
+
 class SchedRefsTest extends AppTestCase
 {
     protected $testUri;

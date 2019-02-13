@@ -76,7 +76,7 @@ class SchedSchedView extends AbstractView
                         $assign[$change[1]] = $this->user->name;
                         break;
                     default:
-                        continue;
+                        break;
                 }
             }
 
