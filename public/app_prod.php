@@ -15,6 +15,8 @@ ini_set("log_errors", 1);
 ini_set("error_log", "syslog");
 
 ini_set('max_input_vars', 5001);
+ini_set('max_input_time', 0);
+ini_set('max_execution_time', 300);
 
 require PROJECT_ROOT . '/vendor/autoload.php';
 
@@ -47,4 +49,8 @@ require PROJECT_ROOT . '/app/middleware.php';
 require PROJECT_ROOT . '/app/routes.php';
 
 // Run!
-$app->run();
+try {
+    $app->run();
+} catch (\Exception $e) {
+
+}

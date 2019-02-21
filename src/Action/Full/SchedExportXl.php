@@ -7,6 +7,8 @@ use App\Action\AbstractExporter;
 use App\Action\SchedulerRepository;
 use Slim\Http\Response;
 use Slim\Http\Request;
+use DateTime;
+use DateTimeZone;
 
 define("CERT_URL", "https://national.ayso.org/Volunteers/ViewCertification?UserName=");
 
@@ -16,6 +18,8 @@ class SchedExportXl extends AbstractExporter
     private $sr;
 
     private $isUnique;
+
+    private $certCheck;
 
     private $outFileName;
     private $user;
@@ -28,6 +32,7 @@ class SchedExportXl extends AbstractExporter
     /**
      * SchedExportXl constructor.
      * @param SchedulerRepository $schedulerRepository
+     * @throws \Exception
      */
     public function __construct(SchedulerRepository $schedulerRepository)
     {
@@ -35,7 +40,12 @@ class SchedExportXl extends AbstractExporter
 
         $this->sr = $schedulerRepository;
 
-        $this->outFileName = 'GameSchedule_'.date('Ymd_His').'.'.$this->getFileExtension();
+        $tz = 'America/Los_Angeles';
+        $timestamp = time();
+        $dt = new DateTime("now", new DateTimeZone($tz)); //first argument "must" be a string
+        $dt->setTimestamp($timestamp); //adjust the object to correct timestamp
+
+        $this->outFileName = 'GameSchedule_'.$dt->format('Ymd_His').'.'.$this->getFileExtension();
 
         $this->mtCerts = array(
             'AYSOID' => '',
@@ -45,10 +55,10 @@ class SchedExportXl extends AbstractExporter
             'CDCDate' => '',
             'RefCertDesc' => '',
             'RefCertDate' => '',
-            'eAYSOName' => ''
+            'eAYSOName' => '',
         );
 
-        set_time_limit(0);
+//        set_time_limit(0);
     }
 
     /**
@@ -61,6 +71,7 @@ class SchedExportXl extends AbstractExporter
     {
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
+        $this->certCheck = $request->getQueryParam('certCheck') == 'on';
 
         // generate the response
         $response = $response->withHeader('Content-Type', $this->contentType);
@@ -139,11 +150,11 @@ class SchedExportXl extends AbstractExporter
                     'CDC Date',
                     'Ref Cert Desc',
                     'Ref Cert Date',
-                    'eAYSO Name'
+                    'eAYSO Name',
                 );
 
                 $labels = [];
-                if ($this->user->admin) {
+                if ($this->user->admin && $this->certCheck) {
                     $labels = $adminLabels;
                 }
                 foreach ($game as $hdr => $val) {
@@ -172,7 +183,7 @@ class SchedExportXl extends AbstractExporter
                 foreach ($games as $game) {
                     if (!empty($game)) {
                         $arrGame = json_decode(json_encode($game), true);
-                        if ($this->user->admin) {
+                        if ($this->user->admin && $this->certCheck) {
                             $personRec = $this->sr->getPersonInfo($game->name);
                             $id = 0;
                             $this->isUnique = count($personRec) == 1;
@@ -206,7 +217,6 @@ class SchedExportXl extends AbstractExporter
                     }
                 }
 
-
                 if (!empty($data)) {
                     $content['Referee Match Count']['data'] = $data;
                     if ($this->user->admin) {
@@ -227,19 +237,23 @@ class SchedExportXl extends AbstractExporter
      * @param $id
      * @return array
      */
-    private function getCerts($id)
+    private function getCerts($id = null)
     {
+        if(is_null($id)) {
+            return array();
+        }
+
         $json = $this->curl_get("https://vc.ayso1ref.com/$id");
         $cert = json_decode($json);
 
-        if(empty($cert)) {
+        if (empty($cert)) {
             return $this->mtCerts;
         }
 
         if (strpos($cert->FullName, 'Not Found') == false) {
 
             $aysoID = $cert->AYSOID;
-            $url = CERT_URL . $aysoID;
+            $url = CERT_URL.$aysoID;
 
             if ($this->isUnique) {
                 $aysoID = "=HYPERLINK(\"$url\", \"$aysoID\")";
@@ -254,7 +268,7 @@ class SchedExportXl extends AbstractExporter
                 'CDCDate' => $cert->CDCDate,
                 'RefCertDesc' => $cert->RefCertDesc,
                 'RefCertDate' => $cert->RefCertDate,
-                'eAYSOName' => $cert->FullName
+                'eAYSOName' => $cert->FullName,
             );
         } else {
             $certs = $this->mtCerts;
@@ -437,6 +451,7 @@ class SchedExportXl extends AbstractExporter
 
 
 //    private function curl_get($url, array $get = array(), array $options = array())
+
     /**
      * @param string $url
      * @param array $options
@@ -449,7 +464,8 @@ class SchedExportXl extends AbstractExporter
             CURLOPT_URL => $url,
             CURLOPT_HEADER => 0,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 4
+            CURLOPT_TIMEOUT => 900,
+            CURLOPT_FAILONERROR => true,
         );
 
         $ch = curl_init();

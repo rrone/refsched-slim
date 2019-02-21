@@ -823,7 +823,7 @@ class SchedulerRepository
 
         $id = isset($data['id']) ? $data['id'] : null;
 
-        if(is_null($id)) {
+        if (is_null($id)) {
             array_shift($data);
         }
 
@@ -1202,11 +1202,23 @@ class SchedulerRepository
      */
     public function getPersonInfo($name)
     {
-        $personRec = $this->db->table('s1_refs')
-            ->select('s1_refs.*', 'refNicknames.Nickname')
-            ->join('refNicknames', 'refNicknames.AYSOID', '=', 's1_refs.AYSOID')
+        $s1Refs = $this->createArray(
+            $this->db->table('s1_refs')
+                ->select('s1_refs.*', 'refNicknames.Nickname')
+                ->join('refNicknames', 'refNicknames.AYSOID', '=', 's1_refs.AYSOID')
+                ->where('Nickname', 'like', "%$name%")
+                ->get()
+        );
+
+        $s1NoCerts = $this->createArray(
+            $this->db->table('s1_ref_no_certs')
+            ->select('s1_ref_no_certs.*', 'refNicknames.Nickname')
+            ->join('refNicknames', 'refNicknames.AYSOID', '=', 's1_ref_no_certs.AYSOID')
             ->where('Nickname', 'like', "%$name%")
-            ->get();
+            ->get()
+        );
+
+        $personRec = array_merge($s1Refs, $s1NoCerts);
 
         if (count($personRec)) {
             return $this->createArray($personRec);
