@@ -2,7 +2,7 @@
 ## Exit immediately if a command exits with a non-zero status.
 set -e
 #set distribution folder alias
-dist="$HOME"/GoogleDrive-rick.roberts.9/ayso/s1/web/ayso1ref/services/refsched
+dist="$HOME"/GoogleDrive-rick.roberts.9/ayso/s1/web/ayso1ref/services/rs
 config="$HOME"/Sites/AYSO/refsched/config
 PHP=/usr/local/etc/php/7.3/conf.d
 

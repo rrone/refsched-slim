@@ -73,6 +73,8 @@ class SchedExportXl extends AbstractExporter
         $this->event = $request->getAttribute('event');
         $this->certCheck = $request->getQueryParam('certCheck') == 'on';
 
+        $this->outFileName = $this->certCheck ? 'CertCheck.'.$this->outFileName : $this->outFileName;
+
         // generate the response
         $response = $response->withHeader('Content-Type', $this->contentType);
         $response = $response->withHeader('Content-Disposition', 'attachment; filename='.$this->outFileName);
@@ -239,7 +241,7 @@ class SchedExportXl extends AbstractExporter
      */
     private function getCerts($id = null)
     {
-        if(is_null($id)) {
+        if (is_null($id)) {
             return array();
         }
 
