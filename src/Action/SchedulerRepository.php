@@ -1202,11 +1202,15 @@ class SchedulerRepository
      */
     public function getPersonInfo($name)
     {
+        if($name == 'Forfeit'){
+            return array();
+        }
+
         $s1Refs = $this->createArray(
             $this->db->table('s1_refs')
                 ->select('s1_refs.*', 'refNicknames.Nickname')
                 ->join('refNicknames', 'refNicknames.AYSOID', '=', 's1_refs.AYSOID')
-                ->where('Nickname', 'like', "%$name%")
+                ->where('Nickname', 'like', "$name")
                 ->get()
         );
 
@@ -1214,7 +1218,7 @@ class SchedulerRepository
             $this->db->table('s1_ref_no_certs')
             ->select('s1_ref_no_certs.*', 'refNicknames.Nickname')
             ->join('refNicknames', 'refNicknames.AYSOID', '=', 's1_ref_no_certs.AYSOID')
-            ->where('Nickname', 'like', "%$name%")
+            ->where('Nickname', 'like', "$name")
             ->get()
         );
 

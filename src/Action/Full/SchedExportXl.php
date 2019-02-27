@@ -185,7 +185,7 @@ class SchedExportXl extends AbstractExporter
                 foreach ($games as $game) {
                     if (!empty($game)) {
                         $arrGame = json_decode(json_encode($game), true);
-                        if ($this->user->admin && $this->certCheck) {
+                        if ($this->user->admin && $this->certCheck && $game->name != 'Forfeit') {
                             $personRec = $this->sr->getPersonInfo($game->name);
                             $id = 0;
                             $this->isUnique = count($personRec) == 1;
@@ -203,6 +203,8 @@ class SchedExportXl extends AbstractExporter
                                     if (strpos($rec['SAR'], $assignor) > -1) {
                                         $id = $rec['AYSOID'];
                                         continue;
+                                    } else {
+                                        $id = $personRec[0]['AYSOID'];
                                     }
                                 }
                             }
@@ -214,7 +216,10 @@ class SchedExportXl extends AbstractExporter
                             );
 
                         } else {
-                            $data[] = $arrGame;
+                            $data[] = array_merge(
+                                $this->mtCerts,
+                                $arrGame
+                            );
                         }
                     }
                 }
