@@ -3,7 +3,7 @@ namespace Tests;
 
 use App\Action\AbstractController;
 use App\Action\AbstractView;
-use App\Action\Full\SchedFullDBController;
+use App\Action\Full\SchedFullController;
 use App\Action\Full\SchedFullView;
 
 class FullTest extends AppTestCase
@@ -37,7 +37,7 @@ class FullTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedFullDBController($this->c, $view);
+        $controller = new SchedFullController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -71,7 +71,7 @@ class FullTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedFullDBController($this->c, $view);
+        $controller = new SchedFullController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -109,7 +109,7 @@ class FullTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedFullDBController($this->c, $view);
+        $controller = new SchedFullController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -149,7 +149,7 @@ class FullTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedFullDBController($this->c, $view);
+        $controller = new SchedFullController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -175,7 +175,7 @@ class FullTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedFullDBController($this->c, $view);
+        $controller = new SchedFullController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -213,7 +213,7 @@ class FullTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedFullDBController($this->c, $view);
+        $controller = new SchedFullController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it

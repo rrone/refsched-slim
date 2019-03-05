@@ -21,6 +21,12 @@ class SchedMasterView extends AbstractView
     private $description;
     private $games;
 
+    /**
+     * SchedMasterView constructor.
+     * @param Container $container
+     * @param SchedulerRepository $schedulerRepository
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
         parent::__construct($container, $schedulerRepository);
@@ -31,6 +37,10 @@ class SchedMasterView extends AbstractView
 
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
@@ -49,6 +59,10 @@ class SchedMasterView extends AbstractView
         }
     }
 
+    /**
+     * @param Response $response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function render(Response &$response)
     {
         $content = array(
@@ -65,6 +79,10 @@ class SchedMasterView extends AbstractView
         $this->view->render($response, 'sched.html.twig', $content);
     }
 
+    /**
+     * @return string|null
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     private function renderView()
     {
         $html = null;
@@ -191,6 +209,10 @@ class SchedMasterView extends AbstractView
 
     }
 
+    /**
+     * @return string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     private function menu()
     {
         $unassigned = $this->sr->getUnassignedGames($this->event->projectKey);

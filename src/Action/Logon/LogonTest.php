@@ -3,7 +3,7 @@ namespace Tests;
 
 use App\Action\AbstractController;
 use App\Action\AbstractView;
-use App\Action\Logon\LogonDBController;
+use App\Action\Logon\LogonController;
 use App\Action\Logon\LogonView;
 
 class LogonTest extends AppTestCase
@@ -12,6 +12,9 @@ class LogonTest extends AppTestCase
     protected $userName;
     protected $passwd;
 
+    /**
+     *
+     */
     public function setUp()
     {
 //     Setup App controller
@@ -19,6 +22,9 @@ class LogonTest extends AppTestCase
         $this->client = new AppWebTestClient($this->app);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testRoot()
     {
         // instantiate the view and test it
@@ -28,7 +34,7 @@ class LogonTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new LogonDBController($this->c, $view);
+        $controller = new LogonController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         $view = $this->client->get('/');
@@ -36,6 +42,9 @@ class LogonTest extends AppTestCase
         $this->assertContains('<h1>Section 1 Event Schedule</h1>', $view);
     }
 
+    /**
+     *
+     */
     public function testLogonAsUser()
     {
         $this->eventLabel = $this->config['user_test']['event'];
@@ -65,6 +74,9 @@ class LogonTest extends AppTestCase
         $this->assertContains("<h3 class=\"center\">Welcome $this->userName Assignor</h3>", $view);
     }
 
+    /**
+     *
+     */
     public function testLogonAsUserWithBadPW()
     {
         $this->eventLabel = $this->config['user_test']['event'];
@@ -90,6 +102,9 @@ class LogonTest extends AppTestCase
     }
 
 
+    /**
+     *
+     */
     public function testLogonAsAdmin()
     {
         $this->eventLabel = $this->config['admin_test']['event'];
@@ -120,6 +135,9 @@ class LogonTest extends AppTestCase
 
     }
 
+    /**
+     *
+     */
     public function testLogonAsDeveloper()
     {
         $this->eventLabel = $this->config['dev_test']['event'];

@@ -3,7 +3,7 @@ namespace Tests;
 
 use App\Action\AbstractController;
 use App\Action\AbstractView;
-use App\Action\Greet\SchedGreetDBController;
+use App\Action\Greet\SchedGreetController;
 use App\Action\Greet\GreetView;
 
 class SchedGreetTest extends AppTestCase
@@ -34,7 +34,7 @@ class SchedGreetTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedGreetDBController($this->c, $view);
+        $controller = new SchedGreetController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -58,7 +58,7 @@ class SchedGreetTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedGreetDBController($this->c, $view);
+        $controller = new SchedGreetController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -88,7 +88,7 @@ class SchedGreetTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedGreetDBController($this->c, $view);
+        $controller = new SchedGreetController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it

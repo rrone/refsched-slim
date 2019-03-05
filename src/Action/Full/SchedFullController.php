@@ -1,20 +1,21 @@
 <?php
-namespace App\Action\Lock;
+namespace App\Action\Full;
 
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractController;
 
-class SchedLockDBController extends AbstractController
+class SchedFullController extends AbstractController
 {
-    private $lulView;
+    /* @var SchedFullView */
+    private $fullView;
 
-    public function __construct(Container $container, SchedLockView $lockView)
+    public function __construct(Container $container, SchedFullView $fullView)
     {
         parent::__construct($container);
 
-        $this->lulView = $lockView;
+        $this->fullView = $fullView;
     }
 
     /**
@@ -26,23 +27,23 @@ class SchedLockDBController extends AbstractController
      */
     public function __invoke(Request $request, Response $response, $args)
     {
-        if(!$this->isAuthorized() || !$this->user->admin) {
-            return $response->withRedirect($this->getBaseURL('greetPath'));
+        if(!$this->isAuthorized()) {
+            return $response->withRedirect($this->getBaseURL('logonPath'));
         };
 
         $this->logStamp($request);
 
         $request = $request->withAttributes([
             'user' => $this->user,
-            'event' => $this->event,
-            'lock' => true
+            'event' => $this->event
         ]);
 
-        $this->lulView->handler($request, $response);
-        $this->lulView->render($response);
+        $this->fullView->handler($request, $response);
+        $this->fullView->render($response);
 
-        return $response->withRedirect($this->getBaseURL('greetPath'));
+        return $response;
     }
+
 }
 
 

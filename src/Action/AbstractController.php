@@ -79,6 +79,7 @@ abstract class AbstractController
         if (!is_null($event)) {
             $sr = $this->container['sr'];
 
+            /** @var array $enabledEvents */
             $enabledEvents = array_values((array)$sr->getEnabledEvents())[0];
 
             if (in_array($this->event, $enabledEvents)) {

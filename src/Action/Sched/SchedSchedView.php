@@ -28,6 +28,12 @@ class SchedSchedView extends AbstractView
     private $num_unassigned;
     private $atlimit;
 
+    /**
+     * SchedSchedView constructor.
+     * @param Container $container
+     * @param SchedulerRepository $schedulerRepository
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
         parent::__construct($container, $schedulerRepository);
@@ -39,6 +45,11 @@ class SchedSchedView extends AbstractView
 
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return null
+     */
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
@@ -193,8 +204,8 @@ class SchedSchedView extends AbstractView
     }
 
     /**
-     * @return null|string
-     * @throws \Interop\Container\Exception\ContainerException
+     * @return string|null
+     * @throws \Interop\Container\Exception\ContainerException|\Exception
      */
     private function renderView()
     {
@@ -305,6 +316,9 @@ class SchedSchedView extends AbstractView
     }
 
 
+    /**
+     * @return string|null
+     */
     private function renderUserStatus()
     {
         $html = null;
@@ -389,6 +403,9 @@ class SchedSchedView extends AbstractView
         return $html;
     }
 
+    /**
+     * @return string|null
+     */
     private function renderAvailableGames()
     {
         $html = null;
@@ -510,6 +527,11 @@ class SchedSchedView extends AbstractView
         return $html;
     }
 
+    /**
+     * @param $assignor
+     * @return string|null
+     * @throws \Exception
+     */
     private function renderAssignmentByArea(
         $assignor
     ) {

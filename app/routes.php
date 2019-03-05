@@ -5,16 +5,16 @@ $container = $app->getContainer();
 
 //Request::setTrustedProxies(array('127.0.0.1'));
 
-$app->map(['GET', 'POST'], '/', App\Action\Logon\LogonDBController::class)
+$app->map(['GET', 'POST'], '/', App\Action\Logon\LogonController::class)
     ->setName('logon');
 $container['logonPath'] = $container->get('router')->pathFor('logon');
 
-$app->map(['GET', 'POST'], '/logon', App\Action\Logon\LogonDBController::class);
+$app->map(['GET', 'POST'], '/logon', App\Action\Logon\LogonController::class);
 $app->map(['GET', 'POST'], '/logon/users', App\Action\Logon\LogonUsersController::class)
     ->setName('logonUsers');
 $container['logonUsersPath'] = $container->get('router')->pathFor('logonUsers');
 
-$app->map(['GET', 'POST'], '/editref', App\Action\EditRef\SchedEditRefDBController::class)
+$app->map(['GET', 'POST'], '/editref', App\Action\EditRef\SchedEditRefController::class)
     ->setName('editref');
 $container['editrefPath'] = $container->get('router')->pathFor('editref');
 
@@ -22,31 +22,31 @@ $app->map(['GET', 'POST'], '/end', App\Action\End\SchedEndController::class)
     ->setName('end');
 $container['endPath'] = $container->get('router')->pathFor('end');
 
-$app->map(['GET', 'POST'], '/full', App\Action\Full\SchedFullDBController::class)
+$app->map(['GET', 'POST'], '/full', App\Action\Full\SchedFullController::class)
     ->setName('full');
 $container['fullPath'] = $container->get('router')->pathFor('full');
 
-$app->map(['GET', 'POST'], '/greet', App\Action\Greet\SchedGreetDBController::class)
+$app->map(['GET', 'POST'], '/greet', App\Action\Greet\SchedGreetController::class)
     ->setName('greet');
 $container['greetPath'] = $container->get('router')->pathFor('greet');
 
-$app->map(['GET', 'POST'], '/lock', App\Action\Lock\SchedLockDBController::class)
+$app->map(['GET', 'POST'], '/lock', App\Action\Lock\SchedLockController::class)
     ->setName('lock');
 $container['lockPath'] = $container->get('router')->pathFor('lock');
 
-$app->map(['GET', 'POST'], '/unlock', App\Action\Lock\SchedUnlockDBController::class)
+$app->map(['GET', 'POST'], '/unlock', App\Action\Lock\SchedUnlockController::class)
     ->setName('unlock');
 $container['unlockPath'] = $container->get('router')->pathFor('unlock');
 
-$app->map(['GET', 'POST'], '/refs', App\Action\Refs\SchedRefsDBController::class)
+$app->map(['GET', 'POST'], '/refs', App\Action\Refs\SchedRefsController::class)
     ->setName('refs');
 $container['refsPath'] = $container->get('router')->pathFor('refs');
 
-$app->map(['GET', 'POST'], '/master', App\Action\Master\SchedMasterDBController::class)
+$app->map(['GET', 'POST'], '/master', App\Action\Master\SchedMasterController::class)
     ->setName('master');
 $container['masterPath'] = $container->get('router')->pathFor('master');
 
-$app->map(['GET', 'POST'], '/sched', App\Action\Sched\SchedSchedDBController::class)
+$app->map(['GET', 'POST'], '/sched', App\Action\Sched\SchedSchedController::class)
     ->setName('sched');
 $container['schedPath'] = $container->get('router')->pathFor('sched');
 

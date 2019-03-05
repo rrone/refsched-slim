@@ -1,21 +1,20 @@
 <?php
-namespace App\Action\Master;
+namespace App\Action\Lock;
 
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractController;
 
-class SchedMasterDBController extends AbstractController
+class SchedUnlockController extends AbstractController
 {
-    private $masterView;
+    private $lulView;
 
-	public function __construct(Container $container, SchedMasterView $masterView) {
-		
-		parent::__construct($container);
-        
-        $this->masterView = $masterView;
+    public function __construct(Container $container, SchedLockView $lockView)
+    {
+        parent::__construct($container);
 
+        $this->lulView = $lockView;
     }
 
     /**
@@ -35,13 +34,14 @@ class SchedMasterDBController extends AbstractController
 
         $request = $request->withAttributes([
             'user' => $this->user,
-            'event' => $this->event
+            'event' => $this->event,
+            'unlock' => true
         ]);
 
-        $this->masterView->handler($request, $response);
-        $this->masterView->render($response);
+        $this->lulView->handler($request, $response);
+        $this->lulView->render($response);
 
-        return $response;
+        return $response->withRedirect($this->getBaseURL('greetPath'));
     }
 }
 

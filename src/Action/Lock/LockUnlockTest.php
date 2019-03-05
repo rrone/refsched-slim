@@ -3,12 +3,15 @@ namespace Tests;
 
 use App\Action\AbstractController;
 use App\Action\AbstractView;
-use App\Action\Lock\SchedLockDBController;
-use App\Action\Lock\SchedUnlockDBController;
+use App\Action\Lock\SchedLockController;
+use App\Action\Lock\SchedUnlockController;
 use App\Action\Lock\SchedLockView;
 
 class LockUnlockTest extends AppTestCase
 {
+    /**
+     *
+     */
     public function setUp()
     {
 //     Setup App controller
@@ -18,6 +21,9 @@ class LockUnlockTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testLockAsAdmin()
     {
         // instantiate the view
@@ -26,7 +32,7 @@ class LockUnlockTest extends AppTestCase
 
         // instantiate the Unlock controller & test it
 
-        $controller = new SchedLockDBController($this->c, $view);
+        $controller = new SchedLockController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the unlock controller action as unauthorized and test it
@@ -64,6 +70,9 @@ class LockUnlockTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testUnlockAsUser()
     {
         // instantiate the view
@@ -73,7 +82,7 @@ class LockUnlockTest extends AppTestCase
 
         // instantiate the Lock controller & test it
 
-        $controller = new SchedUnlockDBController($this->c, $view);
+        $controller = new SchedUnlockController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the lock controller action as authorized user and test it
@@ -106,6 +115,9 @@ class LockUnlockTest extends AppTestCase
         $this->assertContains("<h3 class=\"center\">The schedule is presently <span style=\"color:#CC0000\">locked</span>", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testUnlockAsAdmin()
     {
         // instantiate the view
@@ -114,7 +126,7 @@ class LockUnlockTest extends AppTestCase
 
         // instantiate the Unlock controller & test it
 
-        $controller = new SchedUnlockDBController($this->c, $view);
+        $controller = new SchedUnlockController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the unlock controller action as authorized admin and test it
@@ -152,6 +164,9 @@ class LockUnlockTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testLockAsUser()
     {
         // instantiate the view
@@ -161,7 +176,7 @@ class LockUnlockTest extends AppTestCase
 
         // instantiate the Lock controller & test it
 
-        $controller = new SchedLockDBController($this->c, $view);
+        $controller = new SchedLockController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the lock controller action as authorized user and test it
@@ -188,6 +203,9 @@ class LockUnlockTest extends AppTestCase
         $this->assertContains("<h3 class=\"center\">The schedule is presently <span style=\"color:#02C902\">unlocked</span>", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testLockAsAnonymous()
     {
         // instantiate the view
@@ -197,7 +215,7 @@ class LockUnlockTest extends AppTestCase
 
         // instantiate the Lock controller & test it
 
-        $controller = new SchedLockDBController($this->c, $view);
+        $controller = new SchedLockController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the lock controller action as unauthorized and test it
@@ -221,6 +239,9 @@ class LockUnlockTest extends AppTestCase
         $this->assertEquals('/', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testUnlockAsAnonymous()
     {
         // instantiate the view
@@ -230,7 +251,7 @@ class LockUnlockTest extends AppTestCase
 
         // instantiate the Lock controller & test it
 
-        $controller = new SchedLockDBController($this->c, $view);
+        $controller = new SchedLockController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the lock controller action as unauthorized and test it

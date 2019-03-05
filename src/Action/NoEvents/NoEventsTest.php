@@ -9,6 +9,9 @@ use App\Action\AbstractView;
 
 class NoEventsTest extends AppTestCase
 {
+    /**
+     *
+     */
     public function setUp()
     {
 //     Setup App controller
@@ -23,6 +26,9 @@ class NoEventsTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testNoEventsAsAnonymous()
     {
         // instantiate the view and test it

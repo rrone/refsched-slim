@@ -2,7 +2,6 @@
 namespace App\Action\SAR;
 
 use App\Action\SchedulerRepository;
-use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -10,7 +9,7 @@ final class SARAction
 {
     private $sr;
 
-    public function __construct(Container $container, SchedulerRepository $sr)
+    public function __construct(SchedulerRepository $sr)
     {
         $this->sr = $sr;
     }

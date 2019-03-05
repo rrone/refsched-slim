@@ -1,22 +1,20 @@
 <?php
-namespace App\Action\Greet;
+namespace App\Action\Lock;
 
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractController;
 
-class SchedGreetDBController extends AbstractController
+class SchedLockController extends AbstractController
 {
-    /* @var GreetView */
-    private $greetView;
+    private $lulView;
 
-    public function __construct(Container $container, GreetView $greetView)
+    public function __construct(Container $container, SchedLockView $lockView)
     {
         parent::__construct($container);
 
-        $this->greetView = $greetView;
-
+        $this->lulView = $lockView;
     }
 
     /**
@@ -28,21 +26,22 @@ class SchedGreetDBController extends AbstractController
      */
     public function __invoke(Request $request, Response $response, $args)
     {
-        if(!$this->isAuthorized()) {
-            return $response->withRedirect($this->getBaseURL('logonPath'));
+        if(!$this->isAuthorized() || !$this->user->admin) {
+            return $response->withRedirect($this->getBaseURL('greetPath'));
         };
 
         $this->logStamp($request);
 
         $request = $request->withAttributes([
             'user' => $this->user,
-            'event' => $this->event
+            'event' => $this->event,
+            'lock' => true
         ]);
 
-        $this->greetView->handler($request, $response);
-        $this->greetView->render($response);
+        $this->lulView->handler($request, $response);
+        $this->lulView->render($response);
 
-        return $response;
+        return $response->withRedirect($this->getBaseURL('greetPath'));
     }
 }
 

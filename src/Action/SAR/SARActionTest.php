@@ -28,7 +28,7 @@ class SARActionTest extends AppTestCase
     {
         // instantiate the action
 
-        $controller = new SARAction($this->c, $this->sr);
+        $controller = new SARAction($this->sr);
         $this->assertFalse($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -43,7 +43,7 @@ class SARActionTest extends AppTestCase
     {
         // instantiate the action
 
-        $controller = new SARAction($this->c, $this->sr);
+        $controller = new SARAction($this->sr);
         $this->assertFalse($controller instanceof AbstractController);
 
         $user = $this->config['user_test']['user'];
@@ -67,7 +67,7 @@ class SARActionTest extends AppTestCase
     {
         // instantiate the action
 
-        $controller = new SARAction($this->c, $this->sr);
+        $controller = new SARAction($this->sr);
         $this->assertFalse($controller instanceof AbstractController);
 
         $user = $this->config['admin_test']['user'];

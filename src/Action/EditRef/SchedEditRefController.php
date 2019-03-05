@@ -6,7 +6,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractController;
 
-class SchedEditRefDBController extends AbstractController
+class SchedEditRefController extends AbstractController
 {
     /* @var SchedEditRefView */
     private $schedEditRefView;

@@ -39,11 +39,20 @@ class AppTestCase extends WebTestCase
      */
     protected $c;
 
+    /**
+     * @var \FullNameParser
+     */
+    protected $p;
+
     /* @var \Tests\AppWebTestClient */
     protected $client;
 
     private $cookies = array();
 
+    /**
+     * @return App
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function getSlimInstance() {
 
         $this->config = include(PROJECT_ROOT . '/config/config.php');
@@ -72,14 +81,24 @@ class AppTestCase extends WebTestCase
 // Register routes
         require PROJECT_ROOT . '/app/routes.php';
 
+        /** @var Container c */
         $this->c = $app->getContainer();
 
+        $this->p = $this->c->get('p');
         $this->sr = new SchedulerRepository($this->c->get('db'));
+
         $app->getContainer()['settings.test'] = true;
 
         return $app;
     }
 
+    /**
+     * @param $method
+     * @param $path
+     * @param array $data
+     * @param array $optionalHeaders
+     * @return Request
+     */
     protected function request($method, $path, $data = array(), $optionalHeaders = array())
     {
         //Make method uppercase
@@ -112,6 +131,10 @@ class AppTestCase extends WebTestCase
         return new Request($method, $uri, $headers, $cookies, $serverParams, $body);
     }
 
+    /**
+     * @param $name
+     * @param $value
+     */
     protected function setCookie($name, $value)
     {
         $this->cookies[$name] = $value;

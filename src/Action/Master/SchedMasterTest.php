@@ -3,7 +3,7 @@ namespace Tests;
 
 use App\Action\AbstractController;
 use App\Action\AbstractView;
-use App\Action\Master\SchedMasterDBController;
+use App\Action\Master\SchedMasterController;
 use App\Action\Master\SchedMasterView;
 
 class SchedMasterTest extends AppTestCase
@@ -38,7 +38,7 @@ class SchedMasterTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedMasterDBController($this->c, $view);
+        $controller = new SchedMasterController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -62,7 +62,7 @@ class SchedMasterTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedMasterDBController($this->c, $view);
+        $controller = new SchedMasterController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -95,7 +95,7 @@ class SchedMasterTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedMasterDBController($this->c, $view);
+        $controller = new SchedMasterController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -128,7 +128,7 @@ class SchedMasterTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedMasterDBController($this->c, $view);
+        $controller = new SchedMasterController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it

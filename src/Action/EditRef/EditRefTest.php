@@ -1,7 +1,7 @@
 <?php
 namespace Tests;
 
-use App\Action\EditRef\SchedEditRefDBController;
+use App\Action\EditRef\SchedEditRefController;
 use App\Action\EditRef\SchedEditRefView;
 use App\Action\AbstractController;
 use App\Action\AbstractView;
@@ -25,16 +25,19 @@ class EditRefTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testEditRefAsAnonymous()
     {
         // instantiate the view and test it
 
-        $view = new SchedEditRefView($this->c, $this->sr);
+        $view = new SchedEditRefView($this->c, $this->sr, $this->p);
         $this->assertTrue($view instanceof AbstractView);
 
         // instantiate the controller
 
-        $controller = new SchedEditRefDBController($this->c, $view);
+        $controller = new SchedEditRefController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -48,16 +51,19 @@ class EditRefTest extends AppTestCase
         $this->assertEquals('/', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testEditRefAsUser()
     {
         // instantiate the view and test it
 
-        $view = new SchedEditRefView($this->c, $this->sr);
+        $view = new SchedEditRefView($this->c, $this->sr, $this->p);
         $this->assertTrue($view instanceof AbstractView);
 
         // instantiate the controller
 
-        $controller = new SchedEditRefDBController($this->c, $view);
+        $controller = new SchedEditRefController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -115,7 +121,7 @@ class EditRefTest extends AppTestCase
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<td>Crfirst Last</td><td>Ar1first Last</td><td>Ar2first Last</td>", $view);
+        $this->assertContains("<td>CRFirst Last</td><td>AR1FIRST Last</td><td>AR2First Last</td>", $view);
 
         //clear edit names
         $url = '/editref';
@@ -130,16 +136,19 @@ class EditRefTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testEditRefAsAdmin()
     {
         // instantiate the view and test it
 
-        $view = new SchedEditRefView($this->c, $this->sr);
+        $view = new SchedEditRefView($this->c, $this->sr, $this->p);
         $this->assertTrue($view instanceof AbstractView);
 
         // instantiate the controller
 
-        $controller = new SchedEditRefDBController($this->c, $view);
+        $controller = new SchedEditRefController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -209,16 +218,19 @@ class EditRefTest extends AppTestCase
         $this->client->post($url, $body, $headers);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testEditRefBadGameID()
     {
         // instantiate the view and test it
 
-        $view = new SchedEditRefView($this->c, $this->sr);
+        $view = new SchedEditRefView($this->c, $this->sr, $this->p);
         $this->assertTrue($view instanceof AbstractView);
 
         // instantiate the controller
 
-        $controller = new SchedEditRefDBController($this->c, $view);
+        $controller = new SchedEditRefController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it

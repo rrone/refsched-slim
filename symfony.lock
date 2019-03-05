@@ -11,6 +11,9 @@
     "doctrine/instantiator": {
         "version": "1.1.0"
     },
+    "joshfraser/php-name-parser": {
+        "version": "dev-master"
+    },
     "markbaker/matrix": {
         "version": "1.1.4"
     },

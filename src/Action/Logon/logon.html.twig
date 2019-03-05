@@ -34,7 +34,7 @@
         });
 
         $("#event").change(function () {
-            var label = $("#event").find("option:selected").val().replace(/ /g, '_');
+            let label = $("#event").find("option:selected").val().replace(/ /g, '_');
 
             $("#user").load("{{ users }}?" + label);
         });

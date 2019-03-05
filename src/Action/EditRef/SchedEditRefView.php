@@ -6,6 +6,7 @@ use App\Action\SchedulerRepository;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractView;
+use FullNameParser;
 
 class SchedEditRefView extends AbstractView
 {
@@ -14,13 +15,27 @@ class SchedEditRefView extends AbstractView
     private $show_medal_round;
     private $show_medal_round_divisions;
 
-    public function __construct(Container $container, SchedulerRepository $schedulerRepository)
+    private $parser;
+
+    /**
+     * SchedEditRefView constructor.
+     * @param Container $container
+     * @param SchedulerRepository $schedulerRepository
+     * @param FullNameParser $parser
+     * @throws \Interop\Container\Exception\ContainerException
+     */
+    public function __construct(Container $container, SchedulerRepository $schedulerRepository, FullNameParser $parser)
     {
         parent::__construct($container, $schedulerRepository);
 
         $this->sr = $schedulerRepository;
+        $this->parser = $parser;
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
@@ -64,6 +79,10 @@ class SchedEditRefView extends AbstractView
         }
     }
 
+    /**
+     * @param Response $response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function render(Response &$response)
     {
         $content = array(
@@ -82,11 +101,18 @@ class SchedEditRefView extends AbstractView
         $this->view->render($response, 'sched.html.twig', $content);
     }
 
+    /**
+     * @return mixed
+     */
     public function isPost()
     {
         return $this->isPost;
     }
 
+    /**
+     * @return string|null
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     private function renderEditRef()
     {
         $html = null;
@@ -191,6 +217,10 @@ class SchedEditRefView extends AbstractView
         return $html;
     }
 
+    /**
+     * @return string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     private function menu()
     {
         $html = "<h3 class=\"center h3-btn\">";
@@ -213,41 +243,30 @@ class SchedEditRefView extends AbstractView
         return $html;
     }
 
+    /**
+     * @param $name
+     * @return string
+     */
     private function stdName($name)
     {
-        $nameOut = '';
+        $nameIn = '';
 
         //deal with Last, First
         if (strpos($name, ',')) {
             $tempName = explode(',', $name);
             foreach ($tempName as $k => $item) {
                 if ($k > 0) {
-                    $nameOut .= $item . ' ';
+                    $nameIn .= $item . ' ';
                 }
             }
-            $nameOut .= $tempName[0];
+            $nameIn .= $tempName[0];
         } else {
-            $nameOut = $name;
+            $nameIn = $name;
         }
 
         //propercase
-        $tempName = explode(' ', strtolower($nameOut));
-
-        $prefixs = ['Mc', 'Von', "O'", '-', 'Di', "D'"];
-        $nameOut = '';
-        foreach ($tempName as $item) {
-            $item = ucfirst($item);
-            foreach ($prefixs as $prefix) {
-                $pos = strpos($item, $prefix);
-                if ($pos > -1) {
-                    $pos += strlen($prefix);
-                    if (isset($item[$pos])) {
-                        $item[$pos] = strtoupper($item[$pos]);
-                    }
-                }
-            }
-            $nameOut .= $item . ' ';
-        }
+        $nameOut = (object) $this->parser->parse_name($nameIn);
+        $nameOut = $nameOut->fname . ' ' . $nameOut->lname . ' '. $nameOut->suffix;
 
         return trim($nameOut);
     }

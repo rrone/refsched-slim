@@ -1,20 +1,21 @@
 <?php
-namespace App\Action\Sched;
+namespace App\Action\Master;
 
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractController;
 
-class SchedSchedDBController extends AbstractController
+class SchedMasterController extends AbstractController
 {
-    private $schedSchedView;
+    private $masterView;
 
-    public function __construct(Container $container, SchedSchedView $schedSchedView) {
+	public function __construct(Container $container, SchedMasterView $masterView) {
 		
 		parent::__construct($container);
+        
+        $this->masterView = $masterView;
 
-        $this->schedSchedView = $schedSchedView;
     }
 
     /**
@@ -26,8 +27,8 @@ class SchedSchedDBController extends AbstractController
      */
     public function __invoke(Request $request, Response $response, $args)
     {
-        if(!$this->isAuthorized()) {
-            return $response->withRedirect($this->getBaseURL('logonPath'));
+        if(!$this->isAuthorized() || !$this->user->admin) {
+            return $response->withRedirect($this->getBaseURL('greetPath'));
         };
 
         $this->logStamp($request);
@@ -37,10 +38,11 @@ class SchedSchedDBController extends AbstractController
             'event' => $this->event
         ]);
 
-        $this->schedSchedView->handler($request, $response);
-        $this->schedSchedView->render($response);
+        $this->masterView->handler($request, $response);
+        $this->masterView->render($response);
 
         return $response;
-
     }
 }
+
+

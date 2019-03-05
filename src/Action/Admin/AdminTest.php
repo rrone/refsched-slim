@@ -21,6 +21,9 @@ class AdminTest extends AppTestCase
     protected $testUri;
     protected $_object;
 
+    /**
+     *
+     */
     public function setUp()
     {
 //     Setup App controller
@@ -37,6 +40,9 @@ class AdminTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testAdminAsAnonymous()
     {
         // instantiate the view and test it
@@ -58,6 +64,9 @@ class AdminTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testAdminAsUser()
     {
         // instantiate the view and test it
@@ -88,6 +97,9 @@ class AdminTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testAdminAsAdmin()
     {
         // instantiate the view and test it
@@ -118,6 +130,9 @@ class AdminTest extends AppTestCase
         $this->assertContains("<h1>Administrative Functions</h1>", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testLogExportAsUser()
     {
         // instantiate the view and test it
@@ -149,6 +164,9 @@ class AdminTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testLogExportAsAdmin()
     {
         // instantiate the view and test it
@@ -184,6 +202,9 @@ class AdminTest extends AppTestCase
         $this->assertContains('.xlsx', $contentDisposition);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testTemplateExportAsUser()
     {
         // instantiate the view and test it
@@ -215,6 +236,9 @@ class AdminTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testTemplateExportAsAdmin()
     {
         // instantiate the view and test it
@@ -250,6 +274,9 @@ class AdminTest extends AppTestCase
         $this->assertContains('.xlsx', $contentDisposition);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testNullTemplateExportAsAdmin()
     {
         // instantiate the view and test it
@@ -280,6 +307,9 @@ class AdminTest extends AppTestCase
         $this->assertEquals('/', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedImportAsUser()
     {
         // instantiate the view and test it
@@ -312,6 +342,9 @@ class AdminTest extends AppTestCase
         $this->assertEquals('/greet', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testSchedImportAsAdmin()
     {
         // instantiate the view and test it
@@ -345,6 +378,9 @@ class AdminTest extends AppTestCase
         $this->assertContains("<h1>Schedule Import</h1>", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testTestCSVAsAdmin()
     {
         // instantiate the view and test it
@@ -397,6 +433,9 @@ class AdminTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testUploadCSVAsAdmin()
     {
         // instantiate the view and test it
@@ -449,16 +488,25 @@ class AdminTest extends AppTestCase
 
     }
 
+    /**
+     *
+     */
     public function xtestPOSTPWChange()
     {
         /* TODO: Add POST Test for PW change */
     }
 
+    /**
+     *
+     */
     public function xtestPOSTLogMemo()
     {
         /* TODO: Add POST Test for Log memo */
     }
 
+    /**
+     *
+     */
     public function xtestDoneButton()
     {
         /* TODO: Add POST Test for Done button */

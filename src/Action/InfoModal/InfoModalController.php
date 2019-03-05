@@ -2,7 +2,6 @@
 namespace App\Action\InfoModal;
 
 use App\Action\AbstractController;
-use App\Action\SchedulerRepository;
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -33,6 +32,8 @@ class InfoModalController extends AbstractController
         $this->modalView->handler($request, $response);
 
         echo $this->modalView->render($response);
+
+        return null;
 
     }
 }

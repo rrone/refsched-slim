@@ -223,9 +223,10 @@ class SchedRefsView extends AbstractView
                                 }
                             }
                             if (!$this->event->archived) {
-                                $locked = $game->locked && !$this->user->admin ? 'disabled' : '';
+                                $disabled = $game->locked && !$this->user->admin;
+                                $html .= "<td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\" ";
                                 if ($game->assignor || $this->user->admin) {
-                                    $html .= "<td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\" $locked></td>";
+                                     $html .= $disabled ? " disabled ></td>" : "></td>";
                                 } else {
                                     $html .= "<td>&nbsp;</td>\n";
                                 }

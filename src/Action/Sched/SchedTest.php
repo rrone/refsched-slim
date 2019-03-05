@@ -1,7 +1,7 @@
 <?php
 namespace Tests;
 
-use App\Action\Sched\SchedSchedDBController;
+use App\Action\Sched\SchedSchedController;
 use App\Action\Sched\SchedSchedView;
 use App\Action\AbstractController;
 use App\Action\AbstractView;
@@ -34,7 +34,7 @@ class SchedSchedTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedSchedDBController($this->c, $view);
+        $controller = new SchedSchedController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -58,7 +58,7 @@ class SchedSchedTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedSchedDBController($this->c, $view);
+        $controller = new SchedSchedController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -90,7 +90,7 @@ class SchedSchedTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedSchedDBController($this->c, $view);
+        $controller = new SchedSchedController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -123,7 +123,7 @@ class SchedSchedTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedSchedDBController($this->c, $view);
+        $controller = new SchedSchedController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -156,7 +156,7 @@ class SchedSchedTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedSchedDBController($this->c, $view);
+        $controller = new SchedSchedController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -221,7 +221,7 @@ class SchedSchedTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedSchedDBController($this->c, $view);
+        $controller = new SchedSchedController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it

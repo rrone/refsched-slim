@@ -6,7 +6,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractController;
 
-class LogonDBController extends AbstractController
+class LogonController extends AbstractController
 {
     /* @var LogonView */
     private $logonView;

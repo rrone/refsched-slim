@@ -3,7 +3,7 @@ namespace Tests;
 
 use App\Action\AbstractController;
 use App\Action\AbstractView;
-use App\Action\Refs\SchedRefsDBController;
+use App\Action\Refs\SchedRefsController;
 use App\Action\Refs\SchedRefsView;
 
 
@@ -41,7 +41,7 @@ class SchedRefsTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedRefsDBController($this->c, $view);
+        $controller = new SchedRefsController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -65,7 +65,7 @@ class SchedRefsTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedRefsDBController($this->c, $view);
+        $controller = new SchedRefsController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it
@@ -98,7 +98,7 @@ class SchedRefsTest extends AppTestCase
 
         // instantiate the controller
 
-        $controller = new SchedRefsDBController($this->c, $view);
+        $controller = new SchedRefsController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
         // invoke the controller action and test it

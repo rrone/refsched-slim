@@ -298,11 +298,12 @@ class SchedFullView extends AbstractView
             $url = $this->getBaseURL('fullXlsPath');
             $html .= "<form action=$url>";
             $html .= '    <div class="pull-right">';
-            $html .= "    <input type='submit' class=\"btn btn-primary btn-xs export right\" style=\"margin-right: 0; margin-top: 7px;\" 
-value='Export to Excel'>";
+            $html .= "    <input type='submit' class=\"btn btn-primary btn-xs export right\" style=\"margin-right: 0; margin-top: 7px;\" value='Export to Excel'>";
             if ($this->user->admin) {
-                $html .= '    <label for="certCheck" style="margin-right: 10px; vertical-align: center">Detailed Referee Report</label>';
-                $html .= '    <input class="checkbox pull-right" type="checkbox" id="certCheck" name="certCheck" style="margin-right: 0; margin-top: 10px; height: 18px; width: 18px;">';
+                $html .= '    <label style="margin-right: 10px; vertical-align: center">Detailed Referee Report</label>';
+                $html .= '    <input class="checkbox pull-right" type="checkbox" id="certCheck" name="certCheck" style="margin-right:
+     0; 
+    margin-top: 10px; height: 18px; width: 18px;">';
             }
             $html .= '    </div>';
             $html .= "<div class='clear-fix'></div>";

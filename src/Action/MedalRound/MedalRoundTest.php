@@ -11,6 +11,9 @@ use App\Action\MedalRound\ShowMedalRoundDivisionsController;
 
 class MedalRoundTest extends AppTestCase
 {
+    /**
+     *
+     */
     public function setUp()
     {
 //     Setup App controller
@@ -20,6 +23,9 @@ class MedalRoundTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testLockAsAdmin()
     {
         // instantiate the view
@@ -76,6 +82,9 @@ class MedalRoundTest extends AppTestCase
 
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testLockAsUser()
     {
         // instantiate the view
@@ -116,7 +125,7 @@ class MedalRoundTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
-        $this->assertContains("<h3 class=\"center\"><h3 class=\"center\">The schedule is presently <span style=\"color:#CC0000\">locked</span><br><br>", $view);
+        $this->assertContains("<h3 class=\"center\">The schedule is presently <span style=\"color:#CC0000\">locked</span><br><br>", $view);
 
         $response = (object)$this->client->get('/lock');
         $url = implode($response->getHeader('Location'));
@@ -128,10 +137,13 @@ class MedalRoundTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
-        $this->assertContains("<h3 class=\"center\"><h3 class=\"center\">The schedule is presently <span style=\"color:#CC0000\">locked</span><br><br>", $view);
+        $this->assertContains("<h3 class=\"center\">The schedule is presently <span style=\"color:#CC0000\">locked</span><br><br>", $view);
     }
 
-     public function testShowMRAsAdmin()
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
+    public function testShowMRAsAdmin()
     {
         // instantiate the view
 
@@ -186,6 +198,9 @@ class MedalRoundTest extends AppTestCase
         $this->assertContains("Medal round assignments are:&nbsp;<span style=\"color:#02C902\">Viewable</span>&nbsp;-&nbsp;(<a href=/hidemr>Hide Medal Round Assignments</a> from users)", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function testShowMRDAsAdmin()
     {
         // instantiate the view
@@ -241,6 +256,9 @@ class MedalRoundTest extends AppTestCase
         $this->assertContains("Medal round divisions are:&nbsp;<span style=\"color:#02C902\">Viewable</span>&nbsp;-&nbsp;(<a href=/hidemrd>Hide Medal Round Divisions</a> from users)", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function xtestHideMRAsUser()
     {
         // instantiate the view
@@ -287,6 +305,9 @@ class MedalRoundTest extends AppTestCase
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function xtestHideAsAnonymous()
     {
         // instantiate the view
@@ -320,6 +341,9 @@ class MedalRoundTest extends AppTestCase
         $this->assertEquals('/', $url);
     }
 
+    /**
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function xtestShowAsAnonymous()
     {
         // instantiate the view

@@ -13,6 +13,12 @@ class EditGameView extends AbstractView
     private $description;
 
 
+    /**
+     * EditGameView constructor.
+     * @param Container $container
+     * @param SchedulerRepository $repository
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function __construct(Container $container, SchedulerRepository $repository)
     {
         parent::__construct($container, $repository);
@@ -21,6 +27,10 @@ class EditGameView extends AbstractView
         $this->description = 'No matches scheduled';
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
@@ -47,6 +57,11 @@ class EditGameView extends AbstractView
         }
     }
 
+    /**
+     * @param Response $response
+     * @return Response
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function render(Response &$response)
     {
         $content = array(
@@ -67,6 +82,10 @@ class EditGameView extends AbstractView
         return $response;
     }
 
+    /**
+     * @return string|null
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     protected function renderEditGame()
     {
         $html = null;
@@ -159,6 +178,10 @@ class EditGameView extends AbstractView
 
     }
 
+    /**
+     * @return string
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     private function menu()
     {
         $html = "<h3 class=\"center h3-btn\">";

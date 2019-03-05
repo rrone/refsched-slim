@@ -18,10 +18,6 @@ body {
     background-color: #FFFFFF;
 }
 
-body.embed {
-    overflow: auto !important
-}
-
 a:link {
     color: #0066CC;
     text-decoration: none;

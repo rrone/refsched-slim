@@ -1,21 +1,22 @@
 <?php
-namespace App\Action\Full;
+namespace App\Action\Greet;
 
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractController;
 
-class SchedFullDBController extends AbstractController
+class SchedGreetController extends AbstractController
 {
-    /* @var SchedFullView */
-    private $fullView;
+    /* @var GreetView */
+    private $greetView;
 
-    public function __construct(Container $container, SchedFullView $fullView)
+    public function __construct(Container $container, GreetView $greetView)
     {
         parent::__construct($container);
 
-        $this->fullView = $fullView;
+        $this->greetView = $greetView;
+
     }
 
     /**
@@ -38,12 +39,11 @@ class SchedFullDBController extends AbstractController
             'event' => $this->event
         ]);
 
-        $this->fullView->handler($request, $response);
-        $this->fullView->render($response);
+        $this->greetView->handler($request, $response);
+        $this->greetView->render($response);
 
         return $response;
     }
-
 }
 
 

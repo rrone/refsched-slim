@@ -7,6 +7,9 @@ use Slim\Http\Response;
 
 class EndTest extends AppTestCase
 {
+    /**
+     *
+     */
     public function setUp()
     {
         $this->app = $this->getSlimInstance();
@@ -14,6 +17,10 @@ class EndTest extends AppTestCase
         $this->client = new AppWebTestClient($this->app);
     }
 
+    /**
+     * @throws \Slim\Exception\MethodNotAllowedException
+     * @throws \Slim\Exception\NotFoundException
+     */
     public function testEnd()
     {
         // instantiate the controller & test it
