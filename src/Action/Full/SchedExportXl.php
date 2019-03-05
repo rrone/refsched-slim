@@ -87,6 +87,7 @@ class SchedExportXl extends AbstractExporter
             $this->generateSummaryCountDateDivision($content);
             $this->generateAssignmentsByRefereeData($content);
         }
+
         $body = $response->getBody();
         $body->write($this->export($content));
 
@@ -139,11 +140,10 @@ class SchedExportXl extends AbstractExporter
             $projectKey = $event->projectKey;
 
             $games = $this->sr->refereeAssignmentMap($projectKey);
+            $games = json_decode(json_encode($games), true);
 
             //set the header labels
             if (!empty($games)) {
-                $game = (array)$games[0];
-
                 $adminLabels = array(
                     'AYSOID',
                     'MY',
@@ -159,6 +159,8 @@ class SchedExportXl extends AbstractExporter
                 if ($this->user->admin && $this->certCheck) {
                     $labels = $adminLabels;
                 }
+
+                $game = $games[0];
                 foreach ($game as $hdr => $val) {
                     switch ($hdr) {
                         case 'name':
@@ -180,46 +182,70 @@ class SchedExportXl extends AbstractExporter
                 }
 
                 $data = array($labels);
+                $ids = [];
 
                 //set the data : match in each row
-                foreach ($games as $game) {
-                    if (!empty($game)) {
-                        $arrGame = json_decode(json_encode($game), true);
-                        if ($this->user->admin && $this->certCheck && $game->name != 'Forfeit') {
-                            $personRec = $this->sr->getPersonInfo($game->name);
-                            $id = 0;
-                            $this->isUnique = count($personRec) == 1;
-                            if ($this->isUnique) {
-                                $id = $personRec[0]['AYSOID'];
-                            } else {
-                                $assignor = explode(' ', $game->Assignor);
-                                if (strlen(end($assignor)) > 1) {
-                                    $assignor = $assignor[1][0].'/'.$assignor[1][1];
+                if ($this->certCheck) {
+                    foreach ($games as &$game) {
+                        if (!empty($game)) {
+                            $game = array_merge($game, array('AYSOID' => 0));
+                            if ($this->user->admin && $game['name'] != 'Forfeit') {
+                                $personRec = $this->sr->getPersonInfo($game['name']);
+                                $this->isUnique = count($personRec) == 1;
+                                if ($this->isUnique) {
+                                    $game['AYSOID'] = $personRec[0]['AYSOID'];
                                 } else {
-                                    $assignor = end($assignor);
-                                }
-
-                                foreach ($personRec as $rec) {
-                                    if (strpos($rec['SAR'], $assignor) > -1) {
-                                        $id = $rec['AYSOID'];
-                                        continue;
+                                    $assignor = explode(' ', $game['Assignor']);
+                                    if (strlen(end($assignor)) > 1) {
+                                        $assignor = $assignor[1][0].'/'.$assignor[1][1];
                                     } else {
-                                        $id = $personRec[0]['AYSOID'];
+                                        $assignor = end($assignor);
+                                    }
+
+                                    foreach ($personRec as $rec) {
+                                        if (strpos($rec['SAR'], $assignor) > -1) {
+                                            $game['AYSOID'] = $rec['AYSOID'];
+                                            continue;
+                                        } else {
+                                            $game['AYSOID'] = $personRec[0]['AYSOID'];
+                                        }
                                     }
                                 }
                             }
-                            $certs = $this->getCerts($id);
 
-                            $data[] = array_merge(
-                                $certs,
-                                $arrGame
-                            );
+                            $ids[] = $game['AYSOID'];
+                        }
+                    }
 
-                        } else {
-                            $data[] = array_merge(
-                                $this->mtCerts,
-                                $arrGame
-                            );
+                    $certs = $this->getCerts($ids);
+                    $certs = json_decode(json_encode($certs), true);
+
+                    foreach ($games as $num => $game) {
+                        if (!empty($game)) {
+                            try {
+                                if(isset($certs[$game['AYSOID']])) {
+                                    $cert = $certs[$game['AYSOID']];
+                                } else {
+                                    $cert = $this->mtCerts;
+                                }
+//                                unset($game['AYSOID']);
+                                $data[] = array_merge(
+                                    $cert,
+                                    $game
+                                );
+                            } catch (\Exception $e) {
+
+                                var_dump($cert);
+                                var_dump($game);
+                                die();
+                            }
+
+                        }
+                    }
+                } else {
+                    foreach ($games as &$game) {
+                        if (!empty($game)) {
+                            $data[] = json_decode(json_encode($game), true);
                         }
                     }
                 }
@@ -241,47 +267,56 @@ class SchedExportXl extends AbstractExporter
     }
 
     /**
-     * @param $id
+     * @param array $certs
      * @return array
      */
-    private function getCerts($id = null)
+    private function getCerts(array $certs)
     {
-        if (is_null($id)) {
+        if (empty($certs)) {
             return array();
         }
 
-        $json = $this->curl_get("https://vc.ayso1ref.com/$id");
-        $cert = json_decode($json);
+        $ids = implode(',', $certs);
+        $json = $this->curl_get("https://vc.ayso1ref.com/api/json?id=$ids");
 
-        if (empty($cert)) {
-            return $this->mtCerts;
-        }
+        return $this->parseCerts(json_decode($json));
+    }
 
-        if (strpos($cert->FullName, 'Not Found') == false) {
+    /**
+     * @param array $certs
+     * @return array
+     */
+    private function parseCerts(array $certs)
+    {
 
+        $volCerts = [];
+        foreach ($certs as $cert) {
             $aysoID = $cert->AYSOID;
-            $url = CERT_URL.$aysoID;
 
-            if ($this->isUnique) {
-                $aysoID = "=HYPERLINK(\"$url\", \"$aysoID\")";
+            if ($aysoID != 0) {
+                $url = CERT_URL.$aysoID;
+
+                if ($this->isUnique) {
+                    $hrefAysoID = "=HYPERLINK(\"$url\", \"$aysoID\")";
+                } else {
+                    $hrefAysoID = "=HYPERLINK(\"$url\", \"$aysoID**\")";
+                }
+                $volCerts[$aysoID] = array(
+                    'AYSOID' => $hrefAysoID,
+                    'MY' => $cert->MY,
+                    'SAR' => $cert->SAR,
+                    'SafeHavenDate' => $cert->SafeHavenDate,
+                    'CDCDate' => $cert->CDCDate,
+                    'RefCertDesc' => $cert->RefCertDesc,
+                    'RefCertDate' => $cert->RefCertDate,
+                    'eAYSOName' => $cert->FullName,
+                );
             } else {
-                $aysoID = "=HYPERLINK(\"$url\", \"$aysoID**\")";
+                $volCerts[$aysoID] = $this->mtCerts;
             }
-            $certs = array(
-                'AYSOID' => $aysoID,
-                'MY' => $cert->MY,
-                'SAR' => $cert->SAR,
-                'SafeHavenDate' => $cert->SafeHavenDate,
-                'CDCDate' => $cert->CDCDate,
-                'RefCertDesc' => $cert->RefCertDesc,
-                'RefCertDate' => $cert->RefCertDate,
-                'eAYSOName' => $cert->FullName,
-            );
-        } else {
-            $certs = $this->mtCerts;
         }
 
-        return $certs;
+        return $volCerts;
     }
 
     /**
@@ -378,8 +413,10 @@ class SchedExportXl extends AbstractExporter
      * @param $content
      * @return mixed
      */
-    private function generateSummaryCountDateDivision(&$content)
-    {
+    private
+    function generateSummaryCountDateDivision(
+        &$content
+    ) {
         $event = $this->event;
 
         if (!empty($event)) {
@@ -454,6 +491,21 @@ class SchedExportXl extends AbstractExporter
         }
 
         return ($a[0] < $b[0]) ? -1 : 1;
+    }
+
+    /**
+     * @param $a
+     * @param $b
+     * @return int
+     */
+    static function sortOnID($a, $b)
+    {
+        if ($a == $b) {
+            return 0;
+        }
+
+        return ($a['AYSOID'] < $b['AYSOID']) ? -1 : 1;
+
     }
 
 
