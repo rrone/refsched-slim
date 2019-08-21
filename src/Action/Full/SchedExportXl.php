@@ -183,17 +183,18 @@ class SchedExportXl extends AbstractExporter
 
                 $data = array($labels);
                 $ids = [];
+                $idGames = [];
 
                 //set the data : match in each row
                 if ($this->certCheck) {
-                    foreach ($games as &$game) {
+                    foreach ($games as $game) {
                         if (!empty($game)) {
-                            $game = array_merge($game, array('AYSOID' => 0));
+                            $id = 0;
                             if ($this->user->admin && $game['name'] != 'Forfeit') {
                                 $personRec = $this->sr->getPersonInfo($game['name']);
                                 $this->isUnique = count($personRec) == 1;
                                 if ($this->isUnique) {
-                                    $game['AYSOID'] = $personRec[0]['AYSOID'];
+                                    $id = $personRec[0]['AYSOID'];
                                 } else {
                                     $assignor = explode(' ', $game['Assignor']);
                                     if (strlen(end($assignor)) > 1) {
@@ -204,37 +205,37 @@ class SchedExportXl extends AbstractExporter
 
                                     foreach ($personRec as $rec) {
                                         if (strpos($rec['SAR'], $assignor) > -1) {
-                                            $game['AYSOID'] = $rec['AYSOID'];
+                                            $id = $rec['AYSOID'];
                                             continue;
                                         } else {
-                                            $game['AYSOID'] = $personRec[0]['AYSOID'];
+                                            $id = $personRec[0]['AYSOID'];
                                         }
                                     }
                                 }
                             }
+                            $idGames[$id] = $game;
 
-                            $ids[] = $game['AYSOID'];
+                            $ids[] = $id;
                         }
                     }
 
                     $certs = $this->getCerts($ids);
                     $certs = json_decode(json_encode($certs), true);
-
-                    foreach ($games as $num => $game) {
+                    foreach ($idGames as $id => $game) {
                         if (!empty($game)) {
                             try {
-                                if(isset($certs[$game['AYSOID']])) {
-                                    $cert = $certs[$game['AYSOID']];
+                                if (isset($certs[$id])) {
+                                    $cert = $certs[$id];
                                 } else {
                                     $cert = $this->mtCerts;
                                 }
-//                                unset($game['AYSOID']);
+
                                 $data[] = array_merge(
                                     $cert,
                                     $game
                                 );
                             } catch (\Exception $e) {
-
+                                echo $e;
                                 var_dump($cert);
                                 var_dump($game);
                                 die();

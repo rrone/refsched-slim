@@ -14,7 +14,7 @@ echo "  Checkout master branch from Git repository..."
 echo
 
 echo "  Build public resources..."
-./node_modules/.bin/gulp build
+gulp build
 echo
 
 echo "  Purge composer development items..."
