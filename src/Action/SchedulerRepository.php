@@ -702,9 +702,6 @@ class SchedulerRepository
                             case 'medalRound':
                                 $value = 0;
                                 break;
-                            case 'locked':
-                                $value = 0;
-                                break;
                             default:
                                 $value = '';
                         }
@@ -715,7 +712,6 @@ class SchedulerRepository
                 if (!empty($typedData['projectKey'])) {
 
                     $isGame = $this->getGameByKeyAndNumber($typedData['projectKey'], $typedData['game_number']);
-
                     if (empty($isGame)) {
                         $result = $this->insertGame($typedData);
                     } else {
@@ -823,7 +819,7 @@ class SchedulerRepository
 
         $id = isset($data['id']) ? $data['id'] : null;
 
-        if (is_null($id)) {
+        if (empty($id)) {
             array_shift($data);
         }
 
