@@ -278,7 +278,7 @@ class SchedExportXl extends AbstractExporter
         }
 
         $ids = implode(',', $certs);
-        $json = $this->curl_get("https://vc.ayso1ref.com/api/json?id=$ids");
+        $json = $this->curl_get("https://vc.ayso1ref.com/api/id=$ids");
 
         return $this->parseCerts(json_decode($json));
     }
