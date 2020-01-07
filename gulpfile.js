@@ -18,58 +18,60 @@ const appTask = function() {
         .pipe(gulp.dest('public/css'));
 
      //Java scripts
-    gulp.src([
-            appResourceDir + '/js/app.js'
-        ])
+    gulp.src(
+            appResourceDir + '/js/app.js', { allowEmpty: true }
+        )
         .pipe(concat("ext.js"))
         .pipe(gulp.dest(appWebDir +'/js'));
         
     // images
-    gulp.src([
+    gulp.src(
             appResourceDir + '/images/*.png',
             appResourceDir + '/images/*.ico'
             
-        ])
+        )
         .pipe(gulp.dest(appWebDir +'/images'));
 };
 gulp.task('app',appTask);
 
 const nodeModulesTask = function() {
 
-    gulp.src([
+    gulp.src(
             path.join(nodeModulesDir,'normalize.css/normalize.css'),
             path.join(nodeModulesDir,'bootstrap/dist/css/bootstrap.min.css'),
             path.join(nodeModulesDir,'purecss/build/base-min.css'),
             path.join(nodeModulesDir,'purecss/build/grids-responsive-min.css'),
             path.join(nodeModulesDir,'purecss/build/buttons-min.css'),
             path.join(nodeModulesDir,'purecss/build/pure-nr-min.css'),
-            path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.min.css')
-        ])
+            path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.min.css'),
+            { allowEmpty: true }
+        )
         .pipe(gulp.dest(appWebDir + '/css'));
     //
-    gulp.src([
+    gulp.src(
             path.join(nodeModulesDir,'jquery/dist/jquery.min.js'),
             path.join(nodeModulesDir,'bootstrap/dist/js/bootstrap.min.js'),
-            path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.full.js')
-        ])
+            path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.full.js'),
+            { allowEmpty: true }
+        )
         .pipe(gulp.dest(appWebDir +'/js'));
     //
-    gulp.src([
-        path.join(vendorDir,'components/bootstrap/fonts/glyphicons-halflings-regular.ttf'),
-        path.join(vendorDir,'components/bootstrap/fonts/glyphicons-halflings-regular.woff'),
-        path.join(vendorDir,'components/bootstrap/fonts/glyphicons-halflings-regular.woff2')
-    ])
+    gulp.src(
+        path.join(vendorDir,'components/bootstrap-default/fonts/glyphicons-halflings-regular.ttf'),
+        path.join(vendorDir,'components/bootstrap-default/fonts/glyphicons-halflings-regular.woff'),
+        path.join(vendorDir,'components/bootstrap-default/fonts/glyphicons-halflings-regular.woff2')
+    )
         .pipe(gulp.dest(appWebDir +'/fonts'));
 
 };
-gulp.task('node_modules',nodeModulesTask);
+gulp.task('node_modules', nodeModulesTask);
 
 const buildTask = function()
 {
     appTask();
     nodeModulesTask();
 };
-gulp.task('build',buildTask);
+gulp.task('build', buildTask);
 
 const watchTask = function()
 {
@@ -81,9 +83,9 @@ const watchTask = function()
         appResourceDir + '/js/*.js',
         appResourceDir + '/images/*.png',
         appResourceDir + '/images/*.ico'
-    ],  ['app']);
+    ],  gulp.series['app']);
 };
 gulp.task('watch',watchTask);
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['build']);
+gulp.task('default', gulp.series['build']);

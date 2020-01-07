@@ -5,6 +5,7 @@ namespace App\Action\Full;
 
 use App\Action\AbstractExporter;
 use App\Action\SchedulerRepository;
+use Exception;
 use Slim\Http\Response;
 use Slim\Http\Request;
 use DateTime;
@@ -32,7 +33,7 @@ class SchedExportXl extends AbstractExporter
     /**
      * SchedExportXl constructor.
      * @param SchedulerRepository $schedulerRepository
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(SchedulerRepository $schedulerRepository)
     {
@@ -234,7 +235,7 @@ class SchedExportXl extends AbstractExporter
                                     $cert,
                                     $game
                                 );
-                            } catch (\Exception $e) {
+                            } catch (Exception $e) {
                                 echo $e;
                                 var_dump($cert);
                                 var_dump($game);
@@ -278,9 +279,10 @@ class SchedExportXl extends AbstractExporter
         }
 
         $ids = implode(',', $certs);
-        $json = $this->curl_get("https://vc.ayso1ref.com/api/json?id=$ids");
+        $json = $this->curl_get("https://vc.ayso1ref.com/api/$ids");
+        $certs = $this->parseCerts(json_decode($json));
 
-        return $this->parseCerts(json_decode($json));
+        return $certs;
     }
 
     /**

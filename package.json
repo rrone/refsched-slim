@@ -1,5 +1,6 @@
 {
   "name": "slim-skeleton",
+  "license": "ISC",
   "version": "1.0.0",
   "description": "Slim Framework 3 application to provide report support for WordPress site.",
   "main": "gulpfile.js",
@@ -11,16 +12,16 @@
     "coverage": "open var/coverage/index.html"
   },
   "author": "",
-  "license": "ISC",
   "devDependencies": {
     "gulp": "^4.0.2",
-    "gulp-concat": "^2.6.0"
+    "gulp-concat": "^2.6.1"
   },
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.3.1",
     "gulp-cli": "^2.2.0",
-    "jquery": "^3.1.0",
-    "normalize.css": "^4.2.0",
-    "purecss": "^0.6.0"
+    "jquery": "^3.4.1",
+    "normalize.css": "^8.0.1",
+    "popper.js": "^1.16.0",
+    "purecss": "^1.0.1"
   }
 }

@@ -2,7 +2,7 @@
 ## Exit immediately if a command exits with a non-zero status.
 set -e
 #set distribution folder alias
-dist="$HOME"/GoogleDrive-rick.roberts.9/ayso/s1/web/ayso1ref/services/rs
+dist="$HOME"/GoogleDrive-ayso1sra/s1/web/ayso1ref/services/rs
 config="$HOME"/Sites/AYSO/refsched/config
 PHP=/usr/local/etc/php/7.3/conf.d
 
@@ -19,7 +19,7 @@ echo
 
 echo "  Purge composer development items..."
 ## Disable xdebug for composer performance
-if [ -e $PHP"/ext-xdebug.ini" ]
+if [[ -e $PHP"/ext-xdebug.ini" ]]
 then
     mv "$PHP"/ext-xdebug.ini "$PHP"/ext-xdebug.~ini
 fi
@@ -63,7 +63,7 @@ echo
 
 echo "  Restore composer development items..."
 ## Restore xdebug
-if [ -e $PHP"/ext-xdebug.~ini" ]
+if [[ -e $PHP"/ext-xdebug.~ini" ]]
 then
     mv "$PHP"/ext-xdebug.~ini "$PHP"/ext-xdebug.ini
 fi
