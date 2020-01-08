@@ -467,11 +467,6 @@ dom-walk@^0.1.0:
   resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
   integrity sha1-ZyIm3HTI95mtNTB9+TaroRrNYBg=
 
-done@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/done/-/done-1.1.6.tgz#a0c9fc444ad46a1cbf73e326ee4fbc71215f0762"
-  integrity sha512-KMzYhedbW4dahePACAnhLIoJVGfRVt88Ea5Tb4a2EB8RrLu/2rqM3xf/QjnD4eVbpryIiIlTaXvYUUue59cV7Q==
-
 duplexify@^3.6.0:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/duplexify/-/duplexify-3.7.1.tgz#2a4df5317f6ccfd91f86d6fd25d8d8a103b88309"

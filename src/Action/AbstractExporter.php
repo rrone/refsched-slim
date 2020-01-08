@@ -2,6 +2,7 @@
 
 namespace App\Action;
 
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style;
@@ -57,7 +58,7 @@ abstract class AbstractExporter
     /**
      * @param $content
      * @return null|string
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     public function export($content)
     {
@@ -116,7 +117,7 @@ abstract class AbstractExporter
      * @param $content
      * @param string $sheetName
      * @return string
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function exportXLSX($content, $sheetName = 'Sheet')
@@ -166,7 +167,7 @@ abstract class AbstractExporter
      * @param $content
      * @param string $shName
      * @return null|void
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     public function writeWorksheet($content, $shName = "Sheet")
     {

@@ -81,7 +81,6 @@ class SchedExportXl extends AbstractExporter
         $response = $response->withHeader('Content-Disposition', 'attachment; filename='.$this->outFileName);
 
         $content = null;
-
         $this->generateScheduleData($content);
         if ($this->user->admin) {
 //            $this->generateSummaryCountData($content);
@@ -198,7 +197,7 @@ class SchedExportXl extends AbstractExporter
                                     $id = $personRec[0]['AYSOID'];
                                 } else {
                                     $assignor = explode(' ', $game['Assignor']);
-                                    if (strlen(end($assignor)) > 1) {
+                                    if (isset($assignor[1]) AND strlen(end($assignor)) > 1) {
                                         $assignor = $assignor[1][0].'/'.$assignor[1][1];
                                     } else {
                                         $assignor = end($assignor);
@@ -219,51 +218,52 @@ class SchedExportXl extends AbstractExporter
                             $ids[] = $id;
                         }
                     }
-
-                    $certs = $this->getCerts($ids);
-                    $certs = json_decode(json_encode($certs), true);
-                    foreach ($idGames as $id => $game) {
-                        if (!empty($game)) {
-                            try {
-                                if (isset($certs[$id])) {
-                                    $cert = $certs[$id];
-                                } else {
-                                    $cert = $this->mtCerts;
-                                }
-
-                                $data[] = array_merge(
-                                    $cert,
-                                    $game
-                                );
-                            } catch (Exception $e) {
-                                echo $e;
-                                var_dump($cert);
-                                var_dump($game);
-                                die();
-                            }
-
-                        }
-                    }
-                } else {
-                    foreach ($games as &$game) {
-                        if (!empty($game)) {
-                            $data[] = json_decode(json_encode($game), true);
-                        }
-                    }
                 }
 
-                if (!empty($data)) {
-                    $content['Referee Match Count']['data'] = $data;
-                    if ($this->user->admin) {
-                        $content['Referee Match Count']['options']['freezePane'] = 'J2';
-                        $content['Referee Match Count']['options']['horizontalAlignment'] = ['J1:ZZ' => 'center'];
-                    } else {
-                        $content['Referee Match Count']['options']['freezePane'] = 'B2';
-                        $content['Referee Match Count']['options']['horizontalAlignment'] = ['B1:ZZ' => 'center'];
+                $certs = $this->getCerts($ids);
+                $certs = json_decode(json_encode($certs), true);
+                foreach ($idGames as $id => $game) {
+                    if (!empty($game)) {
+                        try {
+                            if (isset($certs[$id])) {
+                                $cert = $certs[$id];
+                            } else {
+                                $cert = $this->mtCerts;
+                            }
+
+                            $data[] = array_merge(
+                                $cert,
+                                $game
+                            );
+                        } catch (Exception $e) {
+                            echo $e;
+                            var_dump($cert);
+                            var_dump($game);
+                            die();
+                        }
+
+                    }
+                }
+            } else {
+                foreach ($games as &$game) {
+                    if (!empty($game)) {
+                        $data[] = json_decode(json_encode($game), true);
                     }
                 }
             }
+
+            if (!empty($data)) {
+                $content['Referee Match Count']['data'] = $data;
+                if ($this->user->admin) {
+                    $content['Referee Match Count']['options']['freezePane'] = 'J2';
+                    $content['Referee Match Count']['options']['horizontalAlignment'] = ['J1:ZZ' => 'center'];
+                } else {
+                    $content['Referee Match Count']['options']['freezePane'] = 'B2';
+                    $content['Referee Match Count']['options']['horizontalAlignment'] = ['B1:ZZ' => 'center'];
+                }
+            }
         }
+
 
         return $content;
     }
@@ -465,9 +465,9 @@ class SchedExportXl extends AbstractExporter
             usort($data, array($this, "sortOnRep"));
 
             if (!empty($data)) {
-                $content['Summary by Date Division']['data'] = $data;
-                $content['Summary by Date Division']['options']['freezePane'] = 'A2';
-                $content['Summary by Date Division']['options']['horizontalAlignment'] = ['WS' => 'center'];
+                $content['Summary by Assignor']['data'] = $data;
+                $content['Summary by Assignor']['options']['freezePane'] = 'A2';
+                $content['Summary by Assignor']['options']['horizontalAlignment'] = ['WS' => 'center'];
             }
         }
 
