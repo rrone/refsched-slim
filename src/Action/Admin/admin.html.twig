@@ -71,23 +71,21 @@
                     <fieldset class="center">
 
                         <!-- User -->
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <div class="col-xs-12 center">
-                                    <label class="col-xs-4 control-label col-xs-offset-1">Select
-                                        Assignors</label>
-                                    <div class="form-group col-xs-7 col-xs-offset-4 ">
-                                        {% for user in view.users %}
-                                            <div class="col-xs-12 checkbox rs-checkbox">
-                                                <label class="col-xs-12 control-label rs-control-label"
-                                                       for="{{ user }}"
-                                                       style="text-align: left;">
-                                                    <input class=" col-xs-1" type="checkbox" name="{{ user }}"
-                                                           value="user"> {{ user | raw }}
-                                                </label>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
+                        <div class="form-group">
+                            <div class="col-xs-12 center">
+                                <label class="col-xs-4 control-label col-xs-offset-1">Select
+                                    Assignors</label>
+                                <div class="form-group col-xs-7 col-xs-offset-4 ">
+                                    {% for user in view.users %}
+                                        <div class="col-xs-12 checkbox rs-checkbox">
+                                            <label class="col-xs-12 control-label rs-control-label"
+                                                   for="{{ user }}"
+                                                   style="text-align: left;">
+                                                <input class=" col-xs-1" type="checkbox" name="{{ user }}"
+                                                       value="user"> {{ user | raw }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -95,23 +93,20 @@
                         <hr>
 
                         <!-- Event Selection -->
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <div class="col-xs-12 center">
-                                    <label class="col-xs-4 control-label col-xs-offset-1">Events to
-                                        Assign</label>
-                                    <div class="form-group col-xs-7 col-xs-offset-4 ">
-                                        {% for event in view.events %}
-                                            <div class="col-xs-12 checkbox rs-checkbox">
-                                                <label class="col-xs-12 control-label rs-control-label"
-                                                       for="{{ event }}"
-                                                       style="text-align: left;">
-                                                    <input class=" col-xs-1" type="checkbox" name="{{ event }}"
-                                                           value="event"> {{ event | raw }}
-                                                </label>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
+                        <div class="form-group">
+                            <div class="col-xs-12 center">
+                                <label class="col-xs-4 control-label col-xs-offset-1">Events to Assign</label>
+                                <div class="form-group col-xs-7 col-xs-offset-4 ">
+                                    {% for event in view.events %}
+                                        <div class="col-xs-12 checkbox rs-checkbox">
+                                            <label class="col-xs-12 control-label rs-control-label"
+                                                   for="{{ event }}"
+                                                   style="text-align: left;">
+                                                <input class=" col-xs-1" type="checkbox" name="{{ event }}"
+                                                       value="event"> {{ event | raw }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -145,7 +140,7 @@
                         <button id="btnExport" name="btnExport" class="btn btn-primary btn-sm">Export Schedule
                             Template
                         </button>
-                        <button id="btnExport" name="btnImport" class="btn btn-primary btn-sm">Import Schedule
+                        <button id="btnImport" name="btnImport" class="btn btn-primary btn-sm">Import Schedule
                         </button>
                     </fieldset>
                 </form>

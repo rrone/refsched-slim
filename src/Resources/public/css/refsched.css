@@ -248,3 +248,7 @@ legend {
     width: 420px;
     min-width: 420px;
 }
+
+.rs-checkbox {
+    margin-top: -7px !important;
+}

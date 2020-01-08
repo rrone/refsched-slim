@@ -1202,23 +1202,23 @@ class SchedulerRepository
             return array();
         }
 
-        $s1Refs = $this->createArray(
-            $this->db->table('s1_refs')
-                ->select('s1_refs.*', 'refNicknames.Nickname')
-                ->join('refNicknames', 'refNicknames.AYSOID', '=', 's1_refs.AYSOID')
+        $Refs = $this->createArray(
+            $this->db->table('refs')
+                ->select('refs.*', 'refNicknames.Nickname')
+                ->join('refNicknames', 'refNicknames.AYSOID', '=', 'refs.AYSOID')
                 ->where('Nickname', 'like', "$name")
                 ->get()
         );
 
-        $s1NoCerts = $this->createArray(
-            $this->db->table('s1_ref_no_certs')
-            ->select('s1_ref_no_certs.*', 'refNicknames.Nickname')
-            ->join('refNicknames', 'refNicknames.AYSOID', '=', 's1_ref_no_certs.AYSOID')
+        $RefsNoCerts = $this->createArray(
+            $this->db->table('ref_no_certs')
+            ->select('ref_no_certs.*', 'refNicknames.Nickname')
+            ->join('refNicknames', 'refNicknames.AYSOID', '=', 'ref_no_certs.AYSOID')
             ->where('Nickname', 'like', "$name")
             ->get()
         );
 
-        $personRec = array_merge($s1Refs, $s1NoCerts);
+        $personRec = array_merge($Refs, $RefsNoCerts);
 
         if (count($personRec)) {
             return $this->createArray($personRec);

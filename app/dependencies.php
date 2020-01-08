@@ -1,5 +1,6 @@
 <?php
 // DIC configuration
+use Twig\Extension\DebugExtension;
 
 $container = $app->getContainer();
 
@@ -24,15 +25,14 @@ $container['view'] = function (\Slim\Container $c) {
 
     // Add extensions
     $view->addExtension(new Slim\Views\TwigExtension($c->get('router'), $c->get('request')->getUri()));
-    $view->addExtension(new Twig_Extension_Debug());
+    $view->addExtension(new DebugExtension());
 
-    $Version = new Twig_SimpleFunction('version', function () use ($settings) {
+    $Version = new Twig\TwigFunction('version', function () use ($settings) {
         $ver = 'Version ' . $settings['version']['version'];
 
         return $ver;
     });
 
-    /** @var Twig_Environment $twig */
     $twig = $view->getEnvironment();
 
     $twig->addFunction($Version);

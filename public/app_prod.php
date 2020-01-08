@@ -1,5 +1,7 @@
 <?php
 
+use Slim\App;
+
 // To help the built-in PHP dev server, check if the request was actually for
 // something which should probably be served as a static file
 if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
@@ -28,7 +30,7 @@ $settings = require PROJECT_ROOT . '/app/settings.php';
 $settings['debug'] = false;
 
 $settings['settings']['banner'] = null;
-$settings['settings']['dbConfig'] = $config['wpe'];
+$settings['settings']['dbConfig'] = $config['sg'];
 
 $settings['settings']['env_uri'] = 'http://';
 if (isset($_SERVER['HTTPS'])) {
@@ -37,7 +39,7 @@ if (isset($_SERVER['HTTPS'])) {
 
 $settings['settings']['env_uri'] .= $_SERVER['SERVER_NAME'];
 
-$app = new \Slim\App($settings);
+$app = new App($settings);
 
 // Set up dependencies
 require PROJECT_ROOT . '/app/dependencies.php';
@@ -51,6 +53,5 @@ require PROJECT_ROOT . '/app/routes.php';
 // Run!
 try {
     $app->run();
-} catch (\Exception $e) {
-
+} catch (Throwable $e) {
 }

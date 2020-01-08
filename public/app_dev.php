@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\Debug\Debug;
+use Slim\App;
 
 // To help the built-in PHP dev server, check if the request was actually for
 // something which should probably be served as a static file
@@ -53,7 +54,7 @@ if (isset($_SERVER['HTTPS'])) {
 
 $settings['settings']['env_uri'] .= $_SERVER['SERVER_NAME'];
 
-$app = new \Slim\App($settings);
+$app = new App($settings);
 
 // Set up dependencies
 require PROJECT_ROOT.'/app/dependencies.php';
@@ -65,4 +66,7 @@ require PROJECT_ROOT.'/app/middleware.php';
 require PROJECT_ROOT.'/app/routes.php';
 
 // Run!
-$app->run();
+try {
+    $app->run();
+} catch (Throwable $e) {
+}

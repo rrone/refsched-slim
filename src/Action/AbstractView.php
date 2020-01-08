@@ -5,6 +5,7 @@ use Slim\Container;
 use Slim\Views\Twig;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Exception\ContainerException;
 
 abstract class AbstractView
 {
@@ -52,7 +53,7 @@ abstract class AbstractView
      * AbstractView constructor.
      * @param Container $container
      * @param SchedulerRepository $schedulerRepository
-     * @throws \Interop\Container\Exception\ContainerException
+     * @throws ContainerException
      */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -60,7 +61,7 @@ abstract class AbstractView
         $this->view = $container->get('view');
         $this->sr = $schedulerRepository;
 
-        $this->page_title = "Section 1 Referee Scheduler";
+        $this->page_title = "Section 7 Referee Scheduler";
     }
 
     abstract protected function handler(Request $request, Response $response);
@@ -108,7 +109,7 @@ abstract class AbstractView
     /**
      * @param $path
      * @return string
-     * @throws \Interop\Container\Exception\ContainerException
+     * @throws ContainerException
      */
     protected function getBaseURL($path)
     {
@@ -138,7 +139,7 @@ abstract class AbstractView
      * @param $path
      * @param string $field
      * @return null|string
-     * @throws \Interop\Container\Exception\ContainerException
+     * @throws ContainerException
      */
     protected function getUri($path, $field = 'game_number')
     {
