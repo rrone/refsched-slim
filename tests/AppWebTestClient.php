@@ -2,7 +2,10 @@
 
 namespace Tests;
 
+use BadMethodCallException;
 use Slim\App;
+use Slim\Exception\MethodNotAllowedException;
+use Slim\Exception\NotFoundException;
 use Slim\Http\Environment;
 use Slim\Http\Headers;
 use Slim\Http\Request;
@@ -29,7 +32,7 @@ class AppWebTestClient extends WebTestClient
 
     public function __call($method, $arguments)
     {
-        throw new \BadMethodCallException(strtoupper($method) . ' is not supported');
+        throw new BadMethodCallException(strtoupper($method) . ' is not supported');
     }
 
     public function get($path, $data = array(), $optionalHeaders = array())
@@ -104,7 +107,11 @@ class AppWebTestClient extends WebTestClient
 
         // Invoke request
         $app = $this->app;
-        $this->response = $app($this->request, $response);
+        try {
+            $this->response = $app($this->request, $response);
+        } catch (MethodNotAllowedException $e) {
+        } catch (NotFoundException $e) {
+        }
 
         if($this->followRedirect){
             while(empty((string)$this->response->getBody()))

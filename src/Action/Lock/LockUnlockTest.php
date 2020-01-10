@@ -7,6 +7,7 @@ use App\Action\Lock\SchedLockController;
 use App\Action\Lock\SchedUnlockController;
 use App\Action\Lock\SchedLockView;
 
+
 class LockUnlockTest extends AppTestCase
 {
     /**
@@ -22,7 +23,7 @@ class LockUnlockTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testLockAsAdmin()
     {
@@ -44,7 +45,7 @@ class LockUnlockTest extends AppTestCase
 
         // invoke the lock controller action as admin and test it
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->app->getContainer()['session'] = [
             'authed' => true,
@@ -71,7 +72,7 @@ class LockUnlockTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testUnlockAsUser()
     {
@@ -94,7 +95,7 @@ class LockUnlockTest extends AppTestCase
 
         // invoke the lock controller action as user and test it
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
         $this->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
@@ -116,7 +117,7 @@ class LockUnlockTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testUnlockAsAdmin()
     {
@@ -138,7 +139,7 @@ class LockUnlockTest extends AppTestCase
 
         // invoke the lock controller action as user and test it
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->app->getContainer()['session'] = [
             'authed' => true,
@@ -165,7 +166,7 @@ class LockUnlockTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testLockAsUser()
     {
@@ -181,7 +182,7 @@ class LockUnlockTest extends AppTestCase
 
         // invoke the lock controller action as authorized user and test it
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->app->getContainer()['session'] = [
             'authed' => true,
@@ -204,7 +205,7 @@ class LockUnlockTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testLockAsAnonymous()
     {
@@ -240,7 +241,7 @@ class LockUnlockTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testUnlockAsAnonymous()
     {

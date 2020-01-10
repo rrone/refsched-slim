@@ -8,7 +8,7 @@ use App\Action\AbstractView;
 
 class EditRefTest extends AppTestCase
 {
-    protected $goodId = 17;
+    protected $goodId = 2;
     protected $badId = 10000;
 
     public function setUp()
@@ -26,7 +26,7 @@ class EditRefTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testEditRefAsAnonymous()
     {
@@ -52,7 +52,7 @@ class EditRefTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testEditRefAsUser()
     {
@@ -69,7 +69,7 @@ class EditRefTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $game = $this->sr->getGameByKeyAndNumber($projectKey, $this->goodId);
         $game_id = $game->id;
@@ -102,7 +102,7 @@ class EditRefTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Assign $user Referees</h3>", $view);
-        $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"473\" value=\"Update Assignments\">", $view);
+        $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"1912\" value=\"Update Assignments\">", $view);
         $this->assertContains("value=\"Update Assignments\">", $view);
 
         // test edit names
@@ -137,7 +137,7 @@ class EditRefTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testEditRefAsAdmin()
     {
@@ -154,7 +154,7 @@ class EditRefTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
         $game_id = $this->sr->getGameByKeyAndNumber($projectKey, $this->goodId)->id;
 
         $this->client->app->getContainer()['session'] = [
@@ -219,7 +219,7 @@ class EditRefTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testEditRefBadGameID()
     {
@@ -236,7 +236,7 @@ class EditRefTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
         $game_id = $this->badId;
 
         $this->client->app->getContainer()['session'] = [

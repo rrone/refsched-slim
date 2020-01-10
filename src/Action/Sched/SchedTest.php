@@ -6,8 +6,12 @@ use App\Action\Sched\SchedSchedView;
 use App\Action\AbstractController;
 use App\Action\AbstractView;
 
+
 class SchedSchedTest extends AppTestCase
 {
+    /**
+     *
+     */
     public function setUp()
     {
 //     Setup App controller
@@ -23,7 +27,7 @@ class SchedSchedTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedAsAnonymous()
     {
@@ -47,7 +51,7 @@ class SchedSchedTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedAsUser()
     {
@@ -64,7 +68,7 @@ class SchedSchedTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -79,7 +83,7 @@ class SchedSchedTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedAsAdmin()
     {
@@ -96,7 +100,7 @@ class SchedSchedTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -112,7 +116,7 @@ class SchedSchedTest extends AppTestCase
 
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedGroup16UAsUser()
     {
@@ -129,7 +133,7 @@ class SchedSchedTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -137,7 +141,7 @@ class SchedSchedTest extends AppTestCase
             'event' => $this->sr->getEvent($projectKey)
         ];
 
-        $params = ['group' => 'U16'];
+        $params = ['group' => '16U'];
         $view = $this->client->get('/sched', $params);
 
         $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
@@ -145,7 +149,7 @@ class SchedSchedTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function xtestRepostSchedAsAdmin()
     {
@@ -162,7 +166,7 @@ class SchedSchedTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
         $show_medal_round = $this->sr->getMedalRound($projectKey);
 
         $this->client->app->getContainer()['session'] = [
@@ -171,11 +175,11 @@ class SchedSchedTest extends AppTestCase
             'event' => $this->sr->getEvent($projectKey),
         ];
 
-        $this->sr->updateAssignor([457=>$user]);
+        $this->sr->updateAssignor([1912=>$user]);
         $games = $this->sr->getGamesByRep($projectKey, $user, $show_medal_round);
 
-        $this->sr->updateAssignor([501=>'']);
-        $unassignedGames = $this->sr->getUnassignedGames($projectKey, 'U16');
+        $this->sr->updateAssignor([1929=>'']);
+        $unassignedGames = $this->sr->getUnassignedGames($projectKey, '16U');
 
         $url = '/sched';
         $headers = array(
@@ -210,7 +214,7 @@ class SchedSchedTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testNoGamesAsUser()
     {
@@ -227,7 +231,7 @@ class SchedSchedTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['empty_test']['user'];
-        $projectKey = $this->config['empty_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -238,7 +242,7 @@ class SchedSchedTest extends AppTestCase
         $view = $this->client->get('/sched');
 
         $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
-        $this->assertContains("<h3 class=\"left\">0 Matches assigned to Area 1P</h3>", $view);
+        $this->assertContains("<h3 class=\"left\">0 Matches assigned to Area 7E</h3>", $view);
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Action\Greet;
 
+
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -34,7 +35,7 @@ class GreetView extends AbstractView
 
     /**
      * @param Response $response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function render(Response &$response)
     {
@@ -56,7 +57,7 @@ class GreetView extends AbstractView
 
     /**
      * @return null|string
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     protected function renderView()
     {

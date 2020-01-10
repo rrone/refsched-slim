@@ -6,6 +6,7 @@ use App\Action\AbstractView;
 use App\Action\Greet\SchedGreetController;
 use App\Action\Greet\GreetView;
 
+
 class SchedGreetTest extends AppTestCase
 {
     public function setUp()
@@ -23,7 +24,7 @@ class SchedGreetTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testGreetAsAnonymous()
     {
@@ -47,7 +48,7 @@ class SchedGreetTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testGreetAsUser()
     {
@@ -64,7 +65,7 @@ class SchedGreetTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -77,7 +78,7 @@ class SchedGreetTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testGreetAsAdmin()
     {
@@ -93,7 +94,7 @@ class SchedGreetTest extends AppTestCase
 
         // invoke the controller action and test it
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,

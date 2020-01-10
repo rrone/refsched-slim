@@ -3,6 +3,7 @@ namespace Tests;
 
 use App\Action\SchedulerRepository;
 use Slim\Container;
+use stdClass;
 
 class ActionTest extends AppTestCase
 {
@@ -13,18 +14,18 @@ class ActionTest extends AppTestCase
 
     /* @var SchedulerRepository */
     private $mockSR;
-    private $projectKey = '2016U16U19Chino';
+    private $projectKey = '202016U19UPlayoffs';
     private $userName;
     private $user;
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function setUp()
     {
         $this->app = $this->getSlimInstance();
         $this->c = $this->app->getContainer();
-        $db = $this->c->get('db');
+        $db = $this->c['db'];
 
         $this->mockSR = new SchedulerRepository($db);
 
@@ -85,7 +86,7 @@ class ActionTest extends AppTestCase
     {
         $result = $this->mockSR->getEventLabel($this->projectKey);
 
-        $this->assertEquals('U16/U19 Playoffs: November 19-20, 2016', $result);
+        $this->assertEquals('16U-19U Playoffs: March 14-15, 2020', $result);
     }
 
     public function testGetLockedNull()
@@ -162,9 +163,9 @@ class ActionTest extends AppTestCase
 
     public function testgetGame()
     {
-        $result = $this->mockSR->getGame(457);
+        $result = $this->mockSR->getGame(1912);
 
-        $this->assertInstanceOf(\stdClass::class, $result);
+        $this->assertInstanceOf(stdClass::class, $result);
     }
 
     public function testupdateGame()

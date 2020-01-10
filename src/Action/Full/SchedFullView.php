@@ -3,6 +3,7 @@
 namespace App\Action\Full;
 
 use App\Action\AbstractView;
+
 use Slim\Container;
 use App\Action\SchedulerRepository;
 use Slim\Http\Request;
@@ -42,7 +43,7 @@ class SchedFullView extends AbstractView
 
     /**
      * @param Response $response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function render(Response &$response)
     {
@@ -63,7 +64,7 @@ class SchedFullView extends AbstractView
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     protected function renderView()
     {
@@ -257,7 +258,7 @@ class SchedFullView extends AbstractView
     /**
      * @param string $pos
      * @return null|string
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     private function menu($pos = 'top')
     {

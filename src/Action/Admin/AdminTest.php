@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests;
 
 use App\Action\AbstractImporter;
@@ -31,7 +32,7 @@ class AdminTest extends AppTestCase
         $this->app->getContainer()['session'] = [
             'authed' => false,
             'user' => null,
-            'event' => null
+            'event' => null,
         ];
 
         $this->client = new AppWebTestClient($this->app);
@@ -41,7 +42,7 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testAdminAsAnonymous()
     {
@@ -65,7 +66,7 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testAdminAsUser()
     {
@@ -82,12 +83,12 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)
+            'event' => $this->sr->getEvent($projectKey),
         ];
 
         $this->client->returnAsResponseObject(true);
@@ -98,7 +99,7 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testAdminAsAdmin()
     {
@@ -115,12 +116,12 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)
+            'event' => $this->sr->getEvent($projectKey),
         ];
 
         $this->client->returnAsResponseObject(true);
@@ -131,7 +132,7 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testLogExportAsUser()
     {
@@ -148,12 +149,12 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)
+            'event' => $this->sr->getEvent($projectKey),
         ];
 
         $this->client->returnAsResponseObject(true);
@@ -165,7 +166,7 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testLogExportAsAdmin()
     {
@@ -182,7 +183,7 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -203,7 +204,7 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testTemplateExportAsUser()
     {
@@ -220,12 +221,12 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)
+            'event' => $this->sr->getEvent($projectKey),
         ];
 
         $this->client->returnAsResponseObject(true);
@@ -237,7 +238,7 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testTemplateExportAsAdmin()
     {
@@ -254,12 +255,12 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)
+            'event' => $this->sr->getEvent($projectKey),
         ];
 
         $this->client->returnAsResponseObject(true);
@@ -275,7 +276,7 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testNullTemplateExportAsAdmin()
     {
@@ -296,7 +297,7 @@ class AdminTest extends AppTestCase
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => null
+            'event' => null,
         ];
 
         $this->client->returnAsResponseObject(true);
@@ -308,12 +309,12 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedImportAsUser()
     {
         // instantiate the view and test it
-        $uploadPath = $this->app->getContainer()->get('settings')['upload_path'];
+        $uploadPath = $this->app->getContainer()['settings']['upload_path'];
 
         $view = new SchedImport($this->c, $this->sr, $uploadPath);
         $this->assertTrue($view instanceof AbstractImporter);
@@ -326,12 +327,12 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)
+            'event' => $this->sr->getEvent($projectKey),
         ];
 
         $this->client->returnAsResponseObject(true);
@@ -343,7 +344,7 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedImportAsAdmin()
     {
@@ -362,12 +363,12 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)
+            'event' => $this->sr->getEvent($projectKey),
         ];
 
         $this->client->returnAsResponseObject(true);
@@ -379,7 +380,7 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testTestCSVAsAdmin()
     {
@@ -398,27 +399,27 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)
+            'event' => $this->sr->getEvent($projectKey),
         ];
 
         $url = '/adm/import';
         $headers = array(
             'cache-control' => 'no-cache',
-            'content-type' => 'multipart/form-data;'
+            'content-type' => 'multipart/form-data;',
         );
         $body = array(
-            'Test' => ''
+            'Test' => '',
         );
 
-        $filePath = PROJECT_ROOT . '/tests/testfiles/';
+        $filePath = PROJECT_ROOT.'/tests/testfiles/';
         $fileName = 'TestGameSchedule.csv';
         $tmpName = tempnam('/tmp', '');
-        copy($filePath . $fileName, $tmpName);
+        copy($filePath.$fileName, $tmpName);
 
         $uploadFile = new UploadedFile($tmpName, $fileName, 'text/csv', filesize($tmpName));
 
@@ -434,7 +435,7 @@ class AdminTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testUploadCSVAsAdmin()
     {
@@ -453,27 +454,27 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
-            'event' => $this->sr->getEvent($projectKey)
+            'event' => $this->sr->getEvent($projectKey),
         ];
 
         $url = '/adm/import';
         $headers = array(
             'cache-control' => 'no-cache',
-            'content-type' => 'multipart/form-data;'
+            'content-type' => 'multipart/form-data;',
         );
         $body = array(
-            'Upload' => ''
+            'Upload' => '',
         );
 
-        $filePath = PROJECT_ROOT . '/tests/testfiles/';
+        $filePath = PROJECT_ROOT.'/tests/testfiles/';
         $fileName = 'TestGameSchedule.csv';
         $tmpName = tempnam('/tmp', '');
-        copy($filePath . $fileName, $tmpName);
+        copy($filePath.$fileName, $tmpName);
 
         $uploadFile = new UploadedFile($tmpName, $fileName, 'text/csv', filesize($tmpName));
 

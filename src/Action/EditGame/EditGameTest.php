@@ -6,6 +6,7 @@ use App\Action\EditGame\EditGameView;
 use App\Action\AbstractController;
 use App\Action\AbstractView;
 
+
 class EditGameTest extends AppTestCase
 {
     /**
@@ -26,7 +27,7 @@ class EditGameTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testEditGameAsUser()
     {
@@ -43,7 +44,7 @@ class EditGameTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -59,7 +60,7 @@ class EditGameTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testEditGameAsAdmin()
     {
@@ -76,7 +77,7 @@ class EditGameTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -92,7 +93,7 @@ class EditGameTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testGamePostAsAdmin()
     {
@@ -109,7 +110,7 @@ class EditGameTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
         $event = $this->sr->getEvent($projectKey);
 
         $this->client->app->getContainer()['session'] = [
@@ -127,28 +128,28 @@ class EditGameTest extends AppTestCase
         );
         $body = array(
             0 => 'Update Matches',
-            '457+projectKey' => $projectKey,
-            '457+id' => '457',
-            '457+game_number' => '1',
-            '457+away' => 'C2--test',
+            '1912+projectKey' => $projectKey,
+            '1912+id' => '1912',
+            '1912+game_number' => '2',
+            '1912+away' => 'C2--test',
         );
 
         $response = (object)$this->client->post($url, $body, $headers);
         $view = (string)$response->getBody();
-        $this->assertContains("<td><input type=\"text\" name=\"457+away\" value=\"C2--test\"></td>", $view);
+        $this->assertContains("<td><input type=\"text\" name=\"1912+away\" value=\"C2--test\"></td>", $view);
 
         // reset edit names
         $body = array(
             0 => 'Update Matches',
-            '457+projectKey' => $projectKey,
-            '457+id' => '457',
-            '457+game_number' => '1',
-            '457+away' => 'C2',
+            '1912+projectKey' => $projectKey,
+            '1912+id' => '1912',
+            '1912+game_number' => '2',
+            '1912+away' => 'C2',
         );
 
         $response = (object)$this->client->post($url, $body, $headers);
         $view = (string)$response->getBody();
-        $this->assertContains("<td><input type=\"text\" name=\"457+away\" value=\"C2\"></td>", $view);
+        $this->assertContains("<td><input type=\"text\" name=\"1912+away\" value=\"C2\"></td>", $view);
     }
 
 

@@ -1,6 +1,8 @@
 <?php
 namespace App\Action\Admin;
 
+
+use PhpOffice\PhpSpreadsheet\Exception;
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -29,7 +31,7 @@ class SchedTemplateExport extends AbstractExporter
      * SchedTemplateExport constructor.
      * @param Container $container
      * @param SchedulerRepository $schedulerRepository
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -46,8 +48,8 @@ class SchedTemplateExport extends AbstractExporter
      * @param Request $request
      * @param Response $response
      * @return null|Response
-     * @throws \Interop\Container\Exception\ContainerException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     *
+     * @throws Exception
      */
     public function handler(Request $request, Response $response)
     {

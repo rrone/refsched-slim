@@ -3,6 +3,7 @@ namespace Tests;
 
 use App\Action\NoEvents\NoEventsController;
 use App\Action\NoEvents\NoEventsView;
+
 use There4\Slim\Test\WebTestClient;
 use App\Action\AbstractController;
 use App\Action\AbstractView;
@@ -27,7 +28,7 @@ class NoEventsTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testNoEventsAsAnonymous()
     {

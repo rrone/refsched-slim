@@ -6,6 +6,7 @@ use App\Action\AbstractView;
 use App\Action\Full\SchedFullController;
 use App\Action\Full\SchedFullView;
 
+
 class FullTest extends AppTestCase
 {
     /**
@@ -26,7 +27,7 @@ class FullTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testFullAsAnonymous()
     {
@@ -60,7 +61,7 @@ class FullTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testFullAsUser()
     {
@@ -77,7 +78,7 @@ class FullTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -98,7 +99,7 @@ class FullTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testFullAsAdmin()
     {
@@ -115,7 +116,7 @@ class FullTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -138,7 +139,7 @@ class FullTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testFullExportAsAnonymous()
     {
@@ -164,7 +165,7 @@ class FullTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testFullExportAsUser()
     {
@@ -181,7 +182,7 @@ class FullTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -202,7 +203,7 @@ class FullTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testFullExportAsAdmin()
     {
@@ -219,7 +220,7 @@ class FullTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,

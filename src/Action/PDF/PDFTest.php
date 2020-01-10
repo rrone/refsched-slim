@@ -54,7 +54,7 @@ class PDFTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
         $event = $this->sr->getEvent($projectKey);
 
         $this->client->app->getContainer()['session'] = [
@@ -83,7 +83,7 @@ class PDFTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
         $event = $this->sr->getEvent($projectKey);
 
         $this->client->app->getContainer()['session'] = [

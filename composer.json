@@ -21,9 +21,10 @@
     },
     "require-dev": {
         "symfony/debug": "^4",
-        "phpunit/phpunit": "^5",
+        "phpunit/phpunit": "^6",
+        "phpunit/dbunit": "^3",
         "phpunit/php-invoker": "^2",
-        "phpunit/php-code-coverage": "4",
+        "phpunit/php-code-coverage": "^5",
         "symfony/browser-kit": "^5",
         "symfony/event-dispatcher": "^5",
         "symfony/filesystem": "^5",
@@ -33,7 +34,7 @@
     },
     "require": {
         "php": "^7.3",
-        "slim/slim": "~3.1",
+        "slim/slim": "^3",
         "slim/twig-view": "^2",
         "slim/flash": "^0.4",
         "monolog/monolog": "^2",
@@ -48,6 +49,7 @@
         "ext-curl": "^7.3",
         "symfony/css-selector": "^5",
         "joshfraser/php-name-parser": "dev-master",
-        "components/bootstrap-default": "^3.3"
+        "components/bootstrap-default": "^3.3",
+        "symfony/dotenv": "^5.0"
     }
 }

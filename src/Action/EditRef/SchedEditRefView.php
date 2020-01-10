@@ -1,6 +1,7 @@
 <?php
 namespace App\Action\EditRef;
 
+
 use Slim\Container;
 use App\Action\SchedulerRepository;
 use Slim\Http\Request;
@@ -22,7 +23,7 @@ class SchedEditRefView extends AbstractView
      * @param Container $container
      * @param SchedulerRepository $schedulerRepository
      * @param FullNameParser $parser
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository, FullNameParser $parser)
     {
@@ -81,7 +82,7 @@ class SchedEditRefView extends AbstractView
 
     /**
      * @param Response $response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function render(Response &$response)
     {
@@ -111,7 +112,7 @@ class SchedEditRefView extends AbstractView
 
     /**
      * @return string|null
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     private function renderEditRef()
     {
@@ -219,7 +220,7 @@ class SchedEditRefView extends AbstractView
 
     /**
      * @return string
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     private function menu()
     {

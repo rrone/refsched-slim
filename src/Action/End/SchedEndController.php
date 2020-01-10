@@ -1,6 +1,7 @@
 <?php
 namespace App\Action\End;
 
+
 use Slim\Container;
 use Slim\Http\Request as Request;
 use Slim\Http\Response as Response;
@@ -18,7 +19,7 @@ class SchedEndController extends AbstractController
      * @param Response $response
      * @param $args
      * @return Response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function __invoke(Request $request, Response $response, $args)
     {

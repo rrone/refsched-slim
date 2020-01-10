@@ -6,6 +6,7 @@ use App\Action\AbstractView;
 use App\Action\Logon\LogonController;
 use App\Action\Logon\LogonView;
 
+
 class LogonTest extends AppTestCase
 {
     protected $eventLabel;
@@ -22,9 +23,6 @@ class LogonTest extends AppTestCase
         $this->client = new AppWebTestClient($this->app);
     }
 
-    /**
-     * @throws \Interop\Container\Exception\ContainerException
-     */
     public function testRoot()
     {
         // instantiate the view and test it
@@ -47,7 +45,7 @@ class LogonTest extends AppTestCase
      */
     public function testLogonAsUser()
     {
-        $this->eventLabel = $this->config['user_test']['event'];
+        $this->eventLabel = $this->config['testParams']['event'];
         $this->userName = $this->config['user_test']['user'];
         $this->passwd = $this->config['user_test']['passwd'];
 
@@ -79,7 +77,7 @@ class LogonTest extends AppTestCase
      */
     public function testLogonAsUserWithBadPW()
     {
-        $this->eventLabel = $this->config['user_test']['event'];
+        $this->eventLabel = $this->config['testParams']['event'];
         $this->userName = $this->config['user_test']['user'];
 
         $url = '/';
@@ -107,7 +105,7 @@ class LogonTest extends AppTestCase
      */
     public function testLogonAsAdmin()
     {
-        $this->eventLabel = $this->config['admin_test']['event'];
+        $this->eventLabel = $this->config['testParams']['event'];
         $this->userName = $this->config['admin_test']['user'];
         $this->passwd = $this->config['admin_test']['passwd'];
 
@@ -140,7 +138,7 @@ class LogonTest extends AppTestCase
      */
     public function testLogonAsDeveloper()
     {
-        $this->eventLabel = $this->config['dev_test']['event'];
+        $this->eventLabel = $this->config['testParams']['event'];
         $this->userName = $this->config['dev_test']['user'];
         $this->passwd = $this->config['dev_test']['passwd'];
 

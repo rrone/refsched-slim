@@ -1,6 +1,7 @@
 <?php
 namespace App\Action\Logon;
 
+
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -61,7 +62,7 @@ class LogonView extends AbstractView
     /**
      * @param Response $response
      * @return Response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function render(Response &$response)
     {
@@ -82,7 +83,7 @@ class LogonView extends AbstractView
     /**
      * @param null $key
      * @return null|string
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     protected function renderView($key = null)
     {

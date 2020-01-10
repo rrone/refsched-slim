@@ -2,6 +2,7 @@
 
 namespace App\Action;
 
+
 use Slim\Container;
 use Slim\Http\Request;
 
@@ -30,16 +31,16 @@ abstract class AbstractController
 
     /**
      * @return mixed
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     private function isTest()
     {
-        return $this->container->get('settings.test');
+        return $this->container['settings.test'];
     }
 
     /**
      * @return bool|null
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     protected function isAuthorized()
     {
@@ -83,7 +84,7 @@ abstract class AbstractController
             $enabledEvents = array_values((array)$sr->getEnabledEvents())[0];
 
             if (in_array($this->event, $enabledEvents)) {
-                $_SESSION['param'] = $this->event->projectKey;;
+                $_SESSION['param'] = $this->event->projectKey;
             }
         }
     }
@@ -91,7 +92,7 @@ abstract class AbstractController
     /**
      * @param Request $request
      * @return null
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     protected function logStamp(Request $request)
     {
@@ -162,7 +163,7 @@ abstract class AbstractController
     /**
      * @param $path
      * @return string
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     protected function getBaseURL($path)
     {

@@ -2,6 +2,7 @@
 
 namespace App\Action\Refs;
 
+
 use Slim\Container;
 use App\Action\SchedulerRepository;
 use Slim\Http\Request;
@@ -36,7 +37,7 @@ class SchedRefsView extends AbstractView
 
     /**
      * @param Response $response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function render(Response &$response)
     {
@@ -59,7 +60,7 @@ class SchedRefsView extends AbstractView
 
     /**
      * @return null|string
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     private function renderRefs()
     {
@@ -253,7 +254,7 @@ class SchedRefsView extends AbstractView
 
     /**
      * @return string
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     private function menu()
     {

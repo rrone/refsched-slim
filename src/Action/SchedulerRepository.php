@@ -2,6 +2,7 @@
 
 namespace App\Action;
 
+use Exception;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Support\Collection;
 use DateTime;
@@ -37,7 +38,7 @@ class SchedulerRepository
     //User table functions
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getAllUsers()
     {
@@ -179,7 +180,7 @@ class SchedulerRepository
     //Events table functions
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getCurrentEvents()
     {
@@ -190,7 +191,7 @@ class SchedulerRepository
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getAllEvents()
     {
@@ -201,7 +202,7 @@ class SchedulerRepository
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getEnabledEvents()
     {
@@ -431,7 +432,7 @@ class SchedulerRepository
      * @param string $group
      * @param bool $medalRound
      * @param string $sortOn
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getGames($projectKey = '%', $group = '%', $medalRound = false, $sortOn = 'game_number')
     {
@@ -467,7 +468,7 @@ class SchedulerRepository
      * @param string $projectKey
      * @param string $group
      * @param bool $medalRound
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getUnassignedGames($projectKey = '%', $group = '%', $medalRound = false)
     {
@@ -490,7 +491,7 @@ class SchedulerRepository
      * @param $projectKey
      * @param $rep
      * @param bool $medalRound
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getGamesByRep($projectKey, $rep, $medalRound = false)
     {
@@ -528,13 +529,13 @@ class SchedulerRepository
 
             switch ($u) {
                 case 1:
-                    $div = substr($group->division, $u, 3);;
+                    $div = substr($group->division, $u, 3);
                     break;
                 case 2:
-                    $div = substr($group->division, $u - 1, 3);;
+                    $div = substr($group->division, $u - 1, 3);
                     break;
                 default:
-                    $div = substr($group->division, $u - 2, 3);;
+                    $div = substr($group->division, $u - 2, 3);
             }
             if (!in_array($div, $result)) {
                 $result[] = $div;
@@ -659,7 +660,7 @@ class SchedulerRepository
 
         foreach ($games as $game) {
             $id = $game->id;
-        };
+        }
 
         $id++;
 
@@ -838,7 +839,7 @@ class SchedulerRepository
 
     /**
      * @param $projectKey
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getGameCounts($projectKey)
     {
@@ -851,7 +852,7 @@ class SchedulerRepository
 
     /**
      * @param $projectKey
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getDatesDivisions($projectKey)
     {
@@ -868,7 +869,7 @@ class SchedulerRepository
 
     /**
      * @param $projectKey
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getDivisions($projectKey)
     {
@@ -884,7 +885,7 @@ class SchedulerRepository
 
     /**
      * @param $projectKey
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getDates($projectKey)
     {
@@ -1026,7 +1027,7 @@ class SchedulerRepository
         $emptySortList = ['name' => '', 'Assignor' => '', 'all' => 0, 'ref' => 0, 'ar' => 0];
         if ($this->numberOfReferees($projectKey) > 3) {
             $emptySortList['4th'] = 0;
-        };
+        }
 
         $result = $this->getDates($projectKey);
         $arrDates = $result->all();
@@ -1093,7 +1094,7 @@ class SchedulerRepository
 
     /**
      * @param $projectKey
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getLimits($projectKey)
     {
@@ -1126,7 +1127,7 @@ class SchedulerRepository
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getAccessLog()
     {
@@ -1149,7 +1150,7 @@ class SchedulerRepository
      * @param $projectKey
      * @param $userName
      * @return string|null
-     * @throws \Exception
+     * @throws Exception
      */
     public function getLastLogon($projectKey, $userName)
     {

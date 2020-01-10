@@ -9,6 +9,7 @@ use App\Action\MedalRound\ShowMedalRoundController;
 use App\Action\MedalRound\MedalRoundView;
 use App\Action\MedalRound\ShowMedalRoundDivisionsController;
 
+
 class MedalRoundTest extends AppTestCase
 {
     /**
@@ -24,7 +25,7 @@ class MedalRoundTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testLockAsAdmin()
     {
@@ -46,7 +47,7 @@ class MedalRoundTest extends AppTestCase
 
         // invoke the lock controller action as admin and test it
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->app->getContainer()['session'] = [
             'authed' => true,
@@ -83,7 +84,7 @@ class MedalRoundTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testLockAsUser()
     {
@@ -105,7 +106,7 @@ class MedalRoundTest extends AppTestCase
 
         // invoke the lock controller action as admin and test it
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->app->getContainer()['session'] = [
             'authed' => true,
@@ -141,7 +142,7 @@ class MedalRoundTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testShowMRAsAdmin()
     {
@@ -164,7 +165,7 @@ class MedalRoundTest extends AppTestCase
 
         // invoke the lock controller action as user and test it
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
         $this->app->getContainer()['session'] = [
             'authed' => true,
             'user' => $this->sr->getUserByName($user),
@@ -199,7 +200,7 @@ class MedalRoundTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testShowMRDAsAdmin()
     {
@@ -221,7 +222,7 @@ class MedalRoundTest extends AppTestCase
 
         // invoke the lock controller action as user and test it
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->app->getContainer()['session'] = [
             'authed' => true,
@@ -257,7 +258,7 @@ class MedalRoundTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function xtestHideMRAsUser()
     {
@@ -273,7 +274,7 @@ class MedalRoundTest extends AppTestCase
 
         // invoke the lock controller action as authorized user and test it
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->app->getContainer()['session'] = [
             'authed' => true,
@@ -306,7 +307,7 @@ class MedalRoundTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function xtestHideAsAnonymous()
     {
@@ -342,7 +343,7 @@ class MedalRoundTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function xtestShowAsAnonymous()
     {

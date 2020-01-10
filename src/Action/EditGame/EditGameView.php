@@ -3,6 +3,7 @@ namespace App\Action\EditGame;
 
 use App\Action\AbstractView;
 use App\Action\SchedulerRepository;
+
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -17,7 +18,7 @@ class EditGameView extends AbstractView
      * EditGameView constructor.
      * @param Container $container
      * @param SchedulerRepository $repository
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function __construct(Container $container, SchedulerRepository $repository)
     {
@@ -60,7 +61,7 @@ class EditGameView extends AbstractView
     /**
      * @param Response $response
      * @return Response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function render(Response &$response)
     {
@@ -84,7 +85,7 @@ class EditGameView extends AbstractView
 
     /**
      * @return string|null
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     protected function renderEditGame()
     {
@@ -180,7 +181,7 @@ class EditGameView extends AbstractView
 
     /**
      * @return string
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     private function menu()
     {

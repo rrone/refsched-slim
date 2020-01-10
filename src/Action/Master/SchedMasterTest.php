@@ -6,6 +6,7 @@ use App\Action\AbstractView;
 use App\Action\Master\SchedMasterController;
 use App\Action\Master\SchedMasterView;
 
+
 class SchedMasterTest extends AppTestCase
 {
     protected $testUri;
@@ -27,7 +28,7 @@ class SchedMasterTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedMasterAsAnonymous()
     {
@@ -51,7 +52,7 @@ class SchedMasterTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedMasterAsUser()
     {
@@ -68,7 +69,7 @@ class SchedMasterTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -84,7 +85,7 @@ class SchedMasterTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedMasterAsAdmin()
     {
@@ -101,7 +102,7 @@ class SchedMasterTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -117,7 +118,7 @@ class SchedMasterTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedMasterPostAsAdmin()
     {
@@ -135,7 +136,7 @@ class SchedMasterTest extends AppTestCase
 
         $user = $this->config['admin_test']['user'];
         $assignor = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -149,10 +150,10 @@ class SchedMasterTest extends AppTestCase
             'cache-control' => 'no-cache',
             'content-type' => 'multipart/form-data;'
         );
-        // clear match 457 (match 1 in 2016U16U19Chino)
+        // clear match 1912 (match 1 in 202016U19UPlayoffs)
         $body = array(
             'Submit' => 'Submit',
-            457 => ''
+            1912 => ''
         );
 
         $response = (object)$this->client->post($url, $body, $headers);
@@ -160,10 +161,10 @@ class SchedMasterTest extends AppTestCase
 
         $this->assertContains("<form name=\"master_sched\" method=\"post\" action=/master>", $view);
 
-        // assign match 457 to Area 1B
+        // assign match 1912 to Area 1B
         $body = array(
             'Submit' => 'Submit',
-            457 => $assignor
+            1912 => $assignor
         );
 
         $response = (object)$this->client->post($url, $body, $headers);

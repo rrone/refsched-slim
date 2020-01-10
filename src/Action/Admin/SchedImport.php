@@ -3,6 +3,8 @@ namespace App\Action\Admin;
 
 use App\Action\AbstractImporter;
 use App\Action\SchedulerRepository;
+
+use PhpOffice\PhpSpreadsheet\Exception;
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -34,7 +36,7 @@ class SchedImport extends AbstractImporter
      * @param Container $container
      * @param SchedulerRepository $schedulerRepository
      * @param $uploadPath
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository, $uploadPath)
     {
@@ -50,8 +52,8 @@ class SchedImport extends AbstractImporter
     /**
      * @param Request $request
      * @return null|string
-     * @throws \Interop\Container\Exception\ContainerException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     *
+     * @throws Exception
      */
     public function handler(Request $request)
     {
@@ -100,7 +102,7 @@ class SchedImport extends AbstractImporter
                     foreach ($files as $file) { // iterate files
                         if (is_file($file))
                             unlink($file); // delete file
-                    };
+                    }
 
                     return $this->getBaseURL('adminPath');
             }
@@ -112,7 +114,7 @@ class SchedImport extends AbstractImporter
 
     /**
      * @param Response $response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function render(Response &$response)
     {
@@ -132,7 +134,7 @@ class SchedImport extends AbstractImporter
     /**
      * @param UploadedFile $file
      * @return array|null
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     protected function getData(UploadedFile $file)
     {
@@ -149,7 +151,7 @@ class SchedImport extends AbstractImporter
     /**
      * @param $file
      * @return bool|null
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     protected function testFile($file)
     {
@@ -169,7 +171,7 @@ class SchedImport extends AbstractImporter
     /**
      * @param $file
      * @return null
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     protected function importFile($file)
     {
@@ -232,7 +234,7 @@ class SchedImport extends AbstractImporter
     /**
      * @param $path
      * @return string
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     protected function getBaseURL($path)
     {

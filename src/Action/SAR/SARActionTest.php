@@ -47,7 +47,7 @@ class SARActionTest extends AppTestCase
         $this->assertFalse($controller instanceof AbstractController);
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -71,7 +71,7 @@ class SARActionTest extends AppTestCase
         $this->assertFalse($controller instanceof AbstractController);
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,

@@ -249,6 +249,10 @@ legend {
     min-width: 420px;
 }
 
-.rs-checkbox {
-    margin-top: -7px !important;
+.panel-heading {
+    margin-bottom: 10px;
+}
+
+.panel-masthead {
+    margin: 0;
 }

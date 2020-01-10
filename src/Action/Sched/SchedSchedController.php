@@ -1,6 +1,7 @@
 <?php
 namespace App\Action\Sched;
 
+
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -22,13 +23,13 @@ class SchedSchedController extends AbstractController
      * @param Response $response
      * @param $args
      * @return Response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized()) {
             return $response->withRedirect($this->getBaseURL('logonPath'));
-        };
+        }
 
         $this->logStamp($request);
 

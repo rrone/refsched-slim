@@ -8,6 +8,7 @@
 
 namespace App\Action\Master;
 
+
 use Slim\Container;
 use App\Action\SchedulerRepository;
 use Slim\Http\Request;
@@ -25,7 +26,7 @@ class SchedMasterView extends AbstractView
      * SchedMasterView constructor.
      * @param Container $container
      * @param SchedulerRepository $schedulerRepository
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -61,7 +62,7 @@ class SchedMasterView extends AbstractView
 
     /**
      * @param Response $response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function render(Response &$response)
     {
@@ -81,7 +82,7 @@ class SchedMasterView extends AbstractView
 
     /**
      * @return string|null
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     private function renderView()
     {
@@ -211,7 +212,7 @@ class SchedMasterView extends AbstractView
 
     /**
      * @return string
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     private function menu()
     {

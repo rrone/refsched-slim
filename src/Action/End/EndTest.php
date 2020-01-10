@@ -3,6 +3,8 @@ namespace Tests;
 
 use App\Action\End\SchedEndController;
 use App\Action\AbstractController;
+use Slim\Exception\MethodNotAllowedException;
+use Slim\Exception\NotFoundException;
 use Slim\Http\Response;
 
 class EndTest extends AppTestCase
@@ -18,8 +20,8 @@ class EndTest extends AppTestCase
     }
 
     /**
-     * @throws \Slim\Exception\MethodNotAllowedException
-     * @throws \Slim\Exception\NotFoundException
+     * @throws MethodNotAllowedException
+     * @throws NotFoundException
      */
     public function testEnd()
     {

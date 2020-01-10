@@ -7,6 +7,7 @@ use App\Action\Refs\SchedRefsController;
 use App\Action\Refs\SchedRefsView;
 
 
+
 ini_set('memory_limit', '1G');
 
 class SchedRefsTest extends AppTestCase
@@ -30,7 +31,7 @@ class SchedRefsTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedRefsAsAnonymous()
     {
@@ -54,7 +55,7 @@ class SchedRefsTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedRefsAsUser()
     {
@@ -71,7 +72,7 @@ class SchedRefsTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -87,7 +88,7 @@ class SchedRefsTest extends AppTestCase
     }
 
     /**
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function testSchedRefsAsAdmin()
     {
@@ -104,7 +105,7 @@ class SchedRefsTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
+        $projectKey = $this->config['testParams']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,

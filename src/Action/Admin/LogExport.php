@@ -1,6 +1,8 @@
 <?php
 namespace App\Action\Admin;
 
+
+use PhpOffice\PhpSpreadsheet\Exception;
 use Slim\Container;
 use Slim\Views\Twig;
 use Slim\Http\Request;
@@ -27,7 +29,7 @@ class LogExport extends AbstractExporter
      * LogExport constructor.
      * @param Container $container
      * @param SchedulerRepository $schedulerRepository
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -44,7 +46,7 @@ class LogExport extends AbstractExporter
      * @param Request $request
      * @param Response $response
      * @return Response
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     public function handler(Request $request, Response $response)
     {

@@ -3,6 +3,8 @@
 namespace App\Action\Sched;
 
 //use function FastRoute\TestFixtures\empty_options_cached;
+use Exception;
+
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -32,7 +34,7 @@ class SchedSchedView extends AbstractView
      * SchedSchedView constructor.
      * @param Container $container
      * @param SchedulerRepository $schedulerRepository
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -181,7 +183,7 @@ class SchedSchedView extends AbstractView
 
     /**
      * @param Response $response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function render(Response &$response)
     {
@@ -205,7 +207,7 @@ class SchedSchedView extends AbstractView
 
     /**
      * @return string|null
-     * @throws \Interop\Container\Exception\ContainerException|\Exception
+     * |Exception
      */
     private function renderView()
     {
@@ -288,7 +290,7 @@ class SchedSchedView extends AbstractView
 
     /**
      * @return string
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     private function menuLinks()
     {
@@ -530,7 +532,7 @@ class SchedSchedView extends AbstractView
     /**
      * @param $assignor
      * @return string|null
-     * @throws \Exception
+     * @throws Exception
      */
     private function renderAssignmentByArea(
         $assignor

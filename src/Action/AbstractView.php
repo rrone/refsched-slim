@@ -53,7 +53,7 @@ abstract class AbstractView
      * AbstractView constructor.
      * @param Container $container
      * @param SchedulerRepository $schedulerRepository
-     * @throws ContainerException
+     *
      */
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -74,13 +74,13 @@ abstract class AbstractView
 
         switch ($u) {
             case 1:
-                $div = substr($div, $u, 3);;
+                $div = substr($div, $u, 3);
                 break;
             case 2:
-                $div = substr($div, $u - 1, 3);;
+                $div = substr($div, $u - 1, 3);
                 break;
             default:
-                $div = substr($div, $u - 2, 3);;
+                $div = substr($div, $u - 2, 3);
         }
 
         return $div;
@@ -109,7 +109,7 @@ abstract class AbstractView
     /**
      * @param $path
      * @return string
-     * @throws ContainerException
+     *
      */
     protected function getBaseURL($path)
     {
@@ -139,7 +139,7 @@ abstract class AbstractView
      * @param $path
      * @param string $field
      * @return null|string
-     * @throws ContainerException
+     *
      */
     protected function getUri($path, $field = 'game_number')
     {

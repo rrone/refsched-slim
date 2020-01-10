@@ -2,6 +2,7 @@
 
 namespace  App\Action\PDF;
 
+
 use Slim\Container;
 use Slim\Http\Request as Request;
 use Slim\Http\Response as Response;
@@ -24,13 +25,13 @@ class PDFController extends AbstractController
      * @param Response $response
      * @param $args
      * @return ExportPDF|Response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized()) {
             return $response->withRedirect($this->getBaseURL('greetPath'));
-        };
+        }
 
         $this->logStamp($request);
 

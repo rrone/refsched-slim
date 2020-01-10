@@ -8,6 +8,7 @@ ini_set('display_startup_errors', 1);
 ini_set('error_log', 'syslog');
 date_default_timezone_set('UTC');
 
+use FullNameParser;
 use Slim\App;
 use App\Action\SchedulerRepository;
 use Slim\Container;
@@ -40,18 +41,17 @@ class AppTestCase extends WebTestCase
     protected $c;
 
     /**
-     * @var \FullNameParser
+     * @var FullNameParser
      */
     protected $p;
 
-    /* @var \Tests\AppWebTestClient */
+    /* @var AppWebTestClient */
     protected $client;
 
     private $cookies = array();
 
     /**
      * @return App
-     * @throws \Interop\Container\Exception\ContainerException
      */
     public function getSlimInstance() {
 
@@ -61,7 +61,7 @@ class AppTestCase extends WebTestCase
         $settings = require PROJECT_ROOT . '/app/settings.php';
         $settings['debug'] = true;
 
-        $settings['settings']['dbConfig'] = $this->config[$this->config['test']];
+        $settings['settings']['dbConfig'] = $this->config['test'];
 
         $settings['test']['user'] = $this->config['user_test'];
         $settings['test']['admin'] = $this->config['admin_test'];
@@ -84,8 +84,8 @@ class AppTestCase extends WebTestCase
         /** @var Container c */
         $this->c = $app->getContainer();
 
-        $this->p = $this->c->get('p');
-        $this->sr = new SchedulerRepository($this->c->get('db'));
+        $this->p = $this->c['p'];
+        $this->sr = new SchedulerRepository($this->c['db']);
 
         $app->getContainer()['settings.test'] = true;
 
@@ -139,6 +139,6 @@ class AppTestCase extends WebTestCase
     {
         $this->cookies[$name] = $value;
     }
-};
+}
 
 /* End of file bootstrap.php */

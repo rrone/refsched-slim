@@ -1,6 +1,7 @@
 <?php
 namespace App\Action\EditGame;
 
+
 use Slim\Container;
 use App\Action\AbstractController;
 use Slim\Http\Request;
@@ -23,13 +24,13 @@ class EditGameController extends AbstractController
      * @param Response $response
      * @param $args
      * @return Response
-     * @throws \Interop\Container\Exception\ContainerException
+     *
      */
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized() || !$this->user->admin) {
             return $response->withRedirect($this->getBaseURL('greetPath'));
-        };
+        }
 
         if($this->event->archived) {
             if(isset($_SERVER['HTTP_REFERER'])) {

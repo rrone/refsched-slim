@@ -1,6 +1,8 @@
 <?php
 namespace App\Action\Admin;
 
+
+use PhpOffice\PhpSpreadsheet\Exception;
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -27,14 +29,14 @@ class LogExportController extends AbstractController
      * @param Response $response
      * @param $args
      * @return Response
-     * @throws \Interop\Container\Exception\ContainerException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     *
+     * @throws Exception
      */
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized()) {
             return $response->withRedirect($this->getBaseURL('logonPath'));
-        };
+        }
 
         if (!$this->user->admin) {
             return $response->withRedirect($this->getBaseURL('greetPath'));

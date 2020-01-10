@@ -2,6 +2,7 @@
 
 namespace App\Action;
 
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -60,7 +61,7 @@ abstract class AbstractImporter
     /**
      * @param $filename
      * @return array|null
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     public function import($filename)
     {
@@ -78,7 +79,7 @@ abstract class AbstractImporter
     /**
      * @param $inputFileName
      * @return array|null
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     public function importCSV($inputFileName)
     {
@@ -91,7 +92,7 @@ abstract class AbstractImporter
     /**
      * @param $inputFileName
      * @return array|null
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     public function importXLSX($inputFileName)
     {
@@ -105,7 +106,7 @@ abstract class AbstractImporter
      * @param $inputFileName
      * @param $inputFileType
      * @return array|null
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     private function _import($inputFileName, $inputFileType)
     {
@@ -120,7 +121,7 @@ abstract class AbstractImporter
     /**
      * @param Spreadsheet $objSpreadsheet
      * @return array|null
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     private function readWorksheet(Spreadsheet $objSpreadsheet)
     {
