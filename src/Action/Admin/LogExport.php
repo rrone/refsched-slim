@@ -37,7 +37,7 @@ class LogExport extends AbstractExporter
 
         $this->container = $container;
         $this->sr = $schedulerRepository;
-        $this->view = $container->get('view');
+        $this->view = $container['view'];
 
         $this->outFileName = 'Access_Log_' . date('Ymd_His') . '.' . $this->getFileExtension();
     }

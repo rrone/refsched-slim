@@ -245,7 +245,7 @@ class GreetView extends AbstractView
                 }
                 $html .= "</h3>";
 
-                $html .= "<hr class=\"center\" width=\"25%\">";
+                $html .= "<hr class=\"center width25\">";
                 $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">ACTIONS</h3>\n";
                 $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
                         'fullPath'

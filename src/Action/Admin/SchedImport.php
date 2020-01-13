@@ -142,9 +142,7 @@ class SchedImport extends AbstractImporter
 
         $file->moveTo($path);
 
-        $data = $this->import($path);
-
-        return $data;
+        return $this->import($path);
 
     }
 
@@ -239,9 +237,8 @@ class SchedImport extends AbstractImporter
     protected function getBaseURL($path)
     {
         $request = $this->container->get('request');
-        $baseUri = $request->getUri()->getBasePath() . $this->container->get($path);
 
-        return $baseUri;
+        return $request->getUri()->getBasePath() . $this->container->get($path);
     }
 
 

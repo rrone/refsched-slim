@@ -20,6 +20,7 @@ $settings = [
                 PROJECT_ROOT . '/src/Action/Admin',
                 PROJECT_ROOT . '/src/Action/NoEvents',
                 PROJECT_ROOT . '/src/Action/EditGame',
+                PROJECT_ROOT . '/src/Action/EditEvents',
                 PROJECT_ROOT . '/src/Action/MedalRound',
                 PROJECT_ROOT . '/src/Action/SAR',
             ],
@@ -39,11 +40,18 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2020.01.10.00-m'
+            'version' => '2020.01.12.00-m'
+        ],
+
+        'section' => [
+            'name' => 'Section 7',
+            'title' => 'S7: Referee Schedule',
+            'header' => 'Section 7 Event Schedule'
         ],
 
         'assignor' => [
             'name' => 'Rob McCarthy',
+            'role' => 'Section 7 Referee Assignor',
             'email' => 'robmccarthy62@gmail.com'
         ],
 

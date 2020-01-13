@@ -184,6 +184,7 @@ class SchedSchedView extends AbstractView
     /**
      * @param Response $response
      *
+     * @throws Exception
      */
     public function render(Response &$response)
     {
@@ -207,7 +208,7 @@ class SchedSchedView extends AbstractView
 
     /**
      * @return string|null
-     * |Exception
+     * @throws Exception
      */
     private function renderView()
     {
@@ -372,6 +373,7 @@ class SchedSchedView extends AbstractView
                 }
                 $html .= "</h3>\n";
 
+                $role = $this->view['assignorrole'];
                 foreach ($this->limit_list as $div => $limit) {
                     //schedule is locked
                     if ($this->locked) {
@@ -382,7 +384,7 @@ class SchedSchedView extends AbstractView
                         }
                         //if at or above limit
                         if ($limit != 'none' && $this->assigned_list[$div] >= $limit) {
-                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at or above your $div match limit in one or more divisions<br>You need to contact the Section 7 Referee Assignor if you want to change your match assignments</span></h3>\n";
+                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at or above your $div match limit in one or more divisions<br>You need to contact the $role if you want to change your match assignments</span></h3>\n";
                             $this->atlimit |= true;
                         }
                     } else {  // not locked
@@ -393,7 +395,7 @@ class SchedSchedView extends AbstractView
                         }
                         //if above limit
                         if ($limit != 'none' && $this->assigned_list[$div] > $limit) {
-                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your $div match limit<br>Additional matches were likely assigned to you by the Section 7 Referee Assignor</span></h3>\n";
+                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your $div match limit<br>Additional matches were likely assigned to you by the $role</span></h3>\n";
                             $this->atlimit &= true;
                         }
                     }
@@ -438,7 +440,7 @@ class SchedSchedView extends AbstractView
             $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
 
             $html .= "<table class=\"sched-table\" >\n";
-            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
+            $html .= "<tr class=\"center colorTitle\">";
             $html .= "<th>Match #</th>";
             $html .= "<th>Date</th>";
             $html .= "<th>Time</th>";
@@ -457,7 +459,9 @@ class SchedSchedView extends AbstractView
             $this->description = $this->user->name.': Schedule';
             $gameCount = 0;
             foreach ($this->assigned_list['unassigned'] as $game) {
-                if (($this->showgroup && $this->showgroup == $this->divisionAge($game->division)) || !$this->showgroup) {
+                if (($this->showgroup && $this->showgroup == $this->divisionAge(
+                            $game->division
+                        )) || !$this->showgroup) {
                     if ($this->user->admin || $usr != substr($game->home, 0, 1) && $usr != substr(
                             $game->away,
                             0,
@@ -479,7 +483,13 @@ class SchedSchedView extends AbstractView
                             }
                         }
 
-                        $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
+                        switch ($rowColor) {
+                            case $this->colorDarkGray:
+                                $html .= "<tr class=\"center colorLtGray\">";
+                                break;
+                            default:
+                                $html .= "<tr class=\"center colorDarkGray\">";
+                        }
                         if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
                             $html .= "<td>".$game->game_number."</td>";
                         } else {
@@ -582,7 +592,7 @@ class SchedSchedView extends AbstractView
 
         if ($gameCount) {
             $html .= "<table class=\"sched-table\" >\n";
-            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
+            $html .= "<tr class=\"center colorTitle\">";
             $html .= "<th>Match #</th>";
             $html .= "<th>Date</th>";
             $html .= "<th>Time</th>";
@@ -593,7 +603,7 @@ class SchedSchedView extends AbstractView
             $html .= "<th>Away</th>";
             $html .= "<th>Referee Team</th>";
             if (empty(count($games))) {
-                $html .= "<tr class=\"center\" bgcolor=\"$this->colorHighlight\">";
+                $html .= "<tr class=\"center colorHighlight\">";
                 $html .= "<td colspan=\"9\">$assignor has no matches assigned</td>";
                 $html .= "</tr>\n";
             } else {
@@ -623,7 +633,14 @@ class SchedSchedView extends AbstractView
                         $date = date('D, d M', strtotime($game->date));
                         $time = date('H:i', strtotime($game->time));
 
-                        $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
+                        switch ($rowColor) {
+                            case $this->colorGroup1:
+                                $html .= "<tr class=\"center colorGroup2\">";
+                                break;
+                            default:
+                                $rowColor = $this->colorGroup1;
+                                $html .= "<tr class=\"center colorGroup1\">";
+                        }
                         if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
                             $html .= "<td>".$game->game_number."</td>";
                         } else {

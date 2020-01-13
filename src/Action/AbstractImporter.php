@@ -113,9 +113,7 @@ abstract class AbstractImporter
         $objReader = IOFactory::createReader($inputFileType);
         $objSpreadsheet = $objReader->load($inputFileName);
 
-        $data = $this->readWorksheet($objSpreadsheet);
-
-        return $data;
+        return $this->readWorksheet($objSpreadsheet);
     }
 
     /**

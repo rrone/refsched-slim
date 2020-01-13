@@ -66,7 +66,8 @@ class InfoModalView extends AbstractView
         if(!is_array($rec)) {
             return null;
         }
-        $html = <<<EOT
+
+        return <<<EOT
 <div>        
 <p><b>Name:</b> {$rec['Name']}</p>  
 <p><b>S/A/R:</b> {$rec['SAR']}</p>  
@@ -78,6 +79,5 @@ class InfoModalView extends AbstractView
 <p><b>eMail:</b> <a href='mailto:{$rec["Email"]}'>{$rec['Email']}</a></p>  
 </div>
 EOT;
-        return $html;
     }
 }

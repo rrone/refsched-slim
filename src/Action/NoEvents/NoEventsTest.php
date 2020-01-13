@@ -45,8 +45,11 @@ class NoEventsTest extends AppTestCase
         // invoke the controller action and test it
 
         $view = $this->client->get('/na');
+        $h = $this->c['view']['header'];
+        $header = "<h1>$h</h1>";
 
-        $this->assertContains("<h1>Section 7 Event Schedule</h1>",$view);
+
+        $this->assertContains($header,$view);
     }
 
 

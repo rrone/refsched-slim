@@ -1,12 +1,12 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <table width="98%" class="maincontent">
+    <table class="maincontent width98">
         <tr>
             <td class="contentarea center">
 
                 <div class="center">
-                    <h1>Section 7 Event Schedule</h1>
+                    <h1>{{ header }}</h1>
 
                     {% for event in events %}
                         <h3>{{ event.name | raw }}, {{ event.location }}<br>

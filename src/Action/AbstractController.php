@@ -167,11 +167,9 @@ abstract class AbstractController
      */
     protected function getBaseURL($path)
     {
-        $request = $this->container->get('request');
+        $request = $this->container['request'];
 
-        $baseUri = $request->getUri()->getBasePath() . $this->container->get($path);
-
-        return $baseUri;
+        return $request->getUri()->getBasePath() . $this->container->get($path);
     }
 
 }
