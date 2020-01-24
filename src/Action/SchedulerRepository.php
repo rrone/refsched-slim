@@ -452,8 +452,6 @@ class SchedulerRepository
                 [
                     ['projectKey', 'like', $projectKey],
                     ['division', 'like', $group],
-                    ['date', '<=', date('Y-m-d')],
-
                 ]
             )
             ->orderBy($sortOn, 'asc')
@@ -1084,9 +1082,7 @@ class SchedulerRepository
 
         $refsList = $this->aggregateRefereeAssignments($arrResult);
 
-        $sortedRefsList = $this->sortRefereeAssignments($refsList, $projectKey);
-
-        return $sortedRefsList;
+        return $this->sortRefereeAssignments($refsList, $projectKey);
 
     }
 

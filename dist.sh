@@ -2,8 +2,8 @@
 ## Exit immediately if a command exits with a non-zero status.
 set -e
 #set distribution folder alias
-prod="$HOME"/Sites/AYSO/rs7.prod.slim
-dev="$HOME"/Sites/AYSO/rs7.dev.slim
+prod="$HOME"/Sites/AYSO/_services/rs7.prod.slim
+dev="$HOME"/Sites/AYSO/_dev/rs7.dev.slim
 config=${dev}/config
 PHP=/usr/local/etc/php/7.3/conf.d
 
@@ -24,12 +24,10 @@ if [[ -e ${PHP}"/ext-xdebug.ini" ]]
 then
     mv "$PHP"/ext-xdebug.ini "$PHP"/ext-xdebug.~ini
 fi
-composer install --no-dev
-yarn install --prod=true
 echo
 
 echo "  Clear distribution folder..."
-rm -f -r ${prod}
+rm -rf ${prod}
 echo
 
 echo "  Setup distribution folder..."
@@ -41,13 +39,18 @@ mkdir ${prod}/config
 echo
 
 echo "  Copying app folders to distribution..."
-cp -f -r app ${prod}/app
-cp -f -r vendor ${prod}/vendor
-cp -f -r node_modules ${prod}/node_modules
-cp -f -r public ${prod}/public
-cp -f -r templates ${prod}/templates
-cp -f -r ${config}/config_prod.php ${prod}/config/config.php
-cp -f -r src/Action ${prod}/src
+cp -rf app ${prod}/app
+cp -rf public ${prod}/public
+cp -rf templates ${prod}/templates
+cp -rf src/Action ${prod}/src
+cp -rf ${config}/config_prod.php ${prod}/config/config.php
+cp -f *.json ${prod}
+cp -f *.lock ${prod}
+
+echo "  Updating production libraries..."
+cd ${prod}
+    composer install --no-dev
+    yarn install --prod=true
 
 echo "  Updating index to production..."
 cp -f ${dev}/public/app_prod.php ${prod}/public/app.php
@@ -60,7 +63,7 @@ echo
 echo "  Removing development jetsam..."
 find ${prod} -type f -name 'app_*' -delete
 find ${prod}/src -type f -name '*Test.php' -delete
-##rm -f -r $dist/config/.git
+##rm -rf $dist/config/.git
 ##find $dist/config -type f -name '.env' -delete
 echo
 
@@ -70,8 +73,6 @@ if [[ -e ${PHP}"/ext-xdebug.~ini" ]]
 then
     mv "$PHP"/ext-xdebug.~ini "$PHP"/ext-xdebug.ini
 fi
-composer install
-yarn install
 echo
 
 echo "...distribution complete"
