@@ -364,6 +364,7 @@ class SchedExportXl extends AbstractExporter
                 $time = date('H:i', strtotime($game->time));
 
                 if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                    $matchID = $game->game_number;
                     if (is_null($this->event->field_map)) {
                         $field = $game->field;
                     } else {
@@ -374,6 +375,7 @@ class SchedExportXl extends AbstractExporter
                     $home = $game->home;
                     $away = $game->away;
                 } else {
+                    $matchID = "";
                     $field = "";
                     $division = "";
                     $pool = "";
@@ -382,7 +384,7 @@ class SchedExportXl extends AbstractExporter
                 }
 
                 $row = array(
-                    $game->game_number,
+                    $matchID,
                     $game->date,
                     $time,
                     $field,

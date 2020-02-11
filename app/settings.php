@@ -39,12 +39,12 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2020.01.24.00-m'
+            'version' => '2020.02.11.00-m'
         ],
 
         'assignor' => [
-            'name' => 'Rob McCarthy',
-            'email' => 'robmccarthy62@gmail.com'
+            'name' => 'Jody Kinsey',
+            'email' => 'jodykinsey23@gmail.com'
         ],
 
         'issueTracker' => 'https://github.com/rrone/refsched/issues?q=is%3Aissue+project%3Arrone%2Frefsched%2F1'

@@ -2,8 +2,8 @@
 ## Exit immediately if a command exits with a non-zero status.
 set -e
 #set distribution folder alias
-prod="$HOME"/Sites/AYSO/_services/rs7.prod.slim
-dev="$HOME"/Sites/AYSO/_dev/rs7.dev.slim
+dev="$HOME"/Sites/AYSO/_dev/refsched.slim
+prod="$HOME"/Sites/AYSO/_services/rs
 config=${dev}/config
 PHP=/usr/local/etc/php/7.3/conf.d
 
@@ -63,8 +63,6 @@ echo
 echo "  Removing development jetsam..."
 find ${prod} -type f -name 'app_*' -delete
 find ${prod}/src -type f -name '*Test.php' -delete
-##rm -rf $dist/config/.git
-##find $dist/config -type f -name '.env' -delete
 echo
 
 echo "  Restore composer development items..."
