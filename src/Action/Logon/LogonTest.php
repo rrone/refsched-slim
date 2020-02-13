@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests;
 
 use App\Action\AbstractController;
@@ -36,8 +37,10 @@ class LogonTest extends AppTestCase
         $this->assertTrue($controller instanceof AbstractController);
 
         $view = $this->client->get('/');
+        $h = $this->c['view']['header'];
+        $header = "<h1>$h</h1>";
 
-        $this->assertContains('<h1>Section 1 Event Schedule</h1>', $view);
+        $this->assertContains($header, $view);
     }
 
     /**
@@ -52,13 +55,13 @@ class LogonTest extends AppTestCase
         $url = '/';
         $headers = array(
             'cache-control' => 'no-cache',
-            'content-type' => 'multipart/form-data;'
+            'content-type' => 'multipart/form-data;',
         );
         $body = array(
             'event' => $this->eventLabel,
             'user' => $this->userName,
             'passwd' => $this->passwd,
-            'Submit' => 'Logon'
+            'Submit' => 'Logon',
         );
 
         $this->client->returnAsResponseObject(true);
@@ -83,19 +86,22 @@ class LogonTest extends AppTestCase
         $url = '/';
         $headers = array(
             'cache-control' => 'no-cache',
-            'content-type' => 'multipart/form-data;'
+            'content-type' => 'multipart/form-data;',
         );
         $body = array(
             'event' => $this->eventLabel,
             'user' => $this->userName,
             'passwd' => '',
-            'Submit' => 'Logon'
+            'Submit' => 'Logon',
         );
 
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->post($url, $body, $headers);
         $view = (string)$response->getBody();
-        $this->assertContains('<h1>Section 1 Event Schedule</h1>', $view);
+        $h = $this->c['view']['header'];
+        $header = "<h1>$h</h1>";
+
+        $this->assertContains($header, $view);
         $this->assertContains("Unrecognized password for $this->userName", $view);
     }
 
@@ -112,13 +118,13 @@ class LogonTest extends AppTestCase
         $url = '/';
         $headers = array(
             'cache-control' => 'no-cache',
-            'content-type' => 'multipart/form-data;'
+            'content-type' => 'multipart/form-data;',
         );
         $body = array(
             'event' => $this->eventLabel,
             'user' => $this->userName,
             'passwd' => $this->passwd,
-            'Submit' => 'Logon'
+            'Submit' => 'Logon',
         );
 
         $this->client->returnAsResponseObject(true);
@@ -145,13 +151,13 @@ class LogonTest extends AppTestCase
         $url = '/';
         $headers = array(
             'cache-control' => 'no-cache',
-            'content-type' => 'multipart/form-data;'
+            'content-type' => 'multipart/form-data;',
         );
         $body = array(
             'event' => $this->eventLabel,
             'user' => $this->userName,
             'passwd' => $this->passwd,
-            'Submit' => 'Logon'
+            'Submit' => 'Logon',
         );
 
         $this->client->returnAsResponseObject(true);

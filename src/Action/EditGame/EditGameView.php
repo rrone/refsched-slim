@@ -120,8 +120,8 @@ class EditGameView extends AbstractView
                     $html .= "<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"action\" value=\"Update Matches\">\n";
                     $html .= "<div class='clear-fix'></div>";
                 }
-                $html .= "<table class=\"edit-table sched-table\" width=\"100%\">\n";
-                $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
+                $html .= "<table class=\"edit-table sched-table width100\">\n";
+                $html .= "<tr class=\"center colorTitle\">";
                 $html .= "<th>Match #</th>";
                 $html .= "<th>Date</th>";
                 $html .= "<th>Time</th>";
@@ -136,7 +136,7 @@ class EditGameView extends AbstractView
                     $time = date('H:i', strtotime($game->time));
 
                     if(!$this->event->archived) {
-                        $html .= "<tr class=\"center\" bgcolor=\"#00FF88\">";
+                        $html .= "<tr class=\"center colorGreen\">";
                         $html .= "<td>$game->game_number
                         <input type=\"hidden\" name=\"$game->id+projectKey\" value=\"$projectKey\">
                         <input type=\"hidden\" name=\"$game->id+id\" value=\"$game->id\">
@@ -151,7 +151,7 @@ class EditGameView extends AbstractView
                         $html .= "<td><input type=\"text\" name=\"$game->id+away\" value=\"$game->away\"></td>";
                         $html .= "</tr>\n";
                     } else {
-                        $html .= "<tr class=\"center\" bgcolor=\"#00FF88\">";
+                        $html .= "<tr class=\"center colorGreen\">";
                         $html .= "<td>$game->game_number</td>";
                         $html .= "<td>$game->date</td>";
                         $html .= "<td>$game->time</td>";

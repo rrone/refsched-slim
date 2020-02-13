@@ -350,7 +350,7 @@ class AdminTest extends AppTestCase
     {
         // instantiate the view and test it
 
-        $uploadPath = $this->app->getContainer()->get('settings')['upload_path'];
+        $uploadPath = $this->app->getContainer()['settings']['upload_path'];
 
         $view = new SchedImport($this->c, $this->sr, $uploadPath);
         $this->assertTrue($view instanceof AbstractImporter);
@@ -386,7 +386,7 @@ class AdminTest extends AppTestCase
     {
         // instantiate the view and test it
 
-        $uploadPath = $this->app->getContainer()->get('settings')['upload_path'];
+        $uploadPath = $this->app->getContainer()['settings']['upload_path'];
 
         $view = new SchedImport($this->c, $this->sr, $uploadPath);
         $this->assertTrue($view instanceof AbstractImporter);
@@ -441,7 +441,7 @@ class AdminTest extends AppTestCase
     {
         // instantiate the view and test it
 
-        $uploadPath = $this->app->getContainer()->get('settings')['upload_path'];
+        $uploadPath = $this->app->getContainer()['settings']['upload_path'];
 
         $view = new SchedImport($this->c, $this->sr, $uploadPath);
         $this->assertTrue($view instanceof AbstractImporter);

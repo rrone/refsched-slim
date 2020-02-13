@@ -2,11 +2,11 @@
 
 {% block content %}
     <div class="maincontent">
-        <table width="98%">
+        <table class="width98">
             <tr>
                 <td>
                     <div class="center">
-                        <h1>Section 1 Event Schedule</h1>
+                        <h1>{{ header }}</h1>
 
                         {% for event in events %}
                             <h3>{{ event.name | raw }}, {{ event.location }}<br>

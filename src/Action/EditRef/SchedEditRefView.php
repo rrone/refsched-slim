@@ -159,8 +159,8 @@ class SchedEditRefView extends AbstractView
                         $time = date('H:i', strtotime($game->time));
                         if ($game->game_number == $target_game && ($game->assignor == $this->user->name || $this->user->admin)) {
                             $html .= "<form name=\"editref\" method=\"post\" action=" . $this->getBaseURL('editrefPath') . ">\n";
-                            $html .= "<table class=\"sched-table\" width=\"100%\">\n";
-                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
+                            $html .= "<table class=\"sched-table width100\">\n";
+                            $html .= "<tr class=\"center colorTitle\">";
                             $html .= "<th>Match #</th>";
                             $html .= "<th>Date</th>";
                             $html .= "<th>Time</th>";
@@ -175,7 +175,7 @@ class SchedEditRefView extends AbstractView
                                 $html .= "<th>4th</th>";
                             }
                             $html .= "</tr>\n";
-                            $html .= "<tr class=\"center\" bgcolor=\"#00FF88\">";
+                            $html .= "<tr class=\"center colorGreen\">";
                             if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
                                 $html .= "<td>$game->game_number</td>";
                             } else {

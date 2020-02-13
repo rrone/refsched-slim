@@ -78,6 +78,10 @@ $app->map(['GET', 'POST'], '/editgame', App\Action\EditGame\EditGameController::
     ->setName('edit_game');
 $container['editGamePath'] = $container->get('router')->pathFor('edit_game');
 
+$app->map(['GET', 'POST'], '/editevents', App\Action\EditEvents\EditEventsController::class)
+    ->setName('edit_events');
+$container['editEventsPath'] = $container->get('router')->pathFor('edit_events');
+
 $app->get('/fieldmap', App\Action\PDF\PDFController::class)
     ->setName('fieldmap');
 $container['fieldmap'] = $container->get('router')->pathFor('fieldmap');

@@ -52,7 +52,7 @@ class SchedulerRepository
      */
     public function getUsers($key = null)
     {
-        $users = $this->db->table('users')
+        return $this->db->table('users')
             ->where(
                 [
                     ['enabled', true],
@@ -60,8 +60,6 @@ class SchedulerRepository
                 ]
             )
             ->get();
-
-        return $users;
     }
 
     /**
@@ -440,7 +438,7 @@ class SchedulerRepository
         $group = '%'.$group.'%';
         $medalRound = $medalRound ? '%' : false;
 
-        $games = $this->db->table('games')
+        return $this->db->table('games')
             ->where(
                 [
                     ['projectKey', '=', $projectKey],
@@ -458,8 +456,6 @@ class SchedulerRepository
             ->orderBy('date', 'asc')
             ->orderBy('time', 'asc')
             ->get();
-
-        return $games;
     }
 
     /**
@@ -495,7 +491,7 @@ class SchedulerRepository
     {
         $medalRound = $medalRound ? '%' : false;
 
-        $games = $this->db->table('games')
+        return $this->db->table('games')
             ->where(
                 [
                     ['projectKey', '=', $projectKey],
@@ -504,8 +500,6 @@ class SchedulerRepository
                 ]
             )
             ->get();
-
-        return $games;
     }
 
     /**
@@ -854,15 +848,13 @@ class SchedulerRepository
      */
     public function getDatesDivisions($projectKey)
     {
-        $result = $this->db->table('games')
+        return $this->db->table('games')
             ->selectRaw('DISTINCT assignor, date, division')
             ->where('projectKey', $projectKey)
             ->orderBy('date', 'asc')
             ->orderBy('division', 'asc')
             ->orderBy('assignor', 'asc')
             ->get();
-
-        return $result;
     }
 
     /**
@@ -871,14 +863,12 @@ class SchedulerRepository
      */
     public function getDivisions($projectKey)
     {
-        $result = $this->db->table('games')
+        return $this->db->table('games')
             ->selectRaw('division as uDiv')
             ->distinct()
             ->where('projectKey', $projectKey)
             ->orderBy('division', 'asc')
             ->get();
-
-        return $result;
     }
 
     /**
@@ -887,14 +877,12 @@ class SchedulerRepository
      */
     public function getDates($projectKey)
     {
-        $result = $this->db->table('games')
+        return $this->db->table('games')
             ->select('date')
             ->distinct()
             ->where('projectKey', $projectKey)
             ->orderBy('date', 'asc')
             ->get();
-
-        return $result;
     }
 
     /**
@@ -1094,11 +1082,9 @@ class SchedulerRepository
      */
     public function getLimits($projectKey)
     {
-        $limits = $this->db->table('limits')
+        return $this->db->table('limits')
             ->where('projectKey', '=', $projectKey)
             ->get();
-
-        return $limits;
     }
 
 //Log writer
@@ -1195,7 +1181,7 @@ class SchedulerRepository
      */
     public function getPersonInfo($name)
     {
-        if($name == 'Forfeit'){
+        if ($name == 'Forfeit') {
             return array();
         }
 
@@ -1209,10 +1195,10 @@ class SchedulerRepository
 
         $RefsNoCerts = $this->createArray(
             $this->db->table('ref_no_certs')
-            ->select('ref_no_certs.*', 'refNicknames.Nickname')
-            ->join('refNicknames', 'refNicknames.AYSOID', '=', 'ref_no_certs.AYSOID')
-            ->where('Nickname', 'like', "$name")
-            ->get()
+                ->select('ref_no_certs.*', 'refNicknames.Nickname')
+                ->join('refNicknames', 'refNicknames.AYSOID', '=', 'ref_no_certs.AYSOID')
+                ->where('Nickname', 'like', "$name")
+                ->get()
         );
 
         $personRec = array_merge($Refs, $RefsNoCerts);
@@ -1230,8 +1216,110 @@ class SchedulerRepository
      */
     protected function createArray($obj)
     {
-        $arr = $array = json_decode(json_encode($obj), true);
-
-        return $arr;
+        return $array = json_decode(json_encode($obj), true);
     }
+
+    /**
+     * @param array $data
+     * @return null
+     */
+    public function modifyEvents(array $data)
+    {
+        $events = $data['data'];
+
+        $changes = array('adds' => 0, 'updates' => 0, 'errors' => []);
+//TODO: update for event records update
+        if (!empty($events)) {
+            foreach ($events['data'] as &$event) {
+                $nextData = [];
+                $match = array_values($event);
+                foreach ($match as $key => $field) {
+                    $nextData[$hdr[$key]] = $match[$key];
+                }
+
+//ensure empty fields default to correct type
+                foreach ($nextData as $key => $value) {
+                    if (is_null($value)) {
+                        switch ($key) {
+                            case 'date':
+                                $value = date('Y-m-d');
+                                break;
+                            case 'time':
+                                $value = "00:00";
+                                break;
+                            case 'medalRound':
+                                $value = 0;
+                                break;
+                            default:
+                                $value = '';
+                        }
+                    }
+                    $typedData[$key] = $value;
+                }
+
+                if (!empty($typedData['projectKey'])) {
+
+                    $isGame = $this->getGameByKeyAndNumber($typedData['projectKey'], $typedData['game_number']);
+                    if (empty($isGame)) {
+                        $result = $this->insertGame($typedData);
+                    } else {
+                        $result = $this->updateGame($typedData);
+                    }
+
+                    $changes['adds'] += $result['adds'];
+                    $changes['updates'] += $result['updates'];
+                } else {
+                    $changes['errors'][] = 'Missing projectKey, unable to add match';
+                }
+            }
+        }
+
+        return $changes;
+
+    }
+
+    /**
+     * @param $data
+     * @return array|null
+     */
+    public function updateEvent($data)
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        $changes = array('adds' => 0, 'updates' => 0);
+
+        $key = $data['projectKey'];
+        $num = $data['game_number'];
+
+        $game = $this->getGameByKeyAndNumber($key, $num);
+
+        //doing update by projectKey & game number; including id caused integrity error
+        unset($game->id);
+        unset($data['id']);
+
+        if (isset($data['time'])) {
+            $data['time'] = date('H:i:s', strtotime($data['time']));
+        }
+
+        $dif = array_diff_assoc($data, (array)$game);
+
+        if (!empty($dif)) {
+            $this->db->table('games')
+                ->where(
+                    [
+                        ['projectKey', $key],
+                        ['game_number', $num],
+                    ]
+                )
+                ->update($data);
+
+            $changes['updates']++;
+        }
+
+        return $changes;
+    }
+
+
 }

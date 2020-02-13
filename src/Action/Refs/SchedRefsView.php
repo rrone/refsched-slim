@@ -115,8 +115,8 @@ class SchedRefsView extends AbstractView
                     $html .= "Green shading change indicates different start times</h3>\n";
 
                     $html .= "<form name=\"addref\" method=\"post\" action=\"".$this->getBaseURL('refsPath')."\">\n";
-                    $html .= "<table class=\"sched-table\" width=\"100%\">\n";
-                    $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
+                    $html .= "<table class=\"sched-table width100\">\n";
+                    $html .= "<tr class=\"center colorTitle\">";
                     $html .= "<th>Match #</th>";
                     $html .= "<th>Date</th>";
                     $html .= "<th>Time</th>";
@@ -145,7 +145,7 @@ class SchedRefsView extends AbstractView
                         $time = date('H:i', strtotime($game->time));
                         if ($game->assignor == $this->user->name || $this->user->admin) {
                             if (!$game->assignor && $this->user->admin) {
-                                $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                                $html .= "<tr class=\"center colorOpenSlots\">";
                             } else {
                                 if (!$testtime) {
                                     $testtime = $time;
@@ -162,14 +162,20 @@ class SchedRefsView extends AbstractView
                                 //no refs
                                 if (empty($game->cr) && empty($game->ar1) && empty($game->ar2) && (!$has4th || ($has4th
                                             && empty($game->r4th)))) {
-                                    $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                                    $html .= "<tr class=\"center colorUnassigned\">";
                                     //open AR  or 4th slots
                                 } elseif (empty($game->cr) || empty($game->ar1) || empty($game->ar2) || ($has4th &&
                                         empty($game->r4th))) {
-                                    $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                                    $html .= "<tr class=\"center colorOpenSlots\">";
                                     //match covered
                                 } else {
-                                    $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
+                                    switch ($rowColor) {
+                                        case $this->colorGroup1:
+                                            $html .= "<tr class=\"center colorGroup1\">";
+                                            break;
+                                        default:
+                                            $html .= "<tr class=\"center colorGroup2\">";
+                                    }
                                 }
                             }
                             if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
@@ -197,26 +203,32 @@ class SchedRefsView extends AbstractView
                                 $html .= "<td></td>";
                             }
                             $html .= "<td>$game->assignor</td>";
-                            if ($this->user->admin && !empty($game->cr) && count(preg_grep ("/$game->cr/", $refNames))) {
+                            if ($this->user->admin && !empty($game->cr) && count(preg_grep("/$game->cr/", $refNames))) {
                                 $html .= '<td><button type="button" class="info btn btn-link" id="'.$game->cr.'">'.$game->cr.'</button></td>';
                             } else {
                                 $html .= "<td>$game->cr</td>";
                             }
-                            if ($this->user->admin && !empty($game->ar1) && count(preg_grep ("/$game->ar1/", $refNames)
+                            if ($this->user->admin && !empty($game->ar1) && count(
+                                    preg_grep("/$game->ar1/", $refNames)
                                 )) {
                                 $html .= '<td><button type="button" class="info btn btn-link" id="'.$game->ar1.'">'.$game->ar1.'</button></td>';
                             } else {
                                 $html .= "<td>$game->ar1</td>";
                             }
-                            if ($this->user->admin && !empty($game->ar2) && count(preg_grep ("/$game->ar2/", $refNames)
+                            if ($this->user->admin && !empty($game->ar2) && count(
+                                    preg_grep("/$game->ar2/", $refNames)
                                 )) {
                                 $html .= '<td><button type="button" class="info btn btn-link" id="'.$game->ar2.'">'.$game->ar2.'</button></td>';
                             } else {
                                 $html .= "<td>$game->ar2</td>";
                             }
                             if ($has4th) {
-                                if ($this->user->admin && !empty($game->r4th) && count(preg_grep ("/$game->r4th/",
-                                        $refNames))) {
+                                if ($this->user->admin && !empty($game->r4th) && count(
+                                        preg_grep(
+                                            "/$game->r4th/",
+                                            $refNames
+                                        )
+                                    )) {
                                     $html .= '<td><button type="button" class="info btn btn-link" id="'.$game->r4th
                                         .'">'.$game->r4th.'</button></td>';
                                 } else {
@@ -227,7 +239,7 @@ class SchedRefsView extends AbstractView
                                 $disabled = $game->locked && !$this->user->admin;
                                 $html .= "<td><input class=\"btn btn-primary btn-xs \" type=\"submit\" name=\"$game->id\" value=\"Edit Assignments\" ";
                                 if ($game->assignor || $this->user->admin) {
-                                     $html .= $disabled ? " disabled ></td>" : "></td>";
+                                    $html .= $disabled ? " disabled ></td>" : "></td>";
                                 } else {
                                     $html .= "<td>&nbsp;</td>\n";
                                 }

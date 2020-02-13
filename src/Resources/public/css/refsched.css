@@ -256,3 +256,70 @@ legend {
 .panel-masthead {
     margin: 0;
 }
+
+.colorTitle {
+    background-color: #80ccff
+}
+
+.colorOpenSlots {
+    background-color: #FFF484
+}
+
+.colorUnassigned {
+    background-color: #ffb3b3
+}
+
+.colorGroup1 {
+    background-color: #00e67a
+}
+
+.colorGroup2 {
+    background-color: #4dffac
+}
+
+.colorOpenOpen {
+    background-color: #ffcccc
+}
+
+.colorHighlight {
+    background-color: #FFBC00
+}
+
+.colorAlert {
+    background-color: #CC0000
+}
+
+.colorWarning {
+    background-color: #CC00CC
+}
+
+.colorSuccess {
+    background-color: #02C902
+}
+
+.colorLtGray {
+    background-color: #D3D3D3
+}
+
+.colorDarkGray {
+    background-color: #B7B7B7
+}
+
+.width100 {
+    width: 100%
+}
+
+.width98 {
+    width: 98%
+}
+
+.width50 {
+    width: 50%
+}
+.width25 {
+    width: 25%
+}
+
+.input-checkbox {
+    width: auto !important;
+}

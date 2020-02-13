@@ -10,6 +10,8 @@ use App\Action\Admin\SchedTemplateExport;
 use App\Action\Admin\SchedTemplateExportController;
 use App\Action\EditGame\EditGameController;
 use App\Action\EditGame\EditGameView;
+use App\Action\EditEvents\EditEventsController;
+use App\Action\EditEvents\EditEventsView;
 use App\Action\EditRef\SchedEditRefController;
 use App\Action\EditRef\SchedEditRefView;
 use App\Action\End\SchedEndController;
@@ -67,7 +69,12 @@ $container['view'] = function (Container $c) {
 
     //Manage Twig base_url() returns port 80 when used over HTTPS connection
     $view['env_uri'] = $settings['env_uri'];
+    $view['name'] = $settings['section']['name'];
+    $view['title'] = $settings['section']['title'];
+    $view['header'] = $settings['section']['header'];
+    $view['icon'] = $settings['section']['icon'];
     $view['assignoremail'] = $settings['assignor']['email'];
+    $view['assignorrole'] = $settings['assignor']['role'];
     $view['issueTracker'] = $settings['issueTracker'];
     $view['banner'] = $settings['banner'];
 
@@ -414,6 +421,20 @@ $container[EditGameController::class] = function ($c) use ($sr) {
     $v = new EditGameView($c, $sr);
 
     return new EditGameController($c, $v);
+};
+
+// -----------------------------------------------------------------------------
+// EditEventsView class
+// -----------------------------------------------------------------------------
+$container[App\Action\EditEvents\EditEventsView::class] = function ($c) use ($sr) {
+
+    return new EditEventsView($c, $sr);
+};
+
+$container[App\Action\EditEvents\EditEventsController::class] = function ($c) use ($sr) {
+    $v = new EditEventsView($c, $sr);
+
+    return new EditEventsController($c, $v);
 };
 
 // -----------------------------------------------------------------------------

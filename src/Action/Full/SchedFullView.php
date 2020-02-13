@@ -119,7 +119,7 @@ class SchedFullView extends AbstractView
                 $html .= "Green shading change indicates different start times</h3>\n";
 
                 $html .= "<table class=\"sched-table\">\n";
-                $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
+                $html .= "<tr class=\"center colorTitle\">";
                 $html .= "<th><a href=".$this->getUri('fullPath').">Match #</a></th>";
                 $html .= "<th><a href=".$this->getUri('fullPath', 'date').">Date</a></th>";
                 $html .= "<th>Time</th>";
@@ -161,29 +161,43 @@ class SchedFullView extends AbstractView
                         if ($game->assignor == $this->user->name) {
                             //no refs
                             if (empty($game->cr) && empty($game->ar1) && empty($game->ar2) && (!$has4th || $has4th && empty($game->r4th))) {
-                                $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                                $html .= "<tr class=\"center colorUnassigned\">";
                                 //open AR  or 4th slots
                             } elseif (empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
-                                $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                                $html .= "<tr class=\"center colorOpenSlots\">";
                                 //match covered
                             } else {
-                                $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
+                                switch ($rowColor) {
+                                    case $this->colorGroup1:
+                                        $html .= "<tr class=\"center colorGroup1\">";
+                                        break;
+                                    default:
+                                        $html .= "<tr class=\"center colorGroup2\">";
+                                }
                             }
                         } else {
-                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorLtGray\">";
+                            $html .= "<tr class=\"center colorLtGray\">";
                         }
                         if ($this->user->admin) {
                             //no assignor
                             if (empty($game->assignor)) {
-                                $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                                $html .= "<tr class=\"center colorUnassigned\">";
                                 //my open slots
                             } elseif ($game->assignor == $this->user->name && empty($game->cr) && empty($game->ar1) && empty($game->ar2) && (!$has4th || $has4th && empty($game->r4th))) {
-                                $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                                $html .= "<tr class=\"center colorUnassigned\">";
                                 //assigned open slots
                             } elseif (empty($game->cr) || empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
-                                $html .= "<tr class=\"center\" bgcolor=\"$this->colorOpenSlots\">";
+                                $html .= "<tr class=\"center colorOpenSlots\">";
                                 //match covered
                             } else {
+                                switch ($rowColor) {
+                                    case $this->colorGroup1:
+                                        $html .= "<tr class=\"center colorGroup1\">";
+                                        break;
+                                    default:
+                                        $html .= "<tr class=\"center colorGroup2\">";
+                                }
+
                                 $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                             }
                         }

@@ -58,10 +58,10 @@ abstract class AbstractView
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
         $this->container = $container;
-        $this->view = $container->get('view');
+        $this->view = $container['view'];
         $this->sr = $schedulerRepository;
 
-        $this->page_title = "Section 1 Referee Scheduler";
+        $this->page_title = $this->view['header'];
     }
 
     abstract protected function handler(Request $request, Response $response);
@@ -113,10 +113,9 @@ abstract class AbstractView
      */
     protected function getBaseURL($path)
     {
-        $request = $this->container->get('request');
-        $baseUri = $request->getUri()->getBasePath() . $this->container->get($path);
+        $request = $this->container['request'];
 
-        return $baseUri;
+        return $request->getUri()->getBasePath() . $this->container->get($path);
     }
 
     protected function getCurrentEvents()

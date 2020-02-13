@@ -117,6 +117,6 @@ class SchedRefsTest extends AppTestCase
         $response = (object)$this->client->get($this->testUri);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<table class=\"sched-table\" width=\"100%\">",$view);
+        $this->assertContains("<table class=\"sched-table width100\">",$view);
     }
 }

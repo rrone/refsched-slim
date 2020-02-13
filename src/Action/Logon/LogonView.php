@@ -110,8 +110,8 @@ class LogonView extends AbstractView
                       <form name="form1" method="post" action="$logonPath">
         <div class="center">
 			<table>
-				<tr><td width="50%"><div class="right">Event: </div></td>
-					<td width="50%">
+				<tr><td class="width50"><div class="right">Event: </div></td>
+					<td class="width50">
 						<select id="event" class="form-control left-margin" name="event">
 EOD;
             foreach ($enabled as $option) {
@@ -124,8 +124,8 @@ EOD;
 				</tr>
 		
 				<tr>
-					<td width="50%"><div class="right">Assignor: </div></td>
-					<td width="50%"><select id="user" class="form-control left-margin" name="user">
+					<td class="width50"><div class="right">Assignor: </div></td>
+					<td class="width50"><select id="user" class="form-control left-margin" name="user">
 EOD;
 //            foreach ($users as $user) {
 //                $html .= "<option>$user->name</option>";
@@ -138,7 +138,7 @@ EOD;
 				</tr>
 
 				<tr>
-					<td width="50%"><div class="right">Password: </div></td>
+					<td class="width50"><div class="right">Password: </div></td>
 					<td><input class="form-control" type="password" name="passwd"></td>
 				</tr>
 			</table>

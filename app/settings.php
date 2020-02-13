@@ -39,12 +39,20 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2020.02.12.10-m'
+            'version' => '2020.02.13.00-m'
         ],
 
         'assignor' => [
             'name' => 'Jody Kinsey',
+            'role' => 'Section 1 Referee Assignor',
             'email' => 'jodykinsey23@gmail.com'
+        ],
+
+        'section' => [
+            'name' => 'Section 1',
+            'title' => 'S1: Referee Schedule',
+            'header' => 'Section 1 Event Schedule',
+            'icon' => '/images/s1logo.png'
         ],
 
         'issueTracker' => 'https://github.com/rrone/refsched/issues?q=is%3Aissue+project%3Arrone%2Frefsched%2F1'

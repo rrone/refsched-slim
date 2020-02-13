@@ -125,8 +125,8 @@ class SchedMasterView extends AbstractView
                 $html .= "<h3 class=\"center\">Green: Assignments made (Boo-yah!) / Red: Needs your attention<br><br>\n";
                 $html .= "Green shading change indicates different start times</h3>\n";
 
-                $html .= "<table class=\"sched-table\" width=\"100%\">\n";
-                $html .= "<tr class=\"center\" bgcolor=\"$this->colorTitle\">";
+                $html .= "<table class=\"sched-table width100\">\n";
+                $html .= "<tr class=\"center colorTitle\">";
                 $html .= "<th>Match #</th>";
                 $html .= "<th>Date</th>";
                 $html .= "<th>Time</th>";
@@ -160,9 +160,15 @@ class SchedMasterView extends AbstractView
                         }
 
                         if (empty($game->assignor)) {
-                            $html .= "<tr class=\"center\" bgcolor=\"$this->colorUnassigned\">";
+                            $html .= "<tr class=\"center colorUnassigned\">";
                         } else {
-                            $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
+                            switch ($rowColor) {
+                                case $this->colorGroup1:
+                                    $html .= "<tr class=\"center colorGroup1\">";
+                                    break;
+                                default:
+                                    $html .= "<tr class=\"center colorGroup2\">";
+                            }
                         }
                         $html .= "<td>$game->game_number</td>";
                         $html .= "<td>$date</td>";
