@@ -10,8 +10,6 @@ use App\Action\Admin\SchedTemplateExport;
 use App\Action\Admin\SchedTemplateExportController;
 use App\Action\EditGame\EditGameController;
 use App\Action\EditGame\EditGameView;
-use App\Action\EditEvents\EditEventsController;
-use App\Action\EditEvents\EditEventsView;
 use App\Action\EditRef\SchedEditRefController;
 use App\Action\EditRef\SchedEditRefView;
 use App\Action\End\SchedEndController;
@@ -421,20 +419,6 @@ $container[EditGameController::class] = function ($c) use ($sr) {
     $v = new EditGameView($c, $sr);
 
     return new EditGameController($c, $v);
-};
-
-// -----------------------------------------------------------------------------
-// EditEventsView class
-// -----------------------------------------------------------------------------
-$container[App\Action\EditEvents\EditEventsView::class] = function ($c) use ($sr) {
-
-    return new EditEventsView($c, $sr);
-};
-
-$container[App\Action\EditEvents\EditEventsController::class] = function ($c) use ($sr) {
-    $v = new EditEventsView($c, $sr);
-
-    return new EditEventsController($c, $v);
 };
 
 // -----------------------------------------------------------------------------
