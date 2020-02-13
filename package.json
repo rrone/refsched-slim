@@ -12,10 +12,10 @@
     "coverage": "open var/coverage/index.html"
   },
   "author": "",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "bootstrap": "^4.4.1",
+    "fsevents": "^2.1.2",
     "global": "^4.4.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",

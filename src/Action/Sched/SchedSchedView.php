@@ -382,7 +382,7 @@ class SchedSchedView extends AbstractView
                         }
                         //if at or above limit
                         if ($limit != 'none' && $this->assigned_list[$div] >= $limit) {
-                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at or above your $div match limit in one or more divisions<br>You need to contact the Section 7 Referee Assignor if you want to change your match assignments</span></h3>\n";
+                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are at or above your $div match limit in one or more divisions<br>You need to contact the Section 1 Referee Assignor if you want to change your match assignments</span></h3>\n";
                             $this->atlimit |= true;
                         }
                     } else {  // not locked
@@ -393,7 +393,7 @@ class SchedSchedView extends AbstractView
                         }
                         //if above limit
                         if ($limit != 'none' && $this->assigned_list[$div] > $limit) {
-                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your $div match limit<br>Additional matches were likely assigned to you by the Section 7 Referee Assignor</span></h3>\n";
+                            $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">You are above your $div match limit<br>Additional matches were likely assigned to you by the Section 1 Referee Assignor</span></h3>\n";
                             $this->atlimit &= true;
                         }
                     }

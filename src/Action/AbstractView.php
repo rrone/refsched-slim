@@ -61,7 +61,7 @@ abstract class AbstractView
         $this->view = $container->get('view');
         $this->sr = $schedulerRepository;
 
-        $this->page_title = "Section 7 Referee Scheduler";
+        $this->page_title = "Section 1 Referee Scheduler";
     }
 
     abstract protected function handler(Request $request, Response $response);

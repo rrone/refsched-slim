@@ -19,6 +19,7 @@ use App\Action\Full\SchedFullController;
 use App\Action\Full\SchedFullView;
 use App\Action\Greet\GreetView;
 use App\Action\Greet\SchedGreetController;
+use App\Action\InfoModal\InfoModalController;
 use App\Action\InfoModal\InfoModalView;
 use App\Action\Lock\SchedLockController;
 use App\Action\Lock\SchedLockView;
@@ -44,6 +45,8 @@ use App\Action\SAR\SARAction;
 use App\Action\Sched\SchedSchedController;
 use App\Action\Sched\SchedSchedView;
 use App\Action\SchedulerRepository;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\Container;
 use Twig\Extension\DebugExtension;
 
@@ -90,29 +93,36 @@ $container['flash'] = function () {
 
 unset($container['errorHandler']);
 //$container['errorHandler'] = function ($c) {
-//    if ($c['settings']['debug']) {
-//        return;
-//    }
-//
+////    if ($c['settings']['debug']) {
+////        return;
+////    }
+//die('here');
 //    return function ($request, $response, $exception) use ($c) {
 //
-//    var_dump($exception);                             
+//    var_dump($exception);
 //
 //        return $c['response']->withStatus(500)
 //                             ->withHeader('Content-Type', 'text/html')
 //                             ->write($exception->xdebug_message);
-//        //// 404.html, or 40x.html, or 4xx.html, or error.html
-//        //
-//        //$templates = array(
-//        //    'errors/'.$exception.'.html.twig',
-//        //    'errors/'.substr($exception, 0, 2).'x.html.twig',
-//        //    'errors/'.substr($exception, 0, 1).'xx.html.twig',
-//        //    'errors/default.html.twig',
-//        //);
-//        //
-//        //return new Response($container['view']->resolveTemplate($templates)->render(array('code' => $exception)), $exception);
+//        // 404.html, or 40x.html, or 4xx.html, or error.html
+//
+//        $templates = array(
+//            'errors/'.$exception.'.html.twig',
+//            'errors/'.substr($exception, 0, 2).'x.html.twig',
+//            'errors/'.substr($exception, 0, 1).'xx.html.twig',
+//            'errors/default.html.twig',
+//        );
+//
+//        return new Response($container['view']->resolveTemplate($templates)->render(array('code' => $exception)), $exception);
 //    };
 //};
+
+unset($container['notFoundHandler']);
+$container['notFoundHandler'] = function ($c) {
+    return function (ServerRequestInterface $request, ResponseInterface $response) use ($c) {
+        return $response->withRedirect($c['router']->pathFor(''));
+    };
+};
 
 // -----------------------------------------------------------------------------
 // Service factories
@@ -162,7 +172,7 @@ $container['p'] = function () {
 // -----------------------------------------------------------------------------
 $db = $container['db'];
 
-/* @var App\Action\SchedulerRepository $sr */
+/* @var SchedulerRepository $sr */
 $sr = $container['sr'];
 
 /** @var FullNameParser $p */
@@ -171,7 +181,7 @@ $p = $container['p'];
 $view = $container['view'];
 $uploadPath = $container['settings']['upload_path'];
 
-$container[App\Action\SchedulerRepository::class] = function ($db) {
+$container[SchedulerRepository::class] = function ($db) {
 
     return new SchedulerRepository($db);
 };
@@ -179,12 +189,12 @@ $container[App\Action\SchedulerRepository::class] = function ($db) {
 // -----------------------------------------------------------------------------
 // Admin class
 // -----------------------------------------------------------------------------
-$container[App\Action\Admin\AdminView::class] = function ($c) use ($sr) {
+$container[AdminView::class] = function ($c) use ($sr) {
 
     return new AdminView($c, $sr);
 };
 
-$container[App\Action\Admin\AdminController::class] = function ($c) use ($sr) {
+$container[AdminController::class] = function ($c) use ($sr) {
     $v = new AdminView($c, $sr);
 
     return new AdminController($c, $v);
@@ -193,18 +203,18 @@ $container[App\Action\Admin\AdminController::class] = function ($c) use ($sr) {
 // -----------------------------------------------------------------------------
 // Logon class
 // -----------------------------------------------------------------------------
-$container[App\Action\Logon\LogonView::class] = function ($c) use ($sr) {
+$container[LogonView::class] = function ($c) use ($sr) {
 
     return new LogonView($c, $sr);
 };
 
-$container[App\Action\Logon\LogonController::class] = function ($c) use ($sr) {
+$container[LogonController::class] = function ($c) use ($sr) {
     $v = new LogonView($c, $sr);
 
     return new LogonController($c, $v);
 };
 
-$container[App\Action\Logon\LogonUsersController::class] = function ($c) use ($sr) {
+$container[LogonUsersController::class] = function ($c) use ($sr) {
     $v = new LogonView($c, $sr);
 
     return new LogonUsersController($c, $v);
@@ -213,12 +223,12 @@ $container[App\Action\Logon\LogonUsersController::class] = function ($c) use ($s
 // -----------------------------------------------------------------------------
 // Greet class
 // -----------------------------------------------------------------------------
-$container[App\Action\Greet\GreetView::class] = function ($c) use ($sr) {
+$container[GreetView::class] = function ($c) use ($sr) {
 
     return new GreetView($c, $sr);
 };
 
-$container[App\Action\Greet\SchedGreetController::class] = function ($c) use ($sr) {
+$container[SchedGreetController::class] = function ($c) use ($sr) {
     $v = new GreetView($c, $sr);
 
     return new SchedGreetController($c, $v);
@@ -227,12 +237,12 @@ $container[App\Action\Greet\SchedGreetController::class] = function ($c) use ($s
 // -----------------------------------------------------------------------------
 // SchedFull class
 // -----------------------------------------------------------------------------
-$container[App\Action\Full\SchedFullView::class] = function ($c) use ($sr) {
+$container[SchedFullView::class] = function ($c) use ($sr) {
 
     return new SchedFullView($c, $sr);
 };
 
-$container[App\Action\Full\SchedFullController::class] = function ($c) use ($sr) {
+$container[SchedFullController::class] = function ($c) use ($sr) {
     $v = new SchedFullView($c, $sr);
 
     return new SchedFullController($c, $v);
@@ -241,12 +251,12 @@ $container[App\Action\Full\SchedFullController::class] = function ($c) use ($sr)
 // -----------------------------------------------------------------------------
 // SchedExport class
 // -----------------------------------------------------------------------------
-$container[App\Action\Full\SchedExportXl::class] = function () use ($sr) {
+$container[SchedExportXl::class] = function () use ($sr) {
 
     return new SchedExportXl($sr);
 };
 
-$container[App\Action\Full\SchedExportController::class] = function ($c) use ($sr) {
+$container[SchedExportController::class] = function ($c) use ($sr) {
     $v = new SchedExportXl($sr);
 
     return new SchedExportController($c, $v);
@@ -255,12 +265,12 @@ $container[App\Action\Full\SchedExportController::class] = function ($c) use ($s
 // -----------------------------------------------------------------------------
 // SchedSched class
 // -----------------------------------------------------------------------------
-$container[App\Action\Sched\SchedSchedView::class] = function ($c) use ($sr) {
+$container[SchedSchedView::class] = function ($c) use ($sr) {
 
     return new SchedSchedView($c, $sr);
 };
 
-$container[App\Action\Sched\SchedSchedController::class] = function ($c) use ($sr) {
+$container[SchedSchedController::class] = function ($c) use ($sr) {
     $v = new SchedSchedView($c, $sr);
 
     return new SchedSchedController($c, $v);
@@ -269,12 +279,12 @@ $container[App\Action\Sched\SchedSchedController::class] = function ($c) use ($s
 // -----------------------------------------------------------------------------
 // SchedMaster class
 // -----------------------------------------------------------------------------
-$container[App\Action\Master\SchedMasterView::class] = function ($c) use ($sr) {
+$container[SchedMasterView::class] = function ($c) use ($sr) {
 
     return new SchedMasterView($c, $sr);
 };
 
-$container[App\Action\Master\SchedMasterController::class] = function ($c) use ($sr) {
+$container[SchedMasterController::class] = function ($c) use ($sr) {
     $v = new SchedMasterView($c, $sr);
 
     return new SchedMasterController($c, $v);
@@ -283,18 +293,18 @@ $container[App\Action\Master\SchedMasterController::class] = function ($c) use (
 // -----------------------------------------------------------------------------
 // Lock & Unlock classes
 // -----------------------------------------------------------------------------
-$container[App\Action\Lock\SchedLockView::class] = function ($c) use ($sr) {
+$container[SchedLockView::class] = function ($c) use ($sr) {
 
     return new SchedLockView($c, $sr);
 };
 
-$container[App\Action\Lock\SchedLockController::class] = function ($c) use ($sr) {
+$container[SchedLockController::class] = function ($c) use ($sr) {
     $v = new SchedLockView($c, $sr);
 
     return new SchedLockController($c, $v);
 };
 
-$container[App\Action\Lock\SchedUnlockController::class] = function ($c) use ($sr) {
+$container[SchedUnlockController::class] = function ($c) use ($sr) {
     $v = new SchedLockView($c, $sr);
 
     return new SchedUnlockController($c, $v);
@@ -303,12 +313,12 @@ $container[App\Action\Lock\SchedUnlockController::class] = function ($c) use ($s
 // -----------------------------------------------------------------------------
 // SchedRefs class
 // -----------------------------------------------------------------------------
-$container[App\Action\Refs\SchedRefsView::class] = function ($c) use ($sr) {
+$container[SchedRefsView::class] = function ($c) use ($sr) {
 
     return new SchedRefsView($c, $sr);
 };
 
-$container[App\Action\Refs\SchedRefsController::class] = function ($c) use ($sr) {
+$container[SchedRefsController::class] = function ($c) use ($sr) {
     $v = new SchedRefsView($c, $sr);
 
     return new SchedRefsController($c, $v);
@@ -317,12 +327,12 @@ $container[App\Action\Refs\SchedRefsController::class] = function ($c) use ($sr)
 // -----------------------------------------------------------------------------
 // EditRef class
 // -----------------------------------------------------------------------------
-$container[App\Action\EditRef\SchedEditRefView::class] = function ($c) use ($sr, $p) {
+$container[SchedEditRefView::class] = function ($c) use ($sr, $p) {
 
     return new SchedEditRefView($c, $sr, $p);
 };
 
-$container[App\Action\EditRef\SchedEditRefController::class] = function ($c) use ($sr, $p) {
+$container[SchedEditRefController::class] = function ($c) use ($sr, $p) {
     $v = new SchedEditRefView($c, $sr, $p);
 
     return new SchedEditRefController($c, $v);
@@ -331,12 +341,12 @@ $container[App\Action\EditRef\SchedEditRefController::class] = function ($c) use
 // -----------------------------------------------------------------------------
 // SchedTemplateExport class
 // -----------------------------------------------------------------------------
-$container[App\Action\Admin\SchedTemplateExport::class] = function ($c) use ($sr) {
+$container[SchedTemplateExport::class] = function ($c) use ($sr) {
 
     return new SchedTemplateExport($c, $sr);
 };
 
-$container[App\Action\Admin\SchedTemplateExportController::class] = function ($c) use ($sr) {
+$container[SchedTemplateExportController::class] = function ($c) use ($sr) {
     $v = new SchedTemplateExport($c, $sr);
 
     return new SchedTemplateExportController($c, $v);
@@ -345,12 +355,12 @@ $container[App\Action\Admin\SchedTemplateExportController::class] = function ($c
 // -----------------------------------------------------------------------------
 // SchedImport class
 // -----------------------------------------------------------------------------
-$container[App\Action\Admin\SchedImport::class] = function ($c) use ($sr, $uploadPath) {
+$container[SchedImport::class] = function ($c) use ($sr, $uploadPath) {
 
     return new SchedImport($c, $sr, $uploadPath);
 };
 
-$container[App\Action\Admin\SchedImportController::class] = function ($c) use ($sr, $uploadPath) {
+$container[SchedImportController::class] = function ($c) use ($sr, $uploadPath) {
     $v = new SchedImport($c, $sr, $uploadPath);
 
     return new SchedImportController($c, $v);
@@ -359,12 +369,12 @@ $container[App\Action\Admin\SchedImportController::class] = function ($c) use ($
 // -----------------------------------------------------------------------------
 // LogExport class
 // -----------------------------------------------------------------------------
-$container[App\Action\Admin\LogExport::class] = function ($c) use ($sr) {
+$container[LogExport::class] = function ($c) use ($sr) {
 
     return new LogExport($c, $sr);
 };
 
-$container[App\Action\Admin\LogExportController::class] = function ($c) use ($sr) {
+$container[LogExportController::class] = function ($c) use ($sr) {
     $v = new LogExport($c, $sr);
 
     return new LogExportController($c, $v);
@@ -373,7 +383,7 @@ $container[App\Action\Admin\LogExportController::class] = function ($c) use ($sr
 // -----------------------------------------------------------------------------
 // SchedEnd class
 // -----------------------------------------------------------------------------
-$container[App\Action\End\SchedEndController::class] = function ($c) {
+$container[SchedEndController::class] = function ($c) {
 
     return new SchedEndController($c);
 };
@@ -381,12 +391,12 @@ $container[App\Action\End\SchedEndController::class] = function ($c) {
 // -----------------------------------------------------------------------------
 // NoEventsView class
 // -----------------------------------------------------------------------------
-$container[App\Action\NoEvents\NoEventsView::class] = function ($c) use ($sr) {
+$container[NoEventsView::class] = function ($c) use ($sr) {
 
     return new NoEventsView($c, $sr);
 };
 
-$container[App\Action\NoEvents\NoEventsController::class] = function ($c) use ($sr) {
+$container[NoEventsController::class] = function ($c) use ($sr) {
     $v = new NoEventsView($c, $sr);
 
     return new NoEventsController($c, $v);
@@ -395,12 +405,12 @@ $container[App\Action\NoEvents\NoEventsController::class] = function ($c) use ($
 // -----------------------------------------------------------------------------
 // EditGameView class
 // -----------------------------------------------------------------------------
-$container[App\Action\EditGame\EditGameView::class] = function ($c) use ($sr) {
+$container[EditGameView::class] = function ($c) use ($sr) {
 
     return new EditGameView($c, $sr);
 };
 
-$container[App\Action\EditGame\EditGameController::class] = function ($c) use ($sr) {
+$container[EditGameController::class] = function ($c) use ($sr) {
     $v = new EditGameView($c, $sr);
 
     return new EditGameController($c, $v);
@@ -409,12 +419,12 @@ $container[App\Action\EditGame\EditGameController::class] = function ($c) use ($
 // -----------------------------------------------------------------------------
 // FieldMapView class
 // -----------------------------------------------------------------------------
-$container[App\Action\PDF\ExportPDF::class] = function () {
+$container[ExportPDF::class] = function () {
 
     return new ExportPDF();
 };
 
-$container[App\Action\PDF\PDFController::class] = function ($c) {
+$container[PDFController::class] = function ($c) {
     $v = new ExportPDF();
 
     return new PDFController($c, $v);
@@ -423,30 +433,30 @@ $container[App\Action\PDF\PDFController::class] = function ($c) {
 // -----------------------------------------------------------------------------
 // MedalRound classes
 // -----------------------------------------------------------------------------
-$container[App\Action\MedalRound\MedalRoundView::class] = function ($c) use ($sr) {
+$container[MedalRoundView::class] = function ($c) use ($sr) {
 
     return new MedalRoundView($c, $sr);
 };
 
-$container[App\Action\MedalRound\ShowMedalRoundController::class] = function ($c) use ($sr) {
+$container[ShowMedalRoundController::class] = function ($c) use ($sr) {
     $v = new MedalRoundView($c, $sr);
 
     return new ShowMedalRoundController($c, $v);
 };
 
-$container[App\Action\MedalRound\HideMedalRoundController::class] = function ($c) use ($sr) {
+$container[HideMedalRoundController::class] = function ($c) use ($sr) {
     $v = new MedalRoundView($c, $sr);
 
     return new HideMedalRoundController($c, $v);
 };
 
-$container[App\Action\MedalRound\ShowMedalRoundDivisionsController::class] = function ($c) use ($sr) {
+$container[ShowMedalRoundDivisionsController::class] = function ($c) use ($sr) {
     $v = new MedalRoundDivisionsView($c, $sr);
 
     return new ShowMedalRoundDivisionsController($c, $v);
 };
 
-$container[App\Action\MedalRound\HideMedalRoundDivisionsController::class] = function ($c) use ($sr) {
+$container[HideMedalRoundDivisionsController::class] = function ($c) use ($sr) {
     $v = new MedalRoundDivisionsView($c, $sr);
 
     return new HideMedalRoundDivisionsController($c, $v);
@@ -455,7 +465,7 @@ $container[App\Action\MedalRound\HideMedalRoundDivisionsController::class] = fun
 // -----------------------------------------------------------------------------
 // SAR Function class
 // -----------------------------------------------------------------------------
-$container[App\Action\SAR\SARAction::class] = function () use ($sr) {
+$container[SARAction::class] = function () use ($sr) {
 
     return new SARAction($sr);
 };
@@ -463,8 +473,8 @@ $container[App\Action\SAR\SARAction::class] = function () use ($sr) {
 // -----------------------------------------------------------------------------
 // InfoModal class
 // -----------------------------------------------------------------------------
-$container[App\Action\InfoModal\InfoModalController::class] = function ($c) use ($sr) {
+$container[InfoModalController::class] = function ($c) use ($sr) {
     $v = new InfoModalView($c, $sr);
 
-    return new App\Action\InfoModal\InfoModalController($c, $v);
+    return new InfoModalController($c, $v);
 };

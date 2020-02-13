@@ -37,7 +37,7 @@ class LogonTest extends AppTestCase
 
         $view = $this->client->get('/');
 
-        $this->assertContains('<h1>Section 7 Event Schedule</h1>', $view);
+        $this->assertContains('<h1>Section 1 Event Schedule</h1>', $view);
     }
 
     /**
@@ -95,7 +95,7 @@ class LogonTest extends AppTestCase
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->post($url, $body, $headers);
         $view = (string)$response->getBody();
-        $this->assertContains('<h1>Section 7 Event Schedule</h1>', $view);
+        $this->assertContains('<h1>Section 1 Event Schedule</h1>', $view);
         $this->assertContains("Unrecognized password for $this->userName", $view);
     }
 

@@ -1,6 +1,5 @@
 <?php
 
-use Symfony\Component\Debug\Debug;
 use Slim\App;
 
 // To help the built-in PHP dev server, check if the request was actually for
@@ -33,8 +32,6 @@ ini_set('xdebug.profiler_output_dir', PROJECT_ROOT.'/var/xdebug');
 
 require PROJECT_ROOT.'/vendor/autoload.php';
 
-Debug::enable();
-
 session_start();
 
 // Instantiate the app
@@ -43,7 +40,7 @@ $settings = require PROJECT_ROOT.'/app/settings.php';
 $settings['debug'] = true;
 $settings['displayErrorDetails'] = $settings['debug'];
 
-$server = ucwords($config['dev']);
+$server = ucwords($config['dev']['host']);
 $settings['settings']['banner'] = "<h1 class=\"banner\">Development Server : $server</h1>";
 $settings['settings']['dbConfig'] = $config['dev'];
 

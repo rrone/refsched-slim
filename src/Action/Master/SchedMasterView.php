@@ -53,7 +53,7 @@ class SchedMasterView extends AbstractView
         }
 
         if ($request->isPost()) {
-            //only Section 7 may update
+            //only Section 1 may update
             $data = $request->getParsedBody();
 
             $this->sr->updateAssignor($data);
