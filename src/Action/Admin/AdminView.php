@@ -107,7 +107,7 @@ class AdminView extends AbstractView
                 }
 
                 //Ensure Admin has access to all events
-                $user = $this->sr->getUserByName('Admin');
+                $user = $this->sr->getUserByName('Super Admin');
                 $events = $this->sr->getAllEvents();
                 $allKeys = [];
                 foreach ($events as $event) {
@@ -120,13 +120,13 @@ class AdminView extends AbstractView
                 $users = $this->sr->getAllUsers();
 
                 foreach ($users as $user) {
-                    if ($user->name != 'Admin') {
+                    if ($user->name != 'Super Admin') {
                         $this->sr->updateUserEvents($user->id, $keys);
                     }
                 }
 
                 //Ensure Admin has access to all events
-                $user = $this->sr->getUserByName('Admin');
+                $user = $this->sr->getUserByName('Super Admin');
                 $events = $this->sr->getAllEvents();
                 $allKeys = [];
                 foreach ($events as $event) {
@@ -169,7 +169,7 @@ class AdminView extends AbstractView
 
         $selectOptions = [];
         foreach ($users as $user) {
-            if ($user->name != 'Admin') {
+            if ($user->name != 'Super Admin') {
                 $selectOptions[] = "$user->name";
             }
         }

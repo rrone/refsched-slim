@@ -27,14 +27,8 @@
         <hr>
         <div class="center">
             <p>Questions? Contact the <a href="mailto:{{ assignoremail }}">{{ assignorrole }}</a></p>
-            {% if ( view.admin ) %}
-                <p>Find an issue with the Scheduler? Log it in the <a href="{{ issueTracker }}"
-                                                                      target="_blank">issue tracker</a><a
-                            href='{{ env_uri }}/adm'>.</a></p>
-            {% else %}
-                <p>Find an issue with the Scheduler? Log it in the <a href="{{ issueTracker }}"
-                                                                      target="_blank">issue tracker.</a></p>
-            {% endif %}
+            <p>Find an issue with the Scheduler? Log it in the <a href="{{ issueTracker }}"
+                                                                  target="_blank">issue tracker</a>.</p>
             <p>{{ version() }}</p>
         </div>
         {#<!--<a href="/">Home</a> - <a href="#">Contact Us</a><br>-->#}

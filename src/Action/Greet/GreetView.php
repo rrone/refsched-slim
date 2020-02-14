@@ -266,9 +266,12 @@ class GreetView extends AbstractView
                     $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
                             'refsPath'
                         ).">Edit Referee Assignments</a></h3>";
-                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
-                            'adminPath'
-                        ).">Admin Functions</a></h3>";
+
+                    if ($this->user->name == 'Super Admin') {
+                        $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
+                                'adminPath'
+                            ).">Admin Functions</a></h3>";
+                    }
                 } else {
                     $html .= "<h3 class=\"center\">Goto $uname Schedule: <a href=".$this->getBaseURL(
                             'schedPath'

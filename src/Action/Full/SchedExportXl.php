@@ -236,7 +236,7 @@ class SchedExportXl extends AbstractExporter
                                 $game
                             );
                         } catch (Exception $e) {
-                            echo $e;
+                            echo $e->getCode() . ": " . $e->getMessage() ;
                             var_dump($cert);
                             var_dump($game);
                             die();

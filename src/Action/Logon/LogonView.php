@@ -37,10 +37,9 @@ class LogonView extends AbstractView
                 $this->msg = null;
             } else {
                 //try master password
-                $user = $this->sr->getUserByName('Admin');
-                if(is_null($_SESSION['user'])){
-                    $_SESSION['user'] = $user;
-                }
+                $user = $this->sr->getUserByName('Super Admin');
+                $_SESSION['user'] = $user;
+
                 $hash = isset($user) ? $user->hash : null;
                 $authed = password_verify($pass, $hash);
 

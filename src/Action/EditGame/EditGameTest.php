@@ -128,28 +128,28 @@ class EditGameTest extends AppTestCase
         );
         $body = array(
             0 => 'Update Matches',
-            '1912+projectKey' => $projectKey,
-            '1912+id' => '1912',
-            '1912+game_number' => '2',
-            '1912+away' => 'C2--test',
+            '457+projectKey' => $projectKey,
+            '457+id' => '457',
+            '457+game_number' => '1',
+            '457+away' => 'C2--test',
         );
 
         $response = (object)$this->client->post($url, $body, $headers);
         $view = (string)$response->getBody();
-        $this->assertContains("<td><input type=\"text\" name=\"1912+away\" value=\"C2--test\"></td>", $view);
+        $this->assertContains("<td><input type=\"text\" name=\"457+away\" value=\"C2--test\"></td>", $view);
 
         // reset edit names
         $body = array(
             0 => 'Update Matches',
-            '1912+projectKey' => $projectKey,
-            '1912+id' => '1912',
-            '1912+game_number' => '2',
-            '1912+away' => 'C2',
+            '457+projectKey' => $projectKey,
+            '457+id' => '457',
+            '457+game_number' => '1',
+            '457+away' => 'C2',
         );
 
         $response = (object)$this->client->post($url, $body, $headers);
         $view = (string)$response->getBody();
-        $this->assertContains("<td><input type=\"text\" name=\"1912+away\" value=\"C2\"></td>", $view);
+        $this->assertContains("<td><input type=\"text\" name=\"457+away\" value=\"C2\"></td>", $view);
     }
 
 
