@@ -1,6 +1,29 @@
 <?php
 $settings = [
     'settings' => [
+        // App Settings
+        'version' => [
+            'version' => '2020.02.24.00-m'
+        ],
+
+        'assignor' => [
+            'name' => 'Jody Kinsey',
+            'role' => 'Section 1 Referee Assignor',
+            'email' => 'jodykinsey23@gmail.com'
+        ],
+
+        'section' => [
+            'name' => 'Section 1',
+            'title' => 'S1: Referee Schedule',
+            'header' => 'Section 1 Event Schedule',
+            'icon' => '/images/s1logo.png'
+        ],
+
+        'issueTracker' => 'https://github.com/rrone/refsched/issues?q=is%3Aissue+project%3Arrone%2Frefsched%2F1',
+
+        // Test Settings
+        'settings.test' => false,
+
         // Slim Settings
         'determineRouteBeforeAppMiddleware' => false,
 
@@ -38,28 +61,7 @@ $settings = [
             'path' => PROJECT_ROOT . '/var/logs/app.log',
         ],
 
-        'version' => [
-            'version' => '2020.02.13.30-m'
-        ],
-
-        'assignor' => [
-            'name' => 'Jody Kinsey',
-            'role' => 'Section 1 Referee Assignor',
-            'email' => 'jodykinsey23@gmail.com'
-        ],
-
-        'section' => [
-            'name' => 'Section 1',
-            'title' => 'S1: Referee Schedule',
-            'header' => 'Section 1 Event Schedule',
-            'icon' => '/images/s1logo.png'
-        ],
-
-        'issueTracker' => 'https://github.com/rrone/refsched/issues?q=is%3Aissue+project%3Arrone%2Frefsched%2F1'
-
     ],
-
-    'settings.test' => false,
 
 ];
 
