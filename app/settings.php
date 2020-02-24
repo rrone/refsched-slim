@@ -6,7 +6,7 @@ $settings = [
     'settings' => [
         // App Settings
         'version' => [
-            'version' => '2020.02.24.10-m'
+            'version' => '2020.02.24.20-m'
         ],
 
         'assignor' => [
@@ -19,7 +19,7 @@ $settings = [
             'name' => 'Section 1',
             'title' => 'S1: Referee Schedule',
             'header' => 'Section 1 Event Schedule',
-            'icon' => '/images/s1logo.png'
+            'icon' => '/images/s1logo_rs.png'
         ],
 
         'issueTracker' => 'https://github.com/rrone/refsched/issues?q=is%3Aissue+project%3Arrone%2Frefsched%2F1',
