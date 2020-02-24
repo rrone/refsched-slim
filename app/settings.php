@@ -1,9 +1,12 @@
 <?php
 $settings = [
+    // Test Settings
+    'settings.test' => false,
+
     'settings' => [
         // App Settings
         'version' => [
-            'version' => '2020.02.24.00-m'
+            'version' => '2020.02.24.10-m'
         ],
 
         'assignor' => [
@@ -20,9 +23,6 @@ $settings = [
         ],
 
         'issueTracker' => 'https://github.com/rrone/refsched/issues?q=is%3Aissue+project%3Arrone%2Frefsched%2F1',
-
-        // Test Settings
-        'settings.test' => false,
 
         // Slim Settings
         'determineRouteBeforeAppMiddleware' => false,

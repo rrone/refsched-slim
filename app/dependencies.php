@@ -96,31 +96,31 @@ $container['flash'] = function () {
     return new Slim\Flash\Messages;
 };
 
-unset($container['errorHandler']);
-//$container['errorHandler'] = function ($c) {
-////    if ($c['settings']['debug']) {
-////        return;
-////    }
-//die('here');
-//    return function ($request, $response, $exception) use ($c) {
-//
-//    var_dump($exception);
-//
-//        return $c['response']->withStatus(500)
-//                             ->withHeader('Content-Type', 'text/html')
-//                             ->write($exception->xdebug_message);
-//        // 404.html, or 40x.html, or 4xx.html, or error.html
-//
-//        $templates = array(
-//            'errors/'.$exception.'.html.twig',
-//            'errors/'.substr($exception, 0, 2).'x.html.twig',
-//            'errors/'.substr($exception, 0, 1).'xx.html.twig',
-//            'errors/default.html.twig',
-//        );
-//
-//        return new Response($container['view']->resolveTemplate($templates)->render(array('code' => $exception)), $exception);
-//    };
-//};
+//unset($container['errorHandler']);
+$container['errorHandler'] = function ($c) {
+//    if ($c['settings']['debug']) {
+//        return;
+//    }
+
+    return function ($request, $response, $exception) use ($c) {
+
+    var_dump($exception);
+
+        return $c['response']->withStatus(500)
+                             ->withHeader('Content-Type', 'text/html')
+                             ->write($exception->xdebug_message);
+        // 404.html, or 40x.html, or 4xx.html, or error.html
+
+        $templates = array(
+            'errors/'.$exception.'.html.twig',
+            'errors/'.substr($exception, 0, 2).'x.html.twig',
+            'errors/'.substr($exception, 0, 1).'xx.html.twig',
+            'errors/default.html.twig',
+        );
+
+        return new Response($container['view']->resolveTemplate($templates)->render(array('code' => $exception)), $exception);
+    };
+};
 
 unset($container['notFoundHandler']);
 $container['notFoundHandler'] = function ($c) {
