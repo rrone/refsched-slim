@@ -51,6 +51,7 @@ class SchedEditRefView extends AbstractView
 
                 foreach ($data as $key => &$value) {
                     if(is_string($key)) {
+                        $value = str_replace("’", "'", $value);
                         $value = $this->user->admin ? $value : $this->stdName($value);
                     }
                 }
