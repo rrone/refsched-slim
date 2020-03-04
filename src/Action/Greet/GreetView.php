@@ -153,13 +153,15 @@ class GreetView extends AbstractView
                 $allatlimit = true;
 
                 foreach ($this->games as $game) {
-                    if ($this->user->admin && !empty($game->assignor)) {
-                        $num_assigned++;
-                    } elseif ($this->user->name == $game->assignor) {
-                        $num_area++;
-                        $assigned_list[$this->divisionAge($game->division)]++;
+                    if(!empty($game->division)) {
+                        if ($this->user->admin && !empty($game->assignor)) {
+                            $num_assigned++;
+                        } elseif ($this->user->name == $game->assignor) {
+                            $num_area++;
+                            $assigned_list[$this->divisionAge($game->division)]++;
+                        }
+                        $used_list[$this->divisionAge($game->division)] = 1;
                     }
-                    $used_list[$this->divisionAge($game->division)] = 1;
                 }
                 $num_unassigned = count($this->games) - $num_assigned;
 
@@ -221,7 +223,8 @@ class GreetView extends AbstractView
                                 $tmpassigned = $assigned_list[$k];
                                 if ($used_list[$k]) {
                                     if ($limit_list[$k] == 'none') {
-                                        $html .= "You have taken <span style=\"color:$this->colorWarning\">$tmpassigned</span> $k matches.  There is <span style=\"color:$this->colorWarning\">no</span> match limit for $k.<br>\n";
+                                        $d = str_replace('_', ' ', $k);
+                                        $html .= "You have taken <span style=\"color:$this->colorWarning\">$tmpassigned</span> $d matches.  There is <span style=\"color:$this->colorWarning\">no</span> match limit for $d.<br>\n";
                                         $allatlimit = false;
                                     } else {
                                         $html .= "You have taken <span style=\"color:$this->colorWarning\">$tmpassigned</span> matches of your <span style=\"color:$this->colorWarning\">$v</span> match limit for $k<br>\n";
@@ -274,7 +277,8 @@ class GreetView extends AbstractView
                             'schedPath'
                         ).">All matches</a> - ";
                     foreach ($groups as $group) {
-                        $html .= "<a href=\"".$this->getBaseURL('schedPath')."?group=$group\">$group</a>".$delim;
+                        $d = str_replace('_', ' ', $group);
+                        $html .= "<a href=\"".$this->getBaseURL('schedPath')."?group=$group\">$d</a>".$delim;
                     }
                     $html = substr($html, 0, strlen($html) - 3)."</h3>";
                     $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(

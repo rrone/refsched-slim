@@ -4,6 +4,25 @@ $settings = [
         // Slim Settings
         'determineRouteBeforeAppMiddleware' => false,
 
+        'version' => [
+            'version' => '2020.03.04.00-m'
+        ],
+
+        // App Settings
+        'section' => [
+            'name' => 'Section 7',
+            'title' => 'S7: Referee Scheduler',
+            'header' => 'Section 7 Event Schedule'
+        ],
+
+        'assignor' => [
+            'name' => 'Rob McCarthy',
+            'role' => 'Section 7 Referee Assignor',
+            'email' => 'robmccarthy62@gmail.com'
+        ],
+
+        'issueTracker' => 'https://github.com/rrone/refsched/issues?q=is%3Aissue+project%3Arrone%2Frefsched%2F1',
+
         // View settings
         'view' => [
             'template_path' => [
@@ -38,24 +57,6 @@ $settings = [
             'name' => 'app',
             'path' => PROJECT_ROOT . '/var/logs/app.log',
         ],
-
-        'version' => [
-            'version' => '2020.01.12.00-m'
-        ],
-
-        'section' => [
-            'name' => 'Section 7',
-            'title' => 'S7: Referee Schedule',
-            'header' => 'Section 7 Event Schedule'
-        ],
-
-        'assignor' => [
-            'name' => 'Rob McCarthy',
-            'role' => 'Section 7 Referee Assignor',
-            'email' => 'robmccarthy62@gmail.com'
-        ],
-
-        'issueTracker' => 'https://github.com/rrone/refsched/issues?q=is%3Aissue+project%3Arrone%2Frefsched%2F1'
 
     ],
 

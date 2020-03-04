@@ -435,10 +435,10 @@ class SchedulerRepository
     public function getGames($projectKey = '%', $group = '%', $medalRound = false, $sortOn = 'game_number')
     {
 
-        $group = '%'.$group.'%';
+        $group = '%'.str_replace(' ', '_', $group).'%';
         $medalRound = $medalRound ? '%' : false;
 
-        return $this->db->table('games')
+        $games = $this->db->table('games')
             ->where(
                 [
                     ['projectKey', '=', $projectKey],
@@ -458,6 +458,12 @@ class SchedulerRepository
             ->orderBy('date', 'asc')
             ->orderBy('time', 'asc')
             ->get();
+
+        foreach ($games as $game) {
+            $game->division = str_replace('_', ' ', $game->division);
+        }
+
+        return $games;
     }
 
     /**
@@ -517,19 +523,22 @@ class SchedulerRepository
             ->get();
 
         $result = [];
-
+        $div = null;
         foreach ($groups as $group) {
-            $u = stripos($group->division, "U");
-
-            switch ($u) {
-                case 1:
-                    $div = substr($group->division, $u, 3);
-                    break;
-                case 2:
-                    $div = substr($group->division, $u - 1, 3);
-                    break;
-                default:
-                    $div = substr($group->division, $u - 2, 3);
+//            $u = stripos($group->division, "U");
+//
+//            switch ($u) {
+//                case 1:
+//                    $div = substr($group->division, $u, 3);
+//                    break;
+//                case 2:
+//                    $div = substr($group->division, $u - 1, 3);
+//                    break;
+//                default:
+//                    $div = substr($group->division, $u - 2, 3);
+//            }
+            if (!empty($group->division)) {
+                $div = str_replace(' ', '_', $group->division);
             }
             if (!in_array($div, $result)) {
                 $result[] = $div;
@@ -683,7 +692,6 @@ class SchedulerRepository
                 foreach ($match as $key => $field) {
                     $nextData[$hdr[$key]] = $match[$key];
                 }
-
                 //ensure empty fields default to correct type
                 foreach ($nextData as $key => $value) {
                     if (is_null($value)) {
@@ -701,6 +709,11 @@ class SchedulerRepository
                                 $value = '';
                         }
                     }
+
+                    if($key == 'division') {
+                        $value = preg_replace('/\s+/', '_', $value);
+                    }
+
                     $typedData[$key] = $value;
                 }
 
@@ -1225,103 +1238,103 @@ class SchedulerRepository
      * @param array $data
      * @return null
      */
-    public function modifyEvents(array $data)
-    {
-        $events = $data['data'];
-
-        $changes = array('adds' => 0, 'updates' => 0, 'errors' => []);
-//TODO: update for event records update
-        if (!empty($events)) {
-            foreach ($events['data'] as &$event) {
-                $nextData = [];
-                $match = array_values($event);
-                foreach ($match as $key => $field) {
-                    $nextData[$hdr[$key]] = $match[$key];
-                }
-
-//ensure empty fields default to correct type
-                foreach ($nextData as $key => $value) {
-                    if (is_null($value)) {
-                        switch ($key) {
-                            case 'date':
-                                $value = date('Y-m-d');
-                                break;
-                            case 'time':
-                                $value = "00:00";
-                                break;
-                            case 'medalRound':
-                                $value = 0;
-                                break;
-                            default:
-                                $value = '';
-                        }
-                    }
-                    $typedData[$key] = $value;
-                }
-
-                if (!empty($typedData['projectKey'])) {
-
-                    $isGame = $this->getGameByKeyAndNumber($typedData['projectKey'], $typedData['game_number']);
-                    if (empty($isGame)) {
-                        $result = $this->insertGame($typedData);
-                    } else {
-                        $result = $this->updateGame($typedData);
-                    }
-
-                    $changes['adds'] += $result['adds'];
-                    $changes['updates'] += $result['updates'];
-                } else {
-                    $changes['errors'][] = 'Missing projectKey, unable to add match';
-                }
-            }
-        }
-
-        return $changes;
-
-    }
+//    public function modifyEvents(array $data)
+//    {
+//        $events = $data['data'];
+//
+//        $changes = array('adds' => 0, 'updates' => 0, 'errors' => []);
+////TODO: update for event records update
+//        if (!empty($events)) {
+//            foreach ($events['data'] as &$event) {
+//                $nextData = [];
+//                $match = array_values($event);
+//                foreach ($match as $key => $field) {
+//                    $nextData[$hdr[$key]] = $match[$key];
+//                }
+//
+////ensure empty fields default to correct type
+//                foreach ($nextData as $key => $value) {
+//                    if (is_null($value)) {
+//                        switch ($key) {
+//                            case 'date':
+//                                $value = date('Y-m-d');
+//                                break;
+//                            case 'time':
+//                                $value = "00:00";
+//                                break;
+//                            case 'medalRound':
+//                                $value = 0;
+//                                break;
+//                            default:
+//                                $value = '';
+//                        }
+//                    }
+//                    $typedData[$key] = $value;
+//                }
+//
+//                if (!empty($typedData['projectKey'])) {
+//
+//                    $isGame = $this->getGameByKeyAndNumber($typedData['projectKey'], $typedData['game_number']);
+//                    if (empty($isGame)) {
+//                        $result = $this->insertGame($typedData);
+//                    } else {
+//                        $result = $this->updateGame($typedData);
+//                    }
+//
+//                    $changes['adds'] += $result['adds'];
+//                    $changes['updates'] += $result['updates'];
+//                } else {
+//                    $changes['errors'][] = 'Missing projectKey, unable to add match';
+//                }
+//            }
+//        }
+//
+//        return $changes;
+//
+//    }
 
     /**
      * @param $data
      * @return array|null
      */
-    public function updateEvent($data)
-    {
-        if (empty($data)) {
-            return null;
-        }
-
-        $changes = array('adds' => 0, 'updates' => 0);
-
-        $key = $data['projectKey'];
-        $num = $data['game_number'];
-
-        $game = $this->getGameByKeyAndNumber($key, $num);
-
-        //doing update by projectKey & game number; including id caused integrity error
-        unset($game->id);
-        unset($data['id']);
-
-        if (isset($data['time'])) {
-            $data['time'] = date('H:i:s', strtotime($data['time']));
-        }
-
-        $dif = array_diff_assoc($data, (array)$game);
-
-        if (!empty($dif)) {
-            $this->db->table('games')
-                ->where(
-                    [
-                        ['projectKey', $key],
-                        ['game_number', $num],
-                    ]
-                )
-                ->update($data);
-
-            $changes['updates']++;
-        }
-
-        return $changes;
-    }
+//    public function updateEvent($data)
+//    {
+//        if (empty($data)) {
+//            return null;
+//        }
+//
+//        $changes = array('adds' => 0, 'updates' => 0);
+//
+//        $key = $data['projectKey'];
+//        $num = $data['game_number'];
+//
+//        $game = $this->getGameByKeyAndNumber($key, $num);
+//
+//        //doing update by projectKey & game number; including id caused integrity error
+//        unset($game->id);
+//        unset($data['id']);
+//
+//        if (isset($data['time'])) {
+//            $data['time'] = date('H:i:s', strtotime($data['time']));
+//        }
+//
+//        $dif = array_diff_assoc($data, (array)$game);
+//
+//        if (!empty($dif)) {
+//            $this->db->table('games')
+//                ->where(
+//                    [
+//                        ['projectKey', $key],
+//                        ['game_number', $num],
+//                    ]
+//                )
+//                ->update($data);
+//
+//            $changes['updates']++;
+//        }
+//
+//        return $changes;
+//    }
 
 
 }

@@ -2,9 +2,9 @@
 ## Exit immediately if a command exits with a non-zero status.
 set -e
 #set distribution folder alias
-prod="$HOME"/Sites/AYSO/rs7.prod.slim
-dev="$HOME"/Sites/AYSO/rs7.dev.slim
+dev="$HOME"/Sites/AYSO/_dev/rs7.dev.slim
 config=${dev}/config
+prod="$HOME"/Sites/AYSO/_services/rs7.prod.slim
 PHP=/usr/local/etc/php/7.3/conf.d
 
 ## clear the screen

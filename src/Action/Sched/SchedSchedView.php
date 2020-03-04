@@ -140,6 +140,9 @@ class SchedSchedView extends AbstractView
                 $unavailable = [];
                 $games = $this->sr->getGames($this->projectKey, '%', true);
                 foreach ($games as $game) {
+                    if(empty($game->division)) {
+                        continue;
+                    }
                     $date = date('D, d M', strtotime($game->date));
                     $time = date('H:i', strtotime($game->time));
                     $div = $this->divisionAge($game->division);
@@ -158,15 +161,15 @@ class SchedSchedView extends AbstractView
                                 $data = [$game->id => $this->user->name];
                                 $this->sr->updateAssignor($data);
                                 $added[$game->id] = $game;
-                                $games_now[$div]++;
-                                $this->msg .= "<p>You have <strong>scheduled</strong> $game->division Match # $game->game_number on $date on $game->field at $time</p>";
+                                $games_now[$game->division]++;
+                                $this->msg .= "<p>You have <strong>scheduled</strong> $div Match # $game->game_number on $date on $game->field at $time</p>";
                             } else {
-                                $atLimit[$div]++;
-                                $this->msg .= "<p>You have <strong>not scheduled</strong> $game->division Match # $game->game_number on $date on $game->field at $time because you are at your match limit!</p>";
+                                $atLimit[$game->division]++;
+                                $this->msg .= "<p>You have <strong>not scheduled</strong> $div Match # $game->game_number on $date on $game->field at $time because you are at your match limit!</p>";
                             }
                         } else {
                             $unavailable[$game->id] = $game;
-                            $this->msg = "<p>Sorry, $game->division Match # $game->game_number has been scheduled by $game->assignor</p>";
+                            $this->msg = "<p>Sorry, $div Match # $game->game_number has been scheduled by $game->assignor</p>";
                         }
                     }
                 }
@@ -359,14 +362,17 @@ class SchedSchedView extends AbstractView
                 }
                 $html .= "<h3 class=\"center\">\n";
                 foreach ($this->assigned_list as $div => $v) {
-                    if (!in_array($div, ['assigned', 'unassigned'])) {
-                        $tempassign = $this->assigned_list[$div];
-                        $templimit = $this->limit_list[$div];
-                        if (!$this->showgroup || $this->showgroup == $div) {
-                            if (isset($this->limit_list[$div]) && $this->limit_list[$div] != 'none') {
-                                $html .= "For $div, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> matches with a limit of <span style=\"color:$this->colorAlert\">$templimit</span> matches<br>";
-                            } else {
-                                $html .= "For $div, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> matches with no limit<br>";
+                    if (!empty($div)) {
+                        if (!in_array($div, ['assigned', 'unassigned'])) {
+                            $tempassign = $this->assigned_list[$div];
+                            $templimit = $this->limit_list[$div];
+                            if (!$this->showgroup || $this->showgroup == $div) {
+                                $d = str_replace('_', ' ', $div);
+                                if (isset($this->limit_list[$div]) && $this->limit_list[$div] != 'none') {
+                                    $html .= "For $d, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> matches with a limit of <span style=\"color:$this->colorAlert\">$templimit</span> matches<br>";
+                                } else {
+                                    $html .= "For $d, you are assigned to <span style=\"color:$this->colorAlert\">$tempassign</span> matches with no limit<br>";
+                                }
                             }
                         }
                     }
@@ -414,19 +420,22 @@ class SchedSchedView extends AbstractView
     {
         $html = null;
         $testtime = null;
-        $usr = explode(' ', $this->user->name);
-        switch ($usr[0]) {
-            case 'Area':
-                $usr = substr($this->user->name, -1);
-                break;
-            case 'Section':
-                $pieces = explode(' ', $this->user->name);
-                $usr = array_pop($pieces);
-                break;
-            default:
-                $usr = null;
+//        $usr = explode(' ', $this->user->name);
+//        switch ($usr[0]) {
+//            case 'Area':
+//                $usr = substr($this->user->name, -1);
+//                break;
+//            case 'Section':
+//                $pieces = explode(' ', $this->user->name);
+//                $usr = array_pop($pieces);
+//                break;
+//            default:
+//                $usr = null;
+//
+//        }
 
-        }
+        $usr = $this->user->name;
+
         $rowColor = $this->colorDarkGray;
 
         $games = $this->sr->getGames($this->projectKey, $this->showgroup, true);
@@ -462,12 +471,8 @@ class SchedSchedView extends AbstractView
                 if (($this->showgroup && $this->showgroup == $this->divisionAge(
                             $game->division
                         )) || !$this->showgroup) {
-                    if ($this->user->admin || $usr != substr($game->home, 0, 1) && $usr != substr(
-                            $game->away,
-                            0,
-                            1
-                        ) && !$game->assignor) {
-                        $date = date('D, d M', strtotime($game->date));
+                    if ($this->user->admin || is_bool( strpos($game->home, $usr)) && is_bool(strpos($game->away, $usr))
+                ) {
                         $time = date('H:i', strtotime($game->time));
 
                         if (!$testtime) {
@@ -490,31 +495,7 @@ class SchedSchedView extends AbstractView
                             default:
                                 $html .= "<tr class=\"center colorDarkGray\">";
                         }
-                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
-                            $html .= "<td>".$game->game_number."</td>";
-                        } else {
-                            $html .= "<td></td>";
-                        }
-                        $html .= "<td>".$date."</td>";
-                        $html .= "<td>".$time."</td>";
-                        $field = $game->field;
-                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
-                            if (is_null($this->event->field_map)) {
-                                $html .= "<td>$field</td>";
-                            } else {
-                                $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$field</a></td>";
-                            }
-                            $html .= "<td>$game->division</td>";
-                            $html .= "<td>".$game->pool."</td>";
-                            $html .= "<td>".$game->home."</td>";
-                            $html .= "<td>".$game->away."</td>";
-                        } else {
-                            $html .= "<td></td>";
-                            $html .= "<td></td>";
-                            $html .= "<td></td>";
-                            $html .= "<td></td>";
-                            $html .= "<td></td>";
-                        }
+                        $html .= $this->renderGameNumber($game);
                         $html .= "<td>&nbsp;</td>";
                         if (!$this->user->admin && !$this->event->archived && !$this->locked) {
                             $html .= "<td><input type=\"checkbox\" name=\"assign:".$game->id."\" value=\""
@@ -630,8 +611,6 @@ class SchedSchedView extends AbstractView
                                     $rowColor = $this->colorGroup1;
                             }
                         }
-                        $date = date('D, d M', strtotime($game->date));
-                        $time = date('H:i', strtotime($game->time));
 
                         switch ($rowColor) {
                             case $this->colorGroup1:
@@ -641,31 +620,7 @@ class SchedSchedView extends AbstractView
                                 $rowColor = $this->colorGroup1;
                                 $html .= "<tr class=\"center colorGroup1\">";
                         }
-                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
-                            $html .= "<td>".$game->game_number."</td>";
-                        } else {
-                            $html .= "<td></td>";
-                        }
-                        $html .= "<td>".$date."</td>";
-                        $html .= "<td>".$time."</td>";
-                        $field = $game->field;
-                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
-                            if (is_null($this->event->field_map)) {
-                                $html .= "<td>$field</td>";
-                            } else {
-                                $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$field</a></td>";
-                            }
-                            $html .= "<td>$game->division</td>";
-                            $html .= "<td>".$game->pool."</td>";
-                            $html .= "<td>".$game->home."</td>";
-                            $html .= "<td>".$game->away."</td>";
-                        } else {
-                            $html .= "<td></td>";
-                            $html .= "<td></td>";
-                            $html .= "<td></td>";
-                            $html .= "<td></td>";
-                            $html .= "<td></td>";
-                        }
+                        $html .= $this->renderGameNumber($game);
                         $html .= "<td>".$game->assignor."</td>";
                         if (!$this->user->admin) {
                             if ($this->locked) {
@@ -719,5 +674,39 @@ class SchedSchedView extends AbstractView
         }
 
         return null;
+    }
+
+    private function renderGameNumber($game)
+    {
+        $date = date('D, d M', strtotime($game->date));
+        $time = date('H:i', strtotime($game->time));
+
+        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+            $html = "<td>".$game->game_number."</td>";
+        } else {
+            $html = "<td></td>";
+        }
+        $html .= "<td>".$date."</td>";
+        $html .= "<td>".$time."</td>";
+        $field = $game->field;
+        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+            if (is_null($this->event->field_map)) {
+                $html .= "<td>$field</td>";
+            } else {
+                $html .= "<td><a href='".$this->event->field_map."' target='_blank'>$field</a></td>";
+            }
+            $html .= "<td>$game->division</td>";
+            $html .= "<td>".$game->pool."</td>";
+            $html .= "<td>".$game->home."</td>";
+            $html .= "<td>".$game->away."</td>";
+        } else {
+            $html .= "<td></td>";
+            $html .= "<td></td>";
+            $html .= "<td></td>";
+            $html .= "<td></td>";
+            $html .= "<td></td>";
+        }
+
+        return $html;
     }
 }

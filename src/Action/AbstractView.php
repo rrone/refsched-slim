@@ -70,20 +70,20 @@ abstract class AbstractView
 
     protected function divisionAge($div)
     {
-        $u = stripos($div, "U");
+//        $u = stripos($div, "U");
+//
+//        switch ($u) {
+//            case 1:
+//                $div = substr($div, $u, 3);
+//                break;
+//            case 2:
+//                $div = substr($div, $u - 1, 3);
+//                break;
+//            default:
+//                $div = substr($div, $u - 2, 3);
+//        }
 
-        switch ($u) {
-            case 1:
-                $div = substr($div, $u, 3);
-                break;
-            case 2:
-                $div = substr($div, $u - 1, 3);
-                break;
-            default:
-                $div = substr($div, $u - 2, 3);
-        }
-
-        return $div;
+        return str_replace(' ', '_', $div);
     }
 
     protected function isRepost(Request $request)
