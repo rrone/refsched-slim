@@ -437,7 +437,9 @@ class SchedulerRepository
 
         $group = '%'.$group.'%';
         $medalRound = $medalRound ? '%' : false;
-        $fieldASC = "CAST(REPLACE(`field`, 'Field ', '') as unsigned) ASC";
+        $fieldASC = "CAST(REPLACE(`home`, 'Field ', '') as unsigned) ASC";
+        $homeASC = "CAST(`home` as unsigned) ASC";
+        $awayASC = "CAST(`away` as unsigned) ASC";
 
         $query = $this->db->table('games')
             ->where(
@@ -469,10 +471,17 @@ class SchedulerRepository
                     ->orderByRaw($fieldASC);
                 break;
             case 'home' :
+                $query = $query
+                    ->orderBy('pool', 'desc')
+                    ->orderByRaw($homeASC)
+                    ->orderBy('date', 'asc')
+                    ->orderBy('time', 'asc')
+                    ->orderByRaw($fieldASC);
+                break;
             case 'away' :
                 $query = $query
                     ->orderBy('pool', 'desc')
-                    ->orderBy($sortOn, 'asc')
+                    ->orderByRaw($awayASC)
                     ->orderBy('date', 'asc')
                     ->orderBy('time', 'asc')
                     ->orderByRaw($fieldASC);
