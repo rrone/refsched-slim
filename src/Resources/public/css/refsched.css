@@ -174,7 +174,6 @@ select.form-control,
 input.form-control {
     margin: 5px 20px;
     font-size: 13px;
-    height: calc(2.25rem + 2px);
 }
 
 .edit-table input.form-control {
