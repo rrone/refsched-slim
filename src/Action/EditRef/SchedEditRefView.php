@@ -8,6 +8,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractView;
 use FullNameParser;
+use Tamtamchik\NameCase\Formatter;
 
 class SchedEditRefView extends AbstractView
 {
@@ -51,7 +52,7 @@ class SchedEditRefView extends AbstractView
 
                 foreach ($data as $key => &$value) {
                     if(is_string($key)) {
-                        $value = str_replace("’", "'", $value);
+                        $value = $this->stdName($value);
                         $value = $this->user->admin ? $value : $this->stdName($value);
                     }
                 }
@@ -251,26 +252,7 @@ class SchedEditRefView extends AbstractView
      */
     private function stdName($name)
     {
-        $nameIn = '';
-
-        //deal with Last, First
-        if (strpos($name, ',')) {
-            $tempName = explode(',', $name);
-            foreach ($tempName as $k => $item) {
-                if ($k > 0) {
-                    $nameIn .= $item . ' ';
-                }
-            }
-            $nameIn .= $tempName[0];
-        } else {
-            $nameIn = $name;
-        }
-
-        //propercase
-        $nameOut = (object) $this->parser->parse_name($nameIn);
-        $nameOut = $nameOut->fname . ' ' . $nameOut->lname . ' '. $nameOut->suffix;
-
-        return trim($nameOut);
+        return Formatter::nameCase(strtolower($name));
     }
 
 }

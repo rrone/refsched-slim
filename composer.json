@@ -50,6 +50,7 @@
         "symfony/css-selector": "^5",
         "joshfraser/php-name-parser": "dev-master",
         "components/bootstrap-default": "^3.3",
-        "symfony/dotenv": "^5.0"
+        "symfony/dotenv": "^5.0",
+        "tamtamchik/namecase": "^2.1"
     }
 }
