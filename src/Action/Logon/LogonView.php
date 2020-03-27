@@ -148,10 +148,13 @@ EOD;
       </form>
 EOD;
         } else {
-            $html = "<div class=\"center no-content\">
+            $html = $this->sr->getEventMessage();
+            if(empty($html)) {
+                $html = "<div class=\"center no-content\">
                 <h2>Rest easy...there are no events available to schedule.</h2>
                 <h2>Go referee some matches yourself.</h2>
                 </div>";
+            }
         }
 
         return $html;

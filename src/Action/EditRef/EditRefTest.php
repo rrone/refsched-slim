@@ -121,7 +121,7 @@ class EditRefTest extends AppTestCase
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<td>CRFirst Last</td><td>AR1FIRST Last</td><td>AR2First Last</td>", $view);
+        $this->assertContains("<td>Last, Crfirst</td><td>Ar1first Last</td><td>Ar2first Last</td>", $view);
 
         //clear edit names
         $url = '/editref';
@@ -204,7 +204,7 @@ class EditRefTest extends AppTestCase
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<td>Referee Admin Last</td><td>AR1 Admin Last</td><td>AR2 Admin Last</td>", $view);
+        $this->assertContains("<td>Referee Admin Last</td><td>Ar1 Admin Last</td><td>Ar2 Admin Last</td>", $view);
 
         //clear edit names
         $url = '/editref';
