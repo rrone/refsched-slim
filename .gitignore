@@ -21,3 +21,5 @@ npm-debug.log
 ###> phpunit/phpunit ###
 /phpunit.xml
 ###< phpunit/phpunit ###
+bin
+.env.*
