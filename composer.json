@@ -48,7 +48,7 @@
         "components/bootstrap-default": "^3.3",
         "symfony/dotenv": "^5.0",
         "tamtamchik/namecase": "^2.1",
-        "ext-json": "^7.4"
+        "ext-json": "^1"
     },
     "scripts": {
         "tests": "vendor/bin/phpunit --testdox",
