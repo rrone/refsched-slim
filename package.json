@@ -1,8 +1,8 @@
 {
   "name": "slim-skeleton",
-  "license": "ISC",
+  "license": "MIT",
   "version": "1.0.0",
-  "description": "Slim Framework 3 application to provide report support.",
+  "description": "Slim Framework 3 application to manage referee schedules.",
   "main": "gulpfile.js",
   "scripts": {
     "gulp-build": "gulp build",

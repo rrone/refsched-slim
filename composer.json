@@ -1,9 +1,8 @@
 {
-    "name": "akrabat/slim3-skeleton",
-    "description": "Simple Slim Framework 3 skeleton with Twig & Monolog.",
-    "license": "BSD-3-Clause",
+    "name": "slim3/refsched",
+    "description": "Slim Framework 3 application to manage referee schedules.",
+    "license": "MIT",
     "type": "project",
-    "keywords": ["slim-framework", "skeleton"],
     "autoload": {
         "psr-4": {
             "App\\": "src",
