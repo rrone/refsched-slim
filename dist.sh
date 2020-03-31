@@ -46,6 +46,7 @@ cp -rf src/Action ${prod}/src
 cp -rf ${config}/config_prod.php ${prod}/config/config.php
 cp -f *.json ${prod}
 cp -f *.lock ${prod}
+cp -f license.txt ${prod}
 
 echo "  Updating production libraries..."
 cd ${prod}
