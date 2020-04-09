@@ -170,7 +170,7 @@ class SchedEditRefView extends AbstractView
                             $html .= "<th>Division</th>";
                             $html .= "<th>Pool</th>";
                             $html .= "<th>Referee Team</th>";
-                            $html .= "<th>Center</th>";
+                            $html .= "<th>Referee</th>";
                             $html .= "<th>AR1</th>";
                             $html .= "<th>AR2</th>";
                             if ($numRefs > 3) {

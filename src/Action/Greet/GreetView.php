@@ -82,6 +82,7 @@ class GreetView extends AbstractView
 
             $show_medal_round = $this->sr->getMedalRound($projectKey);
             $show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
+            $show_medal_round_assignments = $this->sr->getMedalRoundAssignedNames($projectKey);
 
             $locked = $this->sr->getLocked($projectKey);
 
@@ -124,6 +125,15 @@ class GreetView extends AbstractView
                     $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
                             'showMRDivPath'
                         ).">Show Medal Round Divisions</a> to users)<br><br>\n";
+                }
+                if ($show_medal_round_assignments) {
+                    $html .= "Medal round referee assignments are&nbsp;<span style=\"color:$this->colorSuccess\">Assigned</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                            'hideMRAssignmentsPath'
+                        ).">Show as Placeholders)</a><br><br>\n";
+                } else {
+                    $html .= "Medal round referee assignments are&nbsp;<span style=\"color:$this->colorAlert\">Placeholders</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                            'showMRAssignmentsPath'
+                        ).">Show Assignments)</a><br><br>\n";
                 }
             }
 

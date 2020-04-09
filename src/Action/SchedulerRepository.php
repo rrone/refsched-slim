@@ -357,6 +357,32 @@ class SchedulerRepository
     }
 
     /**
+     * @param $key
+     * @return null
+     */
+    public function showMedalRoundAssignments($key)
+    {
+        $this->db->table('events')
+            ->where('projectKey', $key)
+            ->update(['medal_round_assignments' => true]);
+
+        return null;
+    }
+
+    /**
+     * @param $key
+     * @return null
+     */
+    public function hideMedalRoundAssignments($key)
+    {
+        $this->db->table('events')
+            ->where('projectKey', $key)
+            ->update(['medal_round_assignments' => false]);
+
+        return null;
+    }
+
+    /**
      * @param $projectKey
      * @return mixed
      */
@@ -387,6 +413,24 @@ class SchedulerRepository
         $status = $this->getZero($status);
         if (!is_null($status)) {
             return $status->show_medal_round_divisions;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param $projectKey
+     * @return mixed
+     */
+    public function getMedalRoundAssignedNames($projectKey)
+    {
+        $status = $this->db->table('events')
+            ->where('projectKey', '=', $projectKey)
+            ->get();
+
+        $status = $this->getZero($status);
+        if (!is_null($status)) {
+            return $status->medal_round_assignments;
         } else {
             return null;
         }
@@ -437,9 +481,11 @@ class SchedulerRepository
 
         $group = '%'.$group.'%';
         $medalRound = $medalRound ? '%' : false;
-        $fieldASC = "CAST(REPLACE(`home`, 'Field ', '') as unsigned) ASC";
-        $homeASC = "CAST(`home` as unsigned) ASC";
-        $awayASC = "CAST(`away` as unsigned) ASC";
+        $poolASC = "LENGTH(`pool`), `pool`, FIELD(`pool`, 'SF', 'CON', 'FIN') ASC";
+//        $poolDESC = "LENGTH(`pool`), `pool`, FIELD(`pool`, 'SF', 'CON', 'FIN') DESC";
+        $field = "ExtractNumber(`field`)";
+//        $homeASC = "CAST(`home` as unsigned) ASC";
+//        $awayASC = "CAST(`away` as unsigned) ASC";
 
         $query = $this->db->table('games')
             ->where(
@@ -448,51 +494,45 @@ class SchedulerRepository
                     ['division', 'like', $group],
                     ['medalRound', 'like', $medalRound],
                 ]
-            )
-            ->orWhere(
-                [
-                    ['projectKey', 'like', $projectKey],
-                    ['division', 'like', $group],
-                ]
             );
 
         switch ($sortOn) {
             case 'field':
                 $query = $query
-                    ->orderByRaw($fieldASC)
+                    ->orderByRaw($field)
                     ->orderBy('date', 'asc')
                     ->orderBy('time', 'asc');
                 break;
             case 'pool' :
                 $query = $query
-                    ->orderBy($sortOn, 'desc')
+                    ->orderByRaw($poolASC)
                     ->orderBy('date', 'asc')
                     ->orderBy('time', 'asc')
-                    ->orderByRaw($fieldASC);
+                    ->orderByRaw($field);
                 break;
             case 'home' :
                 $query = $query
-                    ->orderBy('pool', 'desc')
-                    ->orderByRaw($homeASC)
+                    ->orderBy('home', 'asc')
+                    ->orderBy('division', 'asc')
                     ->orderBy('date', 'asc')
                     ->orderBy('time', 'asc')
-                    ->orderByRaw($fieldASC);
+                    ->orderByRaw($field);
                 break;
             case 'away' :
                 $query = $query
-                    ->orderBy('pool', 'desc')
-                    ->orderByRaw($awayASC)
+                    ->orderBy('away', 'asc')
+                    ->orderBy('division', 'asc')
                     ->orderBy('date', 'asc')
                     ->orderBy('time', 'asc')
-                    ->orderByRaw($fieldASC);
+                    ->orderByRaw($field);
                 break;
             default:
                 $query = $query
                     ->orderBy($sortOn, 'asc')
-                    ->orderBy('pool', 'desc')
+                    ->orderByRaw($poolASC)
                     ->orderBy('date', 'asc')
                     ->orderBy('time', 'asc')
-                    ->orderByRaw($fieldASC);
+                    ->orderByRaw($field);
         }
 
         return $query->get();

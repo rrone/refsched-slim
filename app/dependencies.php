@@ -29,10 +29,13 @@ use App\Action\Logon\LogonUsersController;
 use App\Action\Logon\LogonView;
 use App\Action\Master\SchedMasterController;
 use App\Action\Master\SchedMasterView;
+use App\Action\MedalRound\HideMedalRoundAssignmentsController;
 use App\Action\MedalRound\HideMedalRoundController;
 use App\Action\MedalRound\HideMedalRoundDivisionsController;
+use App\Action\MedalRound\MedalRoundAssignmentsView;
 use App\Action\MedalRound\MedalRoundDivisionsView;
 use App\Action\MedalRound\MedalRoundView;
+use App\Action\MedalRound\ShowMedalRoundAssignmentsController;
 use App\Action\MedalRound\ShowMedalRoundController;
 use App\Action\MedalRound\ShowMedalRoundDivisionsController;
 use App\Action\NoEvents\NoEventsController;
@@ -80,9 +83,11 @@ $container['view'] = function (Container $c) {
     $view->addExtension(new Slim\Views\TwigExtension($c['router'], $c['request']->getUri()));
     $view->addExtension(new DebugExtension());
 
-    $Version = new Twig\TwigFunction('version', function () use ($settings) {
-        return 'Version ' . $settings['version']['version'];
-    });
+    $Version = new Twig\TwigFunction(
+        'version', function () use ($settings) {
+        return 'Version '.$settings['version']['version'];
+    }
+    );
 
     $twig = $view->getEnvironment();
 
@@ -104,11 +109,11 @@ $container['errorHandler'] = function ($c) {
 
     return function ($request, $response, $exception) use ($c) {
 
-    var_dump($exception);
+        var_dump($exception);
 
         return $c['response']->withStatus(500)
-                             ->withHeader('Content-Type', 'text/html')
-                             ->write($exception->xdebug_message);
+            ->withHeader('Content-Type', 'text/html')
+            ->write($exception->xdebug_message);
         // 404.html, or 40x.html, or 4xx.html, or error.html
 
         $templates = array(
@@ -118,7 +123,10 @@ $container['errorHandler'] = function ($c) {
             'errors/default.html.twig',
         );
 
-        return new Response($container['view']->resolveTemplate($templates)->render(array('code' => $exception)), $exception);
+        return new Response(
+            $container['view']->resolveTemplate($templates)->render(array('code' => $exception)),
+            $exception
+        );
     };
 };
 
@@ -148,6 +156,7 @@ $container['logger'] = function (Container $c) {
     //End of added
 
     $logger->pushHandler($handler);
+
     return $logger;
 };
 
@@ -465,6 +474,19 @@ $container[HideMedalRoundDivisionsController::class] = function ($c) use ($sr) {
     $v = new MedalRoundDivisionsView($c, $sr);
 
     return new HideMedalRoundDivisionsController($c, $v);
+};
+
+$container[ShowMedalRoundAssignmentsController::class] = function ($c) use ($sr) {
+    $v = new MedalRoundAssignmentsView($c, $sr);
+
+    return new ShowMedalRoundAssignmentsController($c, $v);
+};
+
+$container[HideMedalRoundAssignmentsController::class] = function ($c) use ($sr) {
+    $v = new MedalRoundAssignmentsView($c, $sr);
+
+    return new HideMedalRoundAssignmentsController($c, $v);
+
 };
 
 // -----------------------------------------------------------------------------
