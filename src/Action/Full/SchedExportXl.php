@@ -27,7 +27,7 @@ class SchedExportXl extends AbstractExporter
     private $event;
 
     private $mtCerts;
-    private $show_medal_round_divisions;
+    private $show_medal_round_details;
 
 
     /**
@@ -334,7 +334,7 @@ class SchedExportXl extends AbstractExporter
             $projectKey = $event->projectKey;
 
             $show_medal_round = $this->sr->getMedalRound($projectKey);
-            $this->show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
+            $this->show_medal_round_details = $this->sr->getMedalRoundDivisions($projectKey);
 
             $games = $this->sr->getGames($projectKey, '%', $show_medal_round || $this->user->admin);
             $has4th = $this->sr->numberOfReferees($projectKey) > 3;
@@ -363,7 +363,7 @@ class SchedExportXl extends AbstractExporter
             foreach ($games as $game) {
                 $time = date('H:i', strtotime($game->time));
 
-                if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                if ($this->show_medal_round_details || !$game->medalRound || $this->user->admin) {
                     $matchID = $game->game_number;
                     if (is_null($this->event->field_map)) {
                         $field = $game->field;

@@ -14,6 +14,7 @@ class GreetView extends AbstractView
 {
     private $games;
     private $description;
+    private $userview;
 
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -31,6 +32,9 @@ class GreetView extends AbstractView
     {
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
+
+        $this->userview = $_SESSION['view'] == 'asuser';
+
     }
 
     /**
@@ -81,7 +85,7 @@ class GreetView extends AbstractView
             $this->location = $this->event->location;
 
             $show_medal_round = $this->sr->getMedalRound($projectKey);
-            $show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
+            $show_medal_round_details = $this->sr->getMedalRoundDivisions($projectKey);
             $show_medal_round_assignments = $this->sr->getMedalRoundAssignedNames($projectKey);
 
             $locked = $this->sr->getLocked($projectKey);
@@ -117,7 +121,7 @@ class GreetView extends AbstractView
                             'showMRPath'
                         ).">Show Medal Round matches</a> to users)<br><br>\n";
                 }
-                if ($show_medal_round_divisions) {
+                if ($show_medal_round_details) {
                     $html .= "Medal round details are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
                             'hideMRDivPath'
                         ).">Hide Medal Round details</a> from users)<br><br>\n";
@@ -255,16 +259,34 @@ class GreetView extends AbstractView
                 }
                 $html .= "</h3>";
 
-                $html .= "<hr class=\"center width25\">";
+                if ($this->user->admin) {
+                    $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">VIEWING OPTIONS</h3>\n";
+                    if ($this->userview) {
+                        $html .= "<h3 class=\"center\" ><a style='font-weight: lighter' href="
+                            .$this->getBaseURL(
+                                'greetPath'
+                            ).'?asadmin'.">View as Admin</a> - ";
+                        $html .= "<a href=".$this->getBaseURL(
+                                'greetPath'
+                            ).'?asuser'.">View as User</a></h3>";
+                    } else {
+                        $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
+                                'greetPath'
+                            ).'?asadmin'.">View as Admin</a> - ";
+                        $html .= "<a style='font-weight: lighter !important' href=".$this->getBaseURL(
+                                'greetPath'
+                            ).'?asuser'.">View as User</a></h3>";
+                    }
+                }
+
+                $html .= "<hr class=\"center width50\">";
+
                 $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">ACTIONS</h3>\n";
+
                 $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
                         'fullPath'
                     ).">View full schedule</a></h3>";
-
                 if ($this->user->admin) {
-                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
-                            'fullPath'
-                        ).'?userview'.">View full schedule as a user</a></h3>";
                     if (!$this->event->archived) {
                         $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
                                 'editGamePath'
@@ -280,7 +302,7 @@ class GreetView extends AbstractView
                             'refsPath'
                         ).">Edit Referee Assignments</a></h3>";
 
-                    if ($this->user->name == 'Super Admin') {
+                    if ($this->user->admin) {
                         $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
                                 'adminPath'
                             ).">Admin Functions</a></h3>";

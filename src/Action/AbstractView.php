@@ -64,10 +64,23 @@ abstract class AbstractView
         $this->page_title = $this->view['header'];
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
     abstract protected function handler(Request $request, Response $response);
 
+    /**
+     * @param Response $response
+     * @return mixed
+     */
     abstract protected function render(Response &$response);
 
+    /**
+     * @param $div
+     * @return false|string
+     */
     protected function divisionAge($div)
     {
         $u = stripos($div, "U");
@@ -86,6 +99,10 @@ abstract class AbstractView
         return $div;
     }
 
+    /**
+     * @param Request $request
+     * @return bool
+     */
     protected function isRepost(Request $request)
     {
 
@@ -118,6 +135,9 @@ abstract class AbstractView
         return $request->getUri()->getBasePath() . $this->container->get($path);
     }
 
+    /**
+     * @return array
+     */
     protected function getCurrentEvents()
     {
         $events = $this->sr->getCurrentEvents();
@@ -165,6 +185,9 @@ abstract class AbstractView
         return $uri;
     }
 
+    /**
+     * @return string
+     */
     protected function getMedalRoundNotes()
     {
         $html = "<br><br>";
@@ -177,4 +200,15 @@ abstract class AbstractView
         return $html;
 
     }
+
+    /**
+     * @param $a
+     * @param $b
+     * @return bool
+     */
+    protected static function numSort($a, $b) {
+        return $a->game_number > $b->game_number;
+    }
+
+
 }

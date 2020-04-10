@@ -14,7 +14,7 @@ class SchedFullView extends AbstractView
     private $description;
     private $games;
     private $show_medal_round;
-    private $show_medal_round_divisions;
+    private $show_medal_round_details;
     private $mr_games;
     private $show_medal_round_assignments;
     private $userview;
@@ -45,8 +45,8 @@ class SchedFullView extends AbstractView
         if (empty($this->sortOn)) {
             $this->sortOn = 'game_number';
         }
-        $this->userview = array_key_exists('userview', $params);
 
+        $this->userview = $_SESSION['view'] == 'asuser';
         $this->uri = $request->getUri();
 
         return null;
@@ -100,7 +100,7 @@ class SchedFullView extends AbstractView
             $this->location = $this->event->location;
 
             $this->show_medal_round = $this->sr->getMedalRound($projectKey);
-            $this->show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
+            $this->show_medal_round_details = $this->sr->getMedalRoundDivisions($projectKey);
             $this->show_medal_round_assignments = $this->sr->getMedalRoundAssignedNames($projectKey);
 
             if ($this->user->admin) {
@@ -124,6 +124,8 @@ class SchedFullView extends AbstractView
                     }
                 }
                 $this->games = $games;
+                usort($this->mr_games, [$this, 'numSort']);
+
             }
 
             $refNames = [];
@@ -149,10 +151,14 @@ class SchedFullView extends AbstractView
 
                 $html .= $this->renderGames($this->games, $refNames, $has4th);
 
-                if(!$this->show_medal_round_assignments) {
+                if ( $this->show_medal_round ) {
                     $html .= $this->getMedalRoundNotes();
-                    $html .= $this->renderGames($this->mr_games, $refNames, $has4th,
-                        !$this->show_medal_round_assignments);
+                    $html .= $this->renderGames(
+                        $this->mr_games,
+                        $refNames,
+                        $has4th,
+                        !$this->show_medal_round_assignments
+                    );
                 }
             }
 
@@ -178,6 +184,8 @@ class SchedFullView extends AbstractView
 
         $html = "<table class=\"sched-table\">\n";
         $html .= "<tr class=\"center colorTitle\">";
+
+        if (!$mr) {
         $html .= "<th><a href=".$this->getUri('fullPath').">Match #</a></th>";
         $html .= "<th><a href=".$this->getUri('fullPath', 'date').">Date</a></th>";
         $html .= "<th>Time</th>";
@@ -187,8 +195,6 @@ class SchedFullView extends AbstractView
         $html .= "<th><a href=".$this->getUri('fullPath', 'home').">Home</a></th>";
         $html .= "<th><a href=".$this->getUri('fullPath', 'away').">Away</a></th>";
         $html .= "<th><a href=".$this->getUri('fullPath', 'assignor').">Referee Team</a></th>";
-
-        if(!$mr){
             $html .= "<th>Referee</th>";
             $html .= "<th>AR1</th>";
             $html .= "<th>AR2</th>";
@@ -196,6 +202,15 @@ class SchedFullView extends AbstractView
                 $html .= "<th>4th</th>";
             }
         } else {
+            $html .= "<th>Match #</th>";
+            $html .= "<th>Date</th>";
+            $html .= "<th>Time</th>";
+            $html .= "<th>Field</th>";
+            $html .= "<th>Division</th>";
+            $html .= "<th>Pool</th>";
+            $html .= "<th>Home</th>";
+            $html .= "<th>Away</th>";
+            $html .= "<th>Referee Team</th>";
             $html .= "<th>Referee Name</th>";
             $html .= "<th>Referee Name</th>";
             $html .= "<th>Referee Name</th>";
@@ -271,16 +286,16 @@ class SchedFullView extends AbstractView
                     }
                 }
 
-                if ($this->show_medal_round_divisions || !$game->medalRound || ($this->user->admin &&
-                        !$this->userview)) {
+                if (($this->show_medal_round_details && !$game->medalRound && $this->show_medal_round_assignments) ||
+                    ($this->user->admin && !$this->userview)) {
                     $html .= "<td>$game->game_number</td>";
                 } else {
                     $html .= "<td></td>";
                 }
                 $html .= "<td>$date</td>";
                 $html .= "<td>$time</td>";
-                if ($this->show_medal_round_divisions || !$game->medalRound || ($this->user->admin &&
-                        !$this->userview)) {
+                if ($this->show_medal_round_details || !$game->medalRound ||
+                    ($this->user->admin && !$this->userview)) {
                     if (empty($this->event->field_map)) {
                         $html .= "<td>$game->field</td>";
                     } else {
@@ -318,7 +333,7 @@ class SchedFullView extends AbstractView
                     $html .= "<td>$game->ar2</td>";
                 }
                 if ($has4th) {
-                    if ($this->user->admin && !empty($game->r4th) && count(
+                    if ($this->user->admin && !$this->userview && !empty($game->r4th) && count(
                             preg_grep(
                                 "/$game->r4th/",
                                 $refNames
@@ -335,7 +350,7 @@ class SchedFullView extends AbstractView
         }
 
         $html .= "</table>\n";
-        
+
         return $html;
     }
 

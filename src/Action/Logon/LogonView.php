@@ -32,27 +32,18 @@ class LogonView extends AbstractView
             $hash = isset($user) ? $user->hash : null;
             $authed = password_verify($pass, $hash);
 
-            if ($authed) {
-                $_SESSION['authed'] = true;
-                $this->msg = null;
-            } else {
+            if (!$authed) {
                 //try master password
-                $user = $this->sr->getUserByName('Super Admin');
-                $_SESSION['user'] = $user;
-
-                $hash = isset($user) ? $user->hash : null;
+                $usr = $this->sr->getUserByName('Super Admin');
+                $hash = isset($usr) ? $usr->hash : null;
                 $authed = password_verify($pass, $hash);
-
-                if ($authed) {
-                    $_SESSION['authed'] = true;
-                    $_SESSION['admin'] = true;
-                    $this->msg = null;
-                } else {
-                    $_SESSION['authed'] = false;
-                    $_SESSION['admin'] = false;
-                    $this->msg = 'Unrecognized password for ' . $_POST['user'];
-                }
+                $user = $user->admin ? $usr : $user;
             }
+
+            $_SESSION['authed'] = true;
+            $_SESSION['admin'] = $user->admin;
+            $_SESSION['view'] = $user->admin ? 'asadmin' : 'asuser';
+            $this->msg = $authed ? null : 'Unrecognized password for ' . $_POST['user'];
         }
 
         return null;

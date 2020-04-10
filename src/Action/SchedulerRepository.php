@@ -338,7 +338,7 @@ class SchedulerRepository
     {
         $this->db->table('events')
             ->where('projectKey', $key)
-            ->update(['show_medal_round_divisions' => true]);
+            ->update(['show_medal_round_details' => true]);
 
         return null;
     }
@@ -351,7 +351,7 @@ class SchedulerRepository
     {
         $this->db->table('events')
             ->where('projectKey', $key)
-            ->update(['show_medal_round_divisions' => false]);
+            ->update(['show_medal_round_details' => false]);
 
         return null;
     }
@@ -412,7 +412,7 @@ class SchedulerRepository
 
         $status = $this->getZero($status);
         if (!is_null($status)) {
-            return $status->show_medal_round_divisions;
+            return $status->show_medal_round_details;
         } else {
             return null;
         }

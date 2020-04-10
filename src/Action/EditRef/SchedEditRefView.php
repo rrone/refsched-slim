@@ -15,7 +15,9 @@ class SchedEditRefView extends AbstractView
     private $game_id;
     private $isPost;
     private $show_medal_round;
-    private $show_medal_round_divisions;
+    private $show_medal_round_details;
+    private $show_medal_round_assignments;
+    private $userview;
 
     private $parser;
 
@@ -43,6 +45,7 @@ class SchedEditRefView extends AbstractView
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
         $this->game_id = $request->getAttribute('game_id');
+        $this->userview = $_SESSION['view'] == 'asuser';
 
         if ($request->isPost()) {
             $this->isPost = true;
@@ -137,8 +140,8 @@ class SchedEditRefView extends AbstractView
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
             $this->show_medal_round = $this->sr->getMedalRound($projectKey);
-            $this->show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
-
+            $this->show_medal_round_details = $this->sr->getMedalRoundDivisions($projectKey);
+            $this->show_medal_round_assignments = $this->sr->getMedalRoundAssignedNames($projectKey);
             $target_game = $this->sr->gameIdToGameNumber($this->game_id);
             $game = $this->sr->getGameByKeyAndNumber($projectKey, $target_game);
 
@@ -178,14 +181,16 @@ class SchedEditRefView extends AbstractView
                             }
                             $html .= "</tr>\n";
                             $html .= "<tr class=\"center colorGreen\">";
-                            if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                            if ($this->show_medal_round_details || !$game->medalRound || ($this->user->admin &&
+                                    !$this->userview)) {
                                 $html .= "<td>$game->game_number</td>";
                             } else {
                                 $html .= "<td></td>";
                             }
                             $html .= "<td>$date</td>";
                             $html .= "<td>$time</td>";
-                            if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                            if ($this->show_medal_round_details || !$game->medalRound || ($this->user->admin &&
+                                    !$this->userview)) {
                                 $html .= "<td>$game->field</td>";
                                 $html .= "<td>$game->division</td>";
                                 $html .= "<td>$game->pool</td>";

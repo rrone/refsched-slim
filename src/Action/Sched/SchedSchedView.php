@@ -22,7 +22,7 @@ class SchedSchedView extends AbstractView
     private $description;
     private $showgroup;
     private $show_medal_round;
-    private $show_medal_round_divisions;
+    private $show_medal_round_details;
     private $locked;
 
     private $limit_list = [];
@@ -242,7 +242,7 @@ class SchedSchedView extends AbstractView
             $_SESSION['locked'] = $this->locked;
 
             $this->show_medal_round = $this->sr->getMedalRound($this->projectKey);
-            $this->show_medal_round_divisions = $this->sr->getMedalRoundDivisions($this->projectKey);
+            $this->show_medal_round_details = $this->sr->getMedalRoundDivisions($this->projectKey);
 
             $html .= $this->renderUserStatus();
 
@@ -490,7 +490,7 @@ class SchedSchedView extends AbstractView
                             default:
                                 $html .= "<tr class=\"center colorDarkGray\">";
                         }
-                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                        if ($this->show_medal_round_details || !$game->medalRound || $this->user->admin) {
                             $html .= "<td>".$game->game_number."</td>";
                         } else {
                             $html .= "<td></td>";
@@ -498,7 +498,7 @@ class SchedSchedView extends AbstractView
                         $html .= "<td>".$date."</td>";
                         $html .= "<td>".$time."</td>";
                         $field = $game->field;
-                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                        if ($this->show_medal_round_details || !$game->medalRound || $this->user->admin) {
                             if (is_null($this->event->field_map)) {
                                 $html .= "<td>$field</td>";
                             } else {
@@ -641,7 +641,7 @@ class SchedSchedView extends AbstractView
                                 $rowColor = $this->colorGroup1;
                                 $html .= "<tr class=\"center colorGroup1\">";
                         }
-                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                        if ($this->show_medal_round_details || !$game->medalRound || $this->user->admin) {
                             $html .= "<td>".$game->game_number."</td>";
                         } else {
                             $html .= "<td></td>";
@@ -649,7 +649,7 @@ class SchedSchedView extends AbstractView
                         $html .= "<td>".$date."</td>";
                         $html .= "<td>".$time."</td>";
                         $field = $game->field;
-                        if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                        if ($this->show_medal_round_details || !$game->medalRound || $this->user->admin) {
                             if (is_null($this->event->field_map)) {
                                 $html .= "<td>$field</td>";
                             } else {

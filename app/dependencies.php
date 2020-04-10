@@ -51,6 +51,7 @@ use App\Action\SchedulerRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Container;
+use Slim\Http\Response;
 use Twig\Extension\DebugExtension;
 
 $container = $app->getContainer();
