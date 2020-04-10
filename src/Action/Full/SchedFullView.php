@@ -148,7 +148,7 @@ class SchedFullView extends AbstractView
                 if(!$this->show_medal_round_assignments) {
                     $html .= "<br><br>";
                     $html .= "<h2 class=\"center\">For Medal Rounds, Referee Names are placeholders only.  No assignment as Referee or Assistant Referee should be inferred.</h2>\n";
-                    $html .= "<h2 class=\"center\"><em><u>Please</u></em> let your Referees know the assignments for the medal rounds will be at the field by the Section Assignor.</h2>\n";
+                    $html .= "<h2 class=\"center\"><em><u>Please</u></em> let your Referees know the assignments for the medal rounds will be made at the field by the Section Assignor.</h2>\n";
                     $html .= "<br><br>";
                     $html .= $this->renderGames($this->mr_games, $refNames, $has4th,
                         !$this->show_medal_round_assignments);
