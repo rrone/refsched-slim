@@ -17,6 +17,7 @@ class SchedFullView extends AbstractView
     private $show_medal_round_divisions;
     private $mr_games;
     private $show_medal_round_assignments;
+    private $userview;
 
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -36,6 +37,7 @@ class SchedFullView extends AbstractView
     {
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
+
         $params = $request->getParams();
 
         $this->justOpen = array_key_exists('open', $params);
@@ -43,6 +45,8 @@ class SchedFullView extends AbstractView
         if (empty($this->sortOn)) {
             $this->sortOn = 'game_number';
         }
+        $this->userview = array_key_exists('userview', $params);
+
         $this->uri = $request->getUri();
 
         return null;
@@ -272,14 +276,16 @@ class SchedFullView extends AbstractView
                     }
                 }
 
-                if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                if ($this->show_medal_round_divisions || !$game->medalRound || ($this->user->admin &&
+                        !$this->userview)) {
                     $html .= "<td>$game->game_number</td>";
                 } else {
                     $html .= "<td></td>";
                 }
                 $html .= "<td>$date</td>";
                 $html .= "<td>$time</td>";
-                if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
+                if ($this->show_medal_round_divisions || !$game->medalRound || ($this->user->admin &&
+                        !$this->userview)) {
                     if (empty($this->event->field_map)) {
                         $html .= "<td>$game->field</td>";
                     } else {

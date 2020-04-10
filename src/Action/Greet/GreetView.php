@@ -109,22 +109,22 @@ class GreetView extends AbstractView
                         ).">Lock</a> the schedule now)<br><br>\n";
                 }
                 if ($show_medal_round) {
-                    $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                    $html .= "Medal round matches are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
                             'hideMRPath'
-                        ).">Hide Medal Round Assignments</a> from users)<br><br>\n";
+                        ).">Hide Medal Round matches</a> from users)<br><br>\n";
                 } else {
-                    $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                    $html .= "Medal round matches are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
                             'showMRPath'
-                        ).">Show Medal Round Assignments</a> to users)<br><br>\n";
+                        ).">Show Medal Round matches</a> to users)<br><br>\n";
                 }
                 if ($show_medal_round_divisions) {
-                    $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                    $html .= "Medal round details are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
                             'hideMRDivPath'
-                        ).">Hide Medal Round Divisions</a> from users)<br><br>\n";
+                        ).">Hide Medal Round details</a> from users)<br><br>\n";
                 } else {
-                    $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
+                    $html .= "Medal round details are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
                             'showMRDivPath'
-                        ).">Show Medal Round Divisions</a> to users)<br><br>\n";
+                        ).">Show Medal Round details</a> to users)<br><br>\n";
                 }
                 if ($show_medal_round_assignments) {
                     $html .= "Medal round referee assignments are&nbsp;<span style=\"color:$this->colorSuccess\">Assigned</span>&nbsp;-&nbsp;(<a href=".$this->getBaseURL(
@@ -262,6 +262,9 @@ class GreetView extends AbstractView
                     ).">View full schedule</a></h3>";
 
                 if ($this->user->admin) {
+                    $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
+                            'fullPath'
+                        ).'?userview'.">View full schedule as a user</a></h3>";
                     if (!$this->event->archived) {
                         $html .= "<h3 class=\"center\"><a href=".$this->getBaseURL(
                                 'editGamePath'
