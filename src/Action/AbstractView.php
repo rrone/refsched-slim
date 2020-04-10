@@ -164,4 +164,17 @@ abstract class AbstractView
 
         return $uri;
     }
+
+    protected function getMedalRoundNotes()
+    {
+        $html = "<br><br>";
+        $html .= "<h2 class=\"center\">For the Medal Round matches, Referee Names are placeholders only.\n<br />";
+        $html .= "No assignment as Referee or Assistant Referee should be inferred.</h2>\n";
+        $html .= "<h2 class=\"center\"><em><u>Please</u></em> let your Referees know the assignments for the Medal rounds matches\n<br />";
+        $html .= "will be made at the field by the Section Assignor.</h2>\n";
+        $html .= "<br><br>";
+
+        return $html;
+
+    }
 }
