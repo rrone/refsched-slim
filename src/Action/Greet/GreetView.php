@@ -262,15 +262,15 @@ class GreetView extends AbstractView
                 if ($this->user->admin) {
                     $html .= "<h3 class=\"center\" style=\"color:$this->colorAlert\">VIEWING OPTIONS</h3>\n";
                     if ($this->userview) {
-                        $html .= "<h3 class=\"center\"><a  style='font-weight: lighter' href="
+                        $html .= "<h3 class=\"center\"><a href="
                             .$this->getBaseURL(
                                 'greetPath'
                             ).'?asadmin'.">View as Admin</a> - ";
-                        $html .= "<a href=".$this->getBaseURL(
+                        $html .= "<a style='font-weight: lighter' href=".$this->getBaseURL(
                                 'greetPath'
                             ).'?asuser'.">Viewing as User</a></h3>";
                     } else {
-                        $html .= "<h3 class=\"center\"><a style='font-weight: lighter' href="
+                        $html .= "<h3 class=\"center\"><a  style='font-weight: lighter' href="
                             .$this->getBaseURL(
                                 'greetPath'
                             ).'?asadmin'.">Viewing as Admin</a> - ";
