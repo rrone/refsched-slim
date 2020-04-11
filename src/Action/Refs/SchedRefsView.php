@@ -86,9 +86,14 @@ class SchedRefsView extends AbstractView
             $this->page_title = $eventName;
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
-            $this->show_medal_round = $this->sr->getMedalRound($projectKey);
-            $this->show_medal_round_details = $this->sr->getMedalRoundDivisions($projectKey);
-            $this->show_medal_round_assignments = $this->sr->getMedalRoundAssignedNames($projectKey);
+
+            $this->show_medal_round = $this->user->admin ? true : $this->sr->getMedalRound($projectKey);
+            $this->show_medal_round_details = $this->user->admin ? true : $this->sr->getMedalRoundDivisions(
+                $projectKey
+            );
+            $this->show_medal_round_assignments = $this->user->admin ? true : $this->sr->getMedalRoundAssignedNames(
+                $projectKey
+            );
 
             if ($this->user->admin) {
                 $this->games = $this->sr->getGames($projectKey, '%', true);
@@ -139,10 +144,14 @@ class SchedRefsView extends AbstractView
                     $html .= "<form name=\"addref\" method=\"post\" action=\"".$this->getBaseURL('refsPath')."\">\n";
                     $html .= $this->renderGames($this->games, $refNames, $has4th);
 
-                    if($this->show_medal_round) {
+                    if ($this->show_medal_round && !empty($this->mr_games)) {
                         $html .= $this->getMedalRoundNotes();
-                        $html .= $this->renderGames($this->mr_games, $refNames, $has4th,
-                            !$this->show_medal_round_assignments);
+                        $html .= $this->renderGames(
+                            $this->mr_games,
+                            $refNames,
+                            $has4th,
+                            !$this->show_medal_round_assignments
+                        );
                     }
                     $html .= "</form>\n";
 
@@ -184,7 +193,7 @@ class SchedRefsView extends AbstractView
         $html .= "<th>Home</th>";
         $html .= "<th>Away</th>";
         $html .= "<th>Referee Team</th>";
-        if(!$mr){
+        if (!$mr) {
             $html .= "<th>Referee</th>";
             $html .= "<th>AR1</th>";
             $html .= "<th>AR2</th>";
@@ -320,6 +329,7 @@ class SchedRefsView extends AbstractView
 
         return $html;
     }
+
     /**
      * @return string
      *

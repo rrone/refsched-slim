@@ -151,7 +151,7 @@ class SchedFullView extends AbstractView
 
                 $html .= $this->renderGames($this->games, $refNames, $has4th);
 
-                if ( $this->show_medal_round && !empty($this->mr_games)) {
+                if ($this->show_medal_round && !empty($this->mr_games)) {
                     $html .= $this->getMedalRoundNotes();
                     $html .= $this->renderGames(
                         $this->mr_games,

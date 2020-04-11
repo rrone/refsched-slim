@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Action\EditRef;
 
 
@@ -54,7 +55,7 @@ class SchedEditRefView extends AbstractView
             if (in_array("Update Assignments", array_values($data))) {
 
                 foreach ($data as $key => &$value) {
-                    if(is_string($key)) {
+                    if (is_string($key)) {
                         $value = $this->stdName($value);
                         $value = $this->user->admin ? $value : $this->stdName($value);
                     }
@@ -63,13 +64,14 @@ class SchedEditRefView extends AbstractView
                 $gameNum = $this->sr->gameIdToGameNumber($this->game_id);
                 $game = $this->sr->getGameByKeyAndNumber($this->event->projectKey, $gameNum);
 
-                if (!is_null($game) && (($game->assignor == $this->user->name) || $this->user->admin))
+                if (!is_null($game) && (($game->assignor == $this->user->name) || $this->user->admin)) {
                     $this->sr->updateAssignments($data);
+                }
             }
             if (in_array("Clear All", array_values($data))) {
 
                 foreach ($data as $key => &$value) {
-                    if(is_string($key)) {
+                    if (is_string($key)) {
                         $value = null;
                     }
                 }
@@ -77,8 +79,9 @@ class SchedEditRefView extends AbstractView
                 $gameNum = $this->sr->gameIdToGameNumber($this->game_id);
                 $game = $this->sr->getGameByKeyAndNumber($this->event->projectKey, $gameNum);
 
-                if (!is_null($game) && (($game->assignor == $this->user->name) || $this->user->admin))
+                if (!is_null($game) && (($game->assignor == $this->user->name) || $this->user->admin)) {
                     $this->sr->updateAssignments($data);
+                }
 
                 $this->isPost = false;
             }
@@ -100,8 +103,8 @@ class SchedEditRefView extends AbstractView
                 'title' => $this->page_title,
                 'dates' => $this->dates,
                 'location' => $this->location,
-                'description' => "Assign " . $this->user->name . " Referees",
-            )
+                'description' => "Assign ".$this->user->name." Referees",
+            ),
         );
 
         $this->view->render($response, 'sched.html.twig', $content);
@@ -139,9 +142,15 @@ class SchedEditRefView extends AbstractView
             $this->page_title = $eventName;
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
-            $this->show_medal_round = $this->sr->getMedalRound($projectKey);
-            $this->show_medal_round_details = $this->sr->getMedalRoundDivisions($projectKey);
-            $this->show_medal_round_assignments = $this->sr->getMedalRoundAssignedNames($projectKey);
+
+            $this->show_medal_round = $this->user->admin ? true : $this->sr->getMedalRound($projectKey);
+            $this->show_medal_round_details = $this->user->admin ? true : $this->sr->getMedalRoundDivisions(
+                $projectKey
+            );
+            $this->show_medal_round_assignments = $this->user->admin ? true : $this->sr->getMedalRoundAssignedNames(
+                $projectKey
+            );
+
             $target_game = $this->sr->gameIdToGameNumber($this->game_id);
             $game = $this->sr->getGameByKeyAndNumber($projectKey, $target_game);
 
@@ -163,7 +172,9 @@ class SchedEditRefView extends AbstractView
                         $date = date('D, d M', strtotime($game->date));
                         $time = date('H:i', strtotime($game->time));
                         if ($game->game_number == $target_game && ($game->assignor == $this->user->name || $this->user->admin)) {
-                            $html .= "<form name=\"editref\" method=\"post\" action=" . $this->getBaseURL('editrefPath') . ">\n";
+                            $html .= "<form name=\"editref\" method=\"post\" action=".$this->getBaseURL(
+                                    'editrefPath'
+                                ).">\n";
                             $html .= "<table class=\"sched-table width100\">\n";
                             $html .= "<tr class=\"center colorTitle\">";
                             $html .= "<th>Match #</th>";
@@ -233,18 +244,22 @@ class SchedEditRefView extends AbstractView
     {
         $html = "<h3 class=\"center h3-btn\">";
 
-        $html .= "<a href=" . $this->getBaseURL('greetPath') . ">Home</a>&nbsp;-&nbsp;\n";
-        $html .= "<a href=" . $this->getBaseURL('fullPath') . ">View the full schedule</a>&nbsp;-&nbsp\n";
+        $html .= "<a href=".$this->getBaseURL('greetPath').">Home</a>&nbsp;-&nbsp;\n";
+        $html .= "<a href=".$this->getBaseURL('fullPath').">View the full schedule</a>&nbsp;-&nbsp\n";
         if ($this->user->admin) {
-            if(!$this->event->archived) {
+            if (!$this->event->archived) {
                 $html .= "<a href=".$this->getBaseURL('editGamePath').">Edit matches</a>&nbsp;-&nbsp;\n";
             }
-            $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=".$this->getBaseURL(
+                    'masterPath'
+                ).">Go to ".$this->user->name." schedule</a>&nbsp;-&nbsp;\n";
         } else {
-            $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Go to " . $this->user->name . " schedule</a>&nbsp;-&nbsp;\n";
+            $html .= "<a href=".$this->getBaseURL(
+                    'refsPath'
+                ).">Go to ".$this->user->name." schedule</a>&nbsp;-&nbsp;\n";
         }
 
-        $html .= "<a href=" . $this->getBaseURL('endPath') . ">Log off</a>";
+        $html .= "<a href=".$this->getBaseURL('endPath').">Log off</a>";
 
         $html .= "</h3>";
 
