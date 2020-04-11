@@ -143,13 +143,10 @@ class SchedEditRefView extends AbstractView
             $this->dates = $this->event->dates;
             $this->location = $this->event->location;
 
-            $this->show_medal_round = $this->user->admin ? true : $this->sr->getMedalRound($projectKey);
-            $this->show_medal_round_details = $this->user->admin ? true : $this->sr->getMedalRoundDivisions(
-                $projectKey
-            );
-            $this->show_medal_round_assignments = $this->user->admin ? true : $this->sr->getMedalRoundAssignedNames(
-                $projectKey
-            );
+            $this->show_medal_round = $this->userview ? $this->sr->getMedalRound($projectKey) : true;
+            $this->show_medal_round_details = $this->userview ? $this->sr->getMedalRoundDivisions($projectKey) : true;
+            $this->show_medal_round_assignments = $this->userview ? $this->sr->getMedalRoundAssignedNames
+            ($projectKey) : true;
 
             $target_game = $this->sr->gameIdToGameNumber($this->game_id);
             $game = $this->sr->getGameByKeyAndNumber($projectKey, $target_game);
