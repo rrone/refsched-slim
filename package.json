@@ -19,7 +19,7 @@
     "global": "^4.4.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "normalize.css": "^8.0.1",
     "popper.js": "^1.16.0",
     "purecss": "^1.0.1"
