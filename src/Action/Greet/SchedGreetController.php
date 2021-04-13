@@ -33,15 +33,6 @@ class SchedGreetController extends AbstractController
             return $response->withRedirect($this->getBaseURL('logonPath'));
         }
 
-        $params = $request->getParams();
-        if (array_key_exists('asadmin', $params)) {
-            $_SESSION['view'] = 'asadmin';
-            return $response->withRedirect($this->getBaseURL('greetPath'));
-        } elseif (array_key_exists('asuser', $params)) {
-            $_SESSION['view'] = 'asuser';
-            return $response->withRedirect($this->getBaseURL('greetPath'));
-        }
-
         $this->logStamp($request);
 
         $request = $request->withAttributes([

@@ -27,7 +27,7 @@ class MedalRoundView extends AbstractView
         $this->show = $request->getAttribute('show');
     }
 
-    public function render(Response &$response)
+    public function render(Response $response)
     {
         $cont = null;
 

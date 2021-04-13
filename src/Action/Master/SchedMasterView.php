@@ -53,7 +53,7 @@ class SchedMasterView extends AbstractView
         }
 
         if ($request->isPost()) {
-            //only Section 1 may update
+            //only Section 7 may update
             $data = $request->getParsedBody();
 
             $this->sr->updateAssignor($data);
@@ -64,7 +64,7 @@ class SchedMasterView extends AbstractView
      * @param Response $response
      *
      */
-    public function render(Response &$response)
+    public function render(Response $response)
     {
         $content = array(
             'view' => array(
@@ -114,7 +114,7 @@ class SchedMasterView extends AbstractView
                 $users = $this->sr->getUsers($projectKey);
 
                 foreach ($users as $user) {
-                    if($user->admin && strpos($user->for_events, $projectKey) ) {
+                    if($user->name != 'Super Admin' && strpos($user->for_events, $projectKey) ) {
                         $select_list[] = $user->name;
                     }
                 }
@@ -185,7 +185,7 @@ class SchedMasterView extends AbstractView
                         if(!$this->event->archived) {
                             $html .= "<td><select name=\"$game->id\">\n";
                             foreach ($select_list as $user) {
-                                if(!strpos($user, 'Admin')) {
+                                if(!strpos($user, 'Super Admin')) {
                                     if ($user == $game->assignor) {
                                         $html .= "<option selected>$user</option>\n";
                                     } else {

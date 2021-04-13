@@ -25,7 +25,7 @@ class MedalRoundDivisionsView extends AbstractView
         $this->showDivs = $request->getAttribute('divs');
     }
 
-    public function render(Response &$response)
+    public function render(Response $response)
     {
         if ($this->showDivs) {
             $this->renderShowMedalRoundDivs();

@@ -490,7 +490,7 @@ class SchedulerRepository
         $query = $this->db->table('games')
             ->where(
                 [
-                    ['projectKey', '=', $projectKey],
+                    ['projectKey', 'like', $projectKey],
                     ['division', 'like', $group],
                     ['medalRound', 'like', $medalRound],
                 ]
@@ -598,21 +598,7 @@ class SchedulerRepository
         $result = [];
 
         foreach ($groups as $group) {
-            $u = stripos($group->division, "U");
-
-            switch ($u) {
-                case 1:
-                    $div = substr($group->division, $u, 3);
-                    break;
-                case 2:
-                    $div = substr($group->division, $u - 1, 3);
-                    break;
-                default:
-                    $div = substr($group->division, $u - 2, 3);
-            }
-            if (!in_array($div, $result)) {
-                $result[] = $div;
-            }
+            $result[] = $group->division;
         }
         asort($result);
 

@@ -24,7 +24,7 @@ class NoEventsView extends AbstractView
         $this->msg = $this->sr->getEventMessage();
     }
 
-    public function render(Response &$response)
+    public function render(Response $response)
     {
         $content = array(
             'events' => $this->getCurrentEvents(),

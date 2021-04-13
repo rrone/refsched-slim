@@ -6,13 +6,13 @@
 
     {% block head %}{% endblock %}
 
-    <link rel="icon" href="{{ icon }}" sizes="16x16">
+    <link rel="icon" href="{{ env_uri }}/images/s1_logo_16.ico" sizes="16x16">
     {#<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">#}
     {#<link href='{{ env_uri }}/css/bootstrap.min.css' rel='stylesheet' type='text/css'/>#}
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href='{{ env_uri }}/css/app.css' rel='stylesheet' type='text/css'/>
-    <link rel='apple-touch-icon-precomposed' href='{{ env_uri }}{{ icon }}' />
+    <link rel='apple-touch-icon-precomposed' href='{{ env_uri }}/images/s1logo_rs.png' />
 </head>
 
 <body>
@@ -27,8 +27,14 @@
         <hr>
         <div class="center">
             <p>Questions? Contact the <a href="mailto:{{ assignoremail }}">{{ assignorrole }}</a></p>
-            <p>Find an issue with the Scheduler? Log it in the <a href="{{ issueTracker }}"
-                                                                  target="_blank">issue tracker</a>.</p>
+            {% if ( view.admin ) %}
+                <p>Find an issue with the Scheduler? Log it in the <a href="{{ issueTracker }}"
+                                                                      target="_blank">issue tracker</a><a
+                            href='{{ env_uri }}/adm'>.</a></p>
+            {% else %}
+                <p>Find an issue with the Scheduler? Log it in the <a href="{{ issueTracker }}"
+                                                                      target="_blank">issue tracker.</a></p>
+            {% endif %}
             <p>{{ version() }}</p>
         </div>
         {#<!--<a href="/">Home</a> - <a href="#">Contact Us</a><br>-->#}

@@ -119,7 +119,6 @@ abstract class AbstractImporter
     /**
      * @param Spreadsheet $objSpreadsheet
      * @return array|null
-     * @throws Exception
      */
     private function readWorksheet(Spreadsheet $objSpreadsheet)
     {
@@ -134,7 +133,7 @@ abstract class AbstractImporter
             $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
             foreach ($cellIterator as $cell) {
                 if (!is_null($cell)) {
-                    $rowData[] = $cell->getValue();
+                    $rowData[] = trim($cell->getValue());
                 }
             }
 

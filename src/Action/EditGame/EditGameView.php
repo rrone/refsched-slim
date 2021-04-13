@@ -63,7 +63,7 @@ class EditGameView extends AbstractView
      * @return Response
      *
      */
-    public function render(Response &$response)
+    public function render(Response $response)
     {
         $content = array(
             'view' => array(
@@ -145,7 +145,7 @@ class EditGameView extends AbstractView
                         $html .= "<td><input type=\"text\" name=\"$game->id+date\" value=\"$game->date\" required pattern=\"\d{4})-\d{1,2}-\d{1,2}\" placeholder=\"yyyy-mm-dd\" title=\"Date are in the form yyyy-mm-dd\"></td>";
                         $html .= "<td><input type=\"text\" name=\"$game->id+time\" value=\"$time\" pattern=\"\d{2}:\d{2}\" placeholder=\"hh:mm\" title=\"Time in the form hh:mm\"></td>";
                         $html .= "<td><input type=\"text\" name=\"$game->id+field\" value=\"$game->field\"></td>";
-                        $html .= "<td><input type=\"text\" name=\"$game->id+division\" value=\"$game->division\" pattern=\"({1}[0-9]{2}[U][BG]{1})\" title=\"Divisions are in the form 14UG\"></td>";
+                        $html .= "<td><input type=\"text\" name=\"$game->id+division\" value=\"$game->division\" /* pattern=\"({1}[0-9]{2}[U][BG]{1})\" title=\"Divisions are in the form 14UG\"*/></td>";
                         $html .= "<td><input type=\"text\" name=\"$game->id+pool\" value=\"$game->pool\" pattern=\"(\d{1,2}|SF|FIN|CON)\" title=\"Pools are 1-99, 'SF', 'FIN' or 'CON'\"></td>";
                         $html .= "<td><input type=\"text\" name=\"$game->id+home\" value=\"$game->home\"></td>";
                         $html .= "<td><input type=\"text\" name=\"$game->id+away\" value=\"$game->away\"></td>";

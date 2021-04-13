@@ -102,14 +102,6 @@ $app->map(['GET', 'POST'], '/showmrd', App\Action\MedalRound\ShowMedalRoundDivis
     ->setName('showmrd');
 $container['showMRDivPath'] = $container->get('router')->pathFor('showmrd');
 
-$app->map(['GET', 'POST'], '/hidemra', App\Action\MedalRound\HideMedalRoundAssignmentsController::class)
-    ->setName('hidemra');
-$container['hideMRAssignmentsPath'] = $container->get('router')->pathFor('hidemra');
-
-$app->map(['GET', 'POST'], '/showmra', App\Action\MedalRound\ShowMedalRoundAssignmentsController::class)
-    ->setName('showmra');
-$container['showMRAssignmentsPath'] = $container->get('router')->pathFor('showmra');
-
 $app->map(['GET'], '/sar', App\Action\SAR\SARAction::class)
     ->setName('sar');
 

@@ -14,7 +14,7 @@ class ActionTest extends AppTestCase
 
     /* @var SchedulerRepository */
     private $mockSR;
-    private $projectKey = '1619TESTDATA';
+    private $projectKey = '202016U19UPlayoffs';
     private $userName;
     private $user;
 
@@ -86,7 +86,7 @@ class ActionTest extends AppTestCase
     {
         $result = $this->mockSR->getEventLabel($this->projectKey);
 
-        $this->assertEquals('U16/U19 Playoffs: November 19-20, 2016', $result);
+        $this->assertEquals('16U-19U Playoffs: March 14-15, 2020', $result);
     }
 
     public function testGetLockedNull()
@@ -163,7 +163,7 @@ class ActionTest extends AppTestCase
 
     public function testgetGame()
     {
-        $result = $this->mockSR->getGame(470);
+        $result = $this->mockSR->getGame(1912);
 
         $this->assertInstanceOf(stdClass::class, $result);
     }

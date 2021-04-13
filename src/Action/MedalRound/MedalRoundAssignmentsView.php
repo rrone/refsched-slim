@@ -25,7 +25,7 @@ class MedalRoundAssignmentsView extends AbstractView
         $this->showAssignments = $request->getAttribute('assignments');
     }
 
-    public function render(Response &$response)
+    public function render(Response $response)
     {
         if ($this->showAssignments) {
             $this->renderShowMedalRoundAssignments();

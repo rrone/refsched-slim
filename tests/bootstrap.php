@@ -8,7 +8,7 @@ ini_set('display_startup_errors', 1);
 ini_set('error_log', 'syslog');
 date_default_timezone_set('UTC');
 
-use FullNameParser;
+use TheIconic\NameParser\Parser;
 use Slim\App;
 use App\Action\SchedulerRepository;
 use Slim\Container;
@@ -41,7 +41,7 @@ class AppTestCase extends WebTestCase
     protected $c;
 
     /**
-     * @var FullNameParser
+     * @var Parser
      */
     protected $p;
 

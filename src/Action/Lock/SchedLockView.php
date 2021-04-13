@@ -27,7 +27,7 @@ class SchedLockView extends AbstractView
         $this->unlock = $request->getAttribute('unlock');
     }
 
-    public function render(Response &$response)
+    public function render(Response $response)
     {
         $cont = null;
 

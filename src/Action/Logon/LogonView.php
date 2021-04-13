@@ -32,18 +32,28 @@ class LogonView extends AbstractView
             $hash = isset($user) ? $user->hash : null;
             $authed = password_verify($pass, $hash);
 
-            if (!$authed) {
+            if ($authed) {
+                $_SESSION['authed'] = true;
+                $this->msg = null;
+            } else {
                 //try master password
-                $usr = $this->sr->getUserByName('Super Admin');
-                $hash = isset($usr) ? $usr->hash : null;
+                $user = $this->sr->getUserByName('Super Admin');
+                if(is_null($_SESSION['user'])){
+                    $_SESSION['user'] = $user;
+                }
+                $hash = isset($user) ? $user->hash : null;
                 $authed = password_verify($pass, $hash);
-                $user = $user->admin ? $usr : $user;
-            }
 
-            $_SESSION['authed'] = true;
-            $_SESSION['admin'] = $user->admin;
-            $_SESSION['view'] = $user->admin ? 'asadmin' : 'asuser';
-            $this->msg = $authed ? null : 'Unrecognized password for ' . $_POST['user'];
+                if ($authed) {
+                    $_SESSION['authed'] = true;
+                    $_SESSION['admin'] = true;
+                    $this->msg = null;
+                } else {
+                    $_SESSION['authed'] = false;
+                    $_SESSION['admin'] = false;
+                    $this->msg = 'Unrecognized password for ' . $_POST['user'];
+                }
+            }
         }
 
         return null;
@@ -54,7 +64,7 @@ class LogonView extends AbstractView
      * @return Response
      *
      */
-    public function render(Response &$response)
+    public function render(Response $response)
     {
         $key = isset($_SESSION['param']) ? $_SESSION['param'] : null;
 
@@ -139,13 +149,10 @@ EOD;
       </form>
 EOD;
         } else {
-            $html = $this->sr->getEventMessage();
-            if(empty($html)) {
-                $html = "<div class=\"center no-content\">
+            $html = "<div class=\"center no-content\">
                 <h2>Rest easy...there are no events available to schedule.</h2>
                 <h2>Go referee some matches yourself.</h2>
                 </div>";
-            }
         }
 
         return $html;

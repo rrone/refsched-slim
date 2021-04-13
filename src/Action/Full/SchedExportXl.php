@@ -27,7 +27,7 @@ class SchedExportXl extends AbstractExporter
     private $event;
 
     private $mtCerts;
-    private $show_medal_round_details;
+    private $show_medal_round_divisions;
 
 
     /**
@@ -85,7 +85,9 @@ class SchedExportXl extends AbstractExporter
         if ($this->user->admin) {
 //            $this->generateSummaryCountData($content);
             $this->generateSummaryCountDateDivision($content);
-            $this->generateAssignmentsByRefereeData($content);
+            if ($this->certCheck) {
+                $this->generateAssignmentsByRefereeData($content);
+            }
         }
 
         $body = $response->getBody();
@@ -236,7 +238,7 @@ class SchedExportXl extends AbstractExporter
                                 $game
                             );
                         } catch (Exception $e) {
-                            echo $e->getCode() . ": " . $e->getMessage() ;
+                            echo $e;
                             var_dump($cert);
                             var_dump($game);
                             die();
@@ -279,7 +281,7 @@ class SchedExportXl extends AbstractExporter
         }
 
         $ids = implode(',', $certs);
-        $json = $this->curl_get("https://vc.ayso1ref.com/api/$ids");
+        $json = $this->curl_get("https://vc.ayso1ref.com/id/$ids");
         $certs = $this->parseCerts(json_decode($json));
 
         return $certs;
@@ -334,7 +336,7 @@ class SchedExportXl extends AbstractExporter
             $projectKey = $event->projectKey;
 
             $show_medal_round = $this->sr->getMedalRound($projectKey);
-            $this->show_medal_round_details = $this->sr->getMedalRoundDivisions($projectKey);
+            $this->show_medal_round_divisions = $this->sr->getMedalRoundDivisions($projectKey);
 
             $games = $this->sr->getGames($projectKey, '%', $show_medal_round || $this->user->admin);
             $has4th = $this->sr->numberOfReferees($projectKey) > 3;
@@ -363,8 +365,7 @@ class SchedExportXl extends AbstractExporter
             foreach ($games as $game) {
                 $time = date('H:i', strtotime($game->time));
 
-                if ($this->show_medal_round_details || !$game->medalRound || $this->user->admin) {
-                    $matchID = $game->game_number;
+                if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
                     if (is_null($this->event->field_map)) {
                         $field = $game->field;
                     } else {
@@ -375,7 +376,6 @@ class SchedExportXl extends AbstractExporter
                     $home = $game->home;
                     $away = $game->away;
                 } else {
-                    $matchID = "";
                     $field = "";
                     $division = "";
                     $pool = "";
@@ -384,7 +384,7 @@ class SchedExportXl extends AbstractExporter
                 }
 
                 $row = array(
-                    $matchID,
+                    $game->game_number,
                     $game->date,
                     $time,
                     $field,

@@ -84,7 +84,7 @@ class SchedTemplateExport extends AbstractExporter
     /**
      * @param Response $response
      */
-    protected function render(Response &$response)
+    protected function render(Response $response)
     {
         $msg = $this->event->name . ' at ' . $this->event->location . ' on ' . $this->event->dates;
         $content = array(
