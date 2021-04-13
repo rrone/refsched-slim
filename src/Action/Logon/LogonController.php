@@ -25,7 +25,7 @@ class LogonController extends AbstractController
      * @param $args
      * @return Response
      */
-    public function __invoke(Request $request, Response $response, $args)
+    public function __invoke(Request $request, Response $response, $args): Response
     {
 
         $this->logonView->handler($request, $response);

@@ -6,7 +6,7 @@ $settings = [
     'settings' => [
         // App Settings
         'version' => [
-            'version' => '2020.04.30.00-m'
+            'version' => '2021.04.13.00'
         ],
 
         'assignor' => [
@@ -26,6 +26,8 @@ $settings = [
 
         // Slim Settings
         'determineRouteBeforeAppMiddleware' => false,
+
+        'displayErrorDetails'  => true,
 
         // View settings
         'view' => [

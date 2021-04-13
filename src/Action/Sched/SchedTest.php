@@ -141,7 +141,7 @@ class SchedSchedTest extends AppTestCase
             'event' => $this->sr->getEvent($projectKey)
         ];
 
-        $params = ['group' => 'U16'];
+        $params = ['group' => '16U'];
         $view = $this->client->get('/sched', $params);
 
         $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
@@ -175,10 +175,10 @@ class SchedSchedTest extends AppTestCase
             'event' => $this->sr->getEvent($projectKey),
         ];
 
-        $this->sr->updateAssignor([457=>$user]);
+        $this->sr->updateAssignor([1912=>$user]);
         $games = $this->sr->getGamesByRep($projectKey, $user, $show_medal_round);
 
-        $this->sr->updateAssignor([472=>'']);
+        $this->sr->updateAssignor([1929=>'']);
         $unassignedGames = $this->sr->getUnassignedGames($projectKey, '16U');
 
         $url = '/sched';
@@ -242,7 +242,7 @@ class SchedSchedTest extends AppTestCase
         $view = $this->client->get('/sched');
 
         $this->assertContains("<h3 class=\"center\">$user: Schedule</h3>", $view);
-        $this->assertContains("<h3 class=\"left\">7 Matches assigned to Area 1P:</h3>", $view);
+        $this->assertContains("<h3 class=\"left\">0 Matches assigned to Area 7E</h3>", $view);
     }
 
 }

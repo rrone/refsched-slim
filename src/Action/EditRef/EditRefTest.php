@@ -8,8 +8,8 @@ use App\Action\AbstractView;
 
 class EditRefTest extends AppTestCase
 {
-    protected $goodGameNumber = 1;
-    protected $badGameNumber = 10000;
+    protected $goodId = 2;
+    protected $badId = 10000;
 
     public function setUp()
     {
@@ -71,7 +71,7 @@ class EditRefTest extends AppTestCase
         $user = $this->config['user_test']['user'];
         $projectKey = $this->config['testParams']['projectKey'];
 
-        $game = $this->sr->getGameByKeyAndNumber($projectKey, $this->goodGameNumber);
+        $game = $this->sr->getGameByKeyAndNumber($projectKey, $this->goodId);
         $game_id = $game->id;
 
         $this->client->app->getContainer()['session'] = [
@@ -102,7 +102,7 @@ class EditRefTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Assign $user Referees</h3>", $view);
-        $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"457\" value=\"Update Assignments\">", $view);
+        $this->assertContains("<input class=\"btn btn-primary btn-xs right\" type=\"submit\" name=\"1912\" value=\"Update Assignments\">", $view);
         $this->assertContains("value=\"Update Assignments\">", $view);
 
         // test edit names
@@ -121,7 +121,7 @@ class EditRefTest extends AppTestCase
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<td>Last, Crfirst</td><td>Ar1first Last</td><td>Ar2first Last</td>", $view);
+        $this->assertContains("<td>CRFirst Last</td><td>AR1FIRST Last</td><td>AR2First Last</td>", $view);
 
         //clear edit names
         $url = '/editref';
@@ -155,7 +155,7 @@ class EditRefTest extends AppTestCase
 
         $user = $this->config['admin_test']['user'];
         $projectKey = $this->config['testParams']['projectKey'];
-        $game_id = $this->sr->getGameByKeyAndNumber($projectKey, $this->goodGameNumber)->id;
+        $game_id = $this->sr->getGameByKeyAndNumber($projectKey, $this->goodId)->id;
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -204,7 +204,7 @@ class EditRefTest extends AppTestCase
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
 
-        $this->assertContains("<td>Referee Admin Last</td><td>Ar1 Admin Last</td><td>Ar2 Admin Last</td>", $view);
+        $this->assertContains("<td>Referee Admin Last</td><td>AR1 Admin Last</td><td>AR2 Admin Last</td>", $view);
 
         //clear edit names
         $url = '/editref';
@@ -237,7 +237,7 @@ class EditRefTest extends AppTestCase
 
         $user = $this->config['user_test']['user'];
         $projectKey = $this->config['testParams']['projectKey'];
-        $game_id = $this->badGameNumber;
+        $game_id = $this->badId;
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,

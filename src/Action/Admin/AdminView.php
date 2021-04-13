@@ -143,7 +143,7 @@ class AdminView extends AbstractView
 
     }
 
-    public function render(Response &$response)
+    public function render(Response $response)
     {
         $adminPath = $response->getHeader('adminPath')[0];
 

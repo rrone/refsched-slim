@@ -19,8 +19,14 @@ abstract class AbstractView
     protected $sr;
 
     //view variables
+    protected $projectKey;
+
     protected $user;
     protected $event;
+    protected $groups;
+    protected $limit_list = [];
+    protected $assigned_list = [];
+
 
     //view variables
     protected $page_title;
@@ -75,34 +81,23 @@ abstract class AbstractView
      * @param Response $response
      * @return mixed
      */
-    abstract protected function render(Response &$response);
+    abstract protected function render(Response $response);
 
-    /**
-     * @param $div
-     * @return false|string
-     */
     protected function divisionAge($div)
     {
         $u = stripos($div, "U");
 
         switch ($u) {
-            case 1:
-                $div = substr($div, $u, 3);
-                break;
-            case 2:
-                $div = substr($div, $u - 1, 3);
+            case 0:
+                $div = substr_replace(substr($div,1) ,"U", -1);
                 break;
             default:
-                $div = substr($div, $u - 2, 3);
+                $div = substr($div,1);
         }
 
         return $div;
     }
 
-    /**
-     * @param Request $request
-     * @return bool
-     */
     protected function isRepost(Request $request)
     {
 
@@ -135,9 +130,6 @@ abstract class AbstractView
         return $request->getUri()->getBasePath() . $this->container->get($path);
     }
 
-    /**
-     * @return array
-     */
     protected function getCurrentEvents()
     {
         $events = $this->sr->getCurrentEvents();
@@ -186,29 +178,43 @@ abstract class AbstractView
     }
 
     /**
-     * @return string
+     * @return null
      */
-    protected function getMedalRoundNotes()
+    protected function initLimitLists()
     {
-        $html = "<br><br>";
-        $html .= "<h2 class=\"center\">For the Medal Round matches, Referee Names are placeholders only.\n<br />";
-        $html .= "No assignment as Referee or Assistant Referee on a particular match should be inferred.</h2>\n";
-        $html .= "<h2 class=\"center\"><em><u>Please</u></em> thank your Referees for their availability and let them know that\n<br />";
-        $html .= "Medal Round match assignments will be made at the field by the Section Assignor.</h2>\n";
-        $html .= "<br><br>";
+        $this->assigned_list = [];
+        $this->limit_list = [];
 
-        return $html;
+        //initialize assigned and limit lists
+        $this->groups = $this->sr->getGroups($this->projectKey);
 
+        foreach ($this->groups as $group) {
+            $group = explode(' ', $group);
+            $group = $group[0];
+
+            $this->limit_list[$group] = 'none';
+            $this->assigned_list[$group] = 0;
+        }
+
+        $limits = $this->sr->getLimits($this->projectKey);
+
+        foreach ($limits as $limit) {
+            if ($limit->division != 'all') {
+                foreach ($this->groups as $group) {
+                    $this->limit_list[$group] = $limit->limit;
+                }
+
+                return null;
+            }
+
+            foreach ($this->groups as $group) {
+                $div = $this->divisionAge($limit->division);
+                if (stripos($group, $div)) {
+                    $this->limit_list[$group] = $limit->limit;
+                }
+            }
+        }
+        return null;
     }
-
-    /**
-     * @param $a
-     * @param $b
-     * @return bool
-     */
-    protected static function numSort($a, $b) {
-        return $a->game_number > $b->game_number;
-    }
-
 
 }

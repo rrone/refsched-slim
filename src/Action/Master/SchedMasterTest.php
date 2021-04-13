@@ -150,10 +150,10 @@ class SchedMasterTest extends AppTestCase
             'cache-control' => 'no-cache',
             'content-type' => 'multipart/form-data;'
         );
-        // clear match 457 (match 1 in 202016U19UPlayoffs)
+        // clear match 1912 (match 1 in 202016U19UPlayoffs)
         $body = array(
             'Submit' => 'Submit',
-            457 => ''
+            1912 => ''
         );
 
         $response = (object)$this->client->post($url, $body, $headers);
@@ -161,10 +161,10 @@ class SchedMasterTest extends AppTestCase
 
         $this->assertContains("<form name=\"master_sched\" method=\"post\" action=/master>", $view);
 
-        // assign match 457 to Area 1B
+        // assign match 1912 to Area 1B
         $body = array(
             'Submit' => 'Submit',
-            457 => $assignor
+            1912 => $assignor
         );
 
         $response = (object)$this->client->post($url, $body, $headers);

@@ -116,7 +116,7 @@ class SchedImport extends AbstractImporter
      * @param Response $response
      *
      */
-    public function render(Response &$response)
+    public function render(Response $response)
     {
         $content = array(
             'view' => array(

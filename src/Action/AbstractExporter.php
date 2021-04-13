@@ -137,10 +137,14 @@ abstract class AbstractExporter
             $xl->setActiveSheetIndex($xl->getSheetCount() - 1);
 
             $this->writeWorksheet($data, $sheetName);
+            //select upper left cell
+            $xl->getActiveSheet()->setSelectedCell('A2');
         }
 
         //remove first sheet -- is blank
         $xl->removeSheetByIndex(0);
+        //select first sheeet
+        $xl->setActiveSheetIndex(0);
 
         //write to application output buffer
         $objWriter = IOFactory::createWriter($xl, 'Xlsx');

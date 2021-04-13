@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 ## Exit immediately if a command exits with a non-zero status.
 set -e
-#set distribution folder alias
-dev="$HOME"/Sites/AYSO/_dev/refsched.slim
-prod="$HOME"/Sites/AYSO/_services/rs
+#set folder aliases
+ayso="$HOME"/Sites/AYSO
+
+dev="${ayso}"/_dev/rs7.dev.slim
+
 config=${dev}/config
-PHP=/usr/local/etc/php/7.3/conf.d
+prod="${ayso}"/_services/rs7.ayso1ref.com
+
+PHP=/usr/local/etc/php/8.0/conf.d
 
 ## clear the screen
 #printf "\033c"
@@ -24,10 +28,12 @@ if [[ -e ${PHP}"/ext-xdebug.ini" ]]
 then
     mv "$PHP"/ext-xdebug.ini "$PHP"/ext-xdebug.~ini
 fi
+composer install --no-dev
+yarn install --prod=true
 echo
 
 echo "  Clear distribution folder..."
-rm -rf ${prod}
+rm -f -r ${prod}
 echo
 
 echo "  Setup distribution folder..."
@@ -39,19 +45,13 @@ mkdir ${prod}/config
 echo
 
 echo "  Copying app folders to distribution..."
-cp -rf app ${prod}/app
-cp -rf public ${prod}/public
-cp -rf templates ${prod}/templates
-cp -rf src/Action ${prod}/src
-cp -rf ${config}/config_prod.php ${prod}/config/config.php
-cp -f *.json ${prod}
-cp -f *.lock ${prod}
-cp -f license.txt ${prod}
-
-echo "  Updating production libraries..."
-cd ${prod}
-    composer install --no-dev
-    yarn install --prod=true
+cp -f -r app ${prod}/app
+cp -f -r vendor ${prod}/vendor
+cp -f -r node_modules ${prod}/node_modules
+cp -f -r public ${prod}/public
+cp -f -r templates ${prod}/templates
+cp -f -r ${config}/config_prod.php ${prod}/config/config.php
+cp -f -r src/Action ${prod}/src
 
 echo "  Updating index to production..."
 cp -f ${dev}/public/app_prod.php ${prod}/public/app.php
@@ -64,6 +64,8 @@ echo
 echo "  Removing development jetsam..."
 find ${prod} -type f -name 'app_*' -delete
 find ${prod}/src -type f -name '*Test.php' -delete
+##rm -f -r $dist/config/.git
+##find $dist/config -type f -name '.env' -delete
 echo
 
 echo "  Restore composer development items..."
@@ -72,6 +74,8 @@ if [[ -e ${PHP}"/ext-xdebug.~ini" ]]
 then
     mv "$PHP"/ext-xdebug.~ini "$PHP"/ext-xdebug.ini
 fi
+composer install
+yarn install
 echo
 
 echo "...distribution complete"
