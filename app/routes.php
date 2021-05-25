@@ -1,6 +1,10 @@
 <?php
 // Routes
 
+if(!isset($app)) {
+    $app = null;
+}
+
 $container = $app->getContainer();
 
 //Request::setTrustedProxies(array('127.0.0.1'));

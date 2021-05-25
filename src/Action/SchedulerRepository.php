@@ -535,7 +535,13 @@ class SchedulerRepository
                     ->orderByRaw($field);
         }
 
-        return $query->get();
+        try {
+            $games = $query->get();
+        } catch (Exception $e) {
+            echo($e->getMessage());
+            die();
+        }
+        return $games;
 
     }
 

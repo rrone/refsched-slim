@@ -54,4 +54,5 @@ require PROJECT_ROOT . '/app/routes.php';
 try {
     $app->run();
 } catch (Throwable $e) {
+    echo $e->getMessage();
 }

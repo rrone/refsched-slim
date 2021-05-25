@@ -1,5 +1,5 @@
 {
-    "name": "slim3/refsched",
+    "name": "ayso/refsched",
     "description": "Slim Framework 3 application to manage referee schedules.",
     "license": "MIT",
     "type": "project",

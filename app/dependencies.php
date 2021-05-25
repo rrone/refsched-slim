@@ -50,6 +50,10 @@ use Slim\Container;
 use TheIconic\NameParser\Parser;
 use Twig\Extension\DebugExtension;
 
+if(!isset($app)) {
+    $app = null;
+}
+
 $container = $app->getContainer();
 
 // -----------------------------------------------------------------------------
@@ -98,7 +102,7 @@ $container['flash'] = function () {
 unset($container['errorHandler']);
 $container['errorHandler'] = function ($c) {
     if ($c['settings']['debug']) {
-        return;
+        return null;
     }
 
     return function ($exception) use ($c) {
