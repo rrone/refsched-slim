@@ -139,9 +139,7 @@ class SchedImport extends AbstractImporter
     protected function getData(UploadedFile $file): ?array
     {
         $path = $this->uploadPath . $file->getClientFilename();
-        if ( !file_exists($this->uploadPath) ) {
-            mkdir ($this->uploadPath, 0744);
-        }
+
         $file->moveTo($path);
 
         return $this->import($path);

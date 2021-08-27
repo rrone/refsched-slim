@@ -52,7 +52,7 @@ mv "${prod}/rs/public/app_prod.php" "${prod}/rs/public/app.php"
 cp -rf src "${prod}/rs"
 cp -rf templates "${prod}"/rs
 mkdir  "${prod}"/rs/var
-mkdir  "${prod}"/rs/uploads
+mkdir  "${prod}"/rs/var/uploads
 echo
 
 echo ">>> Removing OSX jetsam..."
