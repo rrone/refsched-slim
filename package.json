@@ -10,7 +10,6 @@
     "coverage": "open var/coverage/index.html"
   },
   "author": "",
-  "devDependencies": {},
   "dependencies": {
     "bootstrap": "^4.4.1",
     "global": "^4.4.0",

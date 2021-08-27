@@ -64,8 +64,9 @@ find "${prod}"/rs/src -type f -name '*Test.php' -delete
 echo
 
 cd "${prod}"/rs
-    yarn install --prod=true
     composer install --no-dev
+#    yarn workspaces focus --production
+    yarn install
 
     ln -s public ../public_html
 

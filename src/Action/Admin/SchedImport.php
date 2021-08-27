@@ -18,10 +18,10 @@ use Slim\Http\UploadedFile;
 class SchedImport extends AbstractImporter
 {
     /* @ Container */
-    private $container;
+    private Container $container;
 
     /* @ SchedulerRepository */
-    private $sr;
+    private SchedulerRepository $sr;
 
     private $user;
     private $event;
@@ -55,7 +55,7 @@ class SchedImport extends AbstractImporter
      *
      * @throws Exception
      */
-    public function handler(Request $request)
+    public function handler(Request $request): ?string
     {
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
@@ -136,10 +136,12 @@ class SchedImport extends AbstractImporter
      * @return array|null
      * @throws Exception
      */
-    protected function getData(UploadedFile $file)
+    protected function getData(UploadedFile $file): ?array
     {
         $path = $this->uploadPath . $file->getClientFilename();
-
+        if ( !file_exists($this->uploadPath) ) {
+            mkdir ($this->uploadPath, 0744);
+        }
         $file->moveTo($path);
 
         return $this->import($path);
@@ -151,7 +153,7 @@ class SchedImport extends AbstractImporter
      * @return bool|null
      * @throws Exception
      */
-    protected function testFile($file)
+    protected function testFile($file): ?bool
     {
         $result = null;
 
@@ -214,7 +216,7 @@ class SchedImport extends AbstractImporter
     /**
      * @return array|null
      */
-    protected function validHeader()
+    protected function validHeader(): ?array
     {
         $event = $this->event;
 
@@ -234,7 +236,7 @@ class SchedImport extends AbstractImporter
      * @return string
      *
      */
-    protected function getBaseURL($path)
+    protected function getBaseURL($path): string
     {
         $request = $this->container->get('request');
 

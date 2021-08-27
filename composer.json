@@ -22,11 +22,10 @@
         "symfony/event-dispatcher": "^5",
         "symfony/filesystem": "^5",
         "symfony/process": "^5",
-        "there4/slim-test-helpers": "^2",
-        "symfony/flex": "^1"
+        "there4/slim-test-helpers": "^2"
     },
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "slim/slim": "^3",
         "slim/twig-view": "^2",
         "slim/flash": "^0.4",
@@ -42,6 +41,16 @@
         "ext-curl": "*",
         "symfony/css-selector": "^5",
         "components/bootstrap-default": "^3.3",
-        "theiconic/name-parser": "^1.2"
+        "theiconic/name-parser": "^1.2",
+        "symfony/flex": "^1"
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "platform": {
+            "php": "7.4"
+        },
+        "sort-packages": true
     }
 }

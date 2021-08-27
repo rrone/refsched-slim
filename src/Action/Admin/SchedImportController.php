@@ -10,7 +10,7 @@ use App\Action\AbstractController;
 
 class SchedImportController extends AbstractController
 {
-    private $importer;
+    private SchedImport $importer;
 
 	public function __construct(Container $container, SchedImport $importer)
     {
@@ -27,7 +27,7 @@ class SchedImportController extends AbstractController
      *
      * @throws Exception
      */
-    public function __invoke(Request $request, Response $response, $args)
+    public function __invoke(Request $request, Response $response, $args): Response
     {
         if(!$this->isAuthorized()) {
             return $response->withRedirect($this->getBaseURL('logonPath'));

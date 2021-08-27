@@ -9,7 +9,7 @@ use App\Action\AbstractController;
 class AdminController extends AbstractController
 {
     /* @var AdminView */
-    private $adminView;
+    private AdminView $adminView;
 
 	public function __construct(Container $container, AdminView $adminView) {
 		
@@ -25,7 +25,7 @@ class AdminController extends AbstractController
      * @param $args
      * @return Response
      */
-    public function __invoke(Request $request, Response $response, $args)
+    public function __invoke(Request $request, Response $response, $args): Response
     {
         if(!$this->isAuthorized() || !$this->user->admin) {
             return $response->withRedirect($this->getBaseURL('greetPath'));
