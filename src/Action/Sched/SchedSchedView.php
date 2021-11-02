@@ -17,14 +17,14 @@ use App\Action\AbstractView;
  */
 class SchedSchedView extends AbstractView
 {
-    private $description;
-    private $showgroup;
-    private $show_medal_round;
-    private $show_medal_round_divisions;
-    private $locked;
+    private string $description;
+    private bool $showgroup;
+    private bool $show_medal_round;
+    private bool $show_medal_round_divisions;
+    private bool $locked;
 
-    private $num_unassigned;
-    private $atlimit;
+    private int $num_unassigned;
+    private bool $atlimit;
 
     /**
      * SchedSchedView constructor.
@@ -36,7 +36,7 @@ class SchedSchedView extends AbstractView
     {
         parent::__construct($container, $schedulerRepository);
 
-        $this->showgroup = null;
+        $this->showgroup = false;
         $this->description = 'No matches scheduled';
 
         $this->atlimit = false;
@@ -143,8 +143,8 @@ class SchedSchedView extends AbstractView
                     $time = date('H:i', strtotime($game->time));
                     $div = $game->division;
                     //ensure all indexes exist
-                    $games_now[$div] = isset($games_now[$div]) ? $games_now[$div] : 0;
-                    $atLimit[$div] = isset($atLimit[$div]) ? $atLimit[$div] : 0;
+                    $games_now[$div] = $games_now[$div] ?? 0;
+                    $atLimit[$div] = $atLimit[$div] ?? 0;
                     //if requested
 
                     if (in_array($game->id, array_keys($adds))) {
@@ -209,7 +209,7 @@ class SchedSchedView extends AbstractView
      * @return string|null
      * @throws Exception
      */
-    private function renderView()
+    private function renderView(): ?string
     {
         $html = null;
 
@@ -292,7 +292,7 @@ class SchedSchedView extends AbstractView
      * @return string
      *
      */
-    private function menuLinks()
+    private function menuLinks(): string
     {
         $uname = $this->user->name;
 
@@ -321,7 +321,7 @@ class SchedSchedView extends AbstractView
     /**
      * @return string|null
      */
-    private function renderUserStatus()
+    private function renderUserStatus(): ?string
     {
         $html = null;
 

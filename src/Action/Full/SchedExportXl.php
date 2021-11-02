@@ -16,18 +16,18 @@ define("CERT_URL", "https://national.ayso.org/Volunteers/ViewCertification?UserN
 class SchedExportXl extends AbstractExporter
 {
     /* @var SchedulerRepository */
-    private $sr;
+    private SchedulerRepository $sr;
 
-    private $isUnique;
+    private bool $isUnique;
 
-    private $certCheck;
+    private bool $certCheck;
 
-    private $outFileName;
-    private $user;
-    private $event;
+    private string $outFileName;
+    private object $user;
+    private object $event;
 
-    private $mtCerts;
-    private $show_medal_round_divisions;
+    private array $mtCerts;
+    private bool $show_medal_round_divisions;
 
 
     /**
@@ -46,7 +46,7 @@ class SchedExportXl extends AbstractExporter
         $dt = new DateTime("now", new DateTimeZone($tz)); //first argument "must" be a string
         $dt->setTimestamp($timestamp); //adjust the object to correct timestamp
 
-        $this->outFileName = 'GameSchedule_'.$dt->format('Ymd_His').'.'.$this->getFileExtension();
+        $this->outFileName = 'GameSchedule_' . $dt->format('Ymd_His') . '.' . $this->getFileExtension();
 
         $this->mtCerts = array(
             'AYSOID' => '',
@@ -68,17 +68,17 @@ class SchedExportXl extends AbstractExporter
      * @return Response
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    public function handler(Request $request, Response $response)
+    public function handler(Request $request, Response $response): Response
     {
         $this->user = $request->getAttribute('user');
         $this->event = $request->getAttribute('event');
         $this->certCheck = $request->getQueryParam('certCheck') == 'on';
 
-        $this->outFileName = $this->certCheck ? 'CertCheck.'.$this->outFileName : $this->outFileName;
+        $this->outFileName = $this->certCheck ? 'CertCheck.' . $this->outFileName : $this->outFileName;
 
         // generate the response
         $response = $response->withHeader('Content-Type', $this->contentType);
-        $response = $response->withHeader('Content-Disposition', 'attachment; filename='.$this->outFileName);
+        $response = $response->withHeader('Content-Disposition', 'attachment; filename=' . $this->outFileName);
 
         $content = null;
         $this->generateScheduleData($content);
@@ -132,9 +132,9 @@ class SchedExportXl extends AbstractExporter
 
     /**
      * @param $content
-     * @return mixed
+     * @return void
      */
-    private function generateAssignmentsByRefereeData(&$content)
+    private function generateAssignmentsByRefereeData(&$content): void
     {
         $event = $this->event;
 
@@ -152,8 +152,11 @@ class SchedExportXl extends AbstractExporter
                     'SAR',
                     'Safe Haven Date',
                     'CDC Date',
+                    'SCA Date',
                     'Ref Cert Desc',
                     'Ref Cert Date',
+                    'Risk Status',
+                    'Risk Expire Date',
                     'eAYSO Name',
                 );
 
@@ -199,8 +202,8 @@ class SchedExportXl extends AbstractExporter
                                     $id = $personRec[0]['AYSOID'];
                                 } else {
                                     $assignor = explode(' ', $game['Assignor']);
-                                    if (isset($assignor[1]) AND strlen(end($assignor)) > 1) {
-                                        $assignor = $assignor[1][0].'/'.$assignor[1][1];
+                                    if (isset($assignor[1]) and strlen(end($assignor)) > 1) {
+                                        $assignor = $assignor[1][0] . '/' . $assignor[1][1];
                                     } else {
                                         $assignor = end($assignor);
                                     }
@@ -257,8 +260,8 @@ class SchedExportXl extends AbstractExporter
             if (!empty($data)) {
                 $content['Referee Match Count']['data'] = $data;
                 if ($this->user->admin) {
-                    $content['Referee Match Count']['options']['freezePane'] = 'J2';
-                    $content['Referee Match Count']['options']['horizontalAlignment'] = ['J1:ZZ' => 'center'];
+                    $content['Referee Match Count']['options']['freezePane'] = 'L2';
+                    $content['Referee Match Count']['options']['horizontalAlignment'] = ['M1:ZZ' => 'center'];
                 } else {
                     $content['Referee Match Count']['options']['freezePane'] = 'B2';
                     $content['Referee Match Count']['options']['horizontalAlignment'] = ['B1:ZZ' => 'center'];
@@ -267,39 +270,38 @@ class SchedExportXl extends AbstractExporter
         }
 
 
-        return $content;
     }
 
     /**
      * @param array $certs
      * @return array
      */
-    private function getCerts(array $certs)
+    private function getCerts(array $certs): array
     {
         if (empty($certs)) {
             return array();
         }
 
         $ids = implode(',', $certs);
-        $json = $this->curl_get("https://vc.ayso1ref.com/id/$ids");
-        $certs = $this->parseCerts(json_decode($json));
+//        $json = $this->curl_get("https://vc.ayso1ref.com/id/$ids");
 
-        return $certs;
+        $certs = $this->sr->getCertsByID($ids);
+
+        return $this->parseCerts(json_decode($certs));
     }
 
     /**
      * @param array $certs
      * @return array
      */
-    private function parseCerts(array $certs)
+    private function parseCerts(array $certs): array
     {
-
         $volCerts = [];
         foreach ($certs as $cert) {
             $aysoID = $cert->AYSOID;
 
             if ($aysoID != 0) {
-                $url = CERT_URL.$aysoID;
+                $url = CERT_URL . $aysoID;
 
                 if ($this->isUnique) {
                     $hrefAysoID = "=HYPERLINK(\"$url\", \"$aysoID\")";
@@ -310,11 +312,14 @@ class SchedExportXl extends AbstractExporter
                     'AYSOID' => $hrefAysoID,
                     'MY' => $cert->MY,
                     'SAR' => $cert->SAR,
-                    'SafeHavenDate' => $cert->SafeHavenDate,
-                    'CDCDate' => $cert->CDCDate,
-                    'RefCertDesc' => $cert->RefCertDesc,
-                    'RefCertDate' => $cert->RefCertDate,
-                    'eAYSOName' => $cert->FullName,
+                    'SafeHavenDate' => $cert->Safe_Haven_Date,
+                    'CDCDate' => $cert->Concussion_Awareness_Date,
+                    'SCADate' => $cert->Sudden_Cardiac_Arrest_Date,
+                    'RefCertDesc' => $cert->CertificationDesc,
+                    'RefCertDate' => $cert->CertificationDate,
+                    'RiskStatus' => $cert->RiskStatus,
+                    'RiskExpireDate' => $cert->RiskExpireDate,
+                    'eAYSOName' => $cert->Name,
                 );
             } else {
                 $volCerts[$aysoID] = $this->mtCerts;
@@ -326,9 +331,9 @@ class SchedExportXl extends AbstractExporter
 
     /**
      * @param $content
-     * @return mixed
+     * @return void
      */
-    private function generateScheduleData(&$content)
+    private function generateScheduleData(&$content): void
     {
         $event = $this->event;
 
@@ -366,11 +371,7 @@ class SchedExportXl extends AbstractExporter
                 $time = date('H:i', strtotime($game->time));
 
                 if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
-                    if (is_null($this->event->field_map)) {
-                        $field = $game->field;
-                    } else {
-                        $field = $game->field;
-                    }
+                    $field = $game->field;
                     $division = $game->division;
                     $pool = $game->pool;
                     $home = $game->home;
@@ -410,18 +411,14 @@ class SchedExportXl extends AbstractExporter
             }
         }
 
-        return $content;
-
     }
 
     /**
      * @param $content
-     * @return mixed
+     * @return void
      */
-    private
-    function generateSummaryCountDateDivision(
-        &$content
-    ) {
+    private function generateSummaryCountDateDivision(&$content): void
+    {
         $event = $this->event;
 
         if (!empty($event)) {
@@ -436,7 +433,7 @@ class SchedExportXl extends AbstractExporter
             foreach ($dateDivisions as $dateDivision) {
                 $date = $dateDivision->date;
                 $div = $dateDivision->division;
-                $key = $date." / ".$div;
+                $key = $date . " / " . $div;
 
                 if (!in_array($key, $labels)) {
                     $labels[] = $key;
@@ -451,7 +448,7 @@ class SchedExportXl extends AbstractExporter
                     if (!isset($rows[$assignor])) {
                         $rows[$assignor]['Assignor'] = $assignor;
                     }
-                    $key = $count->date." / ".$count->division;
+                    $key = $count->date . " / " . $count->division;
                     if ($key == $v) {
                         $rows[$assignor][$v] = $count->game_count;
                     } elseif (!isset($rows[$assignor][$v])) {
@@ -473,7 +470,6 @@ class SchedExportXl extends AbstractExporter
             }
         }
 
-        return $content;
     }
 
     /**
@@ -521,7 +517,7 @@ class SchedExportXl extends AbstractExporter
      * @param array $options
      * @return bool|string
      */
-    private function curl_get($url, array $options = array())
+    private function curl_get(string $url, array $options = array())
     {
         $defaults = array(
 //            CURLOPT_URL => $url.(strpos($url, '?') === false ? '?' : '').http_build_query($get),

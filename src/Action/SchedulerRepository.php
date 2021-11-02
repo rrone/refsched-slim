@@ -4,6 +4,7 @@ namespace App\Action;
 
 use Exception;
 use Illuminate\Database\Capsule\Manager;
+use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
 use DateTime;
 use DateTimeZone;
@@ -15,7 +16,7 @@ use DateTimeZone;
 class SchedulerRepository
 {
     /* @var Manager */
-    private $db;
+    private Manager $db;
 
     /**
      * SchedulerRepository constructor.
@@ -30,7 +31,7 @@ class SchedulerRepository
      * @param $elem
      * @return null|object
      */
-    private function getZero($elem)
+    private function getZero($elem): ?object
     {
         return isset($elem[0]) ? (object)$elem[0] : null;
     }
@@ -40,7 +41,7 @@ class SchedulerRepository
     /**
      * @return Collection
      */
-    public function getAllUsers()
+    public function getAllUsers(): Collection
     {
         return $this->db->table('users')
             ->get();
@@ -50,7 +51,7 @@ class SchedulerRepository
      * @param null $key
      * @return Collection
      */
-    public function getUsers($key = null)
+    public function getUsers($key = null): Collection
     {
         return $this->db->table('users')
             ->where(
@@ -86,7 +87,7 @@ class SchedulerRepository
      * @param $hash
      * @return null|object
      */
-    public function getUserByPW($hash)
+    public function getUserByPW($hash): ?object
     {
         if (empty($hash)) {
             return null;
@@ -104,7 +105,7 @@ class SchedulerRepository
      * @param $name
      * @return null|object
      */
-    public function getUserByName($name)
+    public function getUserByName($name): ?object
     {
         if (empty($name)) {
             return null;
@@ -180,34 +181,34 @@ class SchedulerRepository
     /**
      * @return Collection
      */
-    public function getCurrentEvents()
+    public function getCurrentEvents(): Collection
     {
         return $this->db->table('events')
             ->where('view', true)
-            ->orderBy('start_date', 'asc')
+            ->orderBy('start_date')
             ->get();
     }
 
     /**
      * @return Collection
      */
-    public function getAllEvents()
+    public function getAllEvents(): Collection
     {
         return $this->db->table('events')
-            ->orderBy('id', 'asc')
-            ->orderBy('start_date', 'asc')
+            ->orderBy('id')
+            ->orderBy('start_date')
             ->get();
     }
 
     /**
      * @return Collection
      */
-    public function getEnabledEvents()
+    public function getEnabledEvents(): Collection
     {
         return $this->db->table('events')
             ->where('enabled', true)
-            ->orderBy('id', 'asc')
-            ->orderBy('start_date', 'asc')
+            ->orderBy('id')
+            ->orderBy('start_date')
             ->get();
     }
 
@@ -216,7 +217,7 @@ class SchedulerRepository
      * @param bool $asCollection
      * @return null|object
      */
-    public function getEvent($projectKey, $asCollection = false)
+    public function getEvent($projectKey, bool $asCollection = false): ?object
     {
         if (empty($projectKey)) {
             return null;
@@ -237,7 +238,7 @@ class SchedulerRepository
      * @param $label
      * @return null|object
      */
-    public function getEventByLabel($label)
+    public function getEventByLabel($label): ?object
     {
         $event = $this->db->table('events')
             ->where('label', '=', $label)
@@ -261,7 +262,7 @@ class SchedulerRepository
      * @param $projectKey
      * @return null
      */
-    public function getLocked($projectKey)
+    public function getLocked($projectKey): ?bool
     {
         $status = $this->db->table('events')
             ->where('projectKey', '=', $projectKey)
@@ -271,7 +272,7 @@ class SchedulerRepository
         if (!is_null($status)) {
             return $status->locked;
         } else {
-            return null;
+            return true;
         }
     }
 
@@ -476,10 +477,10 @@ class SchedulerRepository
      * @param string $sortOn
      * @return Collection
      */
-    public function getGames($projectKey = '%', $group = '%', $medalRound = false, $sortOn = 'game_number')
+    public function getGames(string $projectKey = '%', string $group = '%', bool $medalRound = false, string $sortOn = 'game_number'): Collection
     {
 
-        $group = '%'.$group.'%';
+        $group = '%' . $group . '%';
         $medalRound = $medalRound ? '%' : false;
         $poolASC = "LENGTH(`pool`), `pool`, FIELD(`pool`, 'SF', 'CON', 'FIN') ASC";
 //        $poolDESC = "LENGTH(`pool`), `pool`, FIELD(`pool`, 'SF', 'CON', 'FIN') DESC";
@@ -500,38 +501,38 @@ class SchedulerRepository
             case 'field':
                 $query = $query
                     ->orderByRaw($field)
-                    ->orderBy('date', 'asc')
-                    ->orderBy('time', 'asc');
+                    ->orderBy('date')
+                    ->orderBy('time');
                 break;
             case 'pool' :
                 $query = $query
                     ->orderByRaw($poolASC)
-                    ->orderBy('date', 'asc')
-                    ->orderBy('time', 'asc')
+                    ->orderBy('date')
+                    ->orderBy('time')
                     ->orderByRaw($field);
                 break;
             case 'home' :
                 $query = $query
-                    ->orderBy('home', 'asc')
-                    ->orderBy('division', 'asc')
-                    ->orderBy('date', 'asc')
-                    ->orderBy('time', 'asc')
+                    ->orderBy('home')
+                    ->orderBy('division')
+                    ->orderBy('date')
+                    ->orderBy('time')
                     ->orderByRaw($field);
                 break;
             case 'away' :
                 $query = $query
-                    ->orderBy('away', 'asc')
-                    ->orderBy('division', 'asc')
-                    ->orderBy('date', 'asc')
-                    ->orderBy('time', 'asc')
+                    ->orderBy('away')
+                    ->orderBy('division')
+                    ->orderBy('date')
+                    ->orderBy('time')
                     ->orderByRaw($field);
                 break;
             default:
                 $query = $query
-                    ->orderBy($sortOn, 'asc')
+                    ->orderBy($sortOn)
                     ->orderByRaw($poolASC)
-                    ->orderBy('date', 'asc')
-                    ->orderBy('time', 'asc')
+                    ->orderBy('date')
+                    ->orderBy('time')
                     ->orderByRaw($field);
         }
 
@@ -551,7 +552,7 @@ class SchedulerRepository
      * @param bool $medalRound
      * @return Collection
      */
-    public function getUnassignedGames($projectKey = '%', $group = '%', $medalRound = false)
+    public function getUnassignedGames(string $projectKey = '%', string $group = '%', bool $medalRound = false): Collection
     {
         $group .= '%';
         $medalRound = $medalRound ? '%' : false;
@@ -574,7 +575,7 @@ class SchedulerRepository
      * @param bool $medalRound
      * @return Collection
      */
-    public function getGamesByRep($projectKey, $rep, $medalRound = false)
+    public function getGamesByRep($projectKey, $rep, bool $medalRound = false): Collection
     {
         $medalRound = $medalRound ? '%' : false;
 
@@ -593,7 +594,7 @@ class SchedulerRepository
      * @param $projectKey
      * @return array
      */
-    public function getGroups($projectKey)
+    public function getGroups($projectKey): array
     {
         $groups = $this->db->table('games')
             ->where('projectKey', $projectKey)
@@ -659,7 +660,7 @@ class SchedulerRepository
             return null;
         }
 
-        $data['r4th'] = isset($data['r4th']) ? $data['r4th'] : null;
+        $data['r4th'] = $data['r4th'] ?? null;
         foreach ($data as $id => $value) {
             if (in_array($value, ['Update Assignments', 'Clear All'])) {
                 $this->db->table('games')
@@ -700,7 +701,7 @@ class SchedulerRepository
     /**
      * @return array|null
      */
-    public function getGamesHeader()
+    public function getGamesHeader(): ?array
     {
         $games = $this->getGames();
         $gameLabels = (array)$this->getZero($games);
@@ -716,7 +717,7 @@ class SchedulerRepository
     /**
      * @return int
      */
-    public function getNextGameId()
+    public function getNextGameId(): int
     {
         $id = 0;
 
@@ -736,7 +737,7 @@ class SchedulerRepository
      * @param $data
      * @return array|null
      */
-    public function modifyGames($data)
+    public function modifyGames($data): ?array
     {
         if (is_null($data)) {
             return null;
@@ -748,11 +749,11 @@ class SchedulerRepository
         $changes = array('adds' => 0, 'updates' => 0, 'errors' => []);
 
         if (!empty($games)) {
-            foreach ($games as &$game) {
+            foreach ($games as $game) {
                 $nextData = [];
                 $match = array_values($game);
                 foreach ($match as $key => $field) {
-                    $nextData[$hdr[$key]] = $match[$key];
+                    $nextData[$hdr[$key]] = $field;
                 }
 
                 //ensure empty fields default to correct type
@@ -801,7 +802,7 @@ class SchedulerRepository
      * @param $game_number
      * @return null|object
      */
-    public function getGameByKeyAndNumber($projectKey, $game_number)
+    public function getGameByKeyAndNumber($projectKey, $game_number): ?object
     {
         $game = $this->db->table('games')
             ->where(
@@ -819,7 +820,7 @@ class SchedulerRepository
      * @param $id
      * @return null|object
      */
-    public function getGame($id)
+    public function getGame($id): ?object
     {
         $game = $this->db->table('games')
             ->where('id', '=', $id)
@@ -832,7 +833,7 @@ class SchedulerRepository
      * @param $data
      * @return array|null
      */
-    public function updateGame($data)
+    public function updateGame($data): ?array
     {
         if (empty($data)) {
             return null;
@@ -875,7 +876,7 @@ class SchedulerRepository
      * @param $data
      * @return array|null
      */
-    public function insertGame($data)
+    public function insertGame($data): ?array
     {
         if (empty($data)) {
             return null;
@@ -883,7 +884,7 @@ class SchedulerRepository
 
         $changes = array('adds' => 0, 'updates' => 0);
 
-        $id = isset($data['id']) ? $data['id'] : null;
+        $id = $data['id'] ?? null;
 
         if (empty($id)) {
             array_shift($data);
@@ -906,7 +907,7 @@ class SchedulerRepository
      * @param $projectKey
      * @return Collection
      */
-    public function getGameCounts($projectKey)
+    public function getGameCounts($projectKey): Collection
     {
         return $this->db->table('games')
             ->selectRaw('assignor, date, division, COUNT(division) as game_count')
@@ -919,14 +920,14 @@ class SchedulerRepository
      * @param $projectKey
      * @return Collection
      */
-    public function getDatesDivisions($projectKey)
+    public function getDatesDivisions($projectKey): Collection
     {
         return $this->db->table('games')
             ->selectRaw('DISTINCT assignor, date, division')
             ->where('projectKey', $projectKey)
-            ->orderBy('date', 'asc')
-            ->orderBy('division', 'asc')
-            ->orderBy('assignor', 'asc')
+            ->orderBy('date')
+            ->orderBy('division')
+            ->orderBy('assignor')
             ->get();
     }
 
@@ -934,13 +935,13 @@ class SchedulerRepository
      * @param $projectKey
      * @return Collection
      */
-    public function getDivisions($projectKey)
+    public function getDivisions($projectKey): Collection
     {
         return $this->db->table('games')
             ->selectRaw('division as uDiv')
             ->distinct()
             ->where('projectKey', $projectKey)
-            ->orderBy('division', 'asc')
+            ->orderBy('division')
             ->get();
     }
 
@@ -948,13 +949,13 @@ class SchedulerRepository
      * @param $projectKey
      * @return Collection
      */
-    public function getDates($projectKey)
+    public function getDates($projectKey): Collection
     {
         return $this->db->table('games')
             ->select('date')
             ->distinct()
             ->where('projectKey', $projectKey)
-            ->orderBy('date', 'asc')
+            ->orderBy('date')
             ->get();
     }
 
@@ -963,7 +964,7 @@ class SchedulerRepository
      * @param $b
      * @return int
      */
-    static function firstLastSort($a, $b)
+    static function firstLastSort($a, $b): int
     {
         $a = (object)$a;
         $b = (object)$b;
@@ -975,8 +976,8 @@ class SchedulerRepository
         $A = explode(' ', $a->name);
         $B = explode(' ', $b->name);
 
-        $lastA = isset($A[1]) ? $A[1] : '';
-        $lastB = isset($B[1]) ? $B[1] : '';
+        $lastA = $A[1] ?? '';
+        $lastB = $B[1] ?? '';
 
         return ($lastA < $lastB) ? -1 : 1;
     }
@@ -985,11 +986,11 @@ class SchedulerRepository
      * @param array $result
      * @return array
      */
-    private function aggregateRefereeAssignments(array $result)
+    private function aggregateRefereeAssignments(array $result): array
     {
 
         $refList = [];
-        $div = null;
+
         foreach ($result as $ref) {
             $arrRef = (array)$ref;
             foreach ($arrRef as $hdr => $val) {
@@ -1079,7 +1080,7 @@ class SchedulerRepository
      * @param $projectKey
      * @return array
      */
-    private function sortRefereeAssignments(array $refsList, $projectKey)
+    private function sortRefereeAssignments(array $refsList, $projectKey): array
     {
         usort($refsList, array($this, "firstLastSort"));
 
@@ -1118,7 +1119,7 @@ class SchedulerRepository
      * @param $projectKey
      * @return array
      */
-    public function refereeAssignmentMap($projectKey)
+    public function refereeAssignmentMap($projectKey): array
     {
         $has4th = $this->numberOfReferees($projectKey) > 3;
 
@@ -1153,7 +1154,7 @@ class SchedulerRepository
      * @param $projectKey
      * @return Collection
      */
-    public function getLimits($projectKey)
+    public function getLimits($projectKey): Collection
     {
         return $this->db->table('limits')
             ->where('projectKey', '=', $projectKey)
@@ -1184,7 +1185,7 @@ class SchedulerRepository
     /**
      * @return Collection
      */
-    public function getAccessLog()
+    public function getAccessLog(): Collection
     {
         return $this->db->table('log')
             ->get();
@@ -1193,7 +1194,7 @@ class SchedulerRepository
     /**
      *
      */
-    public function showVariables()
+    public function showVariables(): Connection
     {
         return $this->db->getConnection();
     }
@@ -1207,7 +1208,7 @@ class SchedulerRepository
      * @return string|null
      * @throws Exception
      */
-    public function getLastLogon($projectKey, $userName)
+    public function getLastLogon($projectKey, $userName): ?string
     {
         $timestamp = null;
 
@@ -1239,7 +1240,7 @@ class SchedulerRepository
      * @param $portal
      * @return null|object
      */
-    public function getSARRec($portal)
+    public function getSARRec($portal): ?object
     {
         $sarRec = $this->db->table('sar')
             ->where('portalName', '=', $portal)
@@ -1289,7 +1290,23 @@ class SchedulerRepository
      */
     protected function createArray($obj)
     {
-        return $array = json_decode(json_encode($obj), true);
+        return json_decode(json_encode($obj), true);
+    }
+
+    /**
+     * @string $ids
+     * @return Collection
+     */
+    public function getCertsByID(string $ids): Collection
+    {
+        $ids = explode(',', $ids);
+
+        $certs = $this->db->table('refs')
+            ->select('*')
+            ->whereIn('AYSOID', $ids)
+            ->get();
+
+        return $certs;
     }
 
     /**

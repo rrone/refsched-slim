@@ -94,7 +94,6 @@ class InfoModalTest extends AppTestCase
 //        $response = (object)$this->client->post($url, $body, $headers);
 //        $view = (string)$response->getBody();
 //        $h = $this->c['view'];
-//        var_dump($this->c['view']);die();
 //        $header = "<h1>$h</h1>";
 //
 //        $this->assertContains($header, $view);

@@ -11,10 +11,10 @@ use Slim\Http\Response;
 
 class SchedFullView extends AbstractView
 {
-    private $description;
+    private string $description;
     private $games;
-    private $show_medal_round;
-    private $show_medal_round_divisions;
+    private bool $show_medal_round;
+    private bool $show_medal_round_divisions;
 
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -66,7 +66,7 @@ class SchedFullView extends AbstractView
     /**
      *
      */
-    protected function renderView()
+    protected function renderView(): ?string
     {
         $html = null;
         $this->menu = null;
@@ -138,17 +138,17 @@ class SchedFullView extends AbstractView
                 $html .= "</tr>\n";
 
                 $rowColor = $this->colorGroup1;
-                $testtime = null;
+                $test_time = null;
 
                 foreach ($this->games as $game) {
                     if (!$this->justOpen || ($this->justOpen && (empty($game->cr) || empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))))) {
                         $date = date('D, d M', strtotime($game->date));
                         $time = date('H:i', strtotime($game->time));
 
-                        if (!$testtime) {
-                            $testtime = $time;
-                        } elseif (($testtime != $time && $game->assignor == $this->user->name) || ($testtime != $time && $this->user->admin && !empty($game->assignor))) {
-                            $testtime = $time;
+                        if (!$test_time) {
+                            $test_time = $time;
+                        } elseif (($test_time != $time && $game->assignor == $this->user->name) || ($test_time != $time && $this->user->admin && !empty($game->assignor))) {
+                            $test_time = $time;
                             switch ($rowColor) {
                                 case $this->colorGroup1:
                                     $rowColor = $this->colorGroup2;
@@ -274,7 +274,7 @@ class SchedFullView extends AbstractView
      * @return null|string
      *
      */
-    private function menu($pos = 'top')
+    private function menu(string $pos = 'top'): ?string
     {
         $html = null;
 
