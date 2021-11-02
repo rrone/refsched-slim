@@ -6,7 +6,7 @@ $settings = [
     'settings' => [
         // App Settings
         'version' => [
-            'version' => '2021.11.02.00'
+            'version' => '2021.11.02.10'
         ],
 
         'assignor' => [

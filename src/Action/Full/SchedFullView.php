@@ -160,13 +160,15 @@ class SchedFullView extends AbstractView
 
                         if ($game->assignor == $this->user->name) {
                             //no refs
-                            if (empty($game->cr) && empty($game->ar1) && empty($game->ar2) && (!$has4th || $has4th && empty($game->r4th))) {
+                            if (empty($game->cr) && empty($game->ar1) && empty($game->ar2) && (!$has4th && empty($game->r4th))) {
                                 $html .= "<tr class=\"center colorUnassigned\">";
-                                //open AR  or 4th slots
-                            } elseif (empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
+
+                            } //open AR  or 4th slots
+                            elseif (empty($game->cr) || empty($game->ar1) || empty($game->ar2) || ($has4th && empty($game->r4th))) {
                                 $html .= "<tr class=\"center colorOpenSlots\">";
-                                //match covered
-                            } else {
+                            }
+                            //match covered
+                            else {
                                 switch ($rowColor) {
                                     case $this->colorGroup1:
                                         $html .= "<tr class=\"center colorGroup1\">";
