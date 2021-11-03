@@ -18,7 +18,7 @@ use App\Action\AbstractView;
 class SchedSchedView extends AbstractView
 {
     private string $description;
-    private bool $showgroup;
+    private bool $show_group;
     private bool $show_medal_round;
     private bool $show_medal_round_divisions;
     private bool $locked;
@@ -36,7 +36,7 @@ class SchedSchedView extends AbstractView
     {
         parent::__construct($container, $schedulerRepository);
 
-        $this->showgroup = false;
+        $this->show_group = false;
         $this->description = 'No matches scheduled';
 
         $this->atlimit = false;
@@ -67,7 +67,7 @@ class SchedSchedView extends AbstractView
             $array_of_keys = array_keys($_POST);
 
             //parse the POST data
-            $this->showgroup = !empty($_POST['group']) ? $_POST['group'] : null;
+            $this->show_group = !empty($_POST['group']) ? $_POST['group'] : null;
 
             $adds = [];
             $assign = [];
@@ -98,7 +98,7 @@ class SchedSchedView extends AbstractView
                     $unassign = [];
                     foreach ($assigned_games as $game) {
                         if (!in_array($game->id, array_keys($assign))) {
-                            if (is_null($this->showgroup) || ($this->showgroup == $this->divisionAge(
+                            if (is_null($this->show_group) || ($this->show_group == $this->divisionAge(
                                         $game->division
                                     ))) {
                                 $removed[$game->id] = $game;
@@ -174,7 +174,7 @@ class SchedSchedView extends AbstractView
 
         $_GET = $request->getParams();
         if (count($_GET) && array_key_exists('group', $_GET)) {
-            $this->showgroup = $_GET['group'];
+            $this->show_group = $_GET['group'];
         }
 
         return null;
@@ -305,7 +305,7 @@ class SchedSchedView extends AbstractView
             }
             $html .= "<a href=" . $this->getBaseURL('masterPath') . ">Select Assignors</a>&nbsp;-&nbsp;";
             $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Edit Referee Assignments</a>&nbsp;-&nbsp;";
-        } elseif ($this->showgroup) {
+        } elseif ($this->show_group) {
             $html .= "<a href=" . $this->getBaseURL('schedPath') . ">View all $uname matches</a>&nbsp;-&nbsp;";
         }
         if (!empty($this->assigned_list['assigned'])) {
@@ -325,7 +325,7 @@ class SchedSchedView extends AbstractView
     {
         $html = null;
 
-        $games = $this->sr->getGames($this->projectKey, $this->showgroup, true);
+        $games = $this->sr->getGames($this->projectKey, $this->show_group, true);
 
         if (count($games)) {
             $this->description = $this->user->name . ': Schedule';
@@ -366,7 +366,7 @@ class SchedSchedView extends AbstractView
                         if (!in_array($div, ['assigned', 'unassigned'])) {
                             $temp_assign = $this->assigned_list[$div];
                             $temp_limit = $this->limit_list[$div];
-                            if (!$this->showgroup || $this->showgroup == $div) {
+                            if (!$this->show_group || $this->show_group == $div) {
                                 $d = str_replace('_', ' ', $div);
                                 if (isset($this->limit_list[$div]) && $this->limit_list[$div] != 'none') {
                                     $html .= "For $d, you are assigned to <span style=\"color:$this->colorAlert\">$temp_assign</span> matches with a limit of <span style=\"color:$this->colorAlert\">$temp_limit</span> matches<br>";
@@ -438,7 +438,7 @@ class SchedSchedView extends AbstractView
 
         $rowColor = $this->colorDarkGray;
 
-        $games = $this->sr->getGames($this->projectKey, $this->showgroup, true);
+        $games = $this->sr->getGames($this->projectKey, $this->show_group, true);
 
         if (count($games) == 0) {
             $html .= "<h3>No available matches.</h3>";
@@ -446,7 +446,7 @@ class SchedSchedView extends AbstractView
             if ($this->num_unassigned) {
                 $html .= "<h3 class='left'>Available matches :</h3>";
             }
-            $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->showgroup\">";
+            $html .= "<input type=\"hidden\" name=\"group\" value=\"$this->show_group\">";
 
             $html .= "<table class=\"sched-table\" >\n";
             $html .= "<tr class=\"center colorTitle\">";
@@ -468,9 +468,9 @@ class SchedSchedView extends AbstractView
             $this->description = $this->user->name . ': Schedule';
             $gameCount = 0;
             foreach ($this->assigned_list['unassigned'] as $game) {
-                if (($this->showgroup && $this->showgroup == $this->divisionAge(
+                if (($this->show_group && $this->show_group == $this->divisionAge(
                             $game->division
-                        )) || !$this->showgroup) {
+                        )) || !$this->show_group) {
                     if ($this->user->admin || is_bool(strpos($game->home, $usr)) && is_bool(strpos($game->away, $usr))
                     ) {
                         $time = date('H:i', strtotime($game->time));
@@ -525,16 +525,14 @@ class SchedSchedView extends AbstractView
      * @return string|null
      * @throws Exception
      */
-    private function renderAssignmentByArea(
-        $assignor
-    )
+    private function renderAssignmentByArea($assignor): ?string
     {
         $html = null;
         $testtime = null;
 
         $gameCount = 0;
 
-        $games = $this->sr->getGames($this->projectKey, $this->showgroup, true);
+        $games = $this->sr->getGames($this->projectKey, $this->show_group, true);
 
         foreach ($games as $game) {
             if ($assignor == $game->assignor) {
@@ -642,7 +640,7 @@ class SchedSchedView extends AbstractView
         return $html;
     }
 
-    private function renderGameNumber($game)
+    private function renderGameNumber($game): string
     {
         $date = date('D, d M', strtotime($game->date));
         $time = date('H:i', strtotime($game->time));

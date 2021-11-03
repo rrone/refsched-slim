@@ -13,7 +13,7 @@ use App\Action\SchedulerRepository;
 class GreetView extends AbstractView
 {
     private $games;
-    private $description;
+    private string $description;
 
     public function __construct(Container $container, SchedulerRepository $schedulerRepository)
     {
@@ -59,7 +59,7 @@ class GreetView extends AbstractView
      * @return null|string
      *
      */
-    protected function renderView()
+    protected function renderView(): ?string
     {
         $html = null;
 
@@ -141,7 +141,7 @@ class GreetView extends AbstractView
                     if (!empty($game->division)) {
                         if ($this->user->admin && !empty($game->assignor)) {
                             $num_assigned++;
-                        } elseif ($this->user->name == $game->assignor && $show_medal_round_divisions) {
+                        } elseif ($this->user->name == $game->assignor) {
                             $num_area++;
                             $this->assigned_list[$game->division]++;
                         }
@@ -205,15 +205,15 @@ class GreetView extends AbstractView
                             }
                         } elseif (!$locked) {
                             foreach ($this->limit_list as $k => $v) {
-                                $tmpassigned = $this->assigned_list[$k];
+                                $tmp_assigned = $this->assigned_list[$k];
                                 if (isset($used_list[$k]) && $used_list[$k]) {
                                     if ($this->limit_list[$k] == 'none') {
                                         $d = str_replace('_', ' ', $k);
-                                        $html .= "You are assigned <span style=\"color:$this->colorWarning\">$tmpassigned</span> $d matches.  There is <span style=\"color:$this->colorWarning\">no</span> match limit for $d.<br>\n";
+                                        $html .= "You are assigned <span style=\"color:$this->colorWarning\">$tmp_assigned</span> $d matches.  There is <span style=\"color:$this->colorWarning\">no</span> match limit for $d.<br>\n";
                                         $all_at_limit = false;
                                     } else {
-                                        $html .= "You are assigned <span style=\"color:$this->colorWarning\">$tmpassigned</span> matches of your <span style=\"color:$this->colorWarning\">$v</span> match limit for $k<br>\n";
-                                        $all_at_limit &= $tmpassigned >= $v;
+                                        $html .= "You are assigned <span style=\"color:$this->colorWarning\">$tmp_assigned</span> matches of your <span style=\"color:$this->colorWarning\">$v</span> match limit for $k<br>\n";
+                                        $all_at_limit &= $tmp_assigned >= $v;
                                     }
                                 }
                             }
@@ -225,9 +225,9 @@ class GreetView extends AbstractView
 
                     if ($locked && !array_key_exists('none', $this->limit_list)) {
                         if (!$all_at_limit) {
-                            $html .= "<br>You may sign " . $this->user->name . " teams up for matches but you may not remove them</h3>\n";
+                            $html .= "You may sign " . $this->user->name . " teams up for neutral matches but you may not remove them</h3>\n";
                         } else {
-                            $html .= "<br>Since " . $this->user->name . " is at or above your limit, you will not be able to sign teams up for matches</h3>\n";
+                            $html .= "Since " . $this->user->name . " is at or above your limit, you will not be able to sign teams up for matches</h3>\n";
                         }
                     }
                 }
