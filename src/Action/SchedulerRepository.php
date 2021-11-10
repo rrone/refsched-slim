@@ -530,9 +530,9 @@ class SchedulerRepository
             default:
                 $query = $query
                     ->orderBy($sortOn)
-                    ->orderByRaw($poolASC)
                     ->orderBy('date')
                     ->orderBy('time')
+                    ->orderByRaw($poolASC)
                     ->orderByRaw($field);
         }
 
