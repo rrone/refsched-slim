@@ -25,6 +25,8 @@ require PROJECT_ROOT . '/vendor/autoload.php';
 session_start();
 
 // Instantiate the app
+$config = include(PROJECT_ROOT . '/config/config.php');
+
 $settings = require PROJECT_ROOT . '/app/settings.php';
 
 $settings['debug'] = false;

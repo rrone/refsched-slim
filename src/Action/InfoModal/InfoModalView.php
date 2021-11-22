@@ -47,7 +47,7 @@ class InfoModalView extends AbstractView
 
     /**
      * @param $id
-     * @return null|string
+     * @return string[]
      */
     protected function retrievePersonData($id)
     {
@@ -57,7 +57,7 @@ class InfoModalView extends AbstractView
             $personRec = "$id not found";
         }
 
-        return $personRec;
+        return array($personRec[0]);
 
     }
 

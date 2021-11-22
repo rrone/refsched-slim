@@ -1,12 +1,12 @@
 <?php
-$settings = [
+return [
     // Test Settings
     'settings.test' => false,
 
     'settings' => [
         // App Settings
         'version' => [
-            'version' => '2021.11.09.00'
+            'version' => '2021.11.22.00'
         ],
 
         'assignor' => [
@@ -56,7 +56,7 @@ $settings = [
         ],
 
         'upload_path' => PROJECT_ROOT . '/var/uploads/',
-        
+
         // monolog settings
         'logger' => [
             'name' => 'app',
@@ -66,7 +66,3 @@ $settings = [
     ],
 
 ];
-
-$config = include(PROJECT_ROOT . '/config/config.php');
-
-return $settings;

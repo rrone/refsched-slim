@@ -1264,6 +1264,7 @@ class SchedulerRepository
                 ->select('refs.*', 'refNicknames.Nickname')
                 ->join('refNicknames', 'refNicknames.AYSOID', '=', 'refs.AYSOID')
                 ->where('Nickname', 'like', "$name")
+                ->orderBy('MY','desc')
                 ->get()
         );
 
