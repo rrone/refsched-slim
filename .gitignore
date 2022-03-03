@@ -1,7 +1,6 @@
 node_modules
 vendor
 var
-composer.lock
 public/app.php
 public/css
 public/graphics

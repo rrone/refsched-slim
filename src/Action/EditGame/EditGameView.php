@@ -146,7 +146,7 @@ class EditGameView extends AbstractView
                         $html .= "<td><input type=\"text\" name=\"$game->id+time\" value=\"$time\" pattern=\"\d{2}:\d{2}\" placeholder=\"hh:mm\" title=\"Time in the form hh:mm\"></td>";
                         $html .= "<td><input type=\"text\" name=\"$game->id+field\" value=\"$game->field\"></td>";
                         $html .= "<td><input type=\"text\" name=\"$game->id+division\" value=\"$game->division\" /* pattern=\"({1}[0-9]{2}[U][BG]{1})\" title=\"Divisions are in the form 14UG\"*/></td>";
-                        $html .= "<td><input type=\"text\" name=\"$game->id+pool\" value=\"$game->pool\" pattern=\"(\d{1,2}|SF|FIN|CON)\" title=\"Pools are 1-99, 'SF', 'FIN' or 'CON'\"></td>";
+                        $html .= "<td><input type=\"text\" name=\"$game->id+pool\" value=\"$game->pool\" pattern=\"(\d{1,2}|[A-Z]|SF|FIN|CON)\" title=\"Pools are 1-99 or A-Z, 'SF', 'FIN' or 'CON'\"></td>";
                         $html .= "<td><input type=\"text\" name=\"$game->id+home\" value=\"$game->home\"></td>";
                         $html .= "<td><input type=\"text\" name=\"$game->id+away\" value=\"$game->away\"></td>";
                         $html .= "</tr>\n";
