@@ -107,8 +107,6 @@ $container['errorHandler'] = function ($c) {
 
     return function ($exception) use ($c) {
 
-    var_dump($exception);
-
         return $c['response']->withStatus(500)
                              ->withHeader('Content-Type', 'text/html')
                              ->write($exception->xdebug_message);
