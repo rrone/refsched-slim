@@ -54,8 +54,11 @@ class SchedExportXl extends AbstractExporter
             'SAR' => '',
             'SafeHavenDate' => '',
             'CDCDate' => '',
+            'SCADate' => '',
             'RefCertDesc' => '',
             'RefCertDate' => '',
+            'RiskStatus' => '',
+            'RiskExpireDate' => '',
             'eAYSOName' => '',
         );
 
@@ -303,11 +306,8 @@ class SchedExportXl extends AbstractExporter
             if ($aysoID != 0) {
                 $url = CERT_URL . $aysoID;
 
-                if ($this->isUnique) {
-                    $hrefAysoID = "=HYPERLINK(\"$url\", \"$aysoID\")";
-                } else {
-                    $hrefAysoID = "=HYPERLINK(\"$url\", \"$aysoID**\")";
-                }
+                $hrefAysoID = "=HYPERLINK(\"$url\", \"$aysoID\")";
+
                 $volCerts[$aysoID] = array(
                     'AYSOID' => $hrefAysoID,
                     'MY' => $cert->MY,
