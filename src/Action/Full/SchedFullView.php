@@ -22,7 +22,7 @@ class SchedFullView extends AbstractView
 
         $this->justOpen = false;
         $this->description = 'No matches scheduled';
-        $this->games = null;
+        $this->games = [];
     }
 
     public function handler(Request $request, Response $response)
@@ -137,7 +137,7 @@ class SchedFullView extends AbstractView
                 }
                 $html .= "</tr>\n";
 
-                $rowColor = $this->colorGroup1;
+                $rowColor = "colorGroup1";
                 $test_time = null;
 
                 foreach ($this->games as $game) {
@@ -150,11 +150,11 @@ class SchedFullView extends AbstractView
                         } elseif (($test_time != $time && $game->assignor == $this->user->name) || ($test_time != $time && $this->user->admin && !empty($game->assignor))) {
                             $test_time = $time;
                             switch ($rowColor) {
-                                case $this->colorGroup1:
-                                    $rowColor = $this->colorGroup2;
+                                case "colorGroup1":
+                                    $rowColor = "colorGroup2";
                                     break;
                                 default:
-                                    $rowColor = $this->colorGroup1;
+                                    $rowColor = "colorGroup1";
                             }
                         }
 
@@ -170,7 +170,7 @@ class SchedFullView extends AbstractView
                             //match covered
                             else {
                                 switch ($rowColor) {
-                                    case $this->colorGroup1:
+                                    case "colorGroup1":
                                         $html .= "<tr class=\"center colorGroup1\">";
                                         break;
                                     default:
@@ -192,17 +192,9 @@ class SchedFullView extends AbstractView
                                 $html .= "<tr class=\"center colorOpenSlots\">";
                                 //match covered
                             } else {
-                                switch ($rowColor) {
-                                    case $this->colorGroup1:
-                                        $html .= "<tr class=\"center colorGroup1\">";
-                                        break;
-                                    default:
-                                        $html .= "<tr class=\"center colorGroup2\">";
+                                $html .= "<tr class=\"center $rowColor\">";
                                 }
-
-                                $html .= "<tr class=\"center\" bgcolor=\"$rowColor\">";
                             }
-                        }
 
                         if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
                             $html .= "<td>$game->game_number</td>";

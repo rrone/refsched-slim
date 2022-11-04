@@ -49,12 +49,16 @@ class SchedExportXl extends AbstractExporter
         $this->outFileName = 'GameSchedule_' . $dt->format('Ymd_His') . '.' . $this->getFileExtension();
 
         $this->mtCerts = array(
+            'AdminID' => '',
             'AYSOID' => '',
             'MY' => '',
             'SAR' => '',
+            'DOB' => '',
             'SafeHavenDate' => '',
             'CDCDate' => '',
             'SCADate' => '',
+            'SafeSportDate' => '',
+            'LiveScanDate' => '',
             'RefCertDesc' => '',
             'RefCertDate' => '',
             'RiskStatus' => '',
@@ -150,17 +154,21 @@ class SchedExportXl extends AbstractExporter
             //set the header labels
             if (!empty($games)) {
                 $adminLabels = array(
+                    'AdminID',
                     'AYSOID',
                     'MY',
                     'SAR',
+                    'DOB',
                     'Safe Haven Date',
                     'CDC Date',
                     'SCA Date',
+                    'SafeSport Date',
+                    'LiveScan Date',
                     'Ref Cert Desc',
                     'Ref Cert Date',
                     'Risk Status',
                     'Risk Expire Date',
-                    'eAYSO Name',
+                    'Admin Name',
                 );
 
                 $labels = [];
@@ -202,7 +210,7 @@ class SchedExportXl extends AbstractExporter
                                 $personRec = $this->sr->getPersonInfo($game['name']);
                                 $this->isUnique = count($personRec) == 1;
                                 if ($this->isUnique) {
-                                    $id = $personRec[0]['AYSOID'];
+                                    $id = $personRec[0]['AdminID'];
                                 } else {
                                     $assignor = explode(' ', $game['Assignor']);
                                     if (isset($assignor[1]) and strlen(end($assignor)) > 1) {
@@ -213,17 +221,19 @@ class SchedExportXl extends AbstractExporter
 
                                     foreach ($personRec as $rec) {
                                         if (strpos($rec['SAR'], $assignor) > -1) {
-                                            $id = $rec['AYSOID'];
+                                            $id = $rec['AdminID'];
                                             continue;
                                         } else {
-                                            $id = $personRec[0]['AYSOID'];
+                                            $id = $personRec[0]['AdminID'];
                                         }
                                     }
                                 }
-                            }
-                            $idGames[$id] = $game;
+                                if($id <> 0) {
+                                    $idGames[$id] = $game;
 
-                            $ids[] = $id;
+                                    $ids[] = $id;
+                                }
+                            }
                         }
                     }
                 }
@@ -263,11 +273,11 @@ class SchedExportXl extends AbstractExporter
             if (!empty($data)) {
                 $content['Referee Match Count']['data'] = $data;
                 if ($this->user->admin) {
-                    $content['Referee Match Count']['options']['freezePane'] = 'L2';
-                    $content['Referee Match Count']['options']['horizontalAlignment'] = ['M1:ZZ' => 'center'];
+                    $content['Referee Match Count']['options']['freezePane'] = 'P2';
+                    $content['Referee Match Count']['options']['horizontalAlignment'] = ['Q1:ZZ' => 'center'];
                 } else {
-                    $content['Referee Match Count']['options']['freezePane'] = 'B2';
-                    $content['Referee Match Count']['options']['horizontalAlignment'] = ['B1:ZZ' => 'center'];
+                    $content['Referee Match Count']['options']['freezePane'] = 'C2';
+                    $content['Referee Match Count']['options']['horizontalAlignment'] = ['C1:ZZ' => 'center'];
                 }
             }
         }
@@ -301,20 +311,29 @@ class SchedExportXl extends AbstractExporter
     {
         $volCerts = [];
         foreach ($certs as $cert) {
+            $adminID = $cert->AdminID;
             $aysoID = $cert->AYSOID;
 
             if ($aysoID != 0) {
                 $url = CERT_URL . $aysoID;
 
                 $hrefAysoID = "=HYPERLINK(\"$url\", \"$aysoID\")";
+            } else {
+                $hrefAysoID = $aysoID;
+            }
 
-                $volCerts[$aysoID] = array(
+            if ($adminID != 0) {
+                $volCerts[$adminID] = array(
+                    'AdminId' => $cert->AdminID,
                     'AYSOID' => $hrefAysoID,
                     'MY' => $cert->MY,
                     'SAR' => $cert->SAR,
+                    'DOB' => $cert->DOB,
                     'SafeHavenDate' => $cert->Safe_Haven_Date,
                     'CDCDate' => $cert->Concussion_Awareness_Date,
                     'SCADate' => $cert->Sudden_Cardiac_Arrest_Date,
+                    'SafeSportDate' => $cert->SafeSport_Date,
+                    'LiveScanDate' => $cert->LiveScan_Date,
                     'RefCertDesc' => $cert->CertificationDesc,
                     'RefCertDate' => $cert->CertificationDate,
                     'RiskStatus' => $cert->RiskStatus,
@@ -322,7 +341,7 @@ class SchedExportXl extends AbstractExporter
                     'eAYSOName' => $cert->Name,
                 );
             } else {
-                $volCerts[$aysoID] = $this->mtCerts;
+                $volCerts[$adminID] = $this->mtCerts;
             }
         }
 
@@ -505,7 +524,7 @@ class SchedExportXl extends AbstractExporter
             return 0;
         }
 
-        return ($a['AYSOID'] < $b['AYSOID']) ? -1 : 1;
+        return ($a['AdminID'] < $b['AdminID']) ? -1 : 1;
 
     }
 

@@ -527,11 +527,17 @@ class SchedulerRepository
                     ->orderBy('time')
                     ->orderByRaw($field);
                 break;
+            case 'assignor' :
+                $query = $query
+                    ->orderBy('date')
+                    ->orderBy('assignor')
+                    ->orderBy('time')
+                    ->orderByRaw($field);
             default:
                 $query = $query
                     ->orderBy($sortOn)
-                    ->orderBy('date')
                     ->orderBy('time')
+                    ->orderBy('date')
                     ->orderByRaw($poolASC)
                     ->orderByRaw($field);
         }
@@ -1011,7 +1017,6 @@ class SchedulerRepository
                         break;
                     case 'date':
                         if (!isset($refList[$ref->name][$val])) {
-                            $refList[$ref->name][$val] = [];
                             $refList[$ref->name][$val] = 0;
                         }
                         if ($val) {
@@ -1027,7 +1032,6 @@ class SchedulerRepository
                         break;
                     case 'crCount':
                         if (!isset($refList[$ref->name]['ref'])) {
-                            $refList[$ref->name]['ref'] = [];
                             $refList[$ref->name]['ref'] = 0;
                         }
                         if ($val) {
@@ -1037,7 +1041,6 @@ class SchedulerRepository
                     case 'ar1Count':
                     case 'ar2Count':
                         if (!isset($refList[$ref->name]['ar'])) {
-                            $refList[$ref->name]['ar'] = [];
                             $refList[$ref->name]['ar'] = 0;
                         }
                         if ($val) {
@@ -1047,7 +1050,6 @@ class SchedulerRepository
                     case
                     'r4thCount':
                         if (!isset($refList[$ref->name]['4th'])) {
-                            $refList[$ref->name]['4th'] = [];
                             $refList[$ref->name]['4th'] = 0;
                         }
                         if ($val) {
@@ -1104,7 +1106,7 @@ class SchedulerRepository
 
         $sortedRefsList = [];
 
-        foreach (array_values($refsList) as $item) {
+        foreach ($refsList as $item) {
             $sortedList = $emptySortList;
             foreach ($item as $k => $v) {
                 $sortedList[$k] = $v;
@@ -1262,19 +1264,20 @@ class SchedulerRepository
         $Refs = $this->createArray(
             $this->db->table('refs')
                 ->select('refs.*', 'refNicknames.Nickname')
-                ->join('refNicknames', 'refNicknames.AYSOID', '=', 'refs.AYSOID')
+                ->join('refNicknames', 'refNicknames.AdminID', '=', 'refs.AdminID')
                 ->where('Nickname', 'like', "$name")
                 ->orderBy('MY','desc')
                 ->get()
         );
 
-        $RefsNoCerts = $this->createArray(
-            $this->db->table('ref_no_certs')
-                ->select('ref_no_certs.*', 'refNicknames.Nickname')
-                ->join('refNicknames', 'refNicknames.AYSOID', '=', 'ref_no_certs.AYSOID')
-                ->where('Nickname', 'like', "$name")
-                ->get()
-        );
+//        $RefsNoCerts = $this->createArray(
+//            $this->db->table('ref_no_certs')
+//                ->select('ref_no_certs.*', 'refNicknames.Nickname')
+//                ->join('refNicknames', 'refNicknames.AdminID', '=', 'ref_no_certs.AdminID')
+//                ->where('Nickname', 'like', "$name")
+//                ->get()
+//        );
+        $RefsNoCerts = array();
 
         $personRec = array_merge($Refs, $RefsNoCerts);
 
@@ -1304,7 +1307,7 @@ class SchedulerRepository
 
         $certs = $this->db->table('refs')
             ->select('*')
-            ->whereIn('AYSOID', $ids)
+            ->whereIn('AdminID', $ids)
             ->get();
 
         return $certs;
