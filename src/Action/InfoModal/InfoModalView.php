@@ -67,17 +67,37 @@ class InfoModalView extends AbstractView
             return null;
         }
 
-        return <<<EOT
+        $html =  <<<EOT
 <div>       
 <p><b>Name:</b> {$rec['Nickname']}</p>  
 <p><b>S/A/R:</b> {$rec['SAR']}</p>  
 <p><b>MY:</b> {$rec['MY']}</p>  
 <p><b>Cert:</b> {$rec['CertificationDesc']}</p>  
 <p><b>CertDate:</b> {$rec['CertificationDate']}</p>  
-<p><b>ID:</b> <a href='https://national.ayso.org/Volunteers/ViewCertification?UserName={$rec["AYSOID"]}' target='_blank'>{$rec['AYSOID']}</a> (e3 MY may be out of date)</p>  
+<hr>
+<p><b>AdminID:</b> {$rec['AdminID']}</p>
+EOT;
+        if($rec['AYSOID'] <> '') {
+            $html .= <<<EOT
+<p><b>AYSOID:</b> <a href='https://national.ayso.org/Volunteers/ViewCertification?UserName={$rec["AYSOID"]}' target='_blank'>{$rec['AYSOID']}</a> (e3 data is stale)</p>
+EOT;
+        }
+
+        if($rec["Cell_Phone"] > '') {
+            $html .= <<<EOT
 <p><b>Cell Phone:</b> <a href='tel:{$rec["Cell_Phone"]}'>{$rec['Cell_Phone']}</a></p>  
+EOT;
+        } else {
+            $html .= <<<EOT
+            <p><b>Cell Phone:</b> N/A</p>  
+EOT;
+        }
+
+        $html .= <<<EOT
 <p><b>eMail:</b> <a href='mailto:{$rec["Email"]}'>{$rec['Email']}</a></p>  
 </div>
 EOT;
+
+        return $html;
     }
 }
