@@ -532,7 +532,7 @@ class SchedSchedView extends AbstractView
 
         $gameCount = 0;
 
-        $games = $this->sr->getGames($this->projectKey, $this->show_group, true);
+        $games = $this->sr->getGames($this->projectKey, $this->show_group, true, 'field');
 
         foreach ($games as $game) {
             if ($assignor == $game->assignor) {

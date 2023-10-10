@@ -202,7 +202,12 @@ class SchedFullView extends AbstractView
                             $html .= "<td></td>";
                         }
                         $html .= "<td>$date</td>";
-                        $html .= "<td>$time</td>";
+                        if($_SESSION['time12']) {
+                            $t = date('h:i A', strtotime($time));
+                            $html .= "<td>$t</td>";
+                        } else {
+                            $html .= "<td>$time</td>";
+                        }
                         if ($this->show_medal_round_divisions || !$game->medalRound || $this->user->admin) {
                             if (empty($this->event->field_map)) {
                                 $html .= "<td>$game->field</td>";

@@ -26,7 +26,7 @@ class LogonView extends AbstractView
             $user = $this->sr->getUserByName($userName);
             $_SESSION['user'] = $user;
             $_SESSION['event'] = $this->sr->getEventByLabel($_POST['event']);
-
+            $_SESSION['time12'] = true;
             // try user pass
             $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
             $hash = isset($user) ? $user->hash : null;
@@ -38,6 +38,8 @@ class LogonView extends AbstractView
             } else {
                 //try master password
                 $user = $this->sr->getUserByName('Super Admin');
+                $_SESSION['time12'] = false;
+
                 if(is_null($_SESSION['user'])){
                     $_SESSION['user'] = $user;
                 }

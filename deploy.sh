@@ -3,7 +3,7 @@
 set -e
 #set folder aliases
 ayso="$HOME"/Sites/AYSO
-dev="${ayso}"/_dev/refsched-master
+dev="${ayso}"/_dev/refsched-slim
 config="${dev}"/config
 
 prod="${ayso}"/_services/rs.ayso1ref.com

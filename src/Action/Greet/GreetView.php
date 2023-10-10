@@ -99,29 +99,29 @@ class GreetView extends AbstractView
 
             if ($this->user->admin) {
                 if ($locked) {
-                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;-&nbsp;(<a href=" . $this->getBaseURL(
+                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;&nbsp;(<a href=" . $this->getBaseURL(
                             'unlockPath'
                         ) . ">Unlock</a> the schedule now)<br><br>\n";
                 } else {
-                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;-&nbsp;(<a href=" . $this->getBaseURL(
+                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;&nbsp;(<a href=" . $this->getBaseURL(
                             'lockPath'
                         ) . ">Lock</a> the schedule now)<br><br>\n";
                 }
                 if ($show_medal_round) {
-                    $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=" . $this->getBaseURL(
+                    $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;&nbsp;(<a href=" . $this->getBaseURL(
                             'hideMRPath'
                         ) . ">Hide Medal Round Assignments</a> from users)<br><br>\n";
                 } else {
-                    $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=" . $this->getBaseURL(
+                    $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;&nbsp;(<a href=" . $this->getBaseURL(
                             'showMRPath'
                         ) . ">Show Medal Round Assignments</a> to users)<br><br>\n";
                 }
                 if ($show_medal_round_divisions) {
-                    $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;-&nbsp;(<a href=" . $this->getBaseURL(
+                    $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;&nbsp;(<a href=" . $this->getBaseURL(
                             'hideMRDivPath'
                         ) . ">Hide Medal Round Divisions</a> from users)<br><br>\n";
                 } else {
-                    $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;-&nbsp;(<a href=" . $this->getBaseURL(
+                    $html .= "Medal round divisions are:&nbsp;<span style=\"color:$this->colorAlert\">Not Viewable</span>&nbsp;&nbsp;(<a href=" . $this->getBaseURL(
                             'showMRDivPath'
                         ) . ">Show Medal Round Divisions</a> to users)<br><br>\n";
                 }
@@ -225,7 +225,7 @@ class GreetView extends AbstractView
 
                     if ($locked && !array_key_exists('none', $this->limit_list)) {
                         if (!$all_at_limit) {
-                            $html .= "You may sign " . $this->user->name . " teams up for neutral matches but you may not remove them</h3>\n";
+                            $html .= "You may sign " . $this->user->name . " teams up for neutral matches, but you may not remove them</h3>\n";
                         } else {
                             $html .= "Since " . $this->user->name . " is at or above your limit, you will not be able to sign teams up for matches</h3>\n";
                         }
