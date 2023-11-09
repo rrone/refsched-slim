@@ -50,7 +50,6 @@ class SchedExportXl extends AbstractExporter
 
         $this->mtCerts = array(
             'AdminID' => '',
-            'AYSOID' => '',
             'MY' => '',
             'SAR' => '',
             'DOB' => '',
@@ -155,7 +154,6 @@ class SchedExportXl extends AbstractExporter
             if (!empty($games)) {
                 $adminLabels = array(
                     'AdminID',
-                    'AYSOID',
                     'MY',
                     'SAR',
                     'DOB',
@@ -312,20 +310,10 @@ class SchedExportXl extends AbstractExporter
         $volCerts = [];
         foreach ($certs as $cert) {
             $adminID = $cert->AdminID;
-            $aysoID = $cert->AYSOID;
-
-            if ($aysoID != 0) {
-                $url = CERT_URL . $aysoID;
-
-                $hrefAysoID = "=HYPERLINK(\"$url\", \"$aysoID\")";
-            } else {
-                $hrefAysoID = $aysoID;
-            }
 
             if ($adminID != 0) {
                 $volCerts[$adminID] = array(
                     'AdminId' => $cert->AdminID,
-                    'AYSOID' => $hrefAysoID,
                     'MY' => $cert->MY,
                     'SAR' => $cert->SAR,
                     'DOB' => $cert->DOB,
@@ -336,8 +324,8 @@ class SchedExportXl extends AbstractExporter
                     'LiveScanDate' => $cert->LiveScan_Date,
                     'RefCertDesc' => $cert->CertificationDesc,
                     'RefCertDate' => $cert->CertificationDate,
-                    'RiskStatus' => $cert->RiskStatus,
-                    'RiskExpireDate' => $cert->RiskExpireDate,
+                    'RiskStatus' => $cert->Risk_Status,
+                    'RiskExpireDate' => $cert->Risk_Expire_Date,
                     'eAYSOName' => $cert->Name,
                 );
             } else {

@@ -74,14 +74,15 @@ class InfoModalView extends AbstractView
 <p><b>MY:</b> {$rec['MY']}</p>  
 <p><b>Cert:</b> {$rec['CertificationDesc']}</p>  
 <p><b>CertDate:</b> {$rec['CertificationDate']}</p>  
+<p><b>Safe Haven:</b> {$rec['Safe_Haven_Date']}</p>  
+<p><b>SCA:</b> {$rec['CertificationDate']}</p>  
+<p><b>Concussion:</b> {$rec['Concussion_Awareness_Date']}</p>  
+<p><b>LiveScan:</b> {$rec['LiveScan_Date']}</p>  
+<p><b>SafeSport:</b> {$rec['SafeSport_Date']}</p>  
+<p><b>Risk Status:</b> {$rec['Risk_Status']}</p>  
 <hr>
 <p><b>AdminID:</b> {$rec['AdminID']}</p>
 EOT;
-        if($rec['AYSOID'] <> '') {
-            $html .= <<<EOT
-<p><b>AYSOID:</b> <a href='https://national.ayso.org/Volunteers/ViewCertification?UserName={$rec["AYSOID"]}' target='_blank'>{$rec['AYSOID']}</a> (e3 data is stale)</p>
-EOT;
-        }
 
         if($rec["Cell_Phone"] > '') {
             $html .= <<<EOT
