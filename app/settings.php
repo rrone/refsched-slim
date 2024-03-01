@@ -6,7 +6,7 @@ return [
     'settings' => [
         // App Settings
         'version' => [
-            'version' => '2023.11.06.00'
+            'version' => '2024.02.22.00'
         ],
 
         'assignor' => [
