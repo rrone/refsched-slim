@@ -195,7 +195,6 @@ class SchedulerRepository
     public function getAllEvents(): Collection
     {
         return $this->db->table('events')
-            ->orderBy('id')
             ->orderBy('start_date')
             ->get();
     }
@@ -207,7 +206,6 @@ class SchedulerRepository
     {
         return $this->db->table('events')
             ->where('enabled', true)
-            ->orderBy('id')
             ->orderBy('start_date')
             ->get();
     }
@@ -1304,10 +1302,11 @@ class SchedulerRepository
     public function getCertsByID(string $ids): Collection
     {
         $ids = explode(',', $ids);
-
         $certs = $this->db->table('refs')
             ->select('*')
             ->whereIn('AdminID', $ids)
+            ->orderBy('AdminID')
+            ->orderBy( 'MY', 'ASC')
             ->get();
 
         return $certs;
