@@ -307,8 +307,11 @@ class SchedSchedView extends AbstractView
             $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Edit Referee Assignments</a>&nbsp;-&nbsp;";
         } elseif ($this->show_group) {
             $html .= "<a href=" . $this->getBaseURL('schedPath') . ">View all $uname matches</a>&nbsp;-&nbsp;";
+        } else {
+            $html .= "<a  href=".$this->getBaseURL('refsPath').">Edit $uname referees</a>&nbsp;-&nbsp;";
         }
         if (!empty($this->assigned_list['assigned'])) {
+            $html .= "<a  href=".$this->getBaseURL('refsPath').">Edit $uname referees</a>&nbsp;-&nbsp;";
             $html .= "<a href=" . $this->getBaseURL('refsPath') . ">Edit $uname Referee Assignments</a>&nbsp;-&nbsp;";
         }
 
@@ -358,7 +361,7 @@ class SchedSchedView extends AbstractView
             //for all users but Admins
             if (!$this->user->admin) {
                 if ($this->locked) {
-                    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">The schedule is locked</span></h3>\n";
+                    $html .= "<h3 class=\"center\"><span style=\"color:$this->colorAlert\">Assignments are locked</span></h3>\n";
                 }
                 $html .= "<h3 class=\"center\">\n";
                 foreach ($this->assigned_list as $div => $v) {

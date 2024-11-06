@@ -67,7 +67,7 @@ class MedalRoundTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user</h3>", $view);
-        $this->assertContains("<h3 class=\"center\">The schedule is:&nbsp;<span style=\"color:#02C902\">Unlocked</span>&nbsp;-&nbsp;(<a href=/lock>Lock</a> the schedule now)", $view);
+        $this->assertContains("<h3 class=\"center\">Assignments are:&nbsp;<span style=\"color:#02C902\">Unlocked</span>&nbsp;-&nbsp;(<a href=/lock>Lock</a> the schedule now)", $view);
 
         $response = (object)$this->client->get('/lock');
         $url = implode($response->getHeader('Location'));
@@ -79,7 +79,7 @@ class MedalRoundTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user</h3>", $view);
-        $this->assertContains("<h3 class=\"center\">The schedule is:&nbsp;<span style=\"color:#CC0000\">Locked</span>&nbsp;-&nbsp;(<a href=/unlock>Unlock</a> the schedule now)", $view);
+        $this->assertContains("<h3 class=\"center\">Assignments are:&nbsp;<span style=\"color:#CC0000\">Locked</span>&nbsp;-&nbsp;(<a href=/unlock>Unlock</a> the schedule now)", $view);
 
     }
 
@@ -126,7 +126,7 @@ class MedalRoundTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
-        $this->assertContains("<h3 class=\"center\">The schedule is presently <span style=\"color:#CC0000\">locked</span><br><br>", $view);
+        $this->assertContains("<h3 class=\"center\">Assignments are presently <span style=\"color:#CC0000\">locked</span><br><br>", $view);
 
         $response = (object)$this->client->get('/lock');
         $url = implode($response->getHeader('Location'));
@@ -138,7 +138,7 @@ class MedalRoundTest extends AppTestCase
         $view = (string)$response->getBody();
 
         $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>", $view);
-        $this->assertContains("<h3 class=\"center\">The schedule is presently <span style=\"color:#CC0000\">locked</span><br><br>", $view);
+        $this->assertContains("<h3 class=\"center\">Assignments are presently <span style=\"color:#CC0000\">locked</span><br><br>", $view);
     }
 
     /**

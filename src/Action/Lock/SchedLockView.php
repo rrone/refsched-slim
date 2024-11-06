@@ -62,10 +62,10 @@ class SchedLockView extends AbstractView
             $locked = $this->sr->getLocked($projectKey);
 
             if ($locked) {
-                $html .= "<h3 class=\"center\">The schedule is already locked!</h3>\n";
+                $html .= "<h3 class=\"center\">Assignments are already locked!</h3>\n";
             } elseif ($this->user->admin) {
                 $this->sr->lockProject($projectKey);
-                $html .= "<h3 class=\"center\">The schedule has been locked!</h3>\n";
+                $html .= "<h3 class=\"center\">Assignments have been locked!</h3>\n";
             }
         }
 
@@ -82,10 +82,10 @@ class SchedLockView extends AbstractView
             $locked = $this->sr->getLocked($projectKey);
 
             if (!$locked) {
-                $html .= "<h3 class=\"center\">The schedule is already unlocked!</h3>\n";
+                $html .= "<h3 class=\"center\">Assignments are already unlocked!</h3>\n";
             } elseif ($this->user->admin) {
                 $this->sr->unlockProject($projectKey);
-                $html .= "<h3 class=\"center\">The schedule has been unlocked!</h3>\n";
+                $html .= "<h3 class=\"center\">Assignments are already unlocked!</h3>\n";
             }
         }
 

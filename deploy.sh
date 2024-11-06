@@ -6,7 +6,7 @@ ayso="$HOME"/Sites/AYSO
 dev="${ayso}"/_dev/refsched-slim
 config="${dev}"/config
 
-prod="${ayso}"/_services/rs.ayso1ref.com
+prod="${ayso}"/_services/rs.ayso1ref.com/rs
 
 PHP=/usr/local/etc/php/7.3/conf.d
 
@@ -31,28 +31,36 @@ fi
 echo ">>> Clear distribution folder..."
 rm -rf "${prod:?}"
 mkdir "${prod}"
-mkdir "${prod}"/rs
-mkdir "${prod}"/rs/config
 echo
 
 echo ">>> Copying app to distribution..."
-cp -f ./*.json "${prod}"/rs
-cp -f ./*.lock "${prod}"/rs
+cp -f ./*.json "${prod}"
+cp -f ./*.lock "${prod}"
 
-mkdir "${prod}"/rs/bin
-cp bin/console "${prod}"/rs/bin
+mkdir "${prod}"/bin
+cp bin/console "${prod}"/bin
+
+echo ">>> Copying app to distribution..."
+cp -rf app "${prod}"
 
 echo ">>> Copying config to distribution..."
-cp -rf app "${prod}/rs"
-cp -rf "${config}/config_prod.php" "${prod}"/rs/config/config.php
-cp -rf public "${prod}/rs"
-rm "${prod}/rs/public/app_dev.php"
-rm "${prod}/rs/public/app.php"
-mv "${prod}/rs/public/app_prod.php" "${prod}/rs/public/app.php"
-cp -rf src "${prod}/rs"
-cp -rf templates "${prod}"/rs
-mkdir  "${prod}"/rs/var
-mkdir  "${prod}"/rs/var/uploads
+mkdir "${prod}"/config
+cp config/config_prod.php "${prod}"/config/config.php
+
+echo ">>> Copying public to distribution..."
+cp -rf public "${prod}"
+rm "${prod}/public/app_dev.php"
+rm "${prod}/public/app.php"
+mv "${prod}/public/app_prod.php" "${prod}/public/app.php"
+
+echo ">>> Copying src to distribution..."
+cp -rf src "${prod}"
+
+echo ">>> Copying templates to distribution..."
+cp -rf templates "${prod}"
+
+mkdir  "${prod}"/var
+mkdir  "${prod}"/var/uploads
 echo
 
 echo ">>> Removing OSX jetsam..."
@@ -60,10 +68,10 @@ find "${prod}" -type f -name '.DS_Store' -delete
 echo
 
 echo ">>> Removing development jetsam..."
-find "${prod}"/rs/src -type f -name '*Test.php' -delete
+find "${prod}"/src -type f -name '*Test.php' -delete
 echo
 
-cd "${prod}"/rs
+cd "${prod}"
     composer install --no-dev
 #    yarn workspaces focus --production
     yarn install

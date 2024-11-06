@@ -86,7 +86,7 @@ class SchedRefsView extends AbstractView
             if ($this->user->admin) {
                 $this->games = $this->sr->getGames($projectKey, '%', true);
             } else {
-                $this->games = $this->sr->getGames($projectKey, '%', $show_medal_round);
+                $this->games = $this->sr->getGames($projectKey, '%', $show_medal_round, 'assignor');
             }
 
             $refNames = [];

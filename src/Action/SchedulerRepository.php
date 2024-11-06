@@ -481,6 +481,7 @@ class SchedulerRepository
         $group = '%' . $group . '%';
         $medalRound = $medalRound ? '%' : false;
         $poolASC = "LENGTH(`pool`), `pool`, FIELD(`pool`, 'SF', 'CON', 'FIN') ASC";
+        $fieldASC = "LENGTH(`field`), `field`, FIELD(`field`) ASC";
 //        $poolDESC = "LENGTH(`pool`), `pool`, FIELD(`pool`, 'SF', 'CON', 'FIN') DESC";
         $field = "ExtractNumber(`field`)";
 //        $homeASC = "CAST(`home` as unsigned) ASC";
@@ -498,30 +499,30 @@ class SchedulerRepository
         switch ($sortOn) {
             case 'field':
                 $query = $query
-                    ->orderByRaw($field)
                     ->orderBy('date')
+                    ->orderByRaw($field)
                     ->orderBy('time');
                 break;
             case 'pool' :
                 $query = $query
-                    ->orderByRaw($poolASC)
                     ->orderBy('date')
+                    ->orderByRaw($poolASC)
                     ->orderBy('time')
                     ->orderByRaw($field);
                 break;
             case 'home' :
                 $query = $query
+                    ->orderBy('date')
                     ->orderBy('home')
                     ->orderBy('division')
-                    ->orderBy('date')
                     ->orderBy('time')
                     ->orderByRaw($field);
                 break;
             case 'away' :
                 $query = $query
+                    ->orderBy('date')
                     ->orderBy('away')
                     ->orderBy('division')
-                    ->orderBy('date')
                     ->orderBy('time')
                     ->orderByRaw($field);
                 break;
@@ -529,13 +530,14 @@ class SchedulerRepository
                 $query = $query
                     ->orderBy('date')
                     ->orderBy('assignor')
+                    ->orderBy('field')
                     ->orderBy('time')
                     ->orderByRaw($field);
             default:
                 $query = $query
                     ->orderBy($sortOn)
-                    ->orderBy('time')
                     ->orderBy('date')
+                    ->orderBy('time')
                     ->orderByRaw($poolASC)
                     ->orderByRaw($field);
         }

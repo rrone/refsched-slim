@@ -99,13 +99,13 @@ class GreetView extends AbstractView
 
             if ($this->user->admin) {
                 if ($locked) {
-                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;&nbsp;(<a href=" . $this->getBaseURL(
+                    $html .= "Assignments are:&nbsp;<span style=\"color:$this->colorAlert\">Locked</span>&nbsp;&nbsp;(<a href=" . $this->getBaseURL(
                             'unlockPath'
-                        ) . ">Unlock</a> the schedule now)<br><br>\n";
+                        ) . ">Unlock</a> assignments now)<br><br>\n";
                 } else {
-                    $html .= "The schedule is:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;&nbsp;(<a href=" . $this->getBaseURL(
+                    $html .= "Assignments are:&nbsp;<span style=\"color:$this->colorSuccess\">Unlocked</span>&nbsp;&nbsp;(<a href=" . $this->getBaseURL(
                             'lockPath'
-                        ) . ">Lock</a> the schedule now)<br><br>\n";
+                        ) . ">Lock</a> assignments now)<br><br>\n";
                 }
                 if ($show_medal_round) {
                     $html .= "Medal round assignments are:&nbsp;<span style=\"color:$this->colorSuccess\">Viewable</span>&nbsp;&nbsp;(<a href=" . $this->getBaseURL(
@@ -155,9 +155,9 @@ class GreetView extends AbstractView
                 if (!$this->user->admin) {
 
                     if ($locked) {
-                        $html .= "The schedule is presently <span style=\"color:$this->colorAlert\">locked</span><br><br>\n";
+                        $html .= "Assignments are presently <span style=\"color:$this->colorAlert\">locked</span><br><br>\n";
                     } else {
-                        $html .= "The schedule is presently <span style=\"color:$this->colorSuccess\">unlocked</span><br><br>\n";
+                        $html .= "Assignments are presently <span style=\"color:$this->colorSuccess\">unlocked</span><br><br>\n";
                     }
                 }
 
