@@ -76,7 +76,7 @@ cd "${prod}"
 #    yarn workspaces focus --production
     yarn install
 
-    ln -s public ../public_html
+    ln -s public ../public
 
 cd "${dev}"
 

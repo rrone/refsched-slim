@@ -1,12 +1,6 @@
 node_modules
 vendor
 var
-public/app.php
-public/css
-public/graphics
-public/images
-public/js
-public/fonts
 dist
 config
 .idea

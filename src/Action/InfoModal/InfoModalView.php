@@ -73,13 +73,14 @@ class InfoModalView extends AbstractView
 <p><b>S/A/R:</b> {$rec['SAR']}</p>  
 <p><b>MY:</b> {$rec['MY']}</p>  
 <p><b>Cert:</b> {$rec['CertificationDesc']}</p>  
-<p><b>CertDate:</b> {$rec['CertificationDate']}</p>  
+<p><b>Cert Date:</b> {$rec['CertificationDate']}</p>  
 <p><b>Safe Haven:</b> {$rec['Safe_Haven_Date']}</p>  
 <p><b>SCA:</b> {$rec['CertificationDate']}</p>  
 <p><b>Concussion:</b> {$rec['Concussion_Awareness_Date']}</p>  
 <p><b>LiveScan:</b> {$rec['LiveScan_Date']}</p>  
-<p><b>SafeSport:</b> {$rec['SafeSport_Date']}</p>  
+<p><b>SafeSport Expires:</b> {$rec['SafeSport_Expire_Date']}</p>  
 <p><b>Risk Status:</b> {$rec['Risk_Status']}</p>  
+<p><b>Birthday:</b> {$rec['DOB']}</p>  
 <hr>
 <p><b>AdminID:</b> {$rec['AdminID']}</p>
 EOT;

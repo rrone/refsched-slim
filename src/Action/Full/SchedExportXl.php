@@ -156,17 +156,17 @@ class SchedExportXl extends AbstractExporter
                     'AdminID',
                     'MY',
                     'SAR',
+                    'Admin Name',
+                    'Ref Cert Desc',
+                    'Ref Cert Date',
                     'DOB',
                     'Safe Haven Date',
                     'CDC Date',
                     'SCA Date',
                     'SafeSport Expire Date',
                     'LiveScan Date',
-                    'Ref Cert Desc',
-                    'Ref Cert Date',
                     'Risk Status',
                     'Risk Expire Date',
-                    'Admin Name',
                 );
 
                 $labels = [];
@@ -267,11 +267,10 @@ class SchedExportXl extends AbstractExporter
                     }
                 }
             }
-
             if (!empty($data)) {
                 $content['Referee Match Count']['data'] = $data;
                 if ($this->user->admin) {
-                    $content['Referee Match Count']['options']['freezePane'] = 'P2';
+                    $content['Referee Match Count']['options']['freezePane'] = 'G2';
                     $content['Referee Match Count']['options']['horizontalAlignment'] = ['Q1:ZZ' => 'center'];
                 } else {
                     $content['Referee Match Count']['options']['freezePane'] = 'C2';
@@ -279,8 +278,6 @@ class SchedExportXl extends AbstractExporter
                 }
             }
         }
-
-
     }
 
     /**
@@ -316,17 +313,17 @@ class SchedExportXl extends AbstractExporter
                     'AdminId' => $cert->AdminID,
                     'MY' => $cert->MY,
                     'SAR' => $cert->SAR,
+                    'eAYSOName' => $cert->Name,
+                    'RefCertDesc' => $cert->CertificationDesc,
+                    'RefCertDate' => $cert->CertificationDate,
                     'DOB' => $cert->DOB,
                     'SafeHavenDate' => $cert->Safe_Haven_Date,
                     'CDCDate' => $cert->Concussion_Awareness_Date,
                     'SCADate' => $cert->Sudden_Cardiac_Arrest_Date,
                     'SafeSportExpireDate' => $cert->SafeSport_Expire_Date,
                     'LiveScanDate' => $cert->LiveScan_Date,
-                    'RefCertDesc' => $cert->CertificationDesc,
-                    'RefCertDate' => $cert->CertificationDate,
                     'RiskStatus' => $cert->Risk_Status,
                     'RiskExpireDate' => $cert->Risk_Expire_Date,
-                    'eAYSOName' => $cert->Name,
                 );
             } else {
                 $volCerts[$adminID] = $this->mtCerts;
